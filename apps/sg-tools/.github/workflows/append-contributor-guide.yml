@@ -1,0 +1,37 @@
+name: Append Issue Info
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  issues: write
+
+jobs:
+  append-info:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add comment with explanation and coding standards
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issue_number = context.payload.issue.number;
+
+            const commentBody = `
+            # Contributor guidelines:  
+            ---
+            When submitting a PR, please follow these guidelines:
+
+            - Include a short demo video showcasing the UI and any relevant edge-case testing. This makes the review process significantly faster.
+            - Avoid unnecessary AI-generated comments or overly obvious code comments. Code should be self-explanatory whenever possible. Add comments only when implementing a workaround, a non-obvious solution, or something that will genuinely help future developers understand the context.  
+
+            Quality is our top priority. We don’t optimize for speed if it compromises stability or introduces bugs.
+            `;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              body: commentBody
+            });

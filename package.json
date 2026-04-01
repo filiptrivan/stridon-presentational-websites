@@ -1,0 +1,14 @@
+{
+  "name": "stridon-presentational-websites",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev:sg": "turbo dev --filter=sg-tools-storefront",
+    "dev:dck": "turbo dev --filter=dck-storefront",
+    "build": "turbo build",
+    "lint": "turbo lint"
+  },
+  "devDependencies": {
+    "turbo": "^2"
+  }
+}

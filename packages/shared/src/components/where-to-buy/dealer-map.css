@@ -1,0 +1,40 @@
+/* Leaflet dark theme overrides — co-located with dealer-map component */
+
+.leaflet-popup-content-wrapper {
+  background: oklch(0.205 0 0) !important;
+  color: oklch(0.985 0 0) !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+}
+
+.leaflet-popup-tip {
+  background: oklch(0.205 0 0) !important;
+}
+
+.leaflet-popup-content {
+  margin: 0.75rem 1rem !important;
+}
+
+.leaflet-control-zoom a {
+  background: oklch(0.205 0 0) !important;
+  color: oklch(0.985 0 0) !important;
+  border-color: oklch(1 0 0 / 10%) !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background: oklch(0.269 0 0) !important;
+}
+
+.leaflet-control-attribution {
+  background: oklch(0.145 0 0 / 70%) !important;
+  color: oklch(0.556 0 0) !important;
+}
+
+.leaflet-control-attribution a {
+  color: oklch(0.708 0 0) !important;
+}
+
+.custom-marker {
+  background: transparent !important;
+  border: none !important;
+}
