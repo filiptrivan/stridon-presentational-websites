@@ -2,6 +2,10 @@
 @import "tw-animate-css";
 @import "@brand/shared/styles/base.css";
 
+@source "../../../packages/shared/src";
+@source "../../../packages/ui/src";
+@source "../../../packages/brand-config/src";
+
 @plugin "@tailwindcss/typography";
 
 :root {
