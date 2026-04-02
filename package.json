@@ -1,6 +1,7 @@
 {
   "name": "stridon-presentational-websites",
   "private": true,
+  "packageManager": "npm@11.6.2",
   "workspaces": ["apps/*", "packages/*"],
   "scripts": {
     "dev:sg": "turbo dev --filter=sg-tools-storefront",
