@@ -24,5 +24,10 @@ dist/
 .DS_Store
 Thumbs.db
 
+# Claude Code
+.agents/
+skills-lock.json
+bash.exe.stackdump
+
 # Debug
 npm-debug.log*
