@@ -1,13 +1,15 @@
 {
   "name": "stridon-presentational-websites",
   "private": true,
-  "packageManager": "npm@11.6.2",
-  "workspaces": ["apps/*", "packages/*"],
+  "packageManager": "pnpm@10.29.3",
   "scripts": {
     "dev:sg": "turbo dev --filter=sg-tools-storefront",
     "dev:dck": "turbo dev --filter=dck-storefront",
     "build": "turbo build",
     "lint": "turbo lint"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["sharp", "unrs-resolver"]
   },
   "devDependencies": {
     "turbo": "^2"

@@ -11,7 +11,6 @@ export const warrantySchema = z.object({
   productModel: z.string().min(1, "Unesi model proizvoda").max(200),
   serialNumber: z.string().min(1, "Unesi serijski broj").max(100),
   purchaseDate: z.string().min(1, "Izaberi datum kupovine"),
-  dealerName: z.string().min(1, "Izaberi prodajno mesto"),
 });
 
 export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB

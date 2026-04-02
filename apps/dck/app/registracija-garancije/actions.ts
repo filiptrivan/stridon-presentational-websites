@@ -35,7 +35,6 @@ export async function submitWarrantyRegistration(
     productModel: formData.get("productModel"),
     serialNumber: formData.get("serialNumber"),
     purchaseDate: formData.get("purchaseDate"),
-    dealerName: formData.get("dealerName"),
   };
 
   const parsed = warrantySchema.safeParse(raw);

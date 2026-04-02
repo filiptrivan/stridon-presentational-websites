@@ -36,18 +36,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Use Turborepo from the repo root:
 
 ```bash
-npm run dev:sg              # SG Tools dev server
-npm run dev:dck             # DCK dev server
-npm run build               # Build both apps
-npm run lint                # Lint both apps
+pnpm dev:sg                 # SG Tools dev server
+pnpm dev:dck                # DCK dev server
+pnpm build                  # Build both apps
+pnpm lint                   # Lint both apps
 ```
 
 Or run per-app from `apps/sg-tools/` or `apps/dck/`:
 
 ```bash
-npm run dev                 # Dev server
-npm run build               # Production build
-npm run lint                # Run ESLint
+pnpm dev                    # Dev server
+pnpm build                  # Production build
+pnpm lint                   # Run ESLint
 ```
 
 ## Environment Variables

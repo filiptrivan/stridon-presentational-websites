@@ -7,7 +7,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { submitWarrantyRegistration } from "@/app/registracija-garancije/actions";
-import { UNIQUE_DEALER_NAMES } from "@/constants/dealers";
 import {
   warrantySchema,
   type WarrantyFormData,
@@ -38,7 +37,6 @@ const WarrantyForm = () => {
       productModel: "",
       serialNumber: "",
       purchaseDate: "",
-      dealerName: "",
     },
   });
 
@@ -204,44 +202,20 @@ const WarrantyForm = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div className="space-y-3">
-          <Label htmlFor="purchaseDate">Datum kupovine</Label>
-          <Input
-            id="purchaseDate"
-            type="date"
-            className="bg-background border-border/50"
-            aria-invalid={!!errors.purchaseDate}
-            {...register("purchaseDate")}
-          />
-          {errors.purchaseDate && (
-            <p className="text-sm text-destructive">
-              {errors.purchaseDate.message}
-            </p>
-          )}
-        </div>
-
-        <div className="space-y-3">
-          <Label htmlFor="dealerName">Prodajno mesto</Label>
-          <select
-            id="dealerName"
-            className="flex h-9 w-full min-w-0 rounded-md border border-border/50 bg-background px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 aria-invalid:border-destructive md:text-sm"
-            aria-invalid={!!errors.dealerName}
-            {...register("dealerName")}
-          >
-            <option value="">Izaberi prodajno mesto</option>
-            {UNIQUE_DEALER_NAMES.map((name) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
-          </select>
-          {errors.dealerName && (
-            <p className="text-sm text-destructive">
-              {errors.dealerName.message}
-            </p>
-          )}
-        </div>
+      <div className="space-y-3">
+        <Label htmlFor="purchaseDate">Datum kupovine</Label>
+        <Input
+          id="purchaseDate"
+          type="date"
+          className="bg-background border-border/50 sm:max-w-[calc(50%-0.75rem)]"
+          aria-invalid={!!errors.purchaseDate}
+          {...register("purchaseDate")}
+        />
+        {errors.purchaseDate && (
+          <p className="text-sm text-destructive">
+            {errors.purchaseDate.message}
+          </p>
+        )}
       </div>
 
       <div className="space-y-3">

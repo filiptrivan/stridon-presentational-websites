@@ -32,3 +32,4 @@ bash.exe.stackdump
 
 # Debug
 npm-debug.log*
+pnpm-debug.log*

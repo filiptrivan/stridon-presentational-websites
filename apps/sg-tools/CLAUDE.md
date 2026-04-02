@@ -12,8 +12,8 @@ See root `../../CLAUDE.md` for shared principles, architecture patterns, and dom
 ## Commands
 
 ```bash
-npm run dev      # Start dev server (localhost:3000)
-npm run build    # Production build
-npm run start    # Start production server
-npm run lint     # Run ESLint
+pnpm dev         # Start dev server (localhost:3000)
+pnpm build       # Production build
+pnpm start       # Start production server
+pnpm lint        # Run ESLint
 ```
