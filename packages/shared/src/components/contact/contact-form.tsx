@@ -6,7 +6,9 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { sendContactEmail } from "@/app/kontakt/actions";
+import { useTurnstile } from "@brand/shared/lib/hooks/useTurnstile";
 import { contactSchema, type ContactFormData } from "@brand/shared/lib/schemas/contact";
+import { TURNSTILE_VERIFICATION_FAILED } from "@brand/shared/lib/turnstile";
 import { Button } from "@brand/ui/button";
 import { Input } from "@brand/ui/input";
 import { Label } from "@brand/ui/label";
@@ -23,8 +25,21 @@ const ContactForm = () => {
     defaultValues: { email: "", message: "" },
   });
 
+  const {
+    token: turnstileToken,
+    reset: resetTurnstile,
+    widget: turnstileWidget,
+  } = useTurnstile();
+
   const onSubmit = async (data: ContactFormData) => {
-    const result = await sendContactEmail(data);
+    if (!turnstileToken) {
+      toast.error(TURNSTILE_VERIFICATION_FAILED);
+      return;
+    }
+
+    const result = await sendContactEmail(data, turnstileToken);
+
+    resetTurnstile();
 
     if (result.success) {
       toast.success("Poruka je uspešno poslata!");
@@ -67,6 +82,8 @@ const ContactForm = () => {
           <p className="text-sm text-destructive">{errors.message.message}</p>
         )}
       </div>
+
+      {turnstileWidget}
 
       <Button type="submit" className="w-full" disabled={isSubmitting}>
         {isSubmitting ? (

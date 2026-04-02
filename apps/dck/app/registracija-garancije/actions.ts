@@ -7,6 +7,8 @@ import {
   FILE_TOO_LARGE_ERROR,
   FILE_TYPE_ERROR,
 } from "@/lib/schemas/warranty";
+import { TURNSTILE_VERIFICATION_FAILED } from "@brand/shared/lib/turnstile";
+import { validateTurnstileToken } from "@brand/shared/lib/turnstile-server";
 import type { ActionResult } from "@brand/shared/types/actions";
 
 const BRAND_SLUG = "dck";
@@ -14,6 +16,17 @@ const BRAND_SLUG = "dck";
 export async function submitWarrantyRegistration(
   formData: FormData,
 ): Promise<ActionResult> {
+  // Verify Turnstile token
+  const turnstileToken = formData.get("turnstileToken");
+  if (typeof turnstileToken !== "string" || !turnstileToken) {
+    return { success: false, error: TURNSTILE_VERIFICATION_FAILED };
+  }
+
+  const isValidToken = await validateTurnstileToken(turnstileToken);
+  if (!isValidToken) {
+    return { success: false, error: TURNSTILE_VERIFICATION_FAILED };
+  }
+
   const raw = {
     firstName: formData.get("firstName"),
     lastName: formData.get("lastName"),
@@ -52,9 +65,23 @@ export async function submitWarrantyRegistration(
     };
   }
 
+  const apiKey = process.env.PACMS_API_KEY;
+  if (!apiKey) {
+    console.error("PACMS_API_KEY is not set");
+    return {
+      success: false,
+      error: "Registracija trenutno nije moguća. Pokušaj ponovo kasnije.",
+    };
+  }
+
   try {
+    const payload = {
+      ...parsed.data,
+      purchaseDate: `${parsed.data.purchaseDate}T00:00:00.000Z`,
+    };
+
     const apiFormData = new FormData();
-    for (const [key, value] of Object.entries(parsed.data)) {
+    for (const [key, value] of Object.entries(payload)) {
       apiFormData.append(key, value);
     }
     apiFormData.append("brandSlug", BRAND_SLUG);
@@ -67,6 +94,9 @@ export async function submitWarrantyRegistration(
       `${apiUrl}/api/Storefront/SubmitWarrantyRegistration`,
       {
         method: "POST",
+        headers: {
+          "X-Api-Key": apiKey,
+        },
         body: apiFormData,
       },
     );

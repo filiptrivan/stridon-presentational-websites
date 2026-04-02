@@ -16,6 +16,8 @@ import {
   FILE_TOO_LARGE_ERROR,
   FILE_TYPE_ERROR,
 } from "@/lib/schemas/warranty";
+import { useTurnstile } from "@brand/shared/lib/hooks/useTurnstile";
+import { TURNSTILE_VERIFICATION_FAILED } from "@brand/shared/lib/turnstile";
 import { Button } from "@brand/ui/button";
 import { Input } from "@brand/ui/input";
 import { Label } from "@brand/ui/label";
@@ -43,7 +45,18 @@ const WarrantyForm = () => {
   const [fileError, setFileError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const {
+    token: turnstileToken,
+    reset: resetTurnstile,
+    widget: turnstileWidget,
+  } = useTurnstile();
+
   const onSubmit = async (data: WarrantyFormData) => {
+    if (!turnstileToken) {
+      toast.error(TURNSTILE_VERIFICATION_FAILED);
+      return;
+    }
+
     setFileError(null);
 
     const file = fileInputRef.current?.files?.[0];
@@ -63,12 +76,15 @@ const WarrantyForm = () => {
     for (const [key, value] of Object.entries(data)) {
       formData.append(key, value);
     }
+    formData.append("turnstileToken", turnstileToken);
 
     if (file) {
       formData.append("receiptImage", file);
     }
 
     const result = await submitWarrantyRegistration(formData);
+
+    resetTurnstile();
 
     if (result.success) {
       toast.success("Garancija je uspešno registrovana!");
@@ -246,6 +262,8 @@ const WarrantyForm = () => {
           JPG, PNG, WebP ili PDF — do 5MB
         </p>
       </div>
+
+      {turnstileWidget}
 
       <Button type="submit" className="w-full" disabled={isSubmitting}>
         {isSubmitting ? (

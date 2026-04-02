@@ -1,14 +1,19 @@
 "use server";
 
 import { contactSchema, type ContactFormData } from "@brand/shared/lib/schemas/contact";
-
-type ActionResult =
-  | { success: true }
-  | { success: false; error: string };
+import { TURNSTILE_VERIFICATION_FAILED } from "@brand/shared/lib/turnstile";
+import { validateTurnstileToken } from "@brand/shared/lib/turnstile-server";
+import type { ActionResult } from "@brand/shared/types/actions";
 
 export async function sendContactEmail(
   data: ContactFormData,
+  turnstileToken: string,
 ): Promise<ActionResult> {
+  const isValidToken = await validateTurnstileToken(turnstileToken);
+  if (!isValidToken) {
+    return { success: false, error: TURNSTILE_VERIFICATION_FAILED };
+  }
+
   const parsed = contactSchema.safeParse(data);
   if (!parsed.success) {
     return { success: false, error: "Podaci nisu ispravni. Proveri unos." };
