@@ -4,6 +4,7 @@ import PageBreadcrumbs from "@brand/shared/components/products/page-breadcrumbs"
 import ProductGrid from "@brand/shared/components/products/product-grid";
 import ProductGridSkeleton from "@brand/shared/components/products/product-grid-skeleton";
 import { SectionErrorBoundary } from "@brand/ui/section-error-boundary";
+import { Prose } from "@brand/ui/prose";
 import Wrapper from "@brand/shared/components/wrapper";
 import { PRODUCTS_PER_PAGE } from "@brand/shared/lib/cache-tags";
 import {
@@ -113,8 +114,8 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         {category.description && (
           <section className="mt-16 border-t border-border pt-10">
             <h2 className="text-xl font-semibold mb-4">Opis kategorije</h2>
-            <div
-              className="prose prose-invert max-w-full whitespace-pre-line prose-p:text-neutral-400 prose-p:leading-relaxed"
+            <Prose
+              variant="category"
               dangerouslySetInnerHTML={{ __html: category.description }}
             />
           </section>

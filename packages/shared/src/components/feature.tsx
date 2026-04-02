@@ -1,10 +1,11 @@
 import { cn } from "@brand/shared/lib/utils";
-import { LucideIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import IconBox from "./icon-box";
 
 export const Feature = ({
   title,
   desc,
-  icon: Icon,
+  icon,
   color,
   bg,
   border,
@@ -25,11 +26,7 @@ export const Feature = ({
         "flex flex-col justify-between p-3 lg:p-6 border border-border/60 rounded-lg lg:rounded-xl",
       )}
     >
-      <div
-        className={`flex items-center justify-center size-9 lg:size-11 rounded-xl ${bg} ${border} border`}
-      >
-        <Icon className={`size-5 lg:size-6 ${color}`} strokeWidth={1.5} />
-      </div>
+      <IconBox icon={icon} color={color} bg={bg} border={border} />
       <div>
         <h3 className="text-base sm:text-lg font-semibold mt-4 text-foreground">
           {title}

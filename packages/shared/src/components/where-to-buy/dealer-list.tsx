@@ -2,6 +2,7 @@
 
 import { cn, formatTelHref } from "@brand/shared/lib/utils";
 import type { Dealer, DealerCategory } from "@brand/shared/types/dealers";
+import { Badge } from "@brand/ui/badge";
 import { ExternalLink, Mail, MapPin, Navigation, Phone } from "lucide-react";
 import { useEffect, useRef } from "react";
 
@@ -29,14 +30,9 @@ const categoryLabels: Record<DealerCategory, string> = {
 
 function CategoryBadge({ category }: { category: DealerCategory }) {
   return (
-    <span
-      className={cn(
-        "inline-block rounded-full px-2.5 py-0.5 text-xs font-medium",
-        categoryColors[category],
-      )}
-    >
+    <Badge className={categoryColors[category]}>
       {categoryLabels[category]}
-    </span>
+    </Badge>
   );
 }
 
@@ -95,15 +91,13 @@ export default function DealerList({
               </h3>
               <div className="flex items-center gap-1.5 shrink-0">
                 {isNearest && (
-                  <span className="inline-block rounded-full px-2 py-0.5 text-xs font-medium bg-primary/20 text-primary">
-                    Najbliži
-                  </span>
+                  <Badge size="sm">Najbliži</Badge>
                 )}
                 {distance != null && !isNearest && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-muted/50 text-muted-foreground text-xs px-2 py-0.5 font-mono">
+                  <Badge variant="muted" size="sm" className="gap-1 font-mono">
                     <Navigation className="size-3" />
                     {`${distance} km`}
-                  </span>
+                  </Badge>
                 )}
                 <CategoryBadge category={dealer.category} />
               </div>

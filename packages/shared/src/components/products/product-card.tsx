@@ -1,7 +1,10 @@
 import type { ProductCardData } from "@brand/shared/types/products";
-import { ExternalLink, Package } from "lucide-react";
+import { Badge } from "@brand/ui/badge";
+import { ExternalLink } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import PriceDisplay from "./price-display";
+import StockStatus from "./stock-status";
 
 interface ProductCardProps {
   product: ProductCardData;
@@ -31,9 +34,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
         )}
 
         {product.hasDiscount && (
-          <span className="absolute top-2 left-2 bg-primary text-primary-foreground text-xs font-semibold px-2 py-1 rounded">
+          <Badge
+            variant="solid"
+            className="absolute top-2 left-2 rounded-md font-semibold"
+          >
             {`-${product.discountPercentage}%`}
-          </span>
+          </Badge>
         )}
       </div>
 
@@ -42,29 +48,13 @@ const ProductCard = ({ product }: ProductCardProps) => {
           {product.title}
         </h3>
 
-        <div className="flex items-center gap-1.5 mt-auto pt-3">
-          <Package className="size-3.5" />
-          <span
-            className={
-              !product.inStock
-                ? "text-xs text-muted-foreground"
-                : "text-xs text-green-500"
-            }
-          >
-            {!product.inStock ? "Nema na stanju" : "Na stanju"}
-          </span>
-        </div>
+        <StockStatus inStock={product.inStock} className="mt-auto pt-3" />
 
-        <div className="flex flex-col sm:flex-row sm:items-baseline sm:gap-2 pt-2">
-          <span className="text-base sm:text-lg font-bold">
-            {product.displayPrice.toLocaleString("sr-RS")} RSD
-          </span>
-          {product.hasDiscount && product.originalPrice && (
-            <span className="text-xs sm:text-sm text-muted-foreground line-through">
-              {product.originalPrice.toLocaleString("sr-RS")} RSD
-            </span>
-          )}
-        </div>
+        <PriceDisplay
+          displayPrice={product.displayPrice}
+          originalPrice={product.originalPrice}
+          className="pt-2"
+        />
 
         <a
           href={`https://www.prodavnicaalata.rs/proizvodi/${product.slug}/`}

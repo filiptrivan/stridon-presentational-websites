@@ -1,10 +1,9 @@
 "use client";
 
 import { cn } from "@brand/shared/lib/utils";
+import { Prose } from "@brand/ui/prose";
 import { useState } from "react";
-
-const proseClasses =
-  "prose prose-sm prose-invert max-w-none prose-a:text-primary prose-a:hover:opacity-80";
+import SectionHeader from "../section-header";
 
 const tabs = [
   { key: "description", label: "Detalji" },
@@ -37,9 +36,9 @@ const ProductTabs = ({ htmlDescription, specification }: ProductTabsProps) => {
 
     return (
       <div>
-        <h2 className="text-xl font-bold mb-6">{tab.label}</h2>
-        <div
-          className={proseClasses}
+        <SectionHeader title={tab.label} size="sub" />
+        <Prose
+          variant="product"
           dangerouslySetInnerHTML={{ __html: contentMap[tab.key]! }}
         />
       </div>
@@ -66,8 +65,8 @@ const ProductTabs = ({ htmlDescription, specification }: ProductTabsProps) => {
         ))}
       </div>
 
-      <div
-        className={proseClasses}
+      <Prose
+        variant="product"
         dangerouslySetInnerHTML={{ __html: contentMap[activeTab]! }}
       />
     </div>

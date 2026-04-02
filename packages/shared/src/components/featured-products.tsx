@@ -1,9 +1,7 @@
 import { getFilteredProducts } from "@brand/shared/lib/api";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
 import ProductCard from "./products/product-card";
+import SectionHeader from "./section-header";
 import Section from "./section";
-import { Button } from "@brand/ui/button";
 import Wrapper from "./wrapper";
 
 const FeaturedProducts = async () => {
@@ -20,20 +18,11 @@ const FeaturedProducts = async () => {
   return (
     <Section>
       <Wrapper>
-        <div className="flex flex-col items-start justify-start lg:items-center lg:justify-center">
-          <h2 className="text-3xl lg:text-4xl font-semibold text-left lg:text-center tracking-tight">
-            Izdvajamo iz ponude
-          </h2>
-          <p className="text-base lg:text-lg font-normal text-muted-foreground text-left lg:text-center mt-2 max-w-md">
-            Najpopularniji alati iz našeg asortimana
-          </p>
-          <Button variant="link" asChild className="mt-2 p-0!">
-            <Link href="/proizvodi">
-              Pogledaj sve
-              <ArrowRight />
-            </Link>
-          </Button>
-        </div>
+        <SectionHeader
+          title="Izdvajamo iz ponude"
+          description="Najpopularniji alati iz našeg asortimana"
+          action={{ label: "Pogledaj sve", href: "/proizvodi" }}
+        />
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6 mt-10">
           {products.data.map((product) => (

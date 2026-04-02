@@ -10,6 +10,7 @@ import {
 import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
 import Image from "next/image";
 import Container from "./container";
+import SectionHeader from "./section-header";
 import Wrapper from "./wrapper";
 
 const companies = [
@@ -37,11 +38,11 @@ const Companies = () => {
       />
       <Wrapper>
         <Container>
-          <div className="flex flex-col items-center justify-center px-2 md:px-0">
-            <h2 className="text-xl lg:text-2xl font-semibold text-center tracking-tight">
-              Partneri i firme sa kojima godinama sarađujemo
-            </h2>
-          </div>
+          <SectionHeader
+            title="Partneri i firme sa kojima godinama sarađujemo"
+            size="sm"
+            align="center"
+          />
         </Container>
 
         <Container delay={0.1}>

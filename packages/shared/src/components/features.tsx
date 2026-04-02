@@ -2,6 +2,7 @@ import { FEATURES } from "@/constants/content";
 import { BadgePercent, History, ShieldCheck, Users } from "lucide-react";
 import Container from "./container";
 import { Feature } from "./feature";
+import SectionHeader from "./section-header";
 import Section from "./section";
 import Wrapper from "./wrapper";
 
@@ -37,11 +38,7 @@ const Features = () => {
     <Section>
       <Wrapper>
         <Container>
-          <div className="flex flex-col items-start justify-start lg:items-center lg:justify-center">
-            <h2 className="text-3xl lg:text-4xl font-semibold text-left lg:text-center tracking-tight">
-              Zašto SG Tools?
-            </h2>
-          </div>
+          <SectionHeader title="Zašto SG Tools?" />
         </Container>
 
         <Container>

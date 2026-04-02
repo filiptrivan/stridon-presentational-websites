@@ -3,6 +3,7 @@ import HeroHeader from "@brand/shared/components/hero-header";
 import Section from "@brand/shared/components/section";
 import Wrapper from "@brand/shared/components/wrapper";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
+import { Prose } from "@brand/ui/prose";
 
 export const metadata = createPageMetadata({
   title: "Politika privatnosti",
@@ -21,7 +22,7 @@ const PrivacyPolicyPage = () => {
       <Section>
         <Wrapper>
           <Container>
-            <div className="prose prose-invert max-w-full prose-p:text-neutral-300 prose-li:text-neutral-300 prose-strong:text-foreground prose-headings:font-heading marker:text-primary">
+            <Prose>
               <h2>Podaci o rukovaocu</h2>
               <p>
                 Sajt <strong>dcksrbija.rs</strong> je u vlasništvu kompanije{" "}
@@ -175,7 +176,7 @@ const PrivacyPolicyPage = () => {
                 pročitaš ovu stranicu kako bi bio/bila u toku sa eventualnim
                 promenama.
               </p>
-            </div>
+            </Prose>
           </Container>
         </Wrapper>
       </Section>

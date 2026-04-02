@@ -4,6 +4,8 @@ import { CONTACT_INFO } from "@/constants";
 import { ExternalLink, MapPin } from "lucide-react";
 import dynamic from "next/dynamic";
 import Container from "../container";
+import IconBox from "../icon-box";
+import SectionHeader from "../section-header";
 import Section from "../section";
 import Wrapper from "../wrapper";
 
@@ -14,14 +16,13 @@ function ContactLocations() {
     <Section className="pt-0!">
       <Wrapper>
         <Container delay={0.1}>
-          <div className="flex flex-col items-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-semibold text-center">
-              Naše prodavnice
-            </h2>
-            <p className="text-muted-foreground mt-3 text-center max-w-lg">
-              Poseti nas na jednoj od dve lokacije u Beogradu
-            </p>
-          </div>
+          <SectionHeader
+            title="Naše prodavnice"
+            description="Poseti nas na jednoj od dve lokacije u Beogradu"
+            align="center"
+            descriptionClassName="max-w-lg"
+            className="mb-10"
+          />
         </Container>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -37,9 +38,14 @@ function ContactLocations() {
                 </div>
 
                 <div className="relative p-3 sm:p-5 flex items-center gap-4">
-                  <div className="size-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
-                    <MapPin className="size-5 text-primary" />
-                  </div>
+                  <IconBox
+                    icon={MapPin}
+                    color="text-primary"
+                    bg="bg-primary/10"
+                    border="border-primary/20"
+                    size="sm"
+                    className="shrink-0"
+                  />
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold">{location.name}</h3>
                     <p className="text-sm text-muted-foreground mt-0.5">

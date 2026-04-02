@@ -1,5 +1,6 @@
 import { HOME_ABOUT_PARAGRAPH } from "@/constants/content";
 import Container from "./container";
+import SectionHeader from "./section-header";
 import Section from "./section";
 import Wrapper from "./wrapper";
 
@@ -8,14 +9,11 @@ function HomeAbout() {
     <Section>
       <Wrapper>
         <Container>
-          <div className="space-y-4">
-            <h2 className="text-3xl lg:text-4xl text-left lg:text-center font-semibold tracking-tight">
-              O SG Tools
-            </h2>
-            <p className="text-base md:text-lg text-left lg:text-center leading-relaxed text-muted-foreground max-w-4xl mx-auto">
-              {HOME_ABOUT_PARAGRAPH}
-            </p>
-          </div>
+          <SectionHeader
+            title="O SG Tools"
+            description={HOME_ABOUT_PARAGRAPH}
+            descriptionClassName="max-w-4xl mx-auto leading-relaxed"
+          />
         </Container>
       </Wrapper>
     </Section>

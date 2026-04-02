@@ -2,10 +2,12 @@ import Container from "../container";
 import Wrapper from "../wrapper";
 import { type BreadcrumbSegment, buildBreadcrumbJsonLd } from "@brand/shared/lib/categories";
 import type { Product } from "@brand/shared/types/products";
-import { ExternalLink, Package } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import PageBreadcrumbs from "./page-breadcrumbs";
+import PriceDisplay from "./price-display";
 import ProductGallery from "./product-gallery";
 import ProductTabs from "./product-tabs";
+import StockStatus from "./stock-status";
 
 interface ProductDetailProps {
   product: Product;
@@ -86,35 +88,20 @@ const ProductDetail = ({
             )}
 
             {/* Price */}
-            <div className="flex items-baseline gap-3 mt-6">
-              <span className="text-2xl sm:text-3xl font-bold">
-                {product.displayPrice.toLocaleString("sr-RS")} RSD
-              </span>
-              {product.hasDiscount && product.originalPrice && (
-                <>
-                  <span className="text-lg text-muted-foreground line-through">
-                    {product.originalPrice.toLocaleString("sr-RS")} RSD
-                  </span>
-                  <span className="bg-primary text-primary-foreground text-xs font-semibold px-2 py-1 rounded">
-                    {`-${product.discountPercentage}%`}
-                  </span>
-                </>
-              )}
-            </div>
+            <PriceDisplay
+              displayPrice={product.displayPrice}
+              originalPrice={product.originalPrice}
+              discountPercentage={product.discountPercentage}
+              size="lg"
+              className="mt-6"
+            />
 
             {/* Stock status */}
-            <div className="flex items-center gap-2 mt-3">
-              <Package className="size-4" />
-              <span
-                className={
-                  !product.inStock
-                    ? "text-sm text-muted-foreground"
-                    : "text-sm text-green-500"
-                }
-              >
-                {!product.inStock ? "Nema na stanju" : "Na stanju"}
-              </span>
-            </div>
+            <StockStatus
+              inStock={product.inStock}
+              size="default"
+              className="mt-3"
+            />
 
             {/* Buy button */}
             <a

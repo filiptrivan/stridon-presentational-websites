@@ -3,6 +3,7 @@ import HeroHeader from "@brand/shared/components/hero-header";
 import Section from "@brand/shared/components/section";
 import Wrapper from "@brand/shared/components/wrapper";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
+import { Prose } from "@brand/ui/prose";
 import Link from "next/link";
 
 export const metadata = createPageMetadata({
@@ -22,7 +23,7 @@ const TermsPage = () => {
       <Section>
         <Wrapper>
           <Container>
-            <div className="prose prose-invert max-w-full prose-p:text-neutral-300 prose-li:text-neutral-300 prose-strong:text-foreground prose-headings:font-heading marker:text-primary">
+            <Prose>
               <h2>Opšte odredbe</h2>
               <p>
                 Ovi uslovi korišćenja regulišu upotrebu internet sajta{" "}
@@ -147,7 +148,7 @@ const TermsPage = () => {
                 putem naše{" "}
                 <Link href="/kontakt">stranice za kontakt</Link>.
               </p>
-            </div>
+            </Prose>
           </Container>
         </Wrapper>
       </Section>
