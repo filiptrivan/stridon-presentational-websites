@@ -14,6 +14,11 @@ export const config: BrandConfig = {
   logoAlt: "DCK Logo",
   navbarLogoHeight: "h-5",
   shopUrl: "https://www.prodavnicaalata.rs/proizvodjaci/dck/",
+  headerCta: {
+    label: "Registracija garancije",
+    href: "/registracija-garancije",
+    external: false,
+  },
 
   defaultTitle: "DCK — Profesionalni električni alati",
   siteDescription:

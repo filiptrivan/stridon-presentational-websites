@@ -14,6 +14,11 @@ export const config: BrandConfig = {
   logoAlt: "SG Tools Logo",
   navbarLogoHeight: "h-3",
   shopUrl: "https://www.prodavnicaalata.rs/proizvodjaci/sg-tools/",
+  headerCta: {
+    label: "Idi na prodavnicu",
+    href: "https://www.prodavnicaalata.rs/proizvodjaci/sg-tools/",
+    external: true,
+  },
 
   defaultTitle:
     "SG Tools — Profesionalni alat nastao iz 30 godina iskustva",

@@ -8,20 +8,21 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@brand/ui/navigation-menu";
+import { Button } from "@brand/ui/button";
 import { NAV_LINKS } from "@/constants/links";
 import { cn } from "../lib/utils";
 import type { Category } from "../types/categories";
 import { getBrandConfig } from "@brand/config";
 import { AnimatePresence, motion } from "framer-motion";
+import { ExternalLinkIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import BuyOnlineButton from "./buy-online-button";
 import Container from "./container";
 import MobileMenu from "./mobile-menu";
 import Wrapper from "./wrapper";
 
-const { logoSrc, logoAlt, navbarLogoHeight } = getBrandConfig();
+const { logoSrc, logoAlt, navbarLogoHeight, headerCta } = getBrandConfig();
 
 interface NavbarProps {
   categories: Category[];
@@ -121,11 +122,16 @@ const Navbar = ({ categories }: NavbarProps) => {
 
         <div className="flex items-center justify-end gap-x-4">
           <Container animation="fadeLeft" delay={0.1}>
-            <BuyOnlineButton
-              size="sm"
-              variant={"outline"}
-              className="hidden md:inline-flex"
-            />
+            <Button asChild size="sm" variant="outline" className="hidden md:inline-flex">
+              {headerCta.external ? (
+                <a href={headerCta.href} target="_blank" rel="noopener noreferrer">
+                  {headerCta.label}
+                  <ExternalLinkIcon className="size-3.5" />
+                </a>
+              ) : (
+                <Link href={headerCta.href}>{headerCta.label}</Link>
+              )}
+            </Button>
           </Container>
           <div className="md:hidden">
             <Container animation="fadeLeft" delay={0.1}>

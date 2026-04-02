@@ -29,12 +29,6 @@ const Hero = () => {
               <ExternalLinkIcon className="size-4" />
             </Link>
           </Button>
-          <Button variant="outline" asChild>
-            <Link href="/proizvodi/kategorije">
-              Pogledaj kategorije
-              <ExternalLinkIcon className="size-4" />
-            </Link>
-          </Button>
         </div>
       </Container>
 

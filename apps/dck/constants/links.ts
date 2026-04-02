@@ -10,7 +10,6 @@ export const NAV_LINKS: readonly NavLink[] = [
   { label: "Kategorije", href: "/proizvodi/kategorije" },
   { label: "O nama", href: "/o-nama" },
   { label: "Gde kupiti", href: "/gde-kupiti" },
-  { label: "Registracija garancije", href: "/registracija-garancije" },
   { label: "Kontakt", href: "/kontakt" },
 ];
 

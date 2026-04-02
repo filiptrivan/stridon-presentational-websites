@@ -17,13 +17,15 @@ import {
 } from "@brand/ui/sheet";
 import { NAV_LINKS } from "@/constants/links";
 import type { Category } from "../types/categories";
-import { MenuIcon } from "lucide-react";
+import { getBrandConfig } from "@brand/config";
+import { ExternalLinkIcon, MenuIcon } from "lucide-react";
 import Link from "next/link";
-import BuyOnlineButton from "./buy-online-button";
 
 interface MobileMenuProps {
   categories: Category[];
 }
+
+const { headerCta } = getBrandConfig();
 
 const MobileMenu = ({ categories }: MobileMenuProps) => {
   return (
@@ -81,7 +83,16 @@ const MobileMenu = ({ categories }: MobileMenuProps) => {
             ),
           )}
           <SheetClose asChild>
-            <BuyOnlineButton className="mt-4" variant={"outline"} />
+            <Button asChild variant="outline" className="mt-4">
+              {headerCta.external ? (
+                <a href={headerCta.href} target="_blank" rel="noopener noreferrer">
+                  {headerCta.label}
+                  <ExternalLinkIcon className="size-3.5" />
+                </a>
+              ) : (
+                <Link href={headerCta.href}>{headerCta.label}</Link>
+              )}
+            </Button>
           </SheetClose>
         </div>
       </SheetContent>
