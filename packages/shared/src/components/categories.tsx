@@ -27,7 +27,7 @@ const Categories = async () => {
 
         <div className="w-full mt-10">
           <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-1.5 sm:gap-3 lg:gap-4">
-            {categories.map((category) => (
+            {categories.slice(0, 6).map((category) => (
               <CategoryCard key={category.slug} category={category} />
             ))}
           </div>

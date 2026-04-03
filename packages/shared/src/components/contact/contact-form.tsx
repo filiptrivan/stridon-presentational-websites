@@ -60,7 +60,7 @@ const ContactForm = () => {
           id="email"
           type="email"
           placeholder="petar@primer.rs"
-          className="bg-[#0A0A0A] border-border/50"
+          className="border-border/50"
           aria-invalid={!!errors.email}
           {...register("email")}
         />
@@ -74,7 +74,7 @@ const ContactForm = () => {
         <Textarea
           id="message"
           placeholder="Reci nam šta ti treba..."
-          className="min-h-[150px] bg-[#0A0A0A] border-border/50 resize-none"
+          className="min-h-[150px] border-border/50 resize-none"
           aria-invalid={!!errors.message}
           {...register("message")}
         />

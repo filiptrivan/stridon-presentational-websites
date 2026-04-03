@@ -3,6 +3,7 @@
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useRef } from "react";
+import { addBrandTileLayer } from "@brand/shared/lib/map";
 import "../where-to-buy/dealer-map.css";
 
 interface LocationMapProps {
@@ -23,13 +24,7 @@ export default function LocationMap({ lat, lng, name }: LocationMapProps) {
       zoom: 15,
     });
 
-    L.tileLayer(
-      "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-      {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
-      },
-    ).addTo(map);
+    addBrandTileLayer(map);
 
     const icon = L.divIcon({
       className: "custom-marker",

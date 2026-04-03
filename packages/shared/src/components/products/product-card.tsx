@@ -22,7 +22,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
       {/* `fill` is required — explicit width/height on <Image> overrides the
           container's aspect-ratio in a flex column, making it impossible
           to control the image container height via CSS. */}
-      <div className="relative aspect-square w-full bg-foreground/5">
+      <div className="relative aspect-square w-full bg-card">
         {product.imageUrl && (
           <Image
             src={product.imageUrl}

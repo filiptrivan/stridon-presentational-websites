@@ -3,7 +3,7 @@ import { Skeleton } from "@brand/ui/skeleton";
 const ProductCardSkeleton = () => {
   return (
     <div className="relative flex flex-col bg-foreground/5 border border-border/20 rounded-lg lg:rounded-xl overflow-hidden h-full">
-      <div className="relative aspect-square w-full bg-foreground/5" />
+      <div className="relative aspect-square w-full bg-card" />
 
       <div className="flex flex-col flex-1 p-3 sm:p-4">
         <div className="space-y-2">

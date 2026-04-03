@@ -77,7 +77,7 @@ const Navbar = ({ categories }: NavbarProps) => {
                           </NavigationMenuTrigger>
                           <NavigationMenuContent className="min-w-[420px]">
                             <ul className="grid grid-cols-2 gap-0.5 p-1">
-                              {categories.map((cat) => (
+                              {categories.slice(0, 4).map((cat) => (
                                 <li key={cat.slug}>
                                   <NavigationMenuLink asChild>
                                     <Link

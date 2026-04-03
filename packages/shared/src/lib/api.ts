@@ -1,6 +1,6 @@
 "use cache";
 
-// Caching strategy: time-based expiry only (hours for structural data, minutes
+// Caching strategy: time-based expiry only (days for structural data, hours
 // for product details). No on-demand revalidation endpoint — this is a
 // display-only site so slight staleness is acceptable.
 
@@ -47,10 +47,10 @@ async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
   return res.json() as Promise<T>;
 }
 
-//#region Hours profile — structural/marketing data
+//#region Days profile — structural/marketing data
 
 export async function getCategories(): Promise<Category[]> {
-  cacheLife("hours");
+  cacheLife("days");
   cacheTag(TAGS.categories);
   return apiFetch<Category[]>(
     `/api/Storefront/Categories?brandSlug=${BRAND_SLUG}`,
@@ -63,7 +63,7 @@ export async function getLeafCategories(): Promise<Category[]> {
 }
 
 export async function getSitemapProducts(): Promise<SitemapEntry[]> {
-  cacheLife("hours");
+  cacheLife("days");
   cacheTag(TAGS.products);
   return apiFetch<SitemapEntry[]>(
     `/api/Storefront/SitemapProductsByBrand?brandSlug=${BRAND_SLUG}`,
@@ -72,10 +72,10 @@ export async function getSitemapProducts(): Promise<SitemapEntry[]> {
 
 //#endregion
 
-//#region Minutes profile — product/detail data
+//#region Hours profile — product/detail data
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
-  cacheLife("minutes");
+  cacheLife("hours");
   cacheTag(TAGS.products);
   try {
     return await apiFetch<Product>(
@@ -90,7 +90,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 export async function getCategoryBySlug(
   slug: string,
 ): Promise<Category | null> {
-  cacheLife("minutes");
+  cacheLife("hours");
   cacheTag(TAGS.categories);
   try {
     return await apiFetch<Category>(
@@ -106,7 +106,7 @@ export async function getFilteredProducts(
   offset: number,
   limit: number,
 ): Promise<ProductCardsResult> {
-  cacheLife("minutes");
+  cacheLife("hours");
   cacheTag(TAGS.products);
   return apiFetch<ProductCardsResult>("/api/Storefront/FilteredProducts", {
     method: "POST",
@@ -124,7 +124,7 @@ export async function getFilteredProductsByCategory(
   offset: number,
   limit: number,
 ): Promise<ProductCardsResult> {
-  cacheLife("minutes");
+  cacheLife("hours");
   cacheTag(TAGS.products);
   return apiFetch<ProductCardsResult>("/api/Storefront/FilteredProducts", {
     method: "POST",

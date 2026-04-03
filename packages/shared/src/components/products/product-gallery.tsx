@@ -35,14 +35,20 @@ const ProductGallery = ({
   return (
     <div className="flex flex-col gap-3">
       <div className="relative aspect-square w-full rounded-lg bg-foreground/5 overflow-hidden border border-border/20">
-        <Image
-          src={allImages[selectedIndex].url}
-          alt={title}
-          fill
-          className="object-contain p-4"
-          sizes="(max-width: 768px) 100vw, 50vw"
-          priority={selectedIndex === 0}
-        />
+        {allImages.map((image, index) => (
+          <Image
+            key={image.url}
+            src={image.url}
+            alt={index === 0 ? title : `${title} - slika ${index + 1}`}
+            fill
+            className={cn(
+              "object-contain p-4 transition-opacity duration-200",
+              index === selectedIndex ? "opacity-100 z-10" : "opacity-0 z-0",
+            )}
+            sizes="(max-width: 768px) 100vw, 50vw"
+            priority={index === 0}
+          />
+        ))}
       </div>
 
       {allImages.length > 1 && (

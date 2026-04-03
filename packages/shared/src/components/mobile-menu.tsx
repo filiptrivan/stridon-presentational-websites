@@ -57,7 +57,7 @@ const MobileMenu = ({ categories }: MobileMenuProps) => {
                           Sve kategorije
                         </Link>
                       </SheetClose>
-                      {categories.map((cat) => (
+                      {categories.slice(0, 4).map((cat) => (
                         <SheetClose asChild key={cat.slug}>
                           <Link
                             href={`/proizvodi/kategorije/${cat.slug}`}
