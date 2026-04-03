@@ -67,7 +67,7 @@ const ProductDetail = ({
         {/* Left: Gallery */}
         <Container>
           <ProductGallery
-            images={product.productMedia}
+            media={product.productMedia}
             fallbackUrl={product.imageUrl}
             title={product.title}
           />
