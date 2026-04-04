@@ -148,7 +148,7 @@ const ProductGallery = ({
                       src={item.thumbnailUrl}
                       alt={`${title} - video ${i + 1}`}
                       fill
-                      sizes="50vw"
+                      sizes="(min-width: 1024px) 576px, 100vw"
                       className="object-contain p-4"
                     />
                   ) : null}
@@ -162,7 +162,7 @@ const ProductGallery = ({
                 src={item.url}
                 alt={i === 0 ? title : `${title} - slika ${i + 1}`}
                 fill
-                sizes="50vw"
+                sizes="(min-width: 1024px) 576px, 100vw"
                 className={cn(
                   "object-contain p-4 transition-opacity duration-200",
                   isSelected ? "opacity-100 z-10" : "opacity-0 z-0",

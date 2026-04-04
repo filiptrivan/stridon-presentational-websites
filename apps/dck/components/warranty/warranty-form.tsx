@@ -97,7 +97,7 @@ const WarrantyForm = () => {
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={(e) => handleSubmit(onSubmit)(e)}
       className="max-w-3xl mx-auto w-full space-y-6"
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
