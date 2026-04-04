@@ -117,7 +117,7 @@ const ProductGallery = ({
 
         {/* Main media display — aspect-square drives the grid row height */}
         <div
-          className="relative aspect-square rounded-lg overflow-hidden cursor-pointer border border-border/20"
+          className="relative aspect-square rounded-lg overflow-hidden cursor-pointer border border-border/40"
           onClick={() => setLightboxOpen(true)}
         >
           {allMedia.map((item, i) => {
@@ -178,7 +178,7 @@ const ProductGallery = ({
       <div className="lg:hidden">
         {allMedia.length === 1 ? (
           <div
-            className="relative aspect-square rounded-lg overflow-hidden border border-border/20"
+            className="relative aspect-square rounded-lg overflow-hidden border border-border/40"
             onClick={() => !isVideoMedia(allMedia[0]) && setLightboxOpen(true)}
           >
             {isVideoMedia(allMedia[0]) ? (
@@ -212,7 +212,7 @@ const ProductGallery = ({
                 {allMedia.map((item, i) => (
                   <div
                     key={item.url}
-                    className="flex-[0_0_100%] min-w-0 relative aspect-square border border-border/20"
+                    className="flex-[0_0_100%] min-w-0 relative aspect-square border border-border/40"
                   >
                     {isVideoMedia(item) ? (
                       <video
