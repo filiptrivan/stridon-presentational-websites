@@ -133,6 +133,15 @@ export function createCategoryMetadata({
   });
 }
 
+export function createNotFoundMetadata(): Metadata {
+  return {
+    title: "Stranica nije pronađena",
+    description:
+      "Stranica koju tražiš ne postoji ili je premeštena. Proveri adresu ili se vrati na početnu.",
+    robots: { index: false, follow: true },
+  };
+}
+
 export function createProductMetadata({
   title,
   description,
