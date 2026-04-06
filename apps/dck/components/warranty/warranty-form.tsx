@@ -1,9 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Send } from "lucide-react";
+import { format } from "date-fns";
+import { sr } from "date-fns/locale";
+import { CalendarIcon, Loader2, Send } from "lucide-react";
 import { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { submitWarrantyRegistration } from "@/app/registracija-garancije/actions";
@@ -20,12 +22,19 @@ import { TURNSTILE_VERIFICATION_FAILED } from "@brand/shared/lib/turnstile";
 import { Button } from "@brand/ui/button";
 import { Input } from "@brand/ui/input";
 import { Label } from "@brand/ui/label";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const WarrantyForm = () => {
   const {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<WarrantyFormData>({
     resolver: zodResolver(warrantySchema),
@@ -202,21 +211,54 @@ const WarrantyForm = () => {
         </div>
       </div>
 
-      <div className="space-y-3">
-        <Label htmlFor="purchaseDate">Datum kupovine</Label>
-        <Input
-          id="purchaseDate"
-          type="date"
-          className="bg-background border-border/50 sm:max-w-[calc(50%-0.75rem)]"
-          aria-invalid={!!errors.purchaseDate}
-          {...register("purchaseDate")}
-        />
-        {errors.purchaseDate && (
-          <p className="text-sm text-destructive">
-            {errors.purchaseDate.message}
-          </p>
-        )}
-      </div>
+      <Controller
+        name="purchaseDate"
+        control={control}
+        render={({ field }) => {
+          const selectedDate = field.value
+            ? new Date(field.value + "T00:00:00")
+            : undefined;
+          return (
+            <div className="space-y-3">
+              <Label id="purchaseDate-label">Datum kupovine</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    data-empty={!field.value}
+                    className="w-full justify-start text-left font-normal bg-background border-border/50 data-[empty=true]:text-muted-foreground"
+                    aria-invalid={!!errors.purchaseDate}
+                    aria-labelledby="purchaseDate-label"
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {selectedDate
+                      ? format(selectedDate, "PPP", { locale: sr })
+                      : "Izaberi datum"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={selectedDate}
+                    onSelect={(date) =>
+                      field.onChange(
+                        date ? format(date, "yyyy-MM-dd") : "",
+                      )
+                    }
+                    disabled={(date) => date > new Date()}
+                    locale={sr}
+                  />
+                </PopoverContent>
+              </Popover>
+              {errors.purchaseDate && (
+                <p className="text-sm text-destructive">
+                  {errors.purchaseDate.message}
+                </p>
+              )}
+            </div>
+          );
+        }}
+      />
 
       <div className="space-y-3">
         <Label htmlFor="receiptImage">
