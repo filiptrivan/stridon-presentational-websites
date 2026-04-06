@@ -1,6 +1,7 @@
 "use server";
 
 import { contactSchema, type ContactFormData } from "@brand/shared/lib/schemas/contact";
+import { reportError } from "@brand/shared/lib/report-error";
 import { TURNSTILE_VERIFICATION_FAILED } from "@brand/shared/lib/turnstile";
 import { validateTurnstileToken } from "@brand/shared/lib/turnstile-server";
 import type { ActionResult } from "@brand/shared/types/actions";
@@ -21,7 +22,7 @@ export async function sendContactEmail(
 
   const apiKey = process.env.BREVO_API_KEY;
   if (!apiKey) {
-    console.error("BREVO_API_KEY is not set");
+    reportError(new Error("BREVO_API_KEY is not set"), { source: "sendContactEmail" });
     return {
       success: false,
       error: "Slanje poruke trenutno nije moguće. Pokušaj ponovo kasnije.",
@@ -52,7 +53,7 @@ export async function sendContactEmail(
 
     if (!response.ok) {
       const body = await response.text();
-      console.error("Brevo API error:", response.status, body);
+      reportError(new Error(`Brevo API error: ${response.status}`), { source: "sendContactEmail", details: body });
       return {
         success: false,
         error: "Slanje poruke nije uspelo. Pokušaj ponovo kasnije.",
@@ -61,7 +62,7 @@ export async function sendContactEmail(
 
     return { success: true };
   } catch (error) {
-    console.error("Failed to send contact email:", error);
+    reportError(error, { source: "sendContactEmail" });
     return {
       success: false,
       error: "Slanje poruke nije uspelo. Pokušaj ponovo kasnije.",

@@ -3,11 +3,13 @@
 // Server-side Turnstile token verification.
 // Docs: https://developers.cloudflare.com/turnstile/get-started/server-side-validation/
 
+import { reportError } from "./report-error";
+
 export async function validateTurnstileToken(token: string): Promise<boolean> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
 
   if (!secret) {
-    console.error("Missing TURNSTILE_SECRET_KEY");
+    reportError(new Error("Missing TURNSTILE_SECRET_KEY"), { source: "validateTurnstileToken" });
     return false;
   }
 

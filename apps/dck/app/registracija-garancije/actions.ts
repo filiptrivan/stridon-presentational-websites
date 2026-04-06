@@ -7,6 +7,7 @@ import {
   FILE_TOO_LARGE_ERROR,
   FILE_TYPE_ERROR,
 } from "@/lib/schemas/warranty";
+import { reportError } from "@brand/shared/lib/report-error";
 import { TURNSTILE_VERIFICATION_FAILED } from "@brand/shared/lib/turnstile";
 import { validateTurnstileToken } from "@brand/shared/lib/turnstile-server";
 import type { ActionResult } from "@brand/shared/types/actions";
@@ -57,7 +58,7 @@ export async function submitWarrantyRegistration(
 
   const apiUrl = process.env.API_URL;
   if (!apiUrl) {
-    console.error("API_URL is not set");
+    reportError(new Error("API_URL is not set"), { source: "submitWarrantyRegistration" });
     return {
       success: false,
       error: "Registracija trenutno nije moguća. Pokušaj ponovo kasnije.",
@@ -66,7 +67,7 @@ export async function submitWarrantyRegistration(
 
   const apiKey = process.env.PACMS_API_KEY;
   if (!apiKey) {
-    console.error("PACMS_API_KEY is not set");
+    reportError(new Error("PACMS_API_KEY is not set"), { source: "submitWarrantyRegistration" });
     return {
       success: false,
       error: "Registracija trenutno nije moguća. Pokušaj ponovo kasnije.",
@@ -102,7 +103,10 @@ export async function submitWarrantyRegistration(
 
     if (!response.ok) {
       const body = await response.text();
-      console.error("Warranty API error:", response.status, body);
+      reportError(new Error(`Warranty API error: ${response.status}`), {
+        source: "submitWarrantyRegistration",
+        details: body,
+      });
       return {
         success: false,
         error: "Registracija nije uspela. Pokušaj ponovo kasnije.",
@@ -111,7 +115,7 @@ export async function submitWarrantyRegistration(
 
     return { success: true };
   } catch (error) {
-    console.error("Failed to submit warranty registration:", error);
+    reportError(error, { source: "submitWarrantyRegistration" });
     return {
       success: false,
       error: "Registracija nije uspela. Pokušaj ponovo kasnije.",
