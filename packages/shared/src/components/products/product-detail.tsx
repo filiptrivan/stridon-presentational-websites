@@ -116,6 +116,12 @@ const ProductDetail = ({
 
             {/* Metadata */}
             <div className="mt-8 pt-6 border-t border-border/20 space-y-2 text-sm">
+              {product.sku != null && (
+                <div className="flex gap-2">
+                  <span className="text-muted-foreground">Šifra proizvoda:</span>
+                  <span>{product.sku}</span>
+                </div>
+              )}
               {product.weightKg != null && (
                 <div className="flex gap-2">
                   <span className="text-muted-foreground">Težina:</span>

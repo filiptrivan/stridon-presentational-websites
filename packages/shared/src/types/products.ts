@@ -51,6 +51,7 @@ export interface Product extends ProductCardData {
   productMedia: ProductMedia[];
   weightKg: number | null;
   heightCm: number | null;
+  sku: string | null;
   relatedProducts: ProductCardData[];
 }
 
