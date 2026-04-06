@@ -6,6 +6,7 @@
 
 import { getBrandConfig } from "@brand/config";
 import { TAGS } from "./cache-tags";
+import { reportError } from "./report-error";
 import type { Category } from "../types/categories";
 import type {
   Product,
@@ -39,11 +40,16 @@ async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
     },
   });
 
-  if (!res.ok)
-    throw new ApiError(
+  if (!res.ok) {
+    const error = new ApiError(
       res.status,
       `API error: ${res.status} ${res.statusText}`,
     );
+    if (res.status !== 404) {
+      reportError(error, { source: `apiFetch ${path}` });
+    }
+    throw error;
+  }
   return res.json() as Promise<T>;
 }
 
