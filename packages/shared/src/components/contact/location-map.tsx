@@ -32,7 +32,7 @@ export default function LocationMap({ lat, lng, name }: LocationMapProps) {
         width: 24px;
         height: 24px;
         border-radius: 50%;
-        background: oklch(44.4% 0.177 26.899);
+        background: var(--primary);
         border: 3px solid #fff;
         box-shadow: 0 2px 8px rgba(0,0,0,0.4);
       "></div>`,

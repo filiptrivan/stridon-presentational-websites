@@ -21,7 +21,7 @@ function createMarkerIcon(isSelected: boolean) {
       width: 24px;
       height: 24px;
       border-radius: 50%;
-      background: ${isSelected ? "oklch(44.4% 0.177 26.899)" : "#6b7280"};
+      background: ${isSelected ? "var(--primary)" : "#6b7280"};
       border: 3px solid ${isSelected ? "#fff" : "#9ca3af"};
       box-shadow: 0 2px 8px rgba(0,0,0,0.4);
       transition: all 0.2s ease;
