@@ -1,29 +1,13 @@
+import Container from "@brand/shared/components/container";
+import HeroHeader from "@brand/shared/components/hero-header";
+import { Button } from "@brand/ui/button";
 import { ExternalLinkIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import Container from "@brand/shared/components/container";
-import HeroBadge from "@brand/shared/components/hero-badge";
-import HeroBadges from "@brand/shared/components/hero-badges";
-import HeroHeader from "@brand/shared/components/hero-header";
-import { Button } from "@brand/ui/button";
 
 const Hero = () => {
   return (
     <HeroHeader
-      pretitle={
-        <HeroBadges heading="Jedini zvanični distributeri">
-          <HeroBadge
-            href="https://www.stridon.rs"
-            label="Stridon Group"
-            className="border border-border bg-background/60 text-foreground"
-          />
-          <HeroBadge
-            href="https://www.prodavnicaalata.rs/"
-            label="Prodavnica Alata"
-            className="border border-border bg-background/60 text-foreground"
-          />
-        </HeroBadges>
-      }
       title={
         <>
           Profesionalni električni alati{" "}
@@ -31,7 +15,7 @@ const Hero = () => {
           za svaki posao
         </>
       }
-      description="DCK električni alati — pouzdani, izdržljivi i dostupni. Zvanični distributer za teritoriju Srbije."
+      description="DCK električni i aku alati sa zvaničnom distribucijom, servisom i produženom garancijom uz registraciju u Srbiji."
       showSvgGrid={true}
     >
       <Container delay={0.3}>

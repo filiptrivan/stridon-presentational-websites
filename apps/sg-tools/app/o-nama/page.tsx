@@ -5,6 +5,12 @@ import CompanyValues from "@brand/shared/components/company-values";
 import CTA from "@brand/shared/components/cta";
 import HeroHeader from "@brand/shared/components/hero-header";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
+import {
+  ABOUT_MILESTONES,
+  ABOUT_PARAGRAPHS,
+  COMPANY_BENEFITS,
+  STATS,
+} from "@/constants/content";
 
 export const metadata = createPageMetadata({
   title: "O nama",
@@ -20,10 +26,10 @@ const AboutPage = () => {
         title="Brend koji je nastao iz porodične priče i stvarnog iskustva"
         description="Iza brenda SG Tools stoje godine rada u prodaji, distribuciji i svakodnevnom kontaktu sa ljudima koji alat koriste da bi završili posao, zaradili i ispoštovali rokove. Posle dugogodišnjeg iskustva na tržištu, odlučili smo da znanje koje smo skupljali pretvorimo u sopstveni brend."
       />
-      <CompanyStats />
-      <AboutStory />
-      <CompanyValues />
-      <CompanyBenefits />
+      <CompanyStats stats={STATS} />
+      <AboutStory paragraphs={ABOUT_PARAGRAPHS} />
+      <CompanyValues milestones={ABOUT_MILESTONES} />
+      <CompanyBenefits benefits={COMPANY_BENEFITS} />
       <CTA />
     </div>
   );

@@ -9,7 +9,6 @@ import {
   NavigationMenuTrigger,
 } from "@brand/ui/navigation-menu";
 import { Button } from "@brand/ui/button";
-import { NAV_LINKS } from "@/constants/links";
 import { cn } from "../lib/utils";
 import type { Category } from "../types/categories";
 import { getBrandConfig } from "@brand/config";
@@ -19,16 +18,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Container from "./container";
-import MobileMenu from "./mobile-menu";
+import MobileMenu, { type NavbarLink } from "./mobile-menu";
 import Wrapper from "./wrapper";
 
 const { logoSrc, logoAlt, navbarLogoHeight, headerCta } = getBrandConfig();
 
 interface NavbarProps {
   categories: Category[];
+  navLinks: readonly NavbarLink[];
 }
 
-const Navbar = ({ categories }: NavbarProps) => {
+const Navbar = ({ categories, navLinks }: NavbarProps) => {
   const router = useRouter();
 
   return (
@@ -58,7 +58,7 @@ const Navbar = ({ categories }: NavbarProps) => {
           <NavigationMenu>
             <NavigationMenuList className="gap-x-1 flex-nowrap">
               <AnimatePresence>
-                {NAV_LINKS.map((link, index) => (
+                {navLinks.map((link, index) => (
                   <Container
                     key={index}
                     animation="fadeDown"
@@ -135,7 +135,7 @@ const Navbar = ({ categories }: NavbarProps) => {
           </Container>
           <div className="md:hidden">
             <Container animation="fadeLeft" delay={0.1}>
-              <MobileMenu categories={categories} />
+              <MobileMenu categories={categories} navLinks={navLinks} />
             </Container>
           </div>
         </div>

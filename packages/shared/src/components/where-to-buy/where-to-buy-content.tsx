@@ -3,10 +3,9 @@
 import Container from "../container";
 import { Button } from "@brand/ui/button";
 import Wrapper from "../wrapper";
-import { DEALERS } from "@/constants/dealers";
 import { getDistanceKm } from "@brand/shared/lib/geo";
 import { cn } from "@brand/shared/lib/utils";
-import type { DealerCategory } from "@brand/shared/types/dealers";
+import type { Dealer, DealerCategory } from "@brand/shared/types/dealers";
 import { LocateFixed, Search, ShieldAlert, X } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -24,7 +23,13 @@ const DealerMap = dynamic(() => import("./dealer-map"), {
 type CategoryFilter = "all" | DealerCategory;
 type LocationStatus = "idle" | "loading" | "granted" | "denied" | "unavailable";
 
-export default function WhereToBuyContent() {
+interface WhereToBuyContentProps {
+  dealers: Dealer[];
+}
+
+export default function WhereToBuyContent({
+  dealers,
+}: WhereToBuyContentProps) {
   const [selectedDealerId, setSelectedDealerId] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -49,7 +54,7 @@ export default function WhereToBuyContent() {
   const distances = useMemo(() => {
     if (!userLocation) return null;
     const map = new Map<string, number>();
-    for (const dealer of DEALERS) {
+    for (const dealer of dealers) {
       map.set(
         dealer.id,
         getDistanceKm(
@@ -61,10 +66,10 @@ export default function WhereToBuyContent() {
       );
     }
     return map;
-  }, [userLocation]);
+  }, [dealers, userLocation]);
 
   const filteredDealers = useMemo(() => {
-    const filtered = DEALERS.filter((dealer) => {
+    const filtered = dealers.filter((dealer) => {
       if (activeCategory !== "all" && dealer.category !== activeCategory) {
         return false;
       }
@@ -86,7 +91,7 @@ export default function WhereToBuyContent() {
     }
 
     return filtered;
-  }, [activeCategory, searchQuery, distances]);
+  }, [activeCategory, searchQuery, dealers, distances]);
 
   const nearestDealerId = useMemo(() => {
     if (!distances || filteredDealers.length === 0) return null;
@@ -148,7 +153,7 @@ export default function WhereToBuyContent() {
 
         let nearestId: string | null = null;
         let minDist = Infinity;
-        for (const dealer of DEALERS) {
+        for (const dealer of dealers) {
           const dist = getDistanceKm(
             loc.lat,
             loc.lng,

@@ -1,8 +1,15 @@
 import { getLeafCategories } from "../lib/api";
 import type { Category } from "../types/categories";
 import Navbar from "./navbar";
+import type { NavbarLink } from "./mobile-menu";
 
-const NavbarWithCategories = async () => {
+interface NavbarWithCategoriesProps {
+  navLinks: readonly NavbarLink[];
+}
+
+const NavbarWithCategories = async ({
+  navLinks,
+}: NavbarWithCategoriesProps) => {
   let categories: Category[] = [];
   try {
     categories = await getLeafCategories();
@@ -10,7 +17,7 @@ const NavbarWithCategories = async () => {
     categories = [];
   }
 
-  return <Navbar categories={categories} />;
+  return <Navbar categories={categories} navLinks={navLinks} />;
 };
 
 export default NavbarWithCategories;

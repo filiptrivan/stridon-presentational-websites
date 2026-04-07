@@ -10,6 +10,7 @@ import { reportError } from "./report-error";
 import type { Category } from "../types/categories";
 import type {
   Product,
+  ProductCardData,
   ProductCardsResult,
   SitemapEntry,
 } from "../types/products";
@@ -123,6 +124,22 @@ export async function getFilteredProducts(
       rows: limit,
     }),
   });
+}
+
+export async function getFeaturedProductsByBrand(
+  count?: number,
+): Promise<ProductCardData[]> {
+  cacheLife("hours");
+  cacheTag(TAGS.products);
+
+  const searchParams = new URLSearchParams({ brandSlug: BRAND_SLUG });
+  if (count !== undefined) {
+    searchParams.set("count", String(count));
+  }
+
+  return apiFetch<ProductCardData[]>(
+    `/api/Storefront/FeaturedProductsByBrand?${searchParams.toString()}`,
+  );
 }
 
 export async function getFilteredProductsByCategory(

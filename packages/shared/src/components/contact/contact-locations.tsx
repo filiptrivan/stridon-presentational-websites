@@ -1,6 +1,5 @@
 "use client";
 
-import { CONTACT_INFO } from "@/constants";
 import { ExternalLink, MapPin } from "lucide-react";
 import dynamic from "next/dynamic";
 import Container from "../container";
@@ -8,10 +7,15 @@ import IconBox from "../icon-box";
 import SectionHeader from "../section-header";
 import Section from "../section";
 import Wrapper from "../wrapper";
+import type { ContactLocation } from "./contact-hero";
 
 const LocationMap = dynamic(() => import("./location-map"), { ssr: false });
 
-function ContactLocations() {
+interface ContactLocationsProps {
+  locations: ContactLocation[];
+}
+
+function ContactLocations({ locations }: ContactLocationsProps) {
   return (
     <Section className="pt-0!">
       <Wrapper>
@@ -26,7 +30,7 @@ function ContactLocations() {
         </Container>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {CONTACT_INFO.locations.map((location, index) => (
+          {locations.map((location, index) => (
             <Container key={location.name} delay={0.2 + index * 0.1}>
               <div className="relative rounded-2xl border border-border/50 overflow-hidden">
                 <div className="aspect-[16/10] w-full isolate">

@@ -3,6 +3,13 @@ import Footer from "@brand/shared/components/footer";
 import Navbar from "@brand/shared/components/navbar";
 import NavbarWithCategories from "@brand/shared/components/navbar-with-categories";
 import { Toaster } from "@brand/ui/sonner";
+import {
+  COMPANY_FOOTER_LINKS,
+  LEGAL_LINKS,
+  NAV_LINKS,
+  PRODUCTS_FOOTER_LINKS,
+  SOCIAL_LINKS,
+} from "@/constants/links";
 import { base, heading } from "@/constants/fonts";
 import { createRootMetadata } from "@brand/shared/lib/metadata";
 import { cn } from "@brand/shared/lib/utils";
@@ -47,11 +54,16 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             }),
           }}
         />
-        <Suspense fallback={<Navbar categories={[]} />}>
-          <NavbarWithCategories />
+        <Suspense fallback={<Navbar categories={[]} navLinks={NAV_LINKS} />}>
+          <NavbarWithCategories navLinks={NAV_LINKS} />
         </Suspense>
         <main className="pt-16">{children}</main>
-        <Footer />
+        <Footer
+          productLinks={PRODUCTS_FOOTER_LINKS}
+          companyLinks={COMPANY_FOOTER_LINKS}
+          legalLinks={LEGAL_LINKS}
+          socialLinks={SOCIAL_LINKS}
+        />
         <Toaster />
       </body>
     </html>

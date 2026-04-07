@@ -1,10 +1,42 @@
-import { CONTACT_INFO } from "@/constants";
 import { formatTelHref } from "@brand/shared/lib/utils";
+import { type ContactFormData } from "@brand/shared/lib/schemas/contact";
+import type { ActionResult } from "@brand/shared/types/actions";
 import { type LucideIcon, Clock, Mail, Phone } from "lucide-react";
 import { type ReactNode } from "react";
 import Container from "../container";
 import HeroHeader from "../hero-header";
 import ContactForm from "./contact-form";
+
+export interface ContactPhone {
+  label: string;
+  number: string;
+}
+
+export interface ContactHour {
+  days: string;
+  time: string;
+}
+
+export interface ContactLocation {
+  name: string;
+  address: string;
+  coords: { lat: number; lng: number };
+}
+
+export interface ContactInfo {
+  email: string;
+  phones: ContactPhone[];
+  hours: ContactHour[];
+  locations: ContactLocation[];
+}
+
+interface ContactHeroProps {
+  contactInfo: ContactInfo;
+  submitContact: (
+    data: ContactFormData,
+    turnstileToken: string,
+  ) => Promise<ActionResult>;
+}
 
 function ContactCard({
   icon: Icon,
@@ -24,7 +56,7 @@ function ContactCard({
   );
 }
 
-function ContactHero() {
+function ContactHero({ contactInfo, submitContact }: ContactHeroProps) {
   return (
     <HeroHeader
       title="Javi nam se"
@@ -34,12 +66,12 @@ function ContactHero() {
         delay={0.3}
         className="flex flex-col sm:flex-row gap-16 sm:gap-5 w-full mt-12"
       >
-        <ContactForm />
+        <ContactForm submitContact={submitContact} />
         <div className="flex flex-col gap-5 w-full">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <ContactCard icon={Phone} title="Telefoni">
               <ul className="mt-2 space-y-1 text-center">
-                {CONTACT_INFO.phones.map((phone) => (
+                {contactInfo.phones.map((phone) => (
                   <li key={phone.number}>
                     <span className="text-xs">{phone.label}</span>
                     <br />
@@ -56,7 +88,7 @@ function ContactHero() {
 
             <ContactCard icon={Clock} title="Radno vreme">
               <ul className="mt-2 space-y-1 text-center">
-                {CONTACT_INFO.hours.map((slot) => (
+                {contactInfo.hours.map((slot) => (
                   <li key={slot.days}>
                     <span className="text-xs">{slot.days}</span>
                     <br />
@@ -71,10 +103,10 @@ function ContactHero() {
 
           <ContactCard icon={Mail} title="E-mail">
             <a
-              href={`mailto:${CONTACT_INFO.email}`}
+              href={`mailto:${contactInfo.email}`}
               className="text-sm text-muted-foreground mt-1 hover:text-primary transition-colors"
             >
-              {CONTACT_INFO.email}
+              {contactInfo.email}
             </a>
           </ContactCard>
         </div>

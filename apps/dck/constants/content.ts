@@ -1,75 +1,82 @@
+import { Award, BadgePercent, ShieldCheck, ToolCase } from "lucide-react";
+
 export const FEATURES = [
   {
-    title: "Svetski kvalitet",
-    desc: "DCK alati su testirani i sertifikovani po najvišim međunarodnim standardima.",
+    title: "Proveren kvalitet",
+    desc: "Testirani i sertifikovani alati za pouzdan rad.",
+    icon: Award,
   },
   {
-    title: "Širok asortiman",
-    desc: "Od bušilica do brusilica — kompletan program za profesionalce i majstore.",
+    title: "Širok izbor alata",
+    desc: "Od bušilica do testera, DCK pokriva najtraženije kategorije.",
+    icon: ToolCase,
   },
   {
     title: "Zvanična garancija",
-    desc: "Svi proizvodi dolaze sa zvaničnom garancijom i podrškom u Srbiji.",
+    desc: "Garancija, servis i tehnička podrška dostupni u Srbiji.",
+    icon: ShieldCheck,
   },
   {
-    title: "Pristupačne cene",
-    desc: "Profesionalni kvalitet po konkurentnim cenama na tržištu.",
+    title: "Odnos cene i kvaliteta",
+    desc: "Profesionalne performanse po ceni koja ima smisla.",
+    icon: BadgePercent,
   },
 ];
 
 export const STATS = [
-  { value: "10.630+", label: "Veleprodajnih kupaca" },
-  { value: "120+", label: "Dilera širom Srbije" },
-  { value: "100%", label: "Zadovoljstvo uslugom" },
+  { value: "1995", label: "Godina osnivanja Dongcheng-a" },
+  { value: "100+", label: "Zemalja prisustva" },
+  { value: "390.000", label: "m² izgrađenog prostora" },
+  { value: "5.800+", label: "Zaposlenih" },
 ];
 
 export const ABOUT_MILESTONES = [
   {
-    title: "Međunarodni brend",
+    title: "Dongcheng od 1995.",
     description:
-      "DCK je globalni brend profesionalnih električnih alata prisutan u desetinama zemalja širom sveta.",
+      "DCK je profesionalni brend kompanije Jiangsu Dongcheng Power Tools, osnovane 1995. godine.",
   },
   {
-    title: "Ekskluzivna distribucija",
+    title: "390.000 m² kapaciteta",
     description:
-      "Stridon Group je jedini ovlašćeni distributer DCK alata za teritoriju Srbije.",
+      "Dongcheng raspolaže sa 350.000 m² površine i oko 390.000 m² izgrađenog proizvodnog i poslovnog prostora.",
   },
   {
-    title: "Dostupan svima",
+    title: "100+ zemalja i Srbija",
     description:
-      "Kroz mrežu od preko 120 dilera širom Srbije, DCK alati su dostupni svim profesionalcima.",
+      "DCK je prisutan u više od 100 zemalja, a Stridon Group je zvanični distributer za teritoriju Srbije.",
   },
 ];
 
 export const COMPANY_BENEFITS = [
   {
-    title: "Sertifikovan kvalitet",
+    title: "Garancija i servis",
     description:
-      "DCK alati prolaze stroge testove kvaliteta i izdržljivosti pre nego što stignu na tržište.",
+      "Lokalna registracija garancije, ovlašćeni servis i tehnička podrška za korisnike u Srbiji.",
   },
   {
-    title: "Ergonomski dizajn",
+    title: "Brushless aku program",
     description:
-      "Prirodno leži u ruci, pruža siguran hvat i smanjuje zamor pri radu.",
+      "Širok izbor aku alata i platformi za radionicu, montažu, gradilište i servisne poslove.",
   },
   {
-    title: "Kompletna podrška",
+    title: "Sopstvena proizvodnja",
     description:
-      "Zvanična garancija, servis i tehnička podrška dostupni u Srbiji.",
+      "Ključne komponente, laboratorije i kontrola procesa ostaju pod direktnim nadzorom proizvođača.",
   },
   {
-    title: "Konkurentne cene",
+    title: "Profesionalni odnos cene i kvaliteta",
     description:
-      "Profesionalni alati po cenama koje imaju smisla za svakodnevni rad.",
+      "Performanse i izdržljivost profesionalnog segmenta po cenama koje imaju smisla za svakodnevni rad.",
   },
 ];
 
 export const ABOUT_PARAGRAPHS = [
-  "DCK je međunarodni brend profesionalnih električnih alata koji se odlikuje pouzdanošću, izdržljivošću i modernim dizajnom. Prisutan u desetinama zemalja širom sveta, DCK je sinonim za kvalitet koji profesionalci prepoznaju.",
-  "Stridon Group DOO je jedini zvanični i ovlašćeni distributer DCK alata za teritoriju Republike Srbije. Kao kompanija sa tri decenije iskustva u industriji alata, pažljivo smo odabrali DCK jer deli naše vrednosti — kvalitet, pouzdanost i pristupačnost.",
-  "Naša misija je jasna: učiniti profesionalne DCK alate dostupnim svakom majstoru, instalateru i hobisti u Srbiji. Kroz mrežu od preko 120 dilera širom zemlje, DCK alati su nadohvat ruke.",
-  "Svi DCK proizvodi koje distribuiramo dolaze sa zvaničnom garancijom i kompletnom tehničkom podrškom. Naš servisni tim je tu da obezbedi da tvoj alat uvek radi na najvišem nivou.",
-  "Od bušilica i brusilica do testera i višenamenskih alata — DCK program pokriva sve što ti treba za profesionalan rad. Svaki alat je dizajniran sa fokusom na ergonomiju, snagu i dugotrajnost.",
-  "Verujemo da profesionalni kvalitet ne mora da bude nedostupan. DCK alati nude odličan odnos cene i performansi, bez kompromisa na račun izdržljivosti.",
-  "Zajedno sa DCK-om gradimo budućnost profesionalnog alata u Srbiji — alat po alat, majstor po majstor.",
+  "DCK je profesionalni brend kompanije Jiangsu Dongcheng Power Tools, osnovane 1995. godine. Brend je razvijen za korisnike koji traže pouzdane električne i aku alate za svakodnevni intenzivan rad.",
+  "Dongcheng danas posluje na više od 350.000 m² površine i raspolaže sa oko 390.000 m² izgrađenog proizvodnog i poslovnog prostora, uz više od 5.800 zaposlenih.",
+  "DCK je prisutan u preko 100 zemalja, a u Srbiji ga zastupa Stridon Group kao zvanični distributer sa lokalnom prodajnom i servisnom podrškom.",
+  "Na domaćem tržištu fokus je na onome što korisniku realno znači: dostupnost alata, registracija garancije, servis i tehnička podrška bez oslanjanja na neproverene kanale prodaje.",
+  "Program obuhvata električne i aku alate kroz više platformi, uključujući 12V, 20V, 40V HPT i 58V, kao i širok izbor modela za bušenje, sečenje, brušenje i montažu.",
+  "DCK pozicionira profesionalni kvalitet u cenovni rang koji je pristupačniji širokom krugu majstora, instalatera i firmi koje alat koriste svakodnevno.",
+  "Zbog toga DCK na srpskom tržištu ne nastupa samo kao još jedan brend alata, već kao kombinacija globalne proizvodnje i lokalne podrške.",
 ];

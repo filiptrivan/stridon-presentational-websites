@@ -1,9 +1,13 @@
 import { DollarSign, Hand, ToolCase, Users } from "lucide-react";
-import { COMPANY_BENEFITS } from "@/constants/content";
 import Container from "./container";
 import { Feature } from "./feature";
 import Section from "./section";
 import Wrapper from "./wrapper";
+
+export type CompanyBenefit = {
+  title: string;
+  description: string;
+};
 
 const FEATURE_STYLES = [
   {
@@ -32,13 +36,17 @@ const FEATURE_STYLES = [
   },
 ];
 
-function CompanyBenefits() {
+interface CompanyBenefitsProps {
+  benefits: CompanyBenefit[];
+}
+
+function CompanyBenefits({ benefits }: CompanyBenefitsProps) {
   return (
     <Section>
       <Wrapper>
         <Container>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
-            {COMPANY_BENEFITS.map((item, index) => (
+            {benefits.map((item, index) => (
               <Feature
                 key={index}
                 title={item.title}

@@ -1,4 +1,3 @@
-import { ABOUT_MILESTONES } from "@/constants/content";
 import {
   Timeline,
   TimelineContent,
@@ -11,7 +10,7 @@ import {
 import { Rocket, Speech, Wrench } from "lucide-react";
 import { Feature } from "./feature";
 
-type Milestone = { title: string; description: string; date?: string };
+export type Milestone = { title: string; description: string; date?: string };
 
 const items = [
   {
@@ -34,10 +33,16 @@ const items = [
   },
 ];
 
-export default function CompanyTimeline() {
+interface CompanyTimelineProps {
+  milestones: Milestone[];
+}
+
+export default function CompanyTimeline({
+  milestones,
+}: CompanyTimelineProps) {
   return (
-    <Timeline defaultValue={ABOUT_MILESTONES.length + 1}>
-      {(ABOUT_MILESTONES as Milestone[]).map((item, index) => {
+    <Timeline defaultValue={milestones.length + 1}>
+      {milestones.map((item, index) => {
         const style = items[index % items.length];
         const step = index + 1;
 
@@ -64,12 +69,12 @@ export default function CompanyTimeline() {
       })}
 
       {/* These two items extends line further downward */}
-      <TimelineItem key="tail-1" step={ABOUT_MILESTONES.length + 1}>
+      <TimelineItem key="tail-1" step={milestones.length + 1}>
         <TimelineHeader>
           <TimelineSeparator />
         </TimelineHeader>
       </TimelineItem>
-      <TimelineItem key="tail-2" step={ABOUT_MILESTONES.length + 2}>
+      <TimelineItem key="tail-2" step={milestones.length + 2}>
         <TimelineHeader>
           <TimelineSeparator />
         </TimelineHeader>

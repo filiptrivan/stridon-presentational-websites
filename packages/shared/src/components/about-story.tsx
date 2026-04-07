@@ -1,19 +1,26 @@
-import { ABOUT_PARAGRAPHS } from "@/constants/content";
 import Container from "./container";
 import SectionHeader from "./section-header";
 import Section from "./section";
 import Wrapper from "./wrapper";
 
-function AboutStory() {
+interface AboutStoryProps {
+  paragraphs: string[];
+  title?: string;
+}
+
+function AboutStory({
+  paragraphs,
+  title = "Naša priča",
+}: AboutStoryProps) {
   return (
     <Section>
       <Wrapper>
         <Container>
           <SectionHeader
-            title="Naša priča"
+            title={title}
             description={
               <div className="space-y-4">
-                {ABOUT_PARAGRAPHS.map((paragraph) => (
+                {paragraphs.map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
                 ))}
               </div>

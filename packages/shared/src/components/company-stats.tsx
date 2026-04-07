@@ -1,9 +1,8 @@
-"use client";
-import { STATS } from "@/constants/content";
+import type { StatsProps } from "./stats";
 import Stats from "./stats";
 
-function CompanyStats() {
-  return <Stats stats={STATS} />;
+function CompanyStats({ stats }: StatsProps) {
+  return <Stats stats={stats} />;
 }
 
 export default CompanyStats;

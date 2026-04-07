@@ -14,7 +14,7 @@ export default async function Image() {
     (
       <DefaultTemplate
         title="O nama"
-        description="Upoznaj DCK — brend nastao iz 30 godina iskustva u svetu profesionalnih alata."
+        description="Upoznaj DCK, brend Dongcheng-a od 1995. godine, prisutan u 100+ zemalja i zvanično dostupan u Srbiji."
       />
     ),
     { ...size, fonts },

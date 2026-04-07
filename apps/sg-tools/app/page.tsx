@@ -10,25 +10,46 @@ import HeroDecorations from "@/components/hero-decorations";
 import HomeAbout from "@brand/shared/components/home-about";
 import Stats from "@brand/shared/components/stats";
 import Testimonials from "@brand/shared/components/testimonials";
-import { STATS } from "@/constants/content";
+import {
+  FEATURES,
+  HOME_ABOUT_PARAGRAPH,
+  STATS,
+} from "@/constants/content";
+import { TESTIMONIALS } from "@/constants";
 import { Suspense } from "react";
+
+const companies = [
+  { src: "/companies/svgs/enterijerjankovic.svg", alt: "Enterijer Jankovic" },
+  { src: "/companies/svgs/galens.svg", alt: "Galens" },
+  { src: "/companies/svgs/termotim.svg", alt: "Termotim" },
+  { src: "/companies/svgs/vitorog.svg", alt: "Vitorog" },
+  { src: "/companies/svgs/nobili.svg", alt: "Nobili" },
+  { src: "/companies/svgs/mbmrad.svg", alt: "MBM Rad" },
+  { src: "/companies/svgs/hidroina.svg", alt: "Hidroina" },
+  { src: "/companies/svgs/ingradnja.svg", alt: "Ingradnja" },
+  { src: "/companies/svgs/silmaxlogo.svg", alt: "Silmax" },
+  { src: "/companies/svgs/coligoars.svg", alt: "Coligoars" },
+  { src: "/companies/svgs/kokreator.svg", alt: "Kokreator" },
+  { src: "/companies/svgs/lokring.svg", alt: "Lokring" },
+  { src: "/companies/svgs/mimiz.svg", alt: "Mimiz" },
+];
 
 const HomePage = () => {
   return (
     <div>
       <HeroDecorations />
       <Hero />
-      <Companies />
+      <Companies companies={companies} />
       <Suspense fallback={<FeaturedProductsSkeleton />}>
         <FeaturedProducts />
       </Suspense>
       <Suspense fallback={<CategoriesSkeleton />}>
         <Categories />
       </Suspense>
-      <Features />
-      <HomeAbout />
+      <Features items={FEATURES} />
+      <HomeAbout description={HOME_ABOUT_PARAGRAPH} />
       <Stats stats={STATS} />
-      <Testimonials />
+      <Testimonials items={TESTIMONIALS} />
       <CTA />
     </div>
   );

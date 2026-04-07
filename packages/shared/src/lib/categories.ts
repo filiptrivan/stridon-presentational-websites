@@ -1,4 +1,4 @@
-import { SITE_URL } from "@/constants/links";
+import { getBrandConfig } from "@brand/config";
 import type { Category } from "@brand/shared/types/categories";
 
 export type BreadcrumbSegment = { label: string; href: string };
@@ -27,12 +27,13 @@ export function buildBreadcrumbJsonLd(
   segments: BreadcrumbSegment[] = [],
   currentPage?: string,
 ) {
+  const { siteUrl } = getBrandConfig();
   const items: Record<string, unknown>[] = [
-    { name: "Početna", item: `${SITE_URL}/` },
-    { name: "Kategorije", item: `${SITE_URL}/proizvodi/kategorije` },
+    { name: "Početna", item: `${siteUrl}/` },
+    { name: "Kategorije", item: `${siteUrl}/proizvodi/kategorije` },
     ...segments.map((seg) => ({
       name: seg.label,
-      item: `${SITE_URL}${seg.href}`,
+      item: `${siteUrl}${seg.href}`,
     })),
     ...(currentPage ? [{ name: currentPage }] : []),
   ];

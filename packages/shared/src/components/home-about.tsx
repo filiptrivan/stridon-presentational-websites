@@ -1,17 +1,24 @@
-import { HOME_ABOUT_PARAGRAPH } from "@/constants/content";
 import Container from "./container";
 import SectionHeader from "./section-header";
 import Section from "./section";
 import Wrapper from "./wrapper";
 
-function HomeAbout() {
+interface HomeAboutProps {
+  description: string;
+  title?: string;
+}
+
+function HomeAbout({
+  description,
+  title = "O SG Tools",
+}: HomeAboutProps) {
   return (
     <Section>
       <Wrapper>
         <Container>
           <SectionHeader
-            title="O SG Tools"
-            description={HOME_ABOUT_PARAGRAPH}
+            title={title}
+            description={description}
             descriptionClassName="max-w-4xl mx-auto leading-relaxed"
           />
         </Container>

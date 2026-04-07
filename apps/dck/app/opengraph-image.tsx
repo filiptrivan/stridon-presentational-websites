@@ -13,8 +13,8 @@ export default async function Image() {
   return new ImageResponse(
     (
       <DefaultTemplate
-        title="Profesionalni alati nastali iz 30 godina iskustva"
-        description="DCK donosi pouzdanost, trajnost i ergonomiju — po cenama koje imaju smisla."
+        title="DCK profesionalni alati"
+        description="Brend kompanije Dongcheng od 1995, prisutan u 100+ zemalja sa zvaničnom podrškom u Srbiji."
       />
     ),
     { ...size, fonts },

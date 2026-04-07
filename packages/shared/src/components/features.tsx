@@ -1,10 +1,16 @@
-import { FEATURES } from "@/constants/content";
+import type { LucideIcon } from "lucide-react";
 import { BadgePercent, History, ShieldCheck, Users } from "lucide-react";
 import Container from "./container";
 import { Feature } from "./feature";
 import SectionHeader from "./section-header";
 import Section from "./section";
 import Wrapper from "./wrapper";
+
+export type FeatureItem = {
+  title: string;
+  desc: string;
+  icon?: LucideIcon;
+};
 
 const BENEFIT_STYLES = [
   {
@@ -33,27 +39,39 @@ const BENEFIT_STYLES = [
   },
 ];
 
-const Features = () => {
+interface FeaturesProps {
+  items: FeatureItem[];
+  title?: string;
+}
+
+const Features = ({
+  items,
+  title = "Zašto SG Tools?",
+}: FeaturesProps) => {
   return (
     <Section>
       <Wrapper>
         <Container>
-          <SectionHeader title="Zašto SG Tools?" />
+          <SectionHeader title={title} />
         </Container>
 
         <Container>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6 mt-10">
-            {FEATURES.map((item, index) => (
-              <Feature
-                key={index}
-                title={item.title}
-                desc={item.desc}
-                icon={BENEFIT_STYLES[index].icon}
-                color={BENEFIT_STYLES[index].color}
-                bg={BENEFIT_STYLES[index].bg}
-                border={BENEFIT_STYLES[index].border}
-              />
-            ))}
+            {items.map((item, index) => {
+              const style = BENEFIT_STYLES[index % BENEFIT_STYLES.length];
+
+              return (
+                <Feature
+                  key={index}
+                  title={item.title}
+                  desc={item.desc}
+                  icon={item.icon ?? style.icon}
+                  color={style.color}
+                  bg={style.bg}
+                  border={style.border}
+                />
+              );
+            })}
           </div>
         </Container>
       </Wrapper>

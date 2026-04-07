@@ -1,4 +1,4 @@
-import { getFilteredProducts } from "@brand/shared/lib/api";
+import { getFeaturedProductsByBrand } from "@brand/shared/lib/api";
 import ProductCard from "./products/product-card";
 import SectionHeader from "./section-header";
 import Section from "./section";
@@ -7,12 +7,12 @@ import Wrapper from "./wrapper";
 const FeaturedProducts = async () => {
   let products;
   try {
-    products = await getFilteredProducts(0, 4);
+    products = await getFeaturedProductsByBrand(4);
   } catch {
     return null;
   }
 
-  if (!products || products.data.length === 0) return null;
+  if (!products || products.length === 0) return null;
 
   return (
     <Section>
@@ -24,7 +24,7 @@ const FeaturedProducts = async () => {
         />
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6 mt-10">
-          {products.data.map((product) => (
+          {products.map((product) => (
             <ProductCard key={product.slug} product={product} />
           ))}
         </div>

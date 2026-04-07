@@ -15,19 +15,25 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@brand/ui/sheet";
-import { NAV_LINKS } from "@/constants/links";
 import type { Category } from "../types/categories";
 import { getBrandConfig } from "@brand/config";
 import { ExternalLinkIcon, MenuIcon } from "lucide-react";
 import Link from "next/link";
 
+export interface NavbarLink {
+  label: string;
+  href: string;
+  external?: boolean;
+}
+
 interface MobileMenuProps {
   categories: Category[];
+  navLinks: readonly NavbarLink[];
 }
 
 const { headerCta } = getBrandConfig();
 
-const MobileMenu = ({ categories }: MobileMenuProps) => {
+const MobileMenu = ({ categories, navLinks }: MobileMenuProps) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -40,7 +46,7 @@ const MobileMenu = ({ categories }: MobileMenuProps) => {
           <SheetTitle>Meni</SheetTitle>
         </SheetHeader>
         <div className="flex flex-col gap-2 mt-8">
-          {NAV_LINKS.map((link, index) =>
+          {navLinks.map((link, index) =>
             link.href === "/proizvodi/kategorije" ? (
               <Accordion key={index} type="single" collapsible>
                 <AccordionItem value="categories" className="border-b-0">

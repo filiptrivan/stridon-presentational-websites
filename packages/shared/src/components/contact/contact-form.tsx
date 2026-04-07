@@ -5,16 +5,23 @@ import { Loader2, Send } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { sendContactEmail } from "@/app/kontakt/actions";
 import { useTurnstile } from "@brand/shared/lib/hooks/useTurnstile";
 import { contactSchema, type ContactFormData } from "@brand/shared/lib/schemas/contact";
 import { TURNSTILE_VERIFICATION_FAILED } from "@brand/shared/lib/turnstile";
+import type { ActionResult } from "@brand/shared/types/actions";
 import { Button } from "@brand/ui/button";
 import { Input } from "@brand/ui/input";
 import { Label } from "@brand/ui/label";
 import { Textarea } from "@brand/ui/textarea";
 
-const ContactForm = () => {
+interface ContactFormProps {
+  submitContact: (
+    data: ContactFormData,
+    turnstileToken: string,
+  ) => Promise<ActionResult>;
+}
+
+const ContactForm = ({ submitContact }: ContactFormProps) => {
   const {
     register,
     handleSubmit,
@@ -37,7 +44,7 @@ const ContactForm = () => {
       return;
     }
 
-    const result = await sendContactEmail(data, turnstileToken);
+    const result = await submitContact(data, turnstileToken);
 
     resetTurnstile();
 

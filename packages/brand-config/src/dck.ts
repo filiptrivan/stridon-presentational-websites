@@ -22,7 +22,7 @@ export const config: BrandConfig = {
 
   defaultTitle: "DCK — Profesionalni električni alati",
   siteDescription:
-    "DCK električni alati — pouzdani profesionalni alati za svaki posao. Zvanični distributer za Srbiju.",
+    "DCK je profesionalni brend kompanije Dongcheng, osnovane 1995. godine, prisutan u 100+ zemalja sa zvaničnom distribucijom i podrškom u Srbiji.",
   productsPageDescription:
     "Pregledaj kompletnu ponudu DCK profesionalnog električnog alata — bušilice, brusilice, testere i još mnogo toga.",
 
@@ -38,7 +38,7 @@ export const config: BrandConfig = {
   ctaGradientClasses: "from-neutral-900 to-neutral-600",
 
   footerTagline:
-    "DCK profesionalni električni alati — zvanični distributer za Srbiju.",
+    "DCK profesionalni električni i aku alati sa zvaničnom podrškom za Srbiju.",
   footerGradientEdge: "var(--background)",
 
   ogColors: {

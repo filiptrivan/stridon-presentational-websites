@@ -1,20 +1,28 @@
 import CompanyGallery from "./company-gallery";
-import CompanyTimeline from "./company-timeline";
+import CompanyTimeline, { type Milestone } from "./company-timeline";
 import SectionHeader from "./section-header";
 import Section from "./section";
 import Wrapper from "./wrapper";
 
-function CompanyValues() {
+interface CompanyValuesProps {
+  milestones: Milestone[];
+  title?: string;
+}
+
+function CompanyValues({
+  milestones,
+  title = "Kako je nastao SG Tools",
+}: CompanyValuesProps) {
   return (
     <Section>
       <Wrapper>
         <SectionHeader
-          title="Kako je nastao SG Tools"
+          title={title}
           align="left"
           className="mb-10 max-w-3xl"
         />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8">
-          <CompanyTimeline />
+          <CompanyTimeline milestones={milestones} />
           <CompanyGallery />
         </div>
       </Wrapper>

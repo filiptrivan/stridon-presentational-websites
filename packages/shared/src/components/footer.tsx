@@ -2,13 +2,6 @@ import { getBrandConfig } from "@brand/config";
 import { Facebook, Instagram, Youtube } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  COMPANY_FOOTER_LINKS,
-  LEGAL_LINKS,
-  type NavLink,
-  PRODUCTS_FOOTER_LINKS,
-  SOCIAL_LINKS,
-} from "@/constants/links";
 import Container from "./container";
 import Glow from "./glow";
 import Wrapper from "./wrapper";
@@ -19,6 +12,18 @@ const socialIcons = {
   youtube: Youtube,
 } as const;
 
+export interface FooterNavLink {
+  label: string;
+  href: string;
+  external?: boolean;
+}
+
+export interface FooterSocialLink {
+  name: string;
+  href: string;
+  icon: keyof typeof socialIcons;
+}
+
 function FooterLinkColumn({
   title,
   links,
@@ -26,7 +31,7 @@ function FooterLinkColumn({
   delay,
 }: {
   title: string;
-  links: readonly NavLink[];
+  links: readonly FooterNavLink[];
   animation: "fadeUp" | "fadeLeft" | "fadeRight";
   delay: number;
 }) {
@@ -63,7 +68,19 @@ function FooterLinkColumn({
   );
 }
 
-const Footer = () => {
+interface FooterProps {
+  productLinks: readonly FooterNavLink[];
+  companyLinks: readonly FooterNavLink[];
+  legalLinks: readonly FooterNavLink[];
+  socialLinks: readonly FooterSocialLink[];
+}
+
+const Footer = ({
+  productLinks,
+  companyLinks,
+  legalLinks,
+  socialLinks,
+}: FooterProps) => {
   const { logoSrc, logoAlt, siteName, footerTagline, footerGradientEdge } =
     getBrandConfig();
   const year = process.env.BUILD_YEAR;
@@ -107,7 +124,7 @@ const Footer = () => {
                 </a>
               </div>
               <div className="mt-6 flex items-center gap-3">
-                {SOCIAL_LINKS.map((social) => {
+                {socialLinks.map((social) => {
                   const Icon = socialIcons[social.icon];
                   return (
                     <a
@@ -129,13 +146,13 @@ const Footer = () => {
           {/* Link columns */}
           <FooterLinkColumn
             title="Proizvodi"
-            links={PRODUCTS_FOOTER_LINKS}
+            links={productLinks}
             animation="fadeUp"
             delay={0.5}
           />
           <FooterLinkColumn
             title="Kompanija"
-            links={COMPANY_FOOTER_LINKS}
+            links={companyLinks}
             animation="fadeUp"
             delay={0.6}
           />
@@ -147,7 +164,7 @@ const Footer = () => {
             <p>{`\u00A9 ${year} ${siteName}`}</p>
             <span className="hidden md:inline">&middot;</span>
             <div className="flex items-center gap-2">
-              {LEGAL_LINKS.map((link, index) => (
+              {legalLinks.map((link, index) => (
                 <span key={link.href} className="flex items-center gap-2">
                   {index > 0 && <span>&middot;</span>}
                   <Link
