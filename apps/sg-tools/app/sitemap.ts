@@ -48,8 +48,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.8,
       });
     }
-  } else {
-    console.error("Failed to fetch category slugs for sitemap:", categoriesResult.reason);
   }
 
   if (productsResult.status === "fulfilled") {
@@ -61,8 +59,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.7,
       });
     }
-  } else {
-    console.error("Failed to fetch product slugs for sitemap:", productsResult.reason);
   }
 
   return entries;

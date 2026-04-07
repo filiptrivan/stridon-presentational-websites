@@ -9,8 +9,7 @@ const Categories = async () => {
   let categories: Category[] = [];
   try {
     categories = await getLeafCategories();
-  } catch (error) {
-    console.error("Failed to fetch categories", error);
+  } catch {
     return null;
   }
 

@@ -8,8 +8,7 @@ const FeaturedProducts = async () => {
   let products;
   try {
     products = await getFilteredProducts(0, 4);
-  } catch (error) {
-    console.error("Error fetching products", error);
+  } catch {
     return null;
   }
 

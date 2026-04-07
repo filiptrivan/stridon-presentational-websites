@@ -6,8 +6,7 @@ const NavbarWithCategories = async () => {
   let categories: Category[] = [];
   try {
     categories = await getLeafCategories();
-  } catch (error) {
-    console.error("Failed to fetch categories for navigation:", error);
+  } catch {
     categories = [];
   }
 

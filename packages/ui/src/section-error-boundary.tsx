@@ -1,5 +1,6 @@
 "use client";
 
+import * as Sentry from "@sentry/nextjs";
 import { Component, type ReactNode } from "react";
 import { SectionError } from "./section-error";
 
@@ -18,8 +19,8 @@ export class SectionErrorBoundary extends Component<Props, State> {
     return { hasError: true };
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error("Section error:", error, errorInfo);
+  componentDidCatch(error: Error) {
+    Sentry.captureException(error);
   }
 
   render() {

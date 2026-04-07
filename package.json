@@ -10,11 +10,15 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
+      "@sentry/cli",
       "sharp",
       "unrs-resolver"
     ]
   },
   "devDependencies": {
     "turbo": "^2"
+  },
+  "dependencies": {
+    "@sentry/nextjs": "^10.47.0"
   }
 }

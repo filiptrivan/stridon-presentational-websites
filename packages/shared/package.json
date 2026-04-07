@@ -13,6 +13,7 @@
     "@brand/ui": "workspace:*"
   },
   "peerDependencies": {
+    "@sentry/nextjs": "*",
     "@hookform/resolvers": "^5",
     "embla-carousel-react": "^8",
     "embla-carousel-wheel-gestures": "^8",
