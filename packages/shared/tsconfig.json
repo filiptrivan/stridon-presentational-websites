@@ -1,12 +1,11 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
       "@brand/config": ["../../packages/brand-config/src"],
       "@brand/config/*": ["../../packages/brand-config/src/*"],
       "@brand/ui/*": ["../../packages/ui/src/*"],
-      "@brand/shared/*": ["src/*"]
+      "@brand/shared/*": ["./src/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"]
