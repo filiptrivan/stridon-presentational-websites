@@ -1,6 +1,6 @@
 import { colors } from "./constants";
 import { Logo } from "./logo";
-import { formatPrice, truncateText } from "@brand/shared/lib/og/utils";
+import { truncateText } from "@brand/shared/lib/og/utils";
 
 //#region Shared Components
 
@@ -205,21 +205,11 @@ export function DefaultTemplate({
 
 export function ProductTemplate({
   title,
-  displayPrice,
-  originalPrice,
-  hasDiscount,
-  discountPercentage,
   imageUrl,
 }: {
   title: string;
-  displayPrice: number;
-  originalPrice?: number | null;
-  hasDiscount: boolean;
-  discountPercentage?: number | null;
   imageUrl?: string;
 }) {
-  const formattedPrice = formatPrice(displayPrice);
-  const formattedOriginal = originalPrice ? formatPrice(originalPrice) : null;
   const truncatedTitle = truncateText(title, 80);
 
   return (
@@ -296,55 +286,6 @@ export function ProductTemplate({
             >
               {truncatedTitle}
             </div>
-
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 16,
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  fontFamily: "Space Grotesk",
-                  fontSize: 52,
-                  color: colors.primaryBright,
-                }}
-              >
-                {formattedPrice}
-              </div>
-              {hasDiscount && discountPercentage != null && (
-                <div
-                  style={{
-                    display: "flex",
-                    fontFamily: "Space Grotesk",
-                    fontSize: 24,
-                    fontWeight: 600,
-                    color: "#ffffff",
-                    backgroundColor: colors.primaryBright,
-                    padding: "6px 18px",
-                    borderRadius: 6,
-                  }}
-                >
-                  -{discountPercentage}%
-                </div>
-              )}
-            </div>
-            {hasDiscount && formattedOriginal && (
-              <div
-                style={{
-                  display: "flex",
-                  fontFamily: "Inter",
-                  fontSize: 28,
-                  color: colors.muted,
-                  textDecoration: "line-through",
-                  marginTop: 6,
-                }}
-              >
-                {formattedOriginal}
-              </div>
-            )}
           </div>
         </div>
       </div>

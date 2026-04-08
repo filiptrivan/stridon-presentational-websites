@@ -33,15 +33,6 @@ const ProductDetailSkeleton = () => {
             <Skeleton className="h-4 w-4/5" />
           </div>
 
-          {/* Price */}
-          <Skeleton className="h-8 sm:h-9 w-36 mt-6" />
-
-          {/* Stock status */}
-          <div className="flex items-center gap-2 mt-3">
-            <Skeleton className="size-4 rounded-full" />
-            <Skeleton className="h-4 w-20" />
-          </div>
-
           {/* Buy button */}
           <Skeleton className="h-12 w-48 rounded-lg mt-6" />
 

@@ -32,10 +32,6 @@ export default async function Image({
   return new ImageResponse(
     <ProductTemplate
       title={product.title}
-      displayPrice={product.displayPrice}
-      originalPrice={product.originalPrice}
-      hasDiscount={product.hasDiscount}
-      discountPercentage={product.discountPercentage}
       imageUrl={product.imageUrl}
     />,
     { ...size, fonts },

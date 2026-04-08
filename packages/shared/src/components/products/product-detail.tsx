@@ -4,7 +4,6 @@ import { type BreadcrumbSegment, buildBreadcrumbJsonLd } from "@brand/shared/lib
 import type { Product } from "@brand/shared/types/products";
 import { ExternalLink } from "lucide-react";
 import PageBreadcrumbs from "./page-breadcrumbs";
-import PriceDisplay from "./price-display";
 import ProductGallery from "./product-gallery";
 import ProductTabs from "./product-tabs";
 
@@ -26,12 +25,6 @@ const ProductDetail = ({
     brand: {
       "@type": "Brand",
       name: product.brandName || "SG Tools",
-    },
-    offers: {
-      "@type": "Offer",
-      url: `https://www.prodavnicaalata.rs/proizvodi/${product.slug}/`,
-      priceCurrency: "RSD",
-      price: product.displayPrice,
     },
   };
 
@@ -82,15 +75,6 @@ const ProductDetail = ({
                 dangerouslySetInnerHTML={{ __html: product.description }}
               />
             )}
-
-            {/* Price */}
-            <PriceDisplay
-              displayPrice={product.displayPrice}
-              originalPrice={product.originalPrice}
-              discountPercentage={product.discountPercentage}
-              size="lg"
-              className="mt-6"
-            />
 
             {/* Buy button */}
             <a
