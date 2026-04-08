@@ -48,6 +48,34 @@ export const ABOUT_MILESTONES = [
   },
 ];
 
+export const ABOUT_GALLERY = [
+  {
+    src: "/about/dck-trade-show-booth.webp",
+    alt: "DCK trade show booth",
+    className: "col-start-1 row-span-3 min-h-[13rem] lg:min-h-0",
+  },
+  {
+    src: "/about/dck-product-demo-event.webp",
+    alt: "DCK product demo event",
+    className: "col-start-1 row-start-4 row-span-3 min-h-[13rem] lg:min-h-0",
+  },
+  {
+    src: "/about/dck-sponsored-driver.webp",
+    alt: "DCK sponsored driver holding tools",
+    className: "col-start-2 row-span-2 min-h-[13rem] lg:min-h-0",
+  },
+  {
+    src: "/about/dck-stage-brand-presentation.webp",
+    alt: "DCK stage brand presentation",
+    className: "col-start-2 row-span-2 min-h-[13rem] lg:min-h-0",
+  },
+  {
+    src: "/about/dck-desert-atv-race-support.webp",
+    alt: "DCK desert ATV race support",
+    className: "col-start-2 row-span-2 min-h-[13rem] lg:min-h-0",
+  },
+];
+
 export const COMPANY_BENEFITS = [
   {
     title: "Garancija i servis",

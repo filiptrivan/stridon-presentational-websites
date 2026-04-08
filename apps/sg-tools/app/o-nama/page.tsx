@@ -6,6 +6,7 @@ import CTA from "@brand/shared/components/cta";
 import HeroHeader from "@brand/shared/components/hero-header";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
 import {
+  ABOUT_GALLERY,
   ABOUT_MILESTONES,
   ABOUT_PARAGRAPHS,
   COMPANY_BENEFITS,
@@ -28,7 +29,10 @@ const AboutPage = () => {
       />
       <CompanyStats stats={STATS} />
       <AboutStory paragraphs={ABOUT_PARAGRAPHS} />
-      <CompanyValues milestones={ABOUT_MILESTONES} />
+      <CompanyValues
+        milestones={ABOUT_MILESTONES}
+        galleryImages={ABOUT_GALLERY}
+      />
       <CompanyBenefits benefits={COMPANY_BENEFITS} />
       <CTA />
     </div>

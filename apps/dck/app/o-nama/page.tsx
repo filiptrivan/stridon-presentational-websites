@@ -1,4 +1,9 @@
-import { ABOUT_MILESTONES, COMPANY_BENEFITS, STATS } from "@/constants/content";
+import {
+  ABOUT_GALLERY,
+  ABOUT_MILESTONES,
+  COMPANY_BENEFITS,
+  STATS,
+} from "@/constants/content";
 import CompanyBenefits from "@brand/shared/components/company-benefits";
 import CompanyStats from "@brand/shared/components/company-stats";
 import CompanyValues from "@brand/shared/components/company-values";
@@ -21,7 +26,11 @@ const AboutPage = () => {
         description="Upoznaj DCK, brend kompanije Dongcheng iz 1995. godine, sa globalnim prisustvom i zvaničnom podrškom za tržište Srbije."
       />
       <CompanyStats stats={STATS} />
-      <CompanyValues milestones={ABOUT_MILESTONES} title="Kako je nastao DCK" />
+      <CompanyValues
+        milestones={ABOUT_MILESTONES}
+        title="Kako je nastao DCK"
+        galleryImages={ABOUT_GALLERY}
+      />
       <CompanyBenefits benefits={COMPANY_BENEFITS} />
 
       <CTA />

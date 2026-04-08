@@ -56,6 +56,34 @@ export const ABOUT_MILESTONES = [
   },
 ];
 
+export const ABOUT_GALLERY = [
+  {
+    src: "/categories/diamond.jpg",
+    alt: "SG Tools diamond tools",
+    className: "col-start-1 row-span-3 min-h-[13rem] lg:min-h-0",
+  },
+  {
+    src: "/categories/electric.jpg",
+    alt: "SG Tools electric tools category",
+    className: "col-start-1 row-start-4 row-span-3 min-h-[13rem] lg:min-h-0",
+  },
+  {
+    src: "/categories/grinder.jpg",
+    alt: "SG Tools grinder category",
+    className: "col-start-2 row-span-2 min-h-[13rem] lg:min-h-0",
+  },
+  {
+    src: "/categories/hand-tools.jpg",
+    alt: "SG Tools hand tools category",
+    className: "col-start-2 row-span-2 min-h-[13rem] lg:min-h-0",
+  },
+  {
+    src: "/categories/diamond.jpg",
+    alt: "SG Tools diamond tools detail",
+    className: "col-start-2 row-span-2 min-h-[13rem] lg:min-h-0",
+  },
+];
+
 export const COMPANY_BENEFITS = [
   {
     title: "Razvijen iz prakse",
