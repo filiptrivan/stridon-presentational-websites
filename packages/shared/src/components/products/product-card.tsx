@@ -4,7 +4,6 @@ import { ExternalLink } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import PriceDisplay from "./price-display";
-import StockStatus from "./stock-status";
 
 interface ProductCardProps {
   product: ProductCardData;
@@ -48,12 +47,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
           {product.title}
         </h3>
 
-        <StockStatus inStock={product.inStock} className="mt-auto pt-3" />
-
         <PriceDisplay
           displayPrice={product.displayPrice}
           originalPrice={product.originalPrice}
-          className="pt-2"
+          className="mt-auto pt-3"
         />
 
         <a

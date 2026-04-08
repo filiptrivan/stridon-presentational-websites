@@ -7,7 +7,6 @@ import PageBreadcrumbs from "./page-breadcrumbs";
 import PriceDisplay from "./price-display";
 import ProductGallery from "./product-gallery";
 import ProductTabs from "./product-tabs";
-import StockStatus from "./stock-status";
 
 interface ProductDetailProps {
   product: Product;
@@ -33,9 +32,6 @@ const ProductDetail = ({
       url: `https://www.prodavnicaalata.rs/proizvodi/${product.slug}/`,
       priceCurrency: "RSD",
       price: product.displayPrice,
-      availability: product.inStock
-        ? "https://schema.org/InStock"
-        : "https://schema.org/OutOfStock",
     },
   };
 
@@ -94,13 +90,6 @@ const ProductDetail = ({
               discountPercentage={product.discountPercentage}
               size="lg"
               className="mt-6"
-            />
-
-            {/* Stock status */}
-            <StockStatus
-              inStock={product.inStock}
-              size="default"
-              className="mt-3"
             />
 
             {/* Buy button */}
