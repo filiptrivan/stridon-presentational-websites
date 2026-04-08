@@ -2,7 +2,6 @@ import Container from "../container";
 import Wrapper from "../wrapper";
 import { type BreadcrumbSegment, buildBreadcrumbJsonLd } from "@brand/shared/lib/categories";
 import type { Product } from "@brand/shared/types/products";
-import { ExternalLink } from "lucide-react";
 import PageBreadcrumbs from "./page-breadcrumbs";
 import ProductGallery from "./product-gallery";
 import ProductTabs from "./product-tabs";
@@ -75,17 +74,6 @@ const ProductDetail = ({
                 dangerouslySetInnerHTML={{ __html: product.description }}
               />
             )}
-
-            {/* Buy button */}
-            <a
-              href={`https://www.prodavnicaalata.rs/proizvodi/${product.slug}/`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-6 inline-flex items-center justify-center gap-2 rounded-lg text-base font-semibold h-12 px-8 transition-colors bg-primary text-primary-foreground hover:bg-primary/90"
-            >
-              Idi na prodavnicu
-              <ExternalLink className="size-4" />
-            </a>
 
             {/* Metadata */}
             <div className="mt-8 pt-6 border-t border-border/20 space-y-2 text-sm">

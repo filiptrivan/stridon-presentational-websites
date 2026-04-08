@@ -10,17 +10,14 @@ export const NAV_LINKS: readonly NavLink[] = [
   { label: "Kategorije", href: "/proizvodi/kategorije" },
   { label: "O nama", href: "/o-nama" },
   { label: "Gde kupiti", href: "/gde-kupiti" },
+  { label: "Registracija garancije", href: "/registracija-garancije" },
   { label: "Kontakt", href: "/kontakt" },
 ];
 
 export const PRODUCTS_FOOTER_LINKS: readonly NavLink[] = [
   { label: "Svi proizvodi", href: "/proizvodi" },
   { label: "Kategorije", href: "/proizvodi/kategorije" },
-  {
-    label: "Online prodavnica",
-    href: "https://www.prodavnicaalata.rs/proizvodjaci/dck/",
-    external: true,
-  },
+  { label: "Postani distributer", href: "/kontakt" },
 ];
 
 export const COMPANY_FOOTER_LINKS: readonly NavLink[] = [

@@ -13,11 +13,10 @@ export const config: BrandConfig = {
   logoSrc: "/sg-tools-logo.svg",
   logoAlt: "SG Tools Logo",
   navbarLogoHeight: "h-3",
-  shopUrl: "https://www.prodavnicaalata.rs/proizvodjaci/sg-tools/",
   headerCta: {
-    label: "Idi na prodavnicu",
-    href: "https://www.prodavnicaalata.rs/proizvodjaci/sg-tools/",
-    external: true,
+    label: "Postani distributer",
+    href: "/kontakt",
+    external: false,
   },
 
   defaultTitle:
@@ -35,7 +34,7 @@ export const config: BrandConfig = {
   heroGradient:
     "bg-[radial-gradient(86.02%_172.05%_at_50%_-40%,rgba(180,42,55,0.85)_0%,rgba(5,5,5,0)_80%)]",
 
-  ctaHeading: "Pronađi pravi alat \n za svaki posao",
+  ctaHeading: "Pouzdan alat \n za svaki posao",
   ctaGradientClasses: "from-neutral-100 to-neutral-400",
 
   footerTagline: "Profesionalni alati nastali iz 30 godina iskustva.",

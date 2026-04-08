@@ -33,12 +33,8 @@ const Hero = () => {
       <Container delay={0.3}>
         <div className="flex gap-3 mt-6">
           <Button asChild>
-            <Link
-              href="https://www.prodavnicaalata.rs/proizvodjaci/sg-tools/"
-              target="_blank"
-            >
-              Idi na prodavnicu
-              <ExternalLinkIcon className="size-4" />
+            <Link href="/kontakt">
+              Postani distributer
             </Link>
           </Button>
           <Button variant="outline" asChild>

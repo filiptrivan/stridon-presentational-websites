@@ -16,11 +16,7 @@ export const NAV_LINKS: readonly NavLink[] = [
 export const PRODUCTS_FOOTER_LINKS: readonly NavLink[] = [
   { label: "Svi proizvodi", href: "/proizvodi" },
   { label: "Kategorije", href: "/proizvodi/kategorije" },
-  {
-    label: "Online prodavnica",
-    href: "https://www.prodavnicaalata.rs",
-    external: true,
-  },
+  { label: "Postani distributer", href: "/kontakt" },
   { label: "Katalog", href: "https://stridon.milev.rs/", external: true },
 ];
 

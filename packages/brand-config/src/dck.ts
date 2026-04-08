@@ -13,10 +13,9 @@ export const config: BrandConfig = {
   logoSrc: "/dck-logo.svg",
   logoAlt: "DCK Logo",
   navbarLogoHeight: "h-5",
-  shopUrl: "https://www.prodavnicaalata.rs/proizvodjaci/dck/",
   headerCta: {
-    label: "Registracija garancije",
-    href: "/registracija-garancije",
+    label: "Postani distributer",
+    href: "/kontakt",
     external: false,
   },
 
@@ -34,7 +33,7 @@ export const config: BrandConfig = {
   heroGradient:
     "bg-[radial-gradient(86.02%_172.05%_at_50%_-40%,rgba(227,30,36,0.4)_0%,rgba(255,255,255,0)_80%)]",
 
-  ctaHeading: "Pronađi pravi DCK alat \n za svaki posao",
+  ctaHeading: "Pouzdan DCK alat \n za svaki posao",
   ctaGradientClasses: "from-neutral-900 to-neutral-600",
 
   footerTagline:

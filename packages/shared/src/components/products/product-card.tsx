@@ -1,5 +1,4 @@
 import type { ProductCardData } from "@brand/shared/types/products";
-import { ExternalLink } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -31,20 +30,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
         )}
       </div>
 
-      <div className="flex flex-col flex-1 p-3 sm:p-4">
+      <div className="p-3 sm:p-4">
         <h3 className="text-sm sm:text-base font-semibold line-clamp-2">
           {product.title}
         </h3>
-
-        <a
-          href={`https://www.prodavnicaalata.rs/proizvodi/${product.slug}/`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="relative z-20 mt-auto pt-3 inline-flex items-center justify-center gap-1.5 rounded-md text-xs sm:text-sm font-medium h-8 px-2 sm:h-9 sm:px-4 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-        >
-          Idi na prodavnicu
-          <ExternalLink className="size-3.5" />
-        </a>
       </div>
     </div>
   );

@@ -1,11 +1,12 @@
 import { getBrandConfig } from "@brand/config";
 import {
-  CreditCard,
-  ExternalLink,
+  ArrowRight,
+  Layers,
   ShieldCheck,
-  Truck,
-  Zap,
+  Users,
+  Wrench,
 } from "lucide-react";
+import Link from "next/link";
 import Container from "./container";
 import Section from "./section";
 import { Button } from "@brand/ui/button";
@@ -13,14 +14,14 @@ import Wrapper from "./wrapper";
 import { cn } from "../lib/utils";
 
 const TRUST_BADGES = [
-  { icon: Truck, text: "Besplatna dostava za 15.000+ RSD" },
-  { icon: Zap, text: "Isporuka 1-5 dana" },
   { icon: ShieldCheck, text: "Garancija na mašine" },
-  { icon: CreditCard, text: "Čekovi na 4 rate" },
+  { icon: Wrench, text: "Ovlašćeni servis u Srbiji" },
+  { icon: Users, text: "Podrška za partnere" },
+  { icon: Layers, text: "Širok asortiman" },
 ];
 
 const CTA = () => {
-  const { shopUrl, ctaHeading, ctaGradientClasses } = getBrandConfig();
+  const { ctaHeading, ctaGradientClasses } = getBrandConfig();
 
   return (
     <Section className="relative overflow-hidden">
@@ -39,16 +40,12 @@ const CTA = () => {
               </span>
             ))}
           </h2>
-          <a
-            href={shopUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button size="lg">
-              Pogledaj ponudu
-              <ExternalLink className="size-4" />
-            </Button>
-          </a>
+          <Button size="lg" asChild>
+            <Link href="/kontakt">
+              Postani distributer
+              <ArrowRight className="size-4" />
+            </Link>
+          </Button>
           <div className="flex flex-wrap justify-center items-center gap-2 lg:gap-3">
             {TRUST_BADGES.map((badge, index) => (
               <Container key={index} delay={0.2 * index}>
