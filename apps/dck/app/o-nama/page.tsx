@@ -25,7 +25,7 @@ const AboutPage = () => {
         title="O nama"
         description="Upoznaj DCK, brend kompanije Dongcheng iz 1995. godine, sa globalnim prisustvom i zvaničnom podrškom za tržište Srbije."
       />
-      <CompanyStats stats={STATS} />
+      <CompanyStats stats={STATS} layout="four-up-no-three" />
       <CompanyValues
         milestones={ABOUT_MILESTONES}
         title="Kako je nastao DCK"

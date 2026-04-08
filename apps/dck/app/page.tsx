@@ -22,7 +22,7 @@ const HomePage = () => {
         <Categories />
       </Suspense>
       <Features items={FEATURES} title="Zašto DCK?" />
-      <Stats stats={STATS} />
+      <Stats stats={STATS} layout="four-up-no-three" />
       <Testimonials items={TESTIMONIALS} />
       <CTA />
     </div>

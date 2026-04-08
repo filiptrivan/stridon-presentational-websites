@@ -1,16 +1,20 @@
 "use client";
 
 import { useCounter } from "@brand/shared/lib/hooks/useCounter";
+import { cn } from "@brand/shared/lib/utils";
 import { RefObject, useRef } from "react";
 import Container from "./container";
 import Section from "./section";
 import Wrapper from "./wrapper";
 
+type StatsLayout = "four-up-no-three" | "three-up-from-sm";
+
 export interface StatsProps {
   stats: Array<{ label: string; value: string | number }>;
+  layout: StatsLayout;
 }
 
-const Stats = ({ stats }: StatsProps) => {
+const Stats = ({ stats, layout }: StatsProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   return (
@@ -18,7 +22,12 @@ const Stats = ({ stats }: StatsProps) => {
       <Wrapper>
         <div
           ref={ref}
-          className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] sm:gap-8 gap-12 w-full"
+          className={cn(
+            "grid sm:gap-8 gap-12 w-full",
+            layout === "four-up-no-three"
+              ? "grid-cols-1 sm:grid-cols-2 xl:grid-cols-4"
+              : "grid-cols-1 sm:grid-cols-3",
+          )}
         >
           {stats.map((stat, index) => (
             <Container key={index} delay={index}>

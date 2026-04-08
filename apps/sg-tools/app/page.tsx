@@ -48,7 +48,7 @@ const HomePage = () => {
       </Suspense>
       <Features items={FEATURES} />
       <HomeAbout description={HOME_ABOUT_PARAGRAPH} />
-      <Stats stats={STATS} />
+      <Stats stats={STATS} layout="three-up-from-sm" />
       <Testimonials items={TESTIMONIALS} />
       <CTA />
     </div>
