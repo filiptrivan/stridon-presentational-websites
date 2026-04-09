@@ -2,8 +2,8 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { sr } from "date-fns/locale";
-import { CalendarIcon, Loader2, Send } from "lucide-react";
+import { srLatn } from "date-fns/locale/sr-Latn";
+import { CalendarIcon, Loader2, Send, Upload } from "lucide-react";
 import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -50,7 +50,30 @@ const WarrantyForm = () => {
   });
 
   const [fileError, setFileError] = useState<string | null>(null);
+  const [fileName, setFileName] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    setFileError(null);
+    if (!file) {
+      setFileName(null);
+      return;
+    }
+    if (file.size > MAX_FILE_SIZE) {
+      setFileError(FILE_TOO_LARGE_ERROR);
+      e.target.value = "";
+      setFileName(null);
+      return;
+    }
+    if (!ACCEPTED_FILE_TYPES.includes(file.type)) {
+      setFileError(FILE_TYPE_ERROR);
+      e.target.value = "";
+      setFileName(null);
+      return;
+    }
+    setFileName(file.name);
+  };
 
   const {
     token: turnstileToken,
@@ -64,20 +87,7 @@ const WarrantyForm = () => {
       return;
     }
 
-    setFileError(null);
-
     const file = fileInputRef.current?.files?.[0];
-
-    if (file) {
-      if (file.size > MAX_FILE_SIZE) {
-        setFileError(FILE_TOO_LARGE_ERROR);
-        return;
-      }
-      if (!ACCEPTED_FILE_TYPES.includes(file.type)) {
-        setFileError(FILE_TYPE_ERROR);
-        return;
-      }
-    }
 
     const formData = new FormData();
     for (const [key, value] of Object.entries(data)) {
@@ -99,6 +109,7 @@ const WarrantyForm = () => {
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
+      setFileName(null);
     } else {
       toast.error(result.error);
     }
@@ -232,7 +243,7 @@ const WarrantyForm = () => {
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {selectedDate
-                      ? format(selectedDate, "PPP", { locale: sr })
+                      ? format(selectedDate, "PPP", { locale: srLatn })
                       : "Izaberi datum"}
                   </Button>
                 </PopoverTrigger>
@@ -246,7 +257,7 @@ const WarrantyForm = () => {
                       )
                     }
                     disabled={(date) => date > new Date()}
-                    locale={sr}
+                    locale={srLatn}
                   />
                 </PopoverContent>
               </Popover>
@@ -261,18 +272,37 @@ const WarrantyForm = () => {
       />
 
       <div className="space-y-3">
-        <Label htmlFor="receiptImage">
+        <Label id="receiptImage-label">
           Fotografija računa{" "}
           <span className="text-muted-foreground font-normal">(opciono)</span>
         </Label>
-        <Input
-          id="receiptImage"
+        <input
           type="file"
           accept=".jpg,.jpeg,.png,.webp,.pdf"
-          className="bg-background border-border/50"
           ref={fileInputRef}
-          aria-invalid={!!fileError}
+          onChange={handleFileChange}
+          className="sr-only"
+          aria-labelledby="receiptImage-label"
+          tabIndex={-1}
         />
+        <div className="flex items-center gap-3">
+          <Button
+            type="button"
+            variant="outline"
+            className="bg-background border-border/50"
+            onClick={() => fileInputRef.current?.click()}
+            aria-invalid={!!fileError}
+            aria-labelledby="receiptImage-label"
+          >
+            <Upload className="mr-2 h-4 w-4" />
+            Izaberi fajl
+          </Button>
+          {fileName && (
+            <span className="text-sm text-muted-foreground truncate">
+              {fileName}
+            </span>
+          )}
+        </div>
         {fileError && <p className="text-sm text-destructive">{fileError}</p>}
         <p className="text-xs text-muted-foreground">
           JPG, PNG, WebP ili PDF — do 5MB
