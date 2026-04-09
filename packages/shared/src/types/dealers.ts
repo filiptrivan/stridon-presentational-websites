@@ -8,6 +8,7 @@ export interface Dealer {
   phone?: string;
   email?: string;
   website?: string;
+  logoSrc?: string;
   category: DealerCategory;
   coordinates: { lat: number; lng: number };
 }

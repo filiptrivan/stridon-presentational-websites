@@ -1,3 +1,4 @@
+import { DEALERS } from "@/constants/dealers";
 import ProductDetail from "@brand/shared/components/products/product-detail";
 import RelatedProducts from "@brand/shared/components/products/related-products";
 import RelatedProductsSkeleton from "@brand/shared/components/products/related-products-skeleton";
@@ -51,6 +52,7 @@ export default async function ProductPage({ params }: Props) {
       <ProductDetail
         product={product}
         categoryBreadcrumbs={categoryBreadcrumbs}
+        dealers={DEALERS.filter((d) => d.logoSrc && d.category !== "service" && d.category !== "outOfWarranty")}
       />
       {relatedProducts.length > 0 && (
         <RelatedProducts products={relatedProducts} />

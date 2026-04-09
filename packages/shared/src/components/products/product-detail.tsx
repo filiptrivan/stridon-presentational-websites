@@ -1,19 +1,23 @@
 import Container from "../container";
 import Wrapper from "../wrapper";
 import { type BreadcrumbSegment, buildBreadcrumbJsonLd } from "@brand/shared/lib/categories";
+import type { Dealer } from "@brand/shared/types/dealers";
 import type { Product } from "@brand/shared/types/products";
 import PageBreadcrumbs from "./page-breadcrumbs";
+import ProductDistributors from "./product-distributors";
 import ProductGallery from "./product-gallery";
 import ProductTabs from "./product-tabs";
 
 interface ProductDetailProps {
   product: Product;
   categoryBreadcrumbs: BreadcrumbSegment[];
+  dealers?: Dealer[];
 }
 
 const ProductDetail = ({
   product,
   categoryBreadcrumbs,
+  dealers,
 }: ProductDetailProps) => {
   const productJsonLd = {
     "@context": "https://schema.org",
@@ -96,6 +100,10 @@ const ProductDetail = ({
                 </div>
               )}
             </div>
+
+            {dealers && dealers.length > 0 && (
+              <ProductDistributors dealers={dealers.slice(0, 6)} />
+            )}
           </div>
         </Container>
       </div>
