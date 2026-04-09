@@ -1,7 +1,7 @@
 {
+  "//": "No ignoreCommand needed — Vercel's built-in monorepo project skipping handles this automatically (turbo-ignore is deprecated). See https://vercel.com/docs/monorepos#skipping-unaffected-projects",
   "framework": "nextjs",
   "regions": ["fra1"],
-  "ignoreCommand": "npx turbo-ignore",
   "headers": [
     {
       "source": "/(.*)",
