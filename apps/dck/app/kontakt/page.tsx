@@ -1,8 +1,7 @@
+import { CONTACT_INFO } from "@/constants";
 import ContactHero from "@brand/shared/components/contact/contact-hero";
-import ContactLocations from "@brand/shared/components/contact/contact-locations";
 import CTA from "@brand/shared/components/cta";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
-import { CONTACT_INFO } from "@/constants";
 import { sendContactEmail } from "./actions";
 
 export const metadata = createPageMetadata({
@@ -15,8 +14,10 @@ export const metadata = createPageMetadata({
 const ContactPage = () => {
   return (
     <div>
-      <ContactHero contactInfo={CONTACT_INFO} submitContact={sendContactEmail} />
-      <ContactLocations locations={CONTACT_INFO.locations} />
+      <ContactHero
+        contactInfo={CONTACT_INFO}
+        submitContact={sendContactEmail}
+      />
       <CTA />
     </div>
   );

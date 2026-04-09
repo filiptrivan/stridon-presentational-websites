@@ -1,33 +1,45 @@
 "use client";
 
-import { ExternalLink, MapPin } from "lucide-react";
+import { ExternalLink, Mail, MapPin, Phone } from "lucide-react";
 import dynamic from "next/dynamic";
 import Container from "../container";
 import IconBox from "../icon-box";
 import SectionHeader from "../section-header";
 import Section from "../section";
 import Wrapper from "../wrapper";
-import type { ContactLocation } from "./contact-hero";
+import type { ContactLocation } from "@brand/shared/types/contact";
 
 const LocationMap = dynamic(() => import("./location-map"), { ssr: false });
 
 interface ContactLocationsProps {
+  title?: string;
+  description?: string;
   locations: ContactLocation[];
+  sectionClassName?: string;
+  showDivider?: boolean;
 }
 
-function ContactLocations({ locations }: ContactLocationsProps) {
+function ContactLocations({
+  title,
+  description,
+  locations,
+  sectionClassName,
+  showDivider,
+}: ContactLocationsProps) {
   return (
-    <Section className="pt-0!">
+    <Section className={sectionClassName} showDivider={showDivider}>
       <Wrapper>
-        <Container delay={0.1}>
-          <SectionHeader
-            title="Naše prodavnice"
-            description="Poseti nas na jednoj od dve lokacije u Beogradu"
-            align="center"
-            descriptionClassName="max-w-lg"
-            className="mb-10"
-          />
-        </Container>
+        {title && (
+          <Container delay={0.1}>
+            <SectionHeader
+              title={title}
+              description={description}
+              align="center"
+              descriptionClassName="max-w-lg"
+              className="mb-10"
+            />
+          </Container>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {locations.map((location, index) => (
@@ -55,14 +67,32 @@ function ContactLocations({ locations }: ContactLocationsProps) {
                     <p className="text-sm text-muted-foreground mt-0.5">
                       {location.address}
                     </p>
+                    {location.phone && (
+                      <a
+                        href={`tel:${location.phone.replace(/-/g, "")}`}
+                        className="text-sm text-muted-foreground hover:text-primary transition-colors mt-1 flex items-center gap-1.5"
+                      >
+                        <Phone className="size-3.5 shrink-0" />
+                        {location.phone}
+                      </a>
+                    )}
+                    {location.email && (
+                      <a
+                        href={`mailto:${location.email}`}
+                        className="text-sm text-muted-foreground hover:text-primary transition-colors mt-1 flex items-center gap-1.5"
+                      >
+                        <Mail className="size-3.5 shrink-0" />
+                        {location.email}
+                      </a>
+                    )}
                     <a
                       href={`https://maps.google.com/?q=${location.coords.lat},${location.coords.lng}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1 mt-1"
+                      className="text-xs text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 mt-1"
                     >
+                      <ExternalLink className="size-3 shrink-0" />
                       Otvori u Google Maps
-                      <ExternalLink className="size-3" />
                     </a>
                   </div>
                 </div>

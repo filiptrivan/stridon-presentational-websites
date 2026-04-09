@@ -1,7 +1,3 @@
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
 ## Critical principles
 
 - **Push back on hacks.** If a request leads to a fragile workaround, say so and propose the clean solution. Never silently accept shortcuts.
@@ -15,41 +11,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **This repo**: Turborepo monorepo with two brand websites sharing components and utilities (Next.js 16, TypeScript, Tailwind CSS v4, Vercel):
 
-| Project | Directory | Domain | Theme | Brand slug |
-|---------|-----------|--------|-------|------------|
-| SG Tools | `apps/sg-tools/` | sgtools.rs | Dark only | `sg-tools` |
-| DCK | `apps/dck/` | dcksrbija.rs | Light only | `dck` |
+| Project  | Directory        | Domain       | Theme      | Brand slug |
+| -------- | ---------------- | ------------ | ---------- | ---------- |
+| SG Tools | `apps/sg-tools/` | sgtools.rs   | Dark only  | `sg-tools` |
+| DCK      | `apps/dck/`      | dcksrbija.rs | Light only | `dck`      |
 
-**Purpose**: Display brand products (fetched server-side from the main platform's REST API) with buy links pointing to prodavnicaalata.rs. These sites are display-only — no cart or checkout.
+**Purpose**: Display brand products (fetched server-side from the main platform's REST API), these sites are display-only — no cart or checkout, the core of the websites is to interest and enable dealers to sell our brands, not to push buying from prodavnicaalata.rs.
 
 **Brand voice**: Friendly and approachable. Serbian copy uses informal "ti" form (not "Vi") — keep it casual and direct.
 
 ## Critical Rules
 
 - **Serbian tone**: Always use informal "ti" form in Serbian copy — never formal "Vi". Keep it casual and friendly.
-- **SG Tools = dark mode only**. Do not add light mode styles or toggles.
-- **DCK = light mode only**. Do not add dark mode styles or toggles.
-- **Product links**: Product pages link to prodavnicaalata.rs for purchasing. Products are display-only on these sites.
 - **Serbian URLs**: All routes use Serbian path names (e.g., `/o-nama`, `/kontakt`, `/proizvodi/kategorije`).
-
-## Commands
-
-Use Turborepo from the repo root:
-
-```bash
-pnpm dev:sg                 # SG Tools dev server
-pnpm dev:dck                # DCK dev server
-pnpm build                  # Build both apps
-pnpm lint                   # Lint both apps
-```
-
-Or run per-app from `apps/sg-tools/` or `apps/dck/`:
-
-```bash
-pnpm dev                    # Dev server
-pnpm build                  # Production build
-pnpm lint                   # Run ESLint
-```
+- For minor straightforward changes, we don't need to build at all.
+- **Type-check command**: `pnpm -C apps/dck exec tsc --noEmit` (or `apps/sg-tools`). Do NOT use `npx tsc` — it won't resolve workspace dependencies.
 
 ## Environment Variables
 
@@ -59,7 +35,6 @@ pnpm lint                   # Run ESLint
 - Key variables (same for both):
   - `API_URL` — Base URL for the PACMS backend REST API (server-only)
   - `BREVO_API_KEY` — Brevo email service API key (contact form)
-  - `PACMS_INTERNAL_KEY` — Authentication key for PACMS backend internal endpoints (error reporting)
 
 ## Architecture
 
@@ -90,6 +65,7 @@ pnpm lint                   # Run ESLint
 ### App Shell Contents (what stays per-app)
 
 Each app (`apps/sg-tools/`, `apps/dck/`) contains only:
+
 - `app/globals.css` — Theme OKLCH tokens (dark vs light)
 - `app/layout.tsx` — Viewport, structured data, body class
 - `app/page.tsx` — Homepage composition
@@ -107,32 +83,32 @@ DCK additionally has: `app/registracija-garancije/`, `components/warranty/`, `li
 
 Three patterns for consuming brand-specific values in shared code:
 
-| Pattern | When | Example |
-|---------|------|---------|
-| `getBrandConfig()` | Server components needing brand identity | `footer.tsx` reads logo, `api.ts` reads brandSlug |
-| Props from app pages | Content arrays that vary per brand | `<Stats stats={STATS} />` from app's `constants/` |
-| CSS custom properties | Theming (colors) | `bg-primary` resolves via each app's `globals.css` |
+| Pattern               | When                                     | Example                                            |
+| --------------------- | ---------------------------------------- | -------------------------------------------------- |
+| `getBrandConfig()`    | Server components needing brand identity | `footer.tsx` reads logo, `api.ts` reads brandSlug  |
+| Props from app pages  | Content arrays that vary per brand       | `<Stats stats={STATS} />` from app's `constants/`  |
+| CSS custom properties | Theming (colors)                         | `bg-primary` resolves via each app's `globals.css` |
 
 ### Import Aliases
 
-| Alias | Resolves to |
-|-------|-------------|
-| `@/*` | App root (e.g., `@/constants/links`, `@/components/hero`) |
-| `@brand/config` | `packages/brand-config/src/` |
-| `@brand/ui/*` | `packages/ui/src/*` |
-| `@brand/shared/*` | `packages/shared/src/*` |
+| Alias             | Resolves to                                               |
+| ----------------- | --------------------------------------------------------- |
+| `@/*`             | App root (e.g., `@/constants/links`, `@/components/hero`) |
+| `@brand/config`   | `packages/brand-config/src/`                              |
+| `@brand/ui/*`     | `packages/ui/src/*`                                       |
+| `@brand/shared/*` | `packages/shared/src/*`                                   |
 
 ### Route Structure (both apps)
 
-| Route | URL |
-|-------|-----|
-| `app/page.tsx` | `/` |
-| `app/o-nama/` | `/o-nama` |
-| `app/kontakt/` | `/kontakt` |
-| `app/gde-kupiti/` | `/gde-kupiti` |
-| `app/proizvodi/kategorije/` | `/proizvodi/kategorije` |
+| Route                              | URL                            |
+| ---------------------------------- | ------------------------------ |
+| `app/page.tsx`                     | `/`                            |
+| `app/o-nama/`                      | `/o-nama`                      |
+| `app/kontakt/`                     | `/kontakt`                     |
+| `app/gde-kupiti/`                  | `/gde-kupiti`                  |
+| `app/proizvodi/kategorije/`        | `/proizvodi/kategorije`        |
 | `app/proizvodi/kategorije/[slug]/` | `/proizvodi/kategorije/[slug]` |
-| `app/proizvodi/[slug]/` | `/proizvodi/[slug]` |
+| `app/proizvodi/[slug]/`            | `/proizvodi/[slug]`            |
 
 DCK also has: `app/registracija-garancije/` → `/registracija-garancije`
 
@@ -141,40 +117,15 @@ DCK also has: `app/registracija-garancije/` → `/registracija-garancije`
 **Server vs Client components**: Most section components are plain server components. Client components (`"use client"`) are used only where interactivity is needed: Navbar, MobileMenu, Container (Framer Motion animations), WhereToBuyContent, DealerList, WarrantyForm.
 
 **Layout wrapper components** (in `@brand/shared`):
+
 - `Wrapper` — Max-width container (`lg:max-w-7xl`) with responsive padding
 - `Container` — Framer Motion animation wrapper with preset animations
 
 **Serbian content**:
+
 - All Serbian strings are hardcoded directly — no i18n framework
 - Structured data arrays live in per-app `constants/content.ts`
 - Navigation labels in per-app `constants/links.ts`
-
-**Product data fetching** (in `@brand/shared/lib/api.ts`):
-- Uses `getBrandConfig().brandSlug` to filter products per brand
-- `"use cache"` directive with time-based cache profiles (hours for categories, minutes for products)
-
-**Styling**: Tailwind CSS v4 with OKLCH color tokens in `globals.css`. Shared base styles in `@brand/shared/styles/base.css`. Component variants use class-variance-authority (CVA). Always use `cn()` for merging classes.
-
-**UI components**: shadcn/ui with `new-york` style. Add new components to `packages/ui/src/`. Config in per-app `components.json`.
-
-**Fonts**: Space Grotesk (headings) and Inter (body) loaded via `next/font/google` in per-app `constants/fonts.ts`.
-
-**Icons**: lucide-react — import individual icons as React components.
-
-### Adding a New Page
-
-1. Create `apps/<brand>/app/<serbian-page-name>/page.tsx`
-2. Import shared components from `@brand/shared/components/`
-3. Pass brand-specific content from `@/constants/`
-4. Add navigation link to `constants/links.ts`
-
-### Adding a New Brand
-
-1. Create `packages/brand-config/src/new-brand.ts` with `BrandConfig` values
-2. Register it in `packages/brand-config/src/index.ts`
-3. Copy `apps/sg-tools/` → `apps/new-brand/`
-4. Customize: `globals.css` (theme), `constants/` (content), `public/` (assets), `next.config.ts` (`NEXT_PUBLIC_BRAND_SLUG`)
-5. All shared components work automatically
 
 ## PACMS Backend Dependency
 
@@ -182,13 +133,14 @@ This repo depends on the **PACMS** platform (`c:\Users\user\Documents\Projects\P
 
 **Product data**: `API_URL` points to the PACMS backend (`/api/Storefront/*` endpoints). All product, category, and sitemap data is fetched from there via `packages/shared/src/lib/api.ts`.
 
-**Error reporting**: Server-side errors are reported to the PACMS backend's `/api/Storefront/ReportError` endpoint (authenticated via `PACMS_INTERNAL_KEY` / `X-Internal-Key` header). The backend dispatches these to Telegram via Hangfire background jobs with rate limiting. This is implemented in:
-- `apps/*/instrumentation.ts` — `onRequestError` catches all unhandled server errors
-- `packages/shared/src/lib/report-error.ts` — `reportError()` for explicitly-caught errors (API failures, server action errors, missing env vars)
+**Error reporting**: Errors are captured by `@sentry/nextjs` and sent to Sentry (email alerts configured per-project). Implementation:
+
+- `apps/*/instrumentation.ts` — `onRequestError` via `Sentry.captureRequestError`
+- `packages/shared/src/lib/report-error.ts` — `reportError()` via `Sentry.captureException` for explicitly-caught errors
 
 **Warranty registration** (DCK only): `apps/dck/app/registracija-garancije/actions.ts` submits warranty forms to `/api/Storefront/SubmitWarrantyRegistration` (authenticated via `PACMS_API_KEY` / `X-Api-Key` header).
 
-**Shared patterns with PACMS storefront** (`c:\Users\user\Documents\Projects\PACMS\pa-storefront`): Both repos use the same `instrumentation.ts` → `ReportError` pattern, the same `report-error.ts` utility structure, and the same Turnstile verification flow. When adding cross-cutting features (error handling, auth, caching), check the PACMS storefront for existing patterns to replicate.
+**Shared patterns with PACMS storefront** (`c:\Users\user\Documents\Projects\PACMS\pa-storefront`): Both repos use the same Sentry instrumentation pattern, the same `report-error.ts` utility structure, and the same Turnstile verification flow. When adding cross-cutting features (error handling, auth, caching), check the PACMS storefront for existing patterns to replicate.
 
 **Vercel deployment**: All projects (dck, sg-tools, pa-storefront-ba, pa-storefront-rs) are managed under one Vercel team. Credentials and project IDs are in the PACMS repo at `.claude/skills/prod-vercel/skill.md`.
 

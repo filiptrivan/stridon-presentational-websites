@@ -1,8 +1,9 @@
+import WarrantyForm from "@/components/warranty/warranty-form";
+import { SERVICE_CENTERS } from "@/constants/service-centers";
+import ContactLocations from "@brand/shared/components/contact/contact-locations";
 import Container from "@brand/shared/components/container";
-import CTA from "@brand/shared/components/cta";
 import HeroHeader from "@brand/shared/components/hero-header";
 import Section from "@brand/shared/components/section";
-import WarrantyForm from "@/components/warranty/warranty-form";
 import Wrapper from "@brand/shared/components/wrapper";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
 
@@ -27,7 +28,11 @@ const WarrantyRegistrationPage = () => {
           </Container>
         </Wrapper>
       </Section>
-      <CTA />
+      <ContactLocations
+        title="Ovlašćeni servisi"
+        description="Ukoliko ti je potreban servis, pronađi najbliži ovlašćeni servisni centar"
+        locations={SERVICE_CENTERS}
+      />
     </div>
   );
 };

@@ -1,34 +1,12 @@
 import { formatTelHref } from "@brand/shared/lib/utils";
 import { type ContactFormData } from "@brand/shared/lib/schemas/contact";
 import type { ActionResult } from "@brand/shared/types/actions";
+import type { ContactInfo } from "@brand/shared/types/contact";
 import { type LucideIcon, Clock, Mail, Phone } from "lucide-react";
 import { type ReactNode } from "react";
 import Container from "../container";
 import HeroHeader from "../hero-header";
 import ContactForm from "./contact-form";
-
-export interface ContactPhone {
-  label: string;
-  number: string;
-}
-
-export interface ContactHour {
-  days: string;
-  time: string;
-}
-
-export interface ContactLocation {
-  name: string;
-  address: string;
-  coords: { lat: number; lng: number };
-}
-
-export interface ContactInfo {
-  email: string;
-  phones: ContactPhone[];
-  hours: ContactHour[];
-  locations: ContactLocation[];
-}
 
 interface ContactHeroProps {
   contactInfo: ContactInfo;

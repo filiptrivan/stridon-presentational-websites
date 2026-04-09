@@ -11,6 +11,7 @@ export const NAV_LINKS: readonly NavLink[] = [
   { label: "O nama", href: "/o-nama" },
   { label: "Gde kupiti", href: "/gde-kupiti" },
   { label: "Registracija garancije", href: "/registracija-garancije" },
+  { label: "Servis", href: "/servis" },
   { label: "Kontakt", href: "/kontakt" },
 ];
 
@@ -24,6 +25,7 @@ export const COMPANY_FOOTER_LINKS: readonly NavLink[] = [
   { label: "O nama", href: "/o-nama" },
   { label: "Gde kupiti", href: "/gde-kupiti" },
   { label: "Registracija garancije", href: "/registracija-garancije" },
+  { label: "Servis", href: "/servis" },
   { label: "Kontakt", href: "/kontakt" },
   {
     label: "Stridon Group",
