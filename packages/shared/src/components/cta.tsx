@@ -1,26 +1,27 @@
 import { getBrandConfig } from "@brand/config";
-import {
-  ArrowRight,
-  Layers,
-  ShieldCheck,
-  Users,
-  Wrench,
-} from "lucide-react";
+import { Button } from "@brand/ui/button";
+import { ArrowRight, Layers, ShieldCheck, Users, Wrench } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
+import { cn } from "../lib/utils";
 import Container from "./container";
 import Section from "./section";
-import { Button } from "@brand/ui/button";
 import Wrapper from "./wrapper";
-import { cn } from "../lib/utils";
 
-const TRUST_BADGES = [
+export type TrustBadge = { icon: LucideIcon; text: string };
+
+const DEFAULT_TRUST_BADGES: TrustBadge[] = [
   { icon: ShieldCheck, text: "Garancija na mašine" },
   { icon: Wrench, text: "Ovlašćeni servis u Srbiji" },
   { icon: Users, text: "Podrška za partnere" },
   { icon: Layers, text: "Širok asortiman" },
 ];
 
-const CTA = () => {
+interface CTAProps {
+  trustBadges?: TrustBadge[];
+}
+
+const CTA = ({ trustBadges = DEFAULT_TRUST_BADGES }: CTAProps) => {
   const { ctaHeading, ctaGradientClasses } = getBrandConfig();
 
   return (
@@ -47,7 +48,7 @@ const CTA = () => {
             </Link>
           </Button>
           <div className="flex flex-wrap justify-center items-center gap-2 lg:gap-3">
-            {TRUST_BADGES.map((badge, index) => (
+            {trustBadges.map((badge, index) => (
               <Container key={index} delay={0.2 * index}>
                 <div className="flex items-center gap-2 px-2 py-2 rounded-lg text-muted-foreground">
                   <badge.icon className="size-3.5 shrink-0" strokeWidth={1.5} />

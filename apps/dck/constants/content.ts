@@ -1,4 +1,12 @@
-import { Award, BadgePercent, ShieldCheck, ToolCase } from "lucide-react";
+import {
+  Award,
+  BadgePercent,
+  Layers,
+  ShieldCheck,
+  Tag,
+  ToolCase,
+} from "lucide-react";
+import type { TrustBadge } from "@brand/shared/components/cta";
 
 export const FEATURES = [
   {
@@ -21,6 +29,13 @@ export const FEATURES = [
     desc: "Profesionalne performanse po ceni koja ima smisla.",
     icon: BadgePercent,
   },
+];
+
+export const CTA_TRUST_BADGES: TrustBadge[] = [
+  { icon: ShieldCheck, text: "Garancija 3 godine" },
+  { icon: Award, text: "Premium kvalitet" },
+  { icon: Layers, text: "Širok asortiman" },
+  { icon: Tag, text: "Pristupačne cene" },
 ];
 
 export const STATS = [
