@@ -1,6 +1,6 @@
 import { CONTACT_INFO } from "@/constants";
+import CTA from "@/components/cta";
 import ContactHero from "@brand/shared/components/contact/contact-hero";
-import CTA from "@brand/shared/components/cta";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
 import { sendContactEmail } from "./actions";
 

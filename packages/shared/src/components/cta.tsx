@@ -1,6 +1,6 @@
 import { getBrandConfig } from "@brand/config";
 import { Button } from "@brand/ui/button";
-import { ArrowRight, Layers, ShieldCheck, Users, Wrench } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { cn } from "../lib/utils";
@@ -10,18 +10,11 @@ import Wrapper from "./wrapper";
 
 export type TrustBadge = { icon: LucideIcon; text: string };
 
-const DEFAULT_TRUST_BADGES: TrustBadge[] = [
-  { icon: ShieldCheck, text: "Garancija na mašine" },
-  { icon: Wrench, text: "Ovlašćeni servis u Srbiji" },
-  { icon: Users, text: "Podrška za partnere" },
-  { icon: Layers, text: "Širok asortiman" },
-];
-
 interface CTAProps {
-  trustBadges?: TrustBadge[];
+  trustBadges: TrustBadge[];
 }
 
-const CTA = ({ trustBadges = DEFAULT_TRUST_BADGES }: CTAProps) => {
+const CTA = ({ trustBadges }: CTAProps) => {
   const { ctaHeading, ctaGradientClasses } = getBrandConfig();
 
   return (

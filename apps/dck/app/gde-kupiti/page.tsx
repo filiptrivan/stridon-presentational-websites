@@ -1,4 +1,4 @@
-import CTA from "@brand/shared/components/cta";
+import CTA from "@/components/cta";
 import HeroHeader from "@brand/shared/components/hero-header";
 import WhereToBuyContent from "@brand/shared/components/where-to-buy/where-to-buy-content";
 import { createPageMetadata } from "@brand/shared/lib/metadata";

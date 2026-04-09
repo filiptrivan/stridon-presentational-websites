@@ -1,7 +1,17 @@
+import { Layers, ShieldCheck, Users, Wrench } from "lucide-react";
+import type { TrustBadge } from "@brand/shared/components/cta";
+
+export const CTA_TRUST_BADGES: TrustBadge[] = [
+  { icon: ShieldCheck, text: "Garancija na mašine" },
+  { icon: Wrench, text: "Ovlašćeni servis u Srbiji" },
+  { icon: Users, text: "Podrška za partnere" },
+  { icon: Layers, text: "Širok asortiman" },
+];
+
 export const FEATURES = [
   {
     title: "Razvijen iz prakse",
-    desc: "Ne pravimo alat napamet. SG Tools je oblikovan kroz stvarne potrebe ljudi koji ga koriste svaki dan.",
+    desc: "SG Tools je oblikovan kroz stvarne potrebe ljudi koji ga koriste svaki dan.",
   },
   {
     title: "Dobar odnos cene i kvaliteta",

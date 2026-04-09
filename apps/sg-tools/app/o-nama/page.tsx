@@ -2,7 +2,7 @@ import AboutStory from "@brand/shared/components/about-story";
 import CompanyBenefits from "@brand/shared/components/company-benefits";
 import CompanyStats from "@brand/shared/components/company-stats";
 import CompanyValues from "@brand/shared/components/company-values";
-import CTA from "@brand/shared/components/cta";
+import CTA from "@/components/cta";
 import HeroHeader from "@brand/shared/components/hero-header";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
 import {
