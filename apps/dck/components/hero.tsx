@@ -47,6 +47,7 @@ const Hero = () => {
                  fetchPriority/loading props, so we set them manually for above-the-fold loading. */}
               <img
                 {...rest}
+                alt={common.alt}
                 style={{ width: "100%", height: "auto" }}
                 className="rounded-xl md:rounded-[26px]"
                 fetchPriority="high"
