@@ -5,7 +5,7 @@ import RelatedProductsSkeleton from "@brand/shared/components/products/related-p
 import SimilarProducts from "@brand/shared/components/products/similar-products";
 import { SectionErrorBoundary } from "@brand/ui/section-error-boundary";
 import { getProductBySlug, getSitemapProducts } from "@brand/shared/lib/api";
-import type { BreadcrumbSegment } from "@brand/shared/lib/categories";
+import { mapCategoryBreadcrumbs } from "@brand/shared/lib/categories";
 import { createProductMetadata } from "@brand/shared/lib/metadata";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -40,9 +40,9 @@ export default async function ProductPage({ params }: Props) {
   const product = await getProductBySlug(slug);
   if (!product) notFound();
 
-  const categoryBreadcrumbs: BreadcrumbSegment[] = product.categorySlug
-    ? [{ label: product.categoryName, href: `/proizvodi/kategorije/${product.categorySlug}` }]
-    : [];
+  const categoryBreadcrumbs = mapCategoryBreadcrumbs(
+    product.categoryBreadcrumbs,
+  );
 
   const relatedProducts = product.relatedProducts;
   const relatedProductIds = relatedProducts.map((p) => p.id);

@@ -2,7 +2,7 @@ import HeroHeader from "@brand/shared/components/hero-header";
 import CategoryCard from "@brand/shared/components/products/category-card";
 import StatusMessage from "@brand/shared/components/status-message";
 import Wrapper from "@brand/shared/components/wrapper";
-import { getLeafCategories } from "@brand/shared/lib/api";
+import { getCategories } from "@brand/shared/lib/api";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
 import { Package } from "lucide-react";
 
@@ -14,7 +14,7 @@ export const metadata = createPageMetadata({
 });
 
 const CategoriesPage = async () => {
-  const categories = await getLeafCategories();
+  const categories = await getCategories();
 
   return (
     <div>

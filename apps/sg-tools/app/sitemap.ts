@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { SITE_URL } from "@/constants/links";
-import { getLeafCategories, getSitemapProducts } from "@brand/shared/lib/api";
+import { getAllCategoriesFlat, getSitemapProducts } from "@brand/shared/lib/api";
 
 const staticPages = [
   { path: "/", changeFrequency: "weekly" as const, priority: 1.0 },
@@ -35,7 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   const [categoriesResult, productsResult] = await Promise.allSettled([
-    getLeafCategories(),
+    getAllCategoriesFlat(),
     getSitemapProducts(),
   ]);
 

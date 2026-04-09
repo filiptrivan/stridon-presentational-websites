@@ -1,4 +1,4 @@
-import { getLeafCategories } from "../lib/api";
+import { getCategories } from "../lib/api";
 import type { Category } from "../types/categories";
 import Navbar from "./navbar";
 import type { NavbarLink } from "./mobile-menu";
@@ -12,7 +12,7 @@ const NavbarWithCategories = async ({
 }: NavbarWithCategoriesProps) => {
   let categories: Category[] = [];
   try {
-    categories = await getLeafCategories();
+    categories = await getCategories();
   } catch {
     categories = [];
   }

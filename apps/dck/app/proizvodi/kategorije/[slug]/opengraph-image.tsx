@@ -1,4 +1,4 @@
-import { getCategoryBySlug, getLeafCategories } from "@brand/shared/lib/api";
+import { getAllCategoriesFlat, getCategoryBySlug } from "@brand/shared/lib/api";
 import { OG_SIZE } from "@/lib/og/constants";
 import { loadFonts } from "@brand/shared/lib/og/fonts";
 import { CategoryTemplate, DefaultTemplate } from "@/lib/og/templates";
@@ -9,7 +9,7 @@ export const size = OG_SIZE;
 export const contentType = "image/png";
 
 export async function generateStaticParams() {
-  const categories = await getLeafCategories();
+  const categories = await getAllCategoriesFlat();
   return categories.map((c) => ({ slug: c.slug }));
 }
 

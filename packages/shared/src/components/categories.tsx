@@ -2,13 +2,13 @@ import CategoryCard from "./products/category-card";
 import SectionHeader from "./section-header";
 import Section from "./section";
 import Wrapper from "./wrapper";
-import { getLeafCategories } from "@brand/shared/lib/api";
+import { getCategories } from "@brand/shared/lib/api";
 import type { Category } from "@brand/shared/types/categories";
 
 const Categories = async () => {
   let categories: Category[] = [];
   try {
-    categories = await getLeafCategories();
+    categories = await getCategories();
   } catch {
     return null;
   }

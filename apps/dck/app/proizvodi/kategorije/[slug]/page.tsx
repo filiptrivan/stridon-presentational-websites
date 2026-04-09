@@ -3,16 +3,20 @@ import { ListingPagination } from "@brand/shared/components/products/listing-pag
 import PageBreadcrumbs from "@brand/shared/components/products/page-breadcrumbs";
 import ProductGrid from "@brand/shared/components/products/product-grid";
 import ProductGridSkeleton from "@brand/shared/components/products/product-grid-skeleton";
+import SubcategoriesGrid from "@brand/shared/components/products/subcategories-grid";
 import { SectionErrorBoundary } from "@brand/ui/section-error-boundary";
 import { Prose } from "@brand/ui/prose";
 import Wrapper from "@brand/shared/components/wrapper";
 import { PRODUCTS_PER_PAGE } from "@brand/shared/lib/cache-tags";
 import {
+  getAllCategoriesFlat,
   getCategoryBySlug,
   getFilteredProductsByCategory,
-  getLeafCategories,
 } from "@brand/shared/lib/api";
-import { buildBreadcrumbJsonLd } from "@brand/shared/lib/categories";
+import {
+  buildBreadcrumbJsonLd,
+  mapCategoryBreadcrumbs,
+} from "@brand/shared/lib/categories";
 import { createCategoryMetadata } from "@brand/shared/lib/metadata";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
@@ -24,7 +28,7 @@ type Props = {
 };
 
 export async function generateStaticParams() {
-  const categories = await getLeafCategories();
+  const categories = await getAllCategoriesFlat();
   return categories.map((c) => ({ slug: c.slug }));
 }
 
@@ -90,7 +94,13 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const category = await getCategoryBySlug(slug);
   if (!category) notFound();
 
-  const breadcrumbJsonLd = buildBreadcrumbJsonLd([], category.name);
+  const breadcrumbSegments = mapCategoryBreadcrumbs(
+    category.categoryBreadcrumbs,
+  );
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(
+    breadcrumbSegments,
+    category.name,
+  );
 
   return (
     <div>
@@ -104,7 +114,13 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       />
 
       <Wrapper className="pb-16">
-        <PageBreadcrumbs currentPage={category.name} />
+        <PageBreadcrumbs
+          segments={breadcrumbSegments}
+          currentPage={category.name}
+        />
+
+        <SubcategoriesGrid categories={category.subCategories} />
+
         <SectionErrorBoundary>
           <Suspense fallback={<ProductGridSkeleton />}>
             <CategoryProducts slug={slug} searchParams={searchParams} />

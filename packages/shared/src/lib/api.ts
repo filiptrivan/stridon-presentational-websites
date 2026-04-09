@@ -64,9 +64,9 @@ export async function getCategories(): Promise<Category[]> {
   );
 }
 
-export async function getLeafCategories(): Promise<Category[]> {
-  const { flattenToLeafCategories } = await import("./categories");
-  return flattenToLeafCategories(await getCategories());
+export async function getAllCategoriesFlat(): Promise<Category[]> {
+  const { flattenAllCategories } = await import("./categories");
+  return flattenAllCategories(await getCategories());
 }
 
 export async function getSitemapProducts(): Promise<SitemapEntry[]> {
