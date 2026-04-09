@@ -5,7 +5,6 @@ const nextConfig: NextConfig = {
   transpilePackages: ["@brand/config", "@brand/ui", "@brand/shared"],
   cacheComponents: true,
   env: {
-    NEXT_PUBLIC_BRAND_SLUG: "dck",
     BUILD_YEAR: String(new Date().getFullYear()),
   },
   images: {

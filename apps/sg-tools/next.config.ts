@@ -5,7 +5,6 @@ const nextConfig: NextConfig = {
   transpilePackages: ["@brand/config", "@brand/ui", "@brand/shared"],
   cacheComponents: true,
   env: {
-    NEXT_PUBLIC_BRAND_SLUG: "sg-tools",
     BUILD_YEAR: String(new Date().getFullYear()),
   },
   images: {
