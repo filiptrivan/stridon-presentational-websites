@@ -1,9 +1,9 @@
-import { Layers, ShieldCheck, Users, Wrench } from "lucide-react";
+import { Clock, Layers, MapPin, Users } from "lucide-react";
 import type { TrustBadge } from "@brand/shared/components/cta";
 
 export const CTA_TRUST_BADGES: TrustBadge[] = [
-  { icon: ShieldCheck, text: "Garancija na mašine" },
-  { icon: Wrench, text: "Ovlašćeni servis u Srbiji" },
+  { icon: Clock, text: "30+ godina u alatima" },
+  { icon: MapPin, text: "120+ dilera u Srbiji" },
   { icon: Users, text: "Podrška za partnere" },
   { icon: Layers, text: "Širok asortiman" },
 ];
