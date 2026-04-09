@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "SG Tools — Profesionalni alati",
+    name: "SG Tools - Profesionalni alati",
     short_name: "SG Tools",
     description:
       "Profesionalni alati nastali iz 30 godina iskustva. Kvalitet po cenama koje imaju smisla.",

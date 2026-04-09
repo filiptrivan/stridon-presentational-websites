@@ -10,7 +10,7 @@ import { createPageMetadata } from "@brand/shared/lib/metadata";
 export const metadata = createPageMetadata({
   title: "Registracija garancije",
   description:
-    "Registruj garanciju za svoj DCK alat — brzo, jednostavno i potpuno besplatno.",
+    "Registruj garanciju za svoj DCK alat - brzo, jednostavno i potpuno besplatno.",
   canonicalUrl: "/registracija-garancije",
 });
 
@@ -19,7 +19,7 @@ const WarrantyRegistrationPage = () => {
     <div>
       <HeroHeader
         title="Registracija garancije"
-        description="Registruj garanciju za svoj DCK alat — popuni formular ispod i osiguraj svoju garanciju brzo i jednostavno."
+        description="Registruj garanciju za svoj DCK alat - popuni formular ispod i osiguraj svoju garanciju brzo i jednostavno."
       />
       <Section>
         <Wrapper>

@@ -1,12 +1,12 @@
 "use client";
 
-import { cn } from "@brand/shared/lib/utils";
 import { isVideoMedia } from "@brand/shared/lib/media";
+import { cn } from "@brand/shared/lib/utils";
 import type { ProductMedia } from "@brand/shared/types/products";
 import useEmblaCarousel from "embla-carousel-react";
 import { Play } from "lucide-react";
-import Image from "next/image";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { startTransition, useEffect, useRef, useState } from "react";
 
 function PlayIconOverlay() {
@@ -20,7 +20,8 @@ function PlayIconOverlay() {
 }
 
 const MediaLightbox = dynamic(
-  () => import("./media-lightbox").then((mod) => ({ default: mod.MediaLightbox })),
+  () =>
+    import("./media-lightbox").then((mod) => ({ default: mod.MediaLightbox })),
   { ssr: false },
 );
 
@@ -30,16 +31,21 @@ interface ProductGalleryProps {
   title: string;
 }
 
-const ProductGallery = ({
-  media,
-  fallbackUrl,
-  title,
-}: ProductGalleryProps) => {
+const ProductGallery = ({ media, fallbackUrl, title }: ProductGalleryProps) => {
   const allMedia: ProductMedia[] =
     media.length > 0
       ? media
       : fallbackUrl
-        ? [{ url: fallbackUrl, mediaType: 0, width: 800, height: 800, thumbnailUrl: null, durationSeconds: null }]
+        ? [
+            {
+              url: fallbackUrl,
+              mediaType: 0,
+              width: 800,
+              height: 800,
+              thumbnailUrl: null,
+              durationSeconds: null,
+            },
+          ]
         : [];
 
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -83,10 +89,12 @@ const ProductGallery = ({
   return (
     <>
       {/* Desktop: vertical thumbnails on left + main media on right */}
-      <div className={cn(
-        "hidden lg:grid lg:gap-3 lg:self-start",
-        allMedia.length > 1 && "lg:grid-cols-[6rem_1fr]",
-      )}>
+      <div
+        className={cn(
+          "hidden lg:grid lg:gap-3 lg:self-start",
+          allMedia.length > 1 && "lg:grid-cols-[6rem_1fr]",
+        )}
+      >
         {allMedia.length > 1 && (
           <div className="relative">
             <div className="absolute inset-0 flex flex-col gap-2 overflow-y-auto">
@@ -102,7 +110,11 @@ const ProductGallery = ({
                   )}
                 >
                   <Image
-                    src={isVideoMedia(item) ? (item.thumbnailUrl ?? item.url) : item.url}
+                    src={
+                      isVideoMedia(item)
+                        ? (item.thumbnailUrl ?? item.url)
+                        : item.url
+                    }
                     alt={`${title} - ${isVideoMedia(item) ? "video" : "slika"} ${i + 1}`}
                     fill
                     sizes="80px"
@@ -115,7 +127,7 @@ const ProductGallery = ({
           </div>
         )}
 
-        {/* Main media display — aspect-square drives the grid row height */}
+        {/* Main media display - aspect-square drives the grid row height */}
         <div
           className="relative aspect-square rounded-lg overflow-hidden cursor-pointer border border-border/40"
           onClick={() => setLightboxOpen(true)}
@@ -206,7 +218,9 @@ const ProductGallery = ({
             <div
               ref={emblaRef}
               className="overflow-hidden rounded-lg"
-              onClick={() => !isVideoMedia(allMedia[selectedIndex]) && setLightboxOpen(true)}
+              onClick={() =>
+                !isVideoMedia(allMedia[selectedIndex]) && setLightboxOpen(true)
+              }
             >
               <div className="flex">
                 {allMedia.map((item, i) => (
@@ -244,7 +258,9 @@ const ProductGallery = ({
                   key={allMedia[i].url}
                   className={cn(
                     "size-2 rounded-full transition-colors",
-                    i === selectedIndex ? "bg-primary" : "bg-muted-foreground/30",
+                    i === selectedIndex
+                      ? "bg-primary"
+                      : "bg-muted-foreground/30",
                   )}
                   onClick={() => emblaApi?.scrollTo(i)}
                   aria-label={`Medij ${i + 1}`}

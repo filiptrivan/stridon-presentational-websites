@@ -30,7 +30,7 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (secrets stay local, .env.production is safe to commit — public keys only)
+# env files (secrets stay local, .env.production is safe to commit - public keys only)
 .env*
 !.env.production
 !.env.example

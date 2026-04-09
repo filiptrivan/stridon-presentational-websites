@@ -15,7 +15,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
       >
         <span className="sr-only">{product.title}</span>
       </Link>
-      {/* `fill` is required — explicit width/height on <Image> overrides the
+      {/* `fill` is required - explicit width/height on <Image> overrides the
           container's aspect-ratio in a flex column, making it impossible
           to control the image container height via CSS. */}
       <div className="relative aspect-square w-full bg-card">

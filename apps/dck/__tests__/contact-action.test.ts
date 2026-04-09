@@ -1,4 +1,4 @@
-import { describe, expect, it, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@brand/shared/lib/report-error", () => ({
   reportError: vi.fn(),
@@ -8,9 +8,9 @@ vi.mock("@brand/shared/lib/turnstile-server", () => ({
   validateTurnstileToken: vi.fn(),
 }));
 
-import { sendContactEmail } from "../app/kontakt/actions";
 import { reportError } from "@brand/shared/lib/report-error";
 import { validateTurnstileToken } from "@brand/shared/lib/turnstile-server";
+import { sendContactEmail } from "../app/kontakt/actions";
 
 const mockedValidateToken = vi.mocked(validateTurnstileToken);
 const mockFetch = vi.fn();
@@ -33,7 +33,7 @@ beforeEach(() => {
   });
 });
 
-describe("sendContactEmail — DCK", () => {
+describe("sendContactEmail - DCK", () => {
   it("returns success on happy path", async () => {
     const result = await sendContactEmail(validData, "valid-token");
     expect(result).toEqual({ success: true });
@@ -117,7 +117,7 @@ describe("sendContactEmail — DCK", () => {
       { email: "aleksatrivan@gmail.com", name: "DCK Srbija" },
     ]);
     expect(body.replyTo).toEqual({ email: validData.email });
-    expect(body.subject).toBe("DCK Srbija — Kontakt forma");
+    expect(body.subject).toBe("DCK Srbija - Kontakt forma");
     expect(body.htmlContent).toContain("Nova poruka sa dcksrbija.rs");
     expect(body.htmlContent).toContain(validData.email);
     expect(body.htmlContent).toContain(validData.message);

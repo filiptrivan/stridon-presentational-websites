@@ -1,10 +1,10 @@
-import { getProductBySlug, getSitemapProducts } from "@brand/shared/lib/api";
 import { OG_SIZE } from "@/lib/og/constants";
-import { loadFonts } from "@brand/shared/lib/og/fonts";
 import { DefaultTemplate, ProductTemplate } from "@/lib/og/templates";
+import { getProductBySlug, getSitemapProducts } from "@brand/shared/lib/api";
+import { loadFonts } from "@brand/shared/lib/og/fonts";
 import { ImageResponse } from "next/og";
 
-export const alt = "Proizvod — DCK";
+export const alt = "Proizvod - DCK";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 
@@ -49,10 +49,7 @@ export default async function Image({
     : undefined;
 
   return new ImageResponse(
-    <ProductTemplate
-      title={product.title}
-      imageUrl={imageDataUrl}
-    />,
+    <ProductTemplate title={product.title} imageUrl={imageDataUrl} />,
     { ...size, fonts },
   );
 }

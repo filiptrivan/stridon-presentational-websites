@@ -30,7 +30,7 @@ const ProductTabs = ({ htmlDescription, specification }: ProductTabsProps) => {
 
   if (availableTabs.length === 0) return null;
 
-  // Only one section — render without tabs
+  // Only one section - render without tabs
   if (availableTabs.length === 1) {
     const tab = availableTabs[0];
 
@@ -45,7 +45,7 @@ const ProductTabs = ({ htmlDescription, specification }: ProductTabsProps) => {
     );
   }
 
-  // Both sections — render with tabs
+  // Both sections - render with tabs
   return (
     <div>
       <div className="flex border-b border-border/20 mb-6">

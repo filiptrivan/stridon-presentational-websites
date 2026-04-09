@@ -217,7 +217,7 @@ function loadAllowPatterns(cwd) {
         }
       }
     } catch {
-      // File doesn't exist or isn't valid JSON — skip
+      // File doesn't exist or isn't valid JSON - skip
     }
   }
 

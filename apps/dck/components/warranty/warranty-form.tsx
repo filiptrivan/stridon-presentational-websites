@@ -9,25 +9,25 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { submitWarrantyRegistration } from "@/app/registracija-garancije/actions";
-import {
-  warrantySchema,
-  type WarrantyFormData,
-  MAX_FILE_SIZE,
-  ACCEPTED_FILE_TYPES,
-  FILE_TOO_LARGE_ERROR,
-  FILE_TYPE_ERROR,
-} from "@/lib/schemas/warranty";
-import { useTurnstile } from "@brand/shared/lib/hooks/useTurnstile";
-import { TURNSTILE_VERIFICATION_FAILED } from "@brand/shared/lib/turnstile";
-import { Button } from "@brand/ui/button";
-import { Input } from "@brand/ui/input";
-import { Label } from "@brand/ui/label";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  ACCEPTED_FILE_TYPES,
+  FILE_TOO_LARGE_ERROR,
+  FILE_TYPE_ERROR,
+  MAX_FILE_SIZE,
+  warrantySchema,
+  type WarrantyFormData,
+} from "@/lib/schemas/warranty";
+import { useTurnstile } from "@brand/shared/lib/hooks/useTurnstile";
+import { TURNSTILE_VERIFICATION_FAILED } from "@brand/shared/lib/turnstile";
+import { Button } from "@brand/ui/button";
+import { Input } from "@brand/ui/input";
+import { Label } from "@brand/ui/label";
 
 const WarrantyForm = () => {
   const {
@@ -252,9 +252,7 @@ const WarrantyForm = () => {
                     mode="single"
                     selected={selectedDate}
                     onSelect={(date) =>
-                      field.onChange(
-                        date ? format(date, "yyyy-MM-dd") : "",
-                      )
+                      field.onChange(date ? format(date, "yyyy-MM-dd") : "")
                     }
                     disabled={(date) => date > new Date()}
                     locale={srLatn}
@@ -305,7 +303,7 @@ const WarrantyForm = () => {
         </div>
         {fileError && <p className="text-sm text-destructive">{fileError}</p>}
         <p className="text-xs text-muted-foreground">
-          JPG, PNG, WebP ili PDF — do 5MB
+          JPG, PNG, WebP ili PDF - do 5MB
         </p>
       </div>
 

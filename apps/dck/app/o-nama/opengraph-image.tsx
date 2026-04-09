@@ -3,7 +3,7 @@ import { DefaultTemplate } from "@/lib/og/templates";
 import { loadFonts } from "@brand/shared/lib/og/fonts";
 import { ImageResponse } from "next/og";
 
-export const alt = "O nama — DCK";
+export const alt = "O nama - DCK";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 

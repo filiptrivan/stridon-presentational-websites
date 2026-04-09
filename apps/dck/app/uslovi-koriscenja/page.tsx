@@ -9,7 +9,7 @@ import Link from "next/link";
 export const metadata = createPageMetadata({
   title: "Uslovi korišćenja",
   description:
-    "Uslovi korišćenja sajta DCK — pravila i uslovi za korišćenje sajta dcksrbija.rs.",
+    "Uslovi korišćenja sajta DCK - pravila i uslovi za korišćenje sajta dcksrbija.rs.",
   canonicalUrl: "/uslovi-koriscenja",
 });
 
@@ -27,19 +27,19 @@ const TermsPage = () => {
               <h2>Opšte odredbe</h2>
               <p>
                 Ovi uslovi korišćenja regulišu upotrebu internet sajta{" "}
-                <strong>dcksrbija.rs</strong>, čiji je vlasnik i operater kompanija{" "}
-                <strong>STRIDON GROUP DOO</strong>, sa sedištem u Republici
-                Srbiji. Pristupanjem i korišćenjem ovog sajta prihvataš ove
-                uslove u celosti. Ukoliko se ne slažeš sa bilo kojim delom
-                uslova, molimo te da ne koristiš sajt.
+                <strong>dcksrbija.rs</strong>, čiji je vlasnik i operater
+                kompanija <strong>STRIDON GROUP DOO</strong>, sa sedištem u
+                Republici Srbiji. Pristupanjem i korišćenjem ovog sajta
+                prihvataš ove uslove u celosti. Ukoliko se ne slažeš sa bilo
+                kojim delom uslova, molimo te da ne koristiš sajt.
               </p>
 
               <h2>Korišćenje sajta</h2>
               <p>
-                Sajt dcksrbija.rs je informativnog i marketinškog karaktera. Služi
-                za prikaz proizvoda brenda DCK, uključujući opise,
+                Sajt dcksrbija.rs je informativnog i marketinškog karaktera.
+                Služi za prikaz proizvoda brenda DCK, uključujući opise,
                 specifikacije i fotografije. Na ovom sajtu{" "}
-                <strong>nije moguća kupovina</strong> — svi proizvodi se kupuju
+                <strong>nije moguća kupovina</strong> - svi proizvodi se kupuju
                 isključivo putem sajta{" "}
                 <a
                   href="https://www.prodavnicaalata.rs"
@@ -58,10 +58,10 @@ const TermsPage = () => {
 
               <h2>Intelektualna svojina</h2>
               <p>
-                Sav sadržaj na sajtu dcksrbija.rs — uključujući ali ne
+                Sav sadržaj na sajtu dcksrbija.rs - uključujući ali ne
                 ograničavajući se na tekstove, fotografije, grafiku, logotipe,
                 ikone, audio i video materijale, kao i dizajn i strukturu sajta
-                — zaštićen je autorskim pravima i predstavlja intelektualnu
+                - zaštićen je autorskim pravima i predstavlja intelektualnu
                 svojinu kompanije STRIDON GROUP DOO.
               </p>
               <p>
@@ -96,9 +96,9 @@ const TermsPage = () => {
               </p>
               <p>
                 Specifikacije, opisi i cene proizvoda prikazanih na sajtu su
-                informativnog karaktera i mogu se razlikovati od stvarnog stanja.
-                Za tačne i ažurne informacije o proizvodima, uključujući cene i
-                dostupnost, proveri sajt{" "}
+                informativnog karaktera i mogu se razlikovati od stvarnog
+                stanja. Za tačne i ažurne informacije o proizvodima, uključujući
+                cene i dostupnost, proveri sajt{" "}
                 <a
                   href="https://www.prodavnicaalata.rs"
                   target="_blank"
@@ -122,11 +122,11 @@ const TermsPage = () => {
 
               <h2>Izmene uslova</h2>
               <p>
-                STRIDON GROUP DOO zadržava pravo da izmeni ove uslove
-                korišćenja u bilo kom trenutku, bez prethodnog obaveštenja.
-                Izmenjeni uslovi stupaju na snagu momentom objavljivanja na ovoj
-                stranici. Nastavkom korišćenja sajta nakon objave izmena
-                prihvataš nove uslove.
+                STRIDON GROUP DOO zadržava pravo da izmeni ove uslove korišćenja
+                u bilo kom trenutku, bez prethodnog obaveštenja. Izmenjeni
+                uslovi stupaju na snagu momentom objavljivanja na ovoj stranici.
+                Nastavkom korišćenja sajta nakon objave izmena prihvataš nove
+                uslove.
               </p>
               <p>
                 Preporučujemo ti da povremeno ponovo pročitaš ovu stranicu kako
@@ -144,9 +144,8 @@ const TermsPage = () => {
               <p>
                 Za sva pitanja u vezi sa ovim uslovima korišćenja, možeš nas
                 kontaktirati putem e-maila na{" "}
-                <a href="mailto:contact@dcksrbija.rs">contact@dcksrbija.rs</a> ili
-                putem naše{" "}
-                <Link href="/kontakt">stranice za kontakt</Link>.
+                <a href="mailto:contact@dcksrbija.rs">contact@dcksrbija.rs</a>{" "}
+                ili putem naše <Link href="/kontakt">stranice za kontakt</Link>.
               </p>
             </Prose>
           </Container>

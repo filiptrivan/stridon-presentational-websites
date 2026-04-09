@@ -1,3 +1,4 @@
+import type { TrustBadge } from "@brand/shared/components/cta";
 import {
   Clock,
   Globe,
@@ -9,7 +10,6 @@ import {
   Users,
   Wrench,
 } from "lucide-react";
-import type { TrustBadge } from "@brand/shared/components/cta";
 
 export const CTA_TRUST_BADGES: TrustBadge[] = [
   { icon: Clock, text: "30+ godina u alatima" },
@@ -148,8 +148,8 @@ export const COMPANY_BENEFITS = [
 ];
 
 export const ABOUT_PARAGRAPHS = [
-  "Naša priča počinje mnogo pre nego što je SG Tools dobio ime. Počela je 1996. godine, na tezgi Novobeogradskog buvljaka — iz bliskog kontakta sa kupcima i iz razumevanja šta ljudima zaista treba od alata. Od samog početka, alat za nas nije bio samo roba. Bio je sredstvo rada, poverenja i dugoročnog odnosa. Kroz godine smo učili direktno od vas — od majstora, hobista, instalatera i servisera koji tačno znaju šta od alata očekuju. Vaše sugestije nismo posmatrali kao komentare, već kao smernice.",
-  "Materijale biramo promišljeno, sa naglaskom na trajnost i otpornost u realnim uslovima rada. Ergonomija za nas nije dodatak, već polazna tačka — alat mora prirodno ležati u ruci, pružati siguran hvat i omogućiti dugotrajan rad bez nepotrebnog zamora. Dizajn je uvek u službi funkcije, bez suvišnih detalja. Od izbora sirovina do završne obrade, ništa nije prepušteno slučaju. SG Tools je zajednički uspeh koji nastavljamo da gradimo zajedno sa našim kupcima — profesionalni kvalitet po cenama koje imaju smisla.",
+  "Naša priča počinje mnogo pre nego što je SG Tools dobio ime. Počela je 1996. godine, na tezgi Novobeogradskog buvljaka - iz bliskog kontakta sa kupcima i iz razumevanja šta ljudima zaista treba od alata. Od samog početka, alat za nas nije bio samo roba. Bio je sredstvo rada, poverenja i dugoročnog odnosa. Kroz godine smo učili direktno od vas - od majstora, hobista, instalatera i servisera koji tačno znaju šta od alata očekuju. Vaše sugestije nismo posmatrali kao komentare, već kao smernice.",
+  "Materijale biramo promišljeno, sa naglaskom na trajnost i otpornost u realnim uslovima rada. Ergonomija za nas nije dodatak, već polazna tačka - alat mora prirodno ležati u ruci, pružati siguran hvat i omogućiti dugotrajan rad bez nepotrebnog zamora. Dizajn je uvek u službi funkcije, bez suvišnih detalja. Od izbora sirovina do završne obrade, ništa nije prepušteno slučaju. SG Tools je zajednički uspeh koji nastavljamo da gradimo zajedno sa našim kupcima - profesionalni kvalitet po cenama koje imaju smisla.",
 ];
 
 export const HOME_ABOUT_PARAGRAPH =

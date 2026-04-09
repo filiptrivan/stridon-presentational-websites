@@ -37,7 +37,6 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-
 }
 
 @layer base {
@@ -74,7 +73,7 @@ h6 {
   font-family: var(--font-heading);
 }
 
-/* Product detail HTML content — override prose image display for inline icons */
+/* Product detail HTML content - override prose image display for inline icons */
 .prose img {
   display: inline-block;
   margin: 0.5em 0.5em 0.5em 0;

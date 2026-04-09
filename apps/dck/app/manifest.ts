@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "DCK — Profesionalni električni alati",
+    name: "DCK - Profesionalni električni alati",
     short_name: "DCK",
     description:
       "DCK profesionalni električni alati. Zvanični distributer za Srbiju.",

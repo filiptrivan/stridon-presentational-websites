@@ -8,7 +8,7 @@ import { Prose } from "@brand/ui/prose";
 export const metadata = createPageMetadata({
   title: "Politika privatnosti",
   description:
-    "Politika privatnosti SG Tools — kako prikupljamo, koristimo i štitimo tvoje podatke na sajtu sgtools.rs.",
+    "Politika privatnosti SG Tools - kako prikupljamo, koristimo i štitimo tvoje podatke na sajtu sgtools.rs.",
   canonicalUrl: "/politika-privatnosti",
 });
 
@@ -28,8 +28,8 @@ const PrivacyPolicyPage = () => {
                 Sajt <strong>sgtools.rs</strong> je u vlasništvu kompanije{" "}
                 <strong>STRIDON GROUP DOO</strong>, sa sedištem u Republici
                 Srbiji. Kao rukovalac podataka, odgovorni smo za zaštitu tvojih
-                ličnih podataka u skladu sa Zakonom o zaštiti podataka o ličnosti
-                Republike Srbije.
+                ličnih podataka u skladu sa Zakonom o zaštiti podataka o
+                ličnosti Republike Srbije.
               </p>
               <ul>
                 <li>
@@ -46,11 +46,11 @@ const PrivacyPolicyPage = () => {
               <h2>Obaveštenje o zaštiti podataka</h2>
               <p>
                 Posvećeni smo zaštiti privatnosti svakog posetioca našeg sajta.
-                Ovom politikom privatnosti objašnjavamo koje podatke prikupljamo,
-                u koje svrhe ih koristimo i kako ih štitimo. Sajt sgtools.rs je
-                informativnog karaktera — služi za prikaz proizvoda brenda SG
-                Tools, bez mogućnosti kupovine. Kupovina se obavlja isključivo
-                na sajtu{" "}
+                Ovom politikom privatnosti objašnjavamo koje podatke
+                prikupljamo, u koje svrhe ih koristimo i kako ih štitimo. Sajt
+                sgtools.rs je informativnog karaktera - služi za prikaz
+                proizvoda brenda SG Tools, bez mogućnosti kupovine. Kupovina se
+                obavlja isključivo na sajtu{" "}
                 <a
                   href="https://www.prodavnicaalata.rs"
                   target="_blank"
@@ -84,8 +84,8 @@ const PrivacyPolicyPage = () => {
               <p>
                 Tvojim podacima pristupaju isključivo ovlašćeni zaposleni
                 kompanije STRIDON GROUP DOO, u cilju obrade tvog upita. Tvoje
-                podatke ne delimo sa trećim licima, osim ukoliko je to
-                neophodno za ispunjenje zakonskih obaveza.
+                podatke ne delimo sa trećim licima, osim ukoliko je to neophodno
+                za ispunjenje zakonskih obaveza.
               </p>
 
               <h2>Zaštita podataka</h2>
@@ -96,9 +96,7 @@ const PrivacyPolicyPage = () => {
               <ul>
                 <li>Zaštitu servera savremenim sigurnosnim protokolima</li>
                 <li>Antivirusnu zaštitu i redovne bezbednosne provere</li>
-                <li>
-                  Ograničen pristup podacima samo ovlašćenim zaposlenima
-                </li>
+                <li>Ograničen pristup podacima samo ovlašćenim zaposlenima</li>
               </ul>
 
               <h2>Tvoja prava</h2>
@@ -142,16 +140,16 @@ const PrivacyPolicyPage = () => {
               </p>
               <ul>
                 <li>
-                  <strong>Neophodni kolačići</strong> — omogućavaju osnovne
+                  <strong>Neophodni kolačići</strong> - omogućavaju osnovne
                   funkcionalnosti sajta i ne mogu se isključiti.
                 </li>
                 <li>
-                  <strong>Analitički kolačići</strong> — pomažu nam da
-                  razumemo kako posetioci koriste sajt, kako bismo poboljšali
-                  sadržaj i korisničko iskustvo.
+                  <strong>Analitički kolačići</strong> - pomažu nam da razumemo
+                  kako posetioci koriste sajt, kako bismo poboljšali sadržaj i
+                  korisničko iskustvo.
                 </li>
                 <li>
-                  <strong>Marketing kolačići</strong> — koriste se za
+                  <strong>Marketing kolačići</strong> - koriste se za
                   prikazivanje relevantnog sadržaja i oglasa.
                 </li>
               </ul>
@@ -162,9 +160,9 @@ const PrivacyPolicyPage = () => {
 
               <h2>Autorska prava</h2>
               <p>
-                Sav sadržaj objavljen na sajtu sgtools.rs, uključujući
-                tekstove, fotografije, grafiku, logotipe i dizajn, zaštićen je
-                autorskim pravima i u vlasništvu je kompanije STRIDON GROUP DOO.
+                Sav sadržaj objavljen na sajtu sgtools.rs, uključujući tekstove,
+                fotografije, grafiku, logotipe i dizajn, zaštićen je autorskim
+                pravima i u vlasništvu je kompanije STRIDON GROUP DOO.
                 Reprodukcija, distribucija ili bilo koji oblik korišćenja
                 sadržaja bez prethodne pisane saglasnosti je zabranjena.
               </p>
@@ -173,9 +171,8 @@ const PrivacyPolicyPage = () => {
               <p>
                 Zadržavamo pravo da ažuriramo ovu politiku privatnosti u bilo
                 kom trenutku. Sve izmene stupaju na snagu momentom objavljivanja
-                na ovoj stranici. Preporučujemo ti da povremeno ponovo
-                pročitaš ovu stranicu kako bi bio/bila u toku sa eventualnim
-                promenama.
+                na ovoj stranici. Preporučujemo ti da povremeno ponovo pročitaš
+                ovu stranicu kako bi bio/bila u toku sa eventualnim promenama.
               </p>
             </Prose>
           </Container>

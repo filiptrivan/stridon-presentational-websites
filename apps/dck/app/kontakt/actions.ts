@@ -1,7 +1,10 @@
 "use server";
 
-import { contactSchema, type ContactFormData } from "@brand/shared/lib/schemas/contact";
 import { reportError } from "@brand/shared/lib/report-error";
+import {
+  contactSchema,
+  type ContactFormData,
+} from "@brand/shared/lib/schemas/contact";
 import { TURNSTILE_VERIFICATION_FAILED } from "@brand/shared/lib/turnstile";
 import { validateTurnstileToken } from "@brand/shared/lib/turnstile-server";
 import type { ActionResult } from "@brand/shared/types/actions";
@@ -22,7 +25,9 @@ export async function sendContactEmail(
 
   const apiKey = process.env.BREVO_API_KEY;
   if (!apiKey) {
-    reportError(new Error("BREVO_API_KEY is not set"), { source: "sendContactEmail" });
+    reportError(new Error("BREVO_API_KEY is not set"), {
+      source: "sendContactEmail",
+    });
     return {
       success: false,
       error: "Slanje poruke trenutno nije moguće. Pokušaj ponovo kasnije.",
@@ -41,7 +46,7 @@ export async function sendContactEmail(
         sender: { name: "DCK Srbija", email: "noreply@dcksrbija.rs" },
         to: [{ email: "aleksatrivan@gmail.com", name: "DCK Srbija" }],
         replyTo: { email: parsed.data.email },
-        subject: "DCK Srbija — Kontakt forma",
+        subject: "DCK Srbija - Kontakt forma",
         htmlContent: `
           <h2>Nova poruka sa dcksrbija.rs</h2>
           <p><strong>E-mail:</strong> ${parsed.data.email}</p>
@@ -53,7 +58,10 @@ export async function sendContactEmail(
 
     if (!response.ok) {
       const body = await response.text();
-      reportError(new Error(`Brevo API error: ${response.status}`), { source: "sendContactEmail", details: body });
+      reportError(new Error(`Brevo API error: ${response.status}`), {
+        source: "sendContactEmail",
+        details: body,
+      });
       return {
         success: false,
         error: "Slanje poruke nije uspelo. Pokušaj ponovo kasnije.",

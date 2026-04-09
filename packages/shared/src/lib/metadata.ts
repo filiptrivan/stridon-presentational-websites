@@ -78,12 +78,10 @@ function createListingMetadata({
   canonicalBase: string;
   currentPage: number;
 }): Metadata {
-  const pageSuffix = currentPage > 1 ? ` — Strana ${currentPage}` : "";
+  const pageSuffix = currentPage > 1 ? ` - Strana ${currentPage}` : "";
   const fullTitle = `${title}${pageSuffix}`;
   const canonical =
-    currentPage > 1
-      ? `${canonicalBase}?strana=${currentPage}`
-      : canonicalBase;
+    currentPage > 1 ? `${canonicalBase}?strana=${currentPage}` : canonicalBase;
 
   return {
     title: fullTitle,

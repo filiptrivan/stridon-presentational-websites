@@ -1,13 +1,13 @@
 "use client";
 
-// Cloudflare Turnstile widget — explicit rendering.
+// Cloudflare Turnstile widget - explicit rendering.
 // Docs: https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/
 
-import { useEffect, useImperativeHandle, useRef } from "react";
 import {
   loadTurnstileScript,
   TURNSTILE_SITE_KEY,
 } from "@brand/shared/lib/turnstile";
+import { useEffect, useImperativeHandle, useRef } from "react";
 
 export type TurnstileWidgetHandle = {
   reset: () => void;

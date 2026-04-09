@@ -16,7 +16,7 @@ import { createPageMetadata } from "@brand/shared/lib/metadata";
 export const metadata = createPageMetadata({
   title: "O nama",
   description:
-    "DCK je profesionalni brend kompanije Dongcheng sa sopstvenom proizvodnjom, brushless aku programom i 3 godine garancije — zvanično dostupan u Srbiji.",
+    "DCK je profesionalni brend kompanije Dongcheng sa sopstvenom proizvodnjom, brushless aku programom i 3 godine garancije - zvanično dostupan u Srbiji.",
   canonicalUrl: "/o-nama",
 });
 
@@ -25,7 +25,7 @@ const AboutPage = () => {
     <div>
       <HeroHeader
         title="Vrhunski kvalitet bez preterane cene"
-        description="DCK je profesionalni brend koji dokazuje da kvalitet alata ne mora da košta bogatstvo. Sa skoro tri decenije iskustva, sopstvenom proizvodnjom i distribucijom u preko 100 zemalja, DCK je stigao i u Srbiju — sa punom podrškom, garancijom i servisom."
+        description="DCK je profesionalni brend koji dokazuje da kvalitet alata ne mora da košta bogatstvo. Sa skoro tri decenije iskustva, sopstvenom proizvodnjom i distribucijom u preko 100 zemalja, DCK je stigao i u Srbiju - sa punom podrškom, garancijom i servisom."
       />
       <CompanyStats stats={STATS} layout="four-up-no-three" />
       <AboutStory title="Priča iza brenda" paragraphs={ABOUT_PARAGRAPHS} />

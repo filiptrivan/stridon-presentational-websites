@@ -6,7 +6,7 @@ import { createPageMetadata } from "@brand/shared/lib/metadata";
 export const metadata = createPageMetadata({
   title: "Servis",
   description:
-    "Pronađi ovlašćeni servisni centar za DCK alate u Srbiji — Novi Sad i Beograd.",
+    "Pronađi ovlašćeni servisni centar za DCK alate u Srbiji - Novi Sad i Beograd.",
   canonicalUrl: "/servis",
 });
 

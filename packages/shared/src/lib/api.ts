@@ -1,12 +1,11 @@
 "use cache";
 
 // Caching strategy: time-based expiry only (days for structural data, hours
-// for product details). No on-demand revalidation endpoint — this is a
+// for product details). No on-demand revalidation endpoint - this is a
 // display-only site so slight staleness is acceptable.
 
 import { getBrandConfig } from "@brand/config";
-import { TAGS } from "./cache-tags";
-import { reportError } from "./report-error";
+import { cacheLife, cacheTag } from "next/cache";
 import type { Category } from "../types/categories";
 import type {
   Product,
@@ -14,7 +13,8 @@ import type {
   ProductCardsResult,
   SitemapEntry,
 } from "../types/products";
-import { cacheLife, cacheTag } from "next/cache";
+import { TAGS } from "./cache-tags";
+import { reportError } from "./report-error";
 
 class ApiError extends Error {
   constructor(
@@ -54,7 +54,7 @@ async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
   return res.json() as Promise<T>;
 }
 
-//#region Days profile — structural/marketing data
+//#region Days profile - structural/marketing data
 
 export async function getCategories(): Promise<Category[]> {
   cacheLife("days");
@@ -79,7 +79,7 @@ export async function getSitemapProducts(): Promise<SitemapEntry[]> {
 
 //#endregion
 
-//#region Hours profile — product/detail data
+//#region Hours profile - product/detail data
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   cacheLife("hours");

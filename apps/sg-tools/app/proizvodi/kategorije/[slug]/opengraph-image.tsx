@@ -1,10 +1,10 @@
-import { getAllCategoriesFlat, getCategoryBySlug } from "@brand/shared/lib/api";
 import { OG_SIZE } from "@/lib/og/constants";
-import { loadFonts } from "@brand/shared/lib/og/fonts";
 import { CategoryTemplate, DefaultTemplate } from "@/lib/og/templates";
+import { getAllCategoriesFlat, getCategoryBySlug } from "@brand/shared/lib/api";
+import { loadFonts } from "@brand/shared/lib/og/fonts";
 import { ImageResponse } from "next/og";
 
-export const alt = "Kategorija — SG Tools";
+export const alt = "Kategorija - SG Tools";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 

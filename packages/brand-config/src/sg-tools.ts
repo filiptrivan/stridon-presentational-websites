@@ -19,16 +19,15 @@ export const config: BrandConfig = {
     external: false,
   },
 
-  defaultTitle:
-    "SG Tools — Profesionalni alat nastao iz 30 godina iskustva",
+  defaultTitle: "SG Tools - Profesionalni alat nastao iz 30 godina iskustva",
   siteDescription:
     "SG Tools je profesionalni alat nastao iz 30 godina iskustva u prodaji i distribuciji alata.",
   productsPageDescription:
-    "Pregledaj kompletnu ponudu SG Tools profesionalnog alata — bušilice, brusilice, testere i još mnogo toga.",
+    "Pregledaj kompletnu ponudu SG Tools profesionalnog alata - bušilice, brusilice, testere i još mnogo toga.",
 
   emailSender: { name: "SG Tools", email: "noreply@sgtools.rs" },
   emailRecipient: { name: "SG Tools", email: "aleksatrivan@gmail.com" },
-  emailSubject: "SG Tools — Contact Form",
+  emailSubject: "SG Tools - Contact Form",
   emailHeading: "Nova poruka sa sgtools.rs",
 
   heroGradient:

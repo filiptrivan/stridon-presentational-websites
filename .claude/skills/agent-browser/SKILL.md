@@ -309,7 +309,7 @@ agent-browser snapshot -i
 #   @e4 [input] "Expiry"
 #   @e5 [button] "Pay"
 
-# Interact directly — no frame switch needed
+# Interact directly - no frame switch needed
 agent-browser fill @e3 "4111111111111111"
 agent-browser fill @e4 "12/28"
 agent-browser click @e5

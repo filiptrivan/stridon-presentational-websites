@@ -7,7 +7,7 @@ const payload = {
   sender: { name: "DCK Srbija", email: "noreply@dcksrbija.rs" },
   to: [{ email: "filiptrivan5@gmail.com", name: "Test" }],
   replyTo: { email: "test@example.com" },
-  subject: "[TEST] DCK Srbija — Kontakt forma",
+  subject: "[TEST] DCK Srbija - Kontakt forma",
   htmlContent: `
     <h2>[Automated Test] Nova poruka sa dcksrbija.rs</h2>
     <p><strong>E-mail:</strong> test@example.com</p>
@@ -16,7 +16,7 @@ const payload = {
   `,
 };
 
-describe.skipIf(!BREVO_API_KEY)("Brevo Integration — DCK", () => {
+describe.skipIf(!BREVO_API_KEY)("Brevo Integration - DCK", () => {
   it("sends email successfully with valid API key", async () => {
     const response = await fetch(BREVO_URL, {
       method: "POST",

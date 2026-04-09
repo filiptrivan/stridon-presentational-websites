@@ -1,6 +1,6 @@
+import { truncateText } from "@brand/shared/lib/og/utils";
 import { colors } from "./constants";
 import { Logo } from "./logo";
-import { truncateText } from "@brand/shared/lib/og/utils";
 
 //#region Shared Components
 
@@ -84,7 +84,7 @@ function AccentLine() {
 }
 
 // NOTE: OgFooter is intentionally NOT used on most templates.
-// The dcksrbija.rs URL is redundant — recipients already see the domain in the shared link.
+// The dcksrbija.rs URL is redundant - recipients already see the domain in the shared link.
 function OgFooter() {
   return (
     <div
