@@ -35,10 +35,10 @@ export const STATS = [
 
 export const ABOUT_MILESTONES = [
   {
-    date: "Pre više od 30 godina",
-    title: "Početak porodične priče u svetu alata",
+    date: "1996.",
+    title: "Prva tezga na Novobeogradskom buvljaku",
     description:
-      "Naša priča počinje mnogo pre nego što je SG Tools dobio ime, kroz porodični posao i godine rada u svetu alata.",
+      "Naša priča počinje na jednoj tezgi Novobeogradskog buvljaka, gde su prodati prvi komadi alata i napravljene prve neraskidive veze sa kupcima.",
   },
   {
     date: "2009.",
@@ -96,9 +96,9 @@ export const ABOUT_GALLERY = [
 
 export const COMPANY_BENEFITS = [
   {
-    title: "Razvijen iz prakse",
+    title: "Ergonomija na prvom mestu",
     description:
-      "SG Tools nastaje iz stvarnih potreba ljudi koji alat koriste svakog dana u radu.",
+      "Alat mora prirodno ležati u ruci, pružati siguran hvat i omogućiti dugotrajan rad bez zamora.",
   },
   {
     title: "Pouzdan u radu",
@@ -111,15 +111,15 @@ export const COMPANY_BENEFITS = [
       "Cilj nam je da ponudimo alat koji traje i radi pouzdano, bez nepotrebnog preplaćivanja.",
   },
   {
-    title: "Temelj u iskustvu",
+    title: "Građen na vašim sugestijama",
     description:
-      "Iza brenda stoje godine rada u prodaji i distribuciji, uz znanje stečeno kroz rad sa hiljadama kupaca.",
+      "Iza svakog proizvoda stoje godine slušanja majstora, instalatera i servisera koji tačno znaju šta od alata očekuju.",
   },
 ];
 
 export const ABOUT_PARAGRAPHS = [
-  "Naša priča počinje mnogo pre nego što je SG Tools dobio ime. Počela je kroz porodični posao, iz bliskog kontakta sa kupcima i iz razumevanja šta ljudima zaista treba od alata. Kroz godine smo naučili jednu važnu stvar: kupcima nije potreban lep opis, nego alat koji radi posao, traje i ima cenu koja ima smisla.",
-  "Danas SG Tools razvijamo sa istom logikom sa kojom je sve i počelo: slušamo tržište, pratimo realne potrebe kupaca i biramo proizvode koji nude pravi balans između kvaliteta, funkcionalnosti i cene.",
+  "Naša priča počinje mnogo pre nego što je SG Tools dobio ime. Počela je 1996. godine, na tezgi Novobeogradskog buvljaka — iz bliskog kontakta sa kupcima i iz razumevanja šta ljudima zaista treba od alata. Od samog početka, alat za nas nije bio samo roba. Bio je sredstvo rada, poverenja i dugoročnog odnosa. Kroz godine smo učili direktno od vas — od majstora, hobista, instalatera i servisera koji tačno znaju šta od alata očekuju. Vaše sugestije nismo posmatrali kao komentare, već kao smernice.",
+  "Materijale biramo promišljeno, sa naglaskom na trajnost i otpornost u realnim uslovima rada. Ergonomija za nas nije dodatak, već polazna tačka — alat mora prirodno ležati u ruci, pružati siguran hvat i omogućiti dugotrajan rad bez nepotrebnog zamora. Dizajn je uvek u službi funkcije, bez suvišnih detalja. Od izbora sirovina do završne obrade, ništa nije prepušteno slučaju. SG Tools je zajednički uspeh koji nastavljamo da gradimo zajedno sa našim kupcima — profesionalni kvalitet po cenama koje imaju smisla.",
 ];
 
 export const HOME_ABOUT_PARAGRAPH =
