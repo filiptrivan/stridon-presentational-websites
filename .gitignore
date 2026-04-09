@@ -27,6 +27,8 @@ Thumbs.db
 # Claude Code
 .agents/
 .claude/settings.local.json
+.claude/skills/db-query/
+.claude/skills/plaky/
 skills-lock.json
 bash.exe.stackdump
 

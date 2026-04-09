@@ -1,6 +1,5 @@
 import { type ContactFormData } from "@brand/shared/lib/schemas/contact";
 import type { ActionResult } from "@brand/shared/types/actions";
-import { Mail } from "lucide-react";
 import Container from "../container";
 import HeroHeader from "../hero-header";
 import ContactForm from "./contact-form";
@@ -30,7 +29,6 @@ function ContactHero({ email, submitContact }: ContactHeroProps) {
               href={`mailto:${email}`}
               className="inline-flex items-center gap-1 text-foreground hover:text-primary transition-colors"
             >
-              <Mail className="size-3.5" />
               {email}
             </a>
           </p>

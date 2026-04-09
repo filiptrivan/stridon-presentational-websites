@@ -1,6 +1,5 @@
 import { SERVICE_CENTERS } from "@/constants/service-centers";
 import ContactLocations from "@brand/shared/components/contact/contact-locations";
-import CTA from "@brand/shared/components/cta";
 import HeroHeader from "@brand/shared/components/hero-header";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
 
@@ -23,7 +22,6 @@ const ServisPage = () => {
         sectionClassName="pt-0!"
         showDivider={false}
       />
-      <CTA />
     </div>
   );
 };
