@@ -24,10 +24,10 @@ export const FEATURES = [
 ];
 
 export const STATS = [
-  { value: "1995", label: "Godina osnivanja Dongcheng-a" },
+  { value: "1995", label: "Godina osnivanja" },
   { value: "100+", label: "Zemalja prisustva" },
-  { value: "390.000", label: "m² izgrađenog prostora" },
-  { value: "5.800+", label: "Zaposlenih" },
+  { value: "350.000", label: "m² proizvodne baze" },
+  { value: "5.500+", label: "Zaposlenih" },
 ];
 
 export const ABOUT_MILESTONES = [
