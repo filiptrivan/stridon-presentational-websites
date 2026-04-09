@@ -2,6 +2,10 @@
   "name": "@brand/shared",
   "version": "0.0.0",
   "private": true,
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
   "exports": {
     "./components/*": "./src/components/*",
     "./lib/*": "./src/lib/*",
@@ -11,6 +15,9 @@
   "dependencies": {
     "@brand/config": "workspace:*",
     "@brand/ui": "workspace:*"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.4"
   },
   "peerDependencies": {
     "@sentry/nextjs": "*",

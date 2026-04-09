@@ -6,7 +6,8 @@
     "dev:sg": "turbo dev --filter=sg-tools-storefront",
     "dev:dck": "turbo dev --filter=dck-storefront",
     "build": "turbo build",
-    "lint": "turbo lint"
+    "lint": "turbo lint",
+    "test": "turbo test"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

@@ -27,6 +27,7 @@ Thumbs.db
 # Claude Code
 .agents/
 .claude/settings.local.json
+.claude/skills/brevo/
 .claude/skills/db-query/
 .claude/skills/plaky/
 skills-lock.json
