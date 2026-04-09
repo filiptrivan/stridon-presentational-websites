@@ -1,4 +1,14 @@
-import { Clock, Layers, MapPin, Users } from "lucide-react";
+import {
+  Clock,
+  Globe,
+  Layers,
+  MapPin,
+  Rocket,
+  Speech,
+  Store,
+  Users,
+  Wrench,
+} from "lucide-react";
 import type { TrustBadge } from "@brand/shared/components/cta";
 
 export const CTA_TRUST_BADGES: TrustBadge[] = [
@@ -39,30 +49,50 @@ export const ABOUT_MILESTONES = [
     title: "Prva tezga na Novobeogradskom buvljaku",
     description:
       "Naša priča počinje na jednoj tezgi Novobeogradskog buvljaka, gde su prodati prvi komadi alata i napravljene prve neraskidive veze sa kupcima.",
+    icon: Wrench,
+    color: "text-amber-400",
+    bg: "bg-amber-500/15",
+    border: "border-amber-500/30",
   },
   {
     date: "2009.",
     title: "Otvaranje radnje u Vojislava Ilića",
     description:
       "Otvaranjem prve radnje gradili smo iskustvo iz neposrednog kontakta sa kupcima i njihovim svakodnevnim potrebama.",
+    icon: Store,
+    color: "text-blue-400",
+    bg: "bg-blue-500/15",
+    border: "border-blue-500/30",
   },
   {
     date: "2012.",
     title: "Otvaranje lokacije na Altini",
     description:
       "Širenjem poslovanja nastavili smo da učimo iz prakse i da još bolje razumemo šta tržište zaista traži od alata.",
+    icon: Speech,
+    color: "text-emerald-400",
+    bg: "bg-emerald-500/15",
+    border: "border-emerald-500/30",
   },
   {
     date: "2014.",
     title: "Pokretanje prodavnicaalata.rs",
     description:
       "Ulaskom u online prodaju povezali smo iskustvo iz radnje sa širim tržištem i dodatno proširili kontakt sa kupcima širom Srbije.",
+    icon: Globe,
+    color: "text-violet-400",
+    bg: "bg-violet-500/15",
+    border: "border-violet-500/30",
   },
   {
     date: "2023.",
     title: "Pokretanje brenda SG Tools",
     description:
       "SG Tools je nastao kao prirodan nastavak tog puta, sa ciljem da ponudi alat koji je pouzdan, funkcionalan i cenovno pristupačan.",
+    icon: Rocket,
+    color: "text-rose-400",
+    bg: "bg-rose-500/15",
+    border: "border-rose-500/30",
   },
 ];
 
