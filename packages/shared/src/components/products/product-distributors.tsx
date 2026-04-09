@@ -4,17 +4,21 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface ProductDistributorsProps {
-  dealers: (Dealer & { logoSrc: string })[];
+  dealers: Dealer[];
 }
 
 const ProductDistributors = ({ dealers }: ProductDistributorsProps) => {
+  const dealersWithLogos = dealers.filter(
+    (d): d is Dealer & { logoSrc: string } => !!d.logoSrc,
+  );
+
   return (
     <div className="mt-8 pt-6 border-t border-border/20">
       <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
         Gde kupiti
       </h2>
       <div className="grid grid-cols-3 gap-2 mt-3">
-        {dealers.map((d) => (
+        {dealersWithLogos.map((d) => (
           <a
             key={d.id}
             href={d.website}

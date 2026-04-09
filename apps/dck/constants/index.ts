@@ -1,16 +1,4 @@
-export const CONTACT_INFO = {
-  email: "office@stridon.rs",
-  phones: [
-    { label: "Internet prodaja", number: "011-4520-171" },
-    { label: "Maloprodaja Ugrinovačka", number: "011-2100-056" },
-    { label: "Maloprodaja Vojislava Ilića", number: "011-2886-509" },
-  ],
-  hours: [
-    { days: "Ponedeljak - Petak", time: "08:00 - 16:00" },
-    { days: "Subota", time: "09:00 - 15:00" },
-    { days: "Nedelja", time: "Ne radimo" },
-  ],
-};
+export const CONTACT_EMAIL = "office@stridon.rs";
 
 export const TESTIMONIALS = [
   {
