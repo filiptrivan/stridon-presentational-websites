@@ -14,6 +14,7 @@ interface ProductDetailProps {
   dealers?: Dealer[];
 }
 
+/** @see ./product-detail-skeleton.tsx — update the skeleton when this layout changes */
 const ProductDetail = ({
   product,
   categoryBreadcrumbs,
@@ -31,10 +32,12 @@ const ProductDetail = ({
     },
   };
 
-  const breadcrumbJsonLd = buildBreadcrumbJsonLd(
-    categoryBreadcrumbs,
-    product.title,
-  );
+  const productBreadcrumbs: BreadcrumbSegment[] = [
+    ...categoryBreadcrumbs,
+    { label: product.title, href: `/proizvodi/${product.slug}` },
+  ];
+
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(productBreadcrumbs);
 
   return (
     <Wrapper className="py-8 lg:py-12">
@@ -48,10 +51,7 @@ const ProductDetail = ({
       />
       {/* Breadcrumbs */}
       <Container>
-        <PageBreadcrumbs
-          segments={categoryBreadcrumbs}
-          currentPage={product.title}
-        />
+        <PageBreadcrumbs items={productBreadcrumbs} />
       </Container>
 
       {/* Two-column layout */}

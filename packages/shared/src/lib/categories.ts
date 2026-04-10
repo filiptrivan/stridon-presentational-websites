@@ -4,6 +4,11 @@ import type { CategoryBreadcrumb } from "@brand/shared/types/products";
 
 export type BreadcrumbSegment = { label: string; href: string };
 
+export const BASE_BREADCRUMBS: BreadcrumbSegment[] = [
+  { label: "Početna", href: "/" },
+  { label: "Kategorije", href: "/proizvodi/kategorije" },
+];
+
 export function flattenAllCategories(categories: Category[]): Category[] {
   const result: Category[] = [];
   for (const cat of categories) {
@@ -24,31 +29,23 @@ export function mapCategoryBreadcrumbs(
 
 /**
  * Builds a schema.org BreadcrumbList JSON-LD object from segments.
- * All segments get `item` URLs. If `currentPage` is provided, it is
- * appended as the final non-linked item.
+ * The last segment is treated as the current page (no `item` URL).
  */
-export function buildBreadcrumbJsonLd(
-  segments: BreadcrumbSegment[] = [],
-  currentPage?: string,
-) {
+export function buildBreadcrumbJsonLd(segments: BreadcrumbSegment[] = []) {
   const { siteUrl } = getBrandConfig();
-  const items: Record<string, unknown>[] = [
-    { name: "Početna", item: `${siteUrl}/` },
-    { name: "Kategorije", item: `${siteUrl}/proizvodi/kategorije` },
-    ...segments.map((seg) => ({
-      name: seg.label,
-      item: `${siteUrl}${seg.href}`,
-    })),
-    ...(currentPage ? [{ name: currentPage }] : []),
-  ];
+  const allCrumbs = [...BASE_BREADCRUMBS, ...segments];
 
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: items.map((entry, i) => ({
-      "@type": "ListItem",
-      position: i + 1,
-      ...entry,
-    })),
+    itemListElement: allCrumbs.map((crumb, i) => {
+      const isLast = i === allCrumbs.length - 1;
+      return {
+        "@type": "ListItem",
+        position: i + 1,
+        name: crumb.label,
+        ...(isLast ? {} : { item: `${siteUrl}${crumb.href}` }),
+      };
+    }),
   };
 }

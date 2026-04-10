@@ -1,4 +1,4 @@
-import type { BreadcrumbSegment } from "@brand/shared/lib/categories";
+import { BASE_BREADCRUMBS, type BreadcrumbSegment } from "@brand/shared/lib/categories";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,43 +12,34 @@ import { Fragment } from "react";
 import Link from "next/link";
 
 interface PageBreadcrumbsProps {
-  segments?: BreadcrumbSegment[];
-  currentPage: string;
+  items: BreadcrumbSegment[];
   className?: string;
 }
 
-const PageBreadcrumbs = ({ segments = [], currentPage, className }: PageBreadcrumbsProps) => {
+const PageBreadcrumbs = ({ items, className }: PageBreadcrumbsProps) => {
+  const allCrumbs = [...BASE_BREADCRUMBS, ...items];
+
   return (
     <Breadcrumb className={cn("mb-8", className)}>
       <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link href="/">Početna</Link>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
+        {allCrumbs.map((crumb, index) => {
+          const isLast = index === allCrumbs.length - 1;
 
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link href="/proizvodi/kategorije">Kategorije</Link>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-
-        {segments.map((segment) => (
-          <Fragment key={segment.href}>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link href={segment.href}>{segment.label}</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          </Fragment>
-        ))}
-
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbPage>{currentPage}</BreadcrumbPage>
-        </BreadcrumbItem>
+          return (
+            <Fragment key={crumb.href}>
+              {index > 0 && <BreadcrumbSeparator />}
+              <BreadcrumbItem>
+                {isLast ? (
+                  <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
+                ) : (
+                  <BreadcrumbLink asChild>
+                    <Link href={crumb.href}>{crumb.label}</Link>
+                  </BreadcrumbLink>
+                )}
+              </BreadcrumbItem>
+            </Fragment>
+          );
+        })}
       </BreadcrumbList>
     </Breadcrumb>
   );

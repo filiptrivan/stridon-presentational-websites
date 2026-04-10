@@ -97,10 +97,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const breadcrumbSegments = mapCategoryBreadcrumbs(
     category.categoryBreadcrumbs,
   );
-  const breadcrumbJsonLd = buildBreadcrumbJsonLd(
-    breadcrumbSegments,
-    category.name,
-  );
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(breadcrumbSegments);
 
   return (
     <div>
@@ -114,10 +111,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       />
 
       <Wrapper className="pb-16">
-        <PageBreadcrumbs
-          segments={breadcrumbSegments}
-          currentPage={category.name}
-        />
+        <PageBreadcrumbs items={breadcrumbSegments} />
 
         <SubcategoriesGrid categories={category.subCategories} />
 
