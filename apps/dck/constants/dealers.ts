@@ -20,7 +20,7 @@ export const DEALERS: Dealer[] = [
     city: "Beograd",
     phone: "011/4520-171",
     email: "office@stridon.rs",
-    website: "https://www.prodavnicaalata.rs/",
+    website: "https://www.stridon.rs/",
     logoSrc: "/companies/svgs/stridon.webp",
     category: "dealer",
     coordinates: { lat: 44.7724, lng: 20.4989 },

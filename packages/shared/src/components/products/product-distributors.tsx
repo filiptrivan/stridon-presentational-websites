@@ -1,3 +1,4 @@
+import { getBrandConfig } from "@brand/config";
 import type { Dealer } from "@brand/shared/types/dealers";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
@@ -8,6 +9,7 @@ interface ProductDistributorsProps {
 }
 
 const ProductDistributors = ({ dealers }: ProductDistributorsProps) => {
+  const { brandName } = getBrandConfig();
   const dealersWithLogos = dealers.filter(
     (d): d is Dealer & { logoSrc: string } => !!d.logoSrc,
   );
@@ -15,7 +17,7 @@ const ProductDistributors = ({ dealers }: ProductDistributorsProps) => {
   return (
     <div className="mt-8 pt-6 border-t border-border/20">
       <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-        Gde kupiti
+        {brandName} prodavci
       </h2>
       <div className="grid grid-cols-3 gap-2 mt-3">
         {dealersWithLogos.map((d) => (
