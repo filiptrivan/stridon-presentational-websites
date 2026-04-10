@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Container from "./container";
 import Glow from "./glow";
+import NewsletterForm from "./newsletter/newsletter-form";
 import Wrapper from "./wrapper";
 
 const socialIcons = {
@@ -98,11 +99,24 @@ const Footer = ({
           ></div>
         </Container>
 
-        <div className="grid gap-10 grid-cols-2 md:grid-cols-3 xl:gap-8">
+        {/* Newsletter */}
+        <Container animation="fadeUp" delay={0.4}>
+          <div>
+            <h3 className="text-base font-medium">Newsletter</h3>
+            <p className="mt-2 mb-4 text-sm text-muted-foreground">
+              Budi u toku sa novostima i akcijama.
+            </p>
+            <div className="max-w-md">
+              <NewsletterForm />
+            </div>
+          </div>
+        </Container>
+
+        <div className="mt-10 border-t border-border/80 pt-8 grid gap-10 grid-cols-2 md:grid-cols-3 xl:gap-8">
           {/* Brand column */}
           <Container
             animation="fadeLeft"
-            delay={0.4}
+            delay={0.5}
             className="col-span-2 md:col-span-1"
           >
             <div className="flex flex-col items-start justify-start">
@@ -148,13 +162,13 @@ const Footer = ({
             title="Proizvodi"
             links={productLinks}
             animation="fadeUp"
-            delay={0.5}
+            delay={0.6}
           />
           <FooterLinkColumn
             title="Kompanija"
             links={companyLinks}
             animation="fadeUp"
-            delay={0.6}
+            delay={0.7}
           />
         </div>
 

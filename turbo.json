@@ -3,7 +3,7 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "env": ["API_URL", "BREVO_API_KEY", "NEXT_PUBLIC_SENTRY_DSN", "PACMS_API_KEY", "SENTRY_AUTH_TOKEN", "SENTRY_ORG", "SENTRY_PROJECT", "TURNSTILE_SECRET_KEY"],
+      "env": ["API_URL", "BREVO_API_KEY", "BREVO_NEWSLETTER_LIST_ID", "NEXT_PUBLIC_SENTRY_DSN", "PACMS_API_KEY", "SENTRY_AUTH_TOKEN", "SENTRY_ORG", "SENTRY_PROJECT", "TURNSTILE_SECRET_KEY"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "dev": {
