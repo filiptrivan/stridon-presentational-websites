@@ -1,5 +1,6 @@
 import { Skeleton } from "@brand/ui/skeleton";
 
+/** @see ./category-card.tsx — update this skeleton when the card layout changes */
 const CategoryCardSkeleton = () => {
   return (
     <div className="flex flex-col bg-foreground/5 border border-border/20 rounded-lg lg:rounded-xl overflow-hidden h-full">

@@ -5,6 +5,7 @@ import Wrapper from "./wrapper";
 import { getCategories } from "@brand/shared/lib/api";
 import type { Category } from "@brand/shared/types/categories";
 
+/** @see ./categories-skeleton.tsx — update the skeleton when this layout changes */
 const Categories = async () => {
   let categories: Category[] = [];
   try {

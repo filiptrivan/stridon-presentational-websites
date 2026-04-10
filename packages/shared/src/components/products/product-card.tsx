@@ -6,6 +6,7 @@ interface ProductCardProps {
   product: ProductCardData;
 }
 
+/** @see ./product-card-skeleton.tsx — update the skeleton when this card layout changes */
 const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <div className="relative flex flex-col bg-foreground/5 border border-border/20 hover:border-border transition-all rounded-lg lg:rounded-xl overflow-hidden h-full">

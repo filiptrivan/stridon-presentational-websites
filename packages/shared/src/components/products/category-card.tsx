@@ -6,6 +6,7 @@ interface CategoryCardProps {
   category: Category;
 }
 
+/** @see ./category-card-skeleton.tsx — update the skeleton when this card layout changes */
 const CategoryCard = ({ category }: CategoryCardProps) => {
   return (
     <Link

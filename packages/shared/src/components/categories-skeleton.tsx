@@ -3,6 +3,7 @@ import CategoryCardSkeleton from "./products/category-card-skeleton";
 import Section from "./section";
 import Wrapper from "./wrapper";
 
+/** @see ./categories.tsx — update this skeleton when the categories layout changes */
 const CategoriesSkeleton = () => {
   return (
     <div aria-hidden="true">
@@ -15,7 +16,7 @@ const CategoriesSkeleton = () => {
 
           <div className="w-full mt-10">
             <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-1.5 sm:gap-3 lg:gap-4">
-              {Array.from({ length: 12 }, (_, i) => (
+              {Array.from({ length: 6 }, (_, i) => (
                 <CategoryCardSkeleton key={i} />
               ))}
             </div>

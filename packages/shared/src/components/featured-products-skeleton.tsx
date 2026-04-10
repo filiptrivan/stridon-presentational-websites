@@ -3,6 +3,7 @@ import ProductCardSkeleton from "./products/product-card-skeleton";
 import Section from "./section";
 import Wrapper from "./wrapper";
 
+/** @see ./featured-products.tsx — update this skeleton when the featured products layout changes */
 const FeaturedProductsSkeleton = () => {
   return (
     <div aria-hidden="true">

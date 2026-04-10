@@ -1,6 +1,7 @@
 import { Skeleton } from "@brand/ui/skeleton";
 import Wrapper from "../wrapper";
 
+/** @see ./product-detail.tsx — update this skeleton when the detail layout changes */
 const ProductDetailSkeleton = () => {
   return (
     <Wrapper className="py-8 lg:py-12">
@@ -33,13 +34,11 @@ const ProductDetailSkeleton = () => {
             <Skeleton className="h-4 w-4/5" />
           </div>
 
-          {/* Buy button */}
-          <Skeleton className="h-12 w-48 rounded-lg mt-6" />
-
           {/* Metadata */}
           <div className="mt-8 pt-6 border-t border-border/20 space-y-2">
             <Skeleton className="h-4 w-32" />
             <Skeleton className="h-4 w-28" />
+            <Skeleton className="h-4 w-36" />
           </div>
         </div>
       </div>
