@@ -13,6 +13,7 @@ import type {
   ProductCardsResult,
   SitemapEntry,
 } from "../types/products";
+import type { Tag } from "../types/tags";
 import { TAGS } from "./cache-tags";
 import { reportError } from "./report-error";
 
@@ -83,6 +84,29 @@ export async function getSitemapProducts(): Promise<SitemapEntry[]> {
   return apiFetch<SitemapEntry[]>(
     `/api/Storefront/SitemapProductsByBrand?brandSlug=${BRAND_SLUG}`,
   );
+}
+
+export async function getTagsByBrand(count?: number): Promise<Tag[]> {
+  cacheLife("days");
+  cacheTag(TAGS.tags);
+  const params = new URLSearchParams({ brandSlug: BRAND_SLUG });
+  if (count !== undefined) params.set("count", String(count));
+  return apiFetch<Tag[]>(`/api/Storefront/TagsByBrand?${params.toString()}`);
+}
+
+// Backend endpoints below are not brand-scoped — they return tags across all brands.
+// Tag detail pages filter products by BRAND_SLUG, so cross-brand tags render empty grids.
+
+export async function getSitemapTags(): Promise<SitemapEntry[]> {
+  cacheLife("days");
+  cacheTag(TAGS.tags);
+  return apiFetch<SitemapEntry[]>("/api/Storefront/SitemapTags");
+}
+
+export async function getPrerenderedTagSlugs(): Promise<string[]> {
+  cacheLife("days");
+  cacheTag(TAGS.tags);
+  return apiFetch<string[]>("/api/Storefront/PrerenderedTagSlugs");
 }
 
 //#endregion
@@ -163,6 +187,37 @@ export async function getFilteredProductsByCategory(
       brandSlugs: [BRAND_SLUG],
       tagSlugs: [],
       categorySlug,
+      first: offset,
+      rows: limit,
+    }),
+  });
+}
+
+export async function getTagBySlug(slug: string): Promise<Tag | null> {
+  cacheLife("hours");
+  cacheTag(TAGS.tags);
+  try {
+    return await apiFetch<Tag>(
+      `/api/Storefront/TagBySlug?slug=${encodeURIComponent(slug)}`,
+    );
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 404) return null;
+    throw error;
+  }
+}
+
+export async function getFilteredProductsByTag(
+  tagSlug: string,
+  offset: number,
+  limit: number,
+): Promise<ProductCardsResult> {
+  cacheLife("hours");
+  cacheTag(TAGS.products);
+  return apiFetch<ProductCardsResult>("/api/Storefront/FilteredProducts", {
+    method: "POST",
+    body: JSON.stringify({
+      brandSlugs: [BRAND_SLUG],
+      tagSlugs: [tagSlug],
       first: offset,
       rows: limit,
     }),

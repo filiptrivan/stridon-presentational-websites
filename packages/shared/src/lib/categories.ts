@@ -9,6 +9,11 @@ export const BASE_BREADCRUMBS: BreadcrumbSegment[] = [
   { label: "Kategorije", href: "/proizvodi/kategorije" },
 ];
 
+export const TAG_BASE_BREADCRUMBS: BreadcrumbSegment[] = [
+  { label: "Početna", href: "/" },
+  { label: "Tagovi", href: "/proizvodi/tagovi" },
+];
+
 export function flattenAllCategories(categories: Category[]): Category[] {
   const result: Category[] = [];
   for (const cat of categories) {
@@ -27,14 +32,8 @@ export function mapCategoryBreadcrumbs(
   return crumbs.map((c) => ({ label: c.name, href: c.path }));
 }
 
-/**
- * Builds a schema.org BreadcrumbList JSON-LD object from segments.
- * The last segment is treated as the current page (no `item` URL).
- */
-export function buildBreadcrumbJsonLd(segments: BreadcrumbSegment[] = []) {
+function segmentsToJsonLd(allCrumbs: BreadcrumbSegment[]) {
   const { siteUrl } = getBrandConfig();
-  const allCrumbs = [...BASE_BREADCRUMBS, ...segments];
-
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -48,4 +47,22 @@ export function buildBreadcrumbJsonLd(segments: BreadcrumbSegment[] = []) {
       };
     }),
   };
+}
+
+/**
+ * Builds a schema.org BreadcrumbList JSON-LD object from segments.
+ * The last segment is treated as the current page (no `item` URL).
+ */
+export function buildBreadcrumbJsonLd(segments: BreadcrumbSegment[] = []) {
+  return segmentsToJsonLd([...BASE_BREADCRUMBS, ...segments]);
+}
+
+export function buildTagBreadcrumbJsonLd(
+  tagName: string,
+  tagSlug: string,
+) {
+  return segmentsToJsonLd([
+    ...TAG_BASE_BREADCRUMBS,
+    { label: tagName, href: `/proizvodi/tagovi/${tagSlug}` },
+  ]);
 }

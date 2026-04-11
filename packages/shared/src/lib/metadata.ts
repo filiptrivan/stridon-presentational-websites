@@ -131,6 +131,25 @@ export function createCategoryMetadata({
   });
 }
 
+export function createTagMetadata({
+  title,
+  description,
+  slug,
+  currentPage,
+}: {
+  title: string;
+  description: string;
+  slug: string;
+  currentPage: number;
+}): Metadata {
+  return createListingMetadata({
+    title,
+    description,
+    canonicalBase: `${brand.siteUrl}/proizvodi/tagovi/${slug}`,
+    currentPage,
+  });
+}
+
 export function createNotFoundMetadata(): Metadata {
   return {
     title: "Stranica nije pronađena",

@@ -300,9 +300,11 @@ export function ProductTemplate({
 export function CategoryTemplate({
   name,
   description,
+  label = "KATEGORIJA",
 }: {
   name: string;
   description?: string;
+  label?: string;
 }) {
   return (
     <OgBackground>
@@ -342,7 +344,7 @@ export function CategoryTemplate({
               letterSpacing: 3,
             }}
           >
-            KATEGORIJA
+            {label}
           </div>
         </div>
 

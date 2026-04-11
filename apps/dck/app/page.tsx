@@ -8,6 +8,8 @@ import FeaturedProductsSkeleton from "@brand/shared/components/featured-products
 import Features from "@brand/shared/components/features";
 import HomeAbout from "@brand/shared/components/home-about";
 import Stats from "@brand/shared/components/stats";
+import Tags from "@brand/shared/components/tags";
+import TagsSkeleton from "@brand/shared/components/tags-skeleton";
 import { Suspense } from "react";
 
 const HomePage = () => {
@@ -16,6 +18,9 @@ const HomePage = () => {
       <Hero />
       <Suspense fallback={<FeaturedProductsSkeleton />}>
         <FeaturedProducts />
+      </Suspense>
+      <Suspense fallback={<TagsSkeleton />}>
+        <Tags />
       </Suspense>
       <Suspense fallback={<CategoriesSkeleton />}>
         <Categories />

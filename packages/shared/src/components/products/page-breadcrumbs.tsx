@@ -13,11 +13,12 @@ import Link from "next/link";
 
 interface PageBreadcrumbsProps {
   items: BreadcrumbSegment[];
+  baseBreadcrumbs?: BreadcrumbSegment[];
   className?: string;
 }
 
-const PageBreadcrumbs = ({ items, className }: PageBreadcrumbsProps) => {
-  const allCrumbs = [...BASE_BREADCRUMBS, ...items];
+const PageBreadcrumbs = ({ items, baseBreadcrumbs, className }: PageBreadcrumbsProps) => {
+  const allCrumbs = [...(baseBreadcrumbs ?? BASE_BREADCRUMBS), ...items];
 
   return (
     <Breadcrumb className={cn("mb-8", className)}>

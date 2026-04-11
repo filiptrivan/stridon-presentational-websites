@@ -1,7 +1,11 @@
 import type { MetadataRoute } from "next";
 
 import { SITE_URL } from "@/constants/links";
-import { getAllCategoriesFlat, getSitemapProducts } from "@brand/shared/lib/api";
+import {
+  getAllCategoriesFlat,
+  getSitemapProducts,
+  getSitemapTags,
+} from "@brand/shared/lib/api";
 
 const staticPages = [
   { path: "/", changeFrequency: "weekly" as const, priority: 1.0 },
@@ -20,6 +24,11 @@ const staticPages = [
     changeFrequency: "weekly" as const,
     priority: 0.9,
   },
+  {
+    path: "/proizvodi/tagovi",
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  },
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -36,10 +45,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
   }
 
-  const [categoriesResult, productsResult] = await Promise.allSettled([
-    getAllCategoriesFlat(),
-    getSitemapProducts(),
-  ]);
+  const [categoriesResult, productsResult, tagsResult] =
+    await Promise.allSettled([
+      getAllCategoriesFlat(),
+      getSitemapProducts(),
+      getSitemapTags(),
+    ]);
 
   if (categoriesResult.status === "fulfilled") {
     for (const category of categoriesResult.value) {
@@ -56,6 +67,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     for (const entry of productsResult.value) {
       entries.push({
         url: `${SITE_URL}/proizvodi/${entry.slug}`,
+        lastModified: new Date(entry.modifiedAt),
+        changeFrequency: "weekly",
+        priority: 0.7,
+      });
+    }
+  }
+
+  if (tagsResult.status === "fulfilled") {
+    for (const entry of tagsResult.value) {
+      entries.push({
+        url: `${SITE_URL}/proizvodi/tagovi/${entry.slug}`,
         lastModified: new Date(entry.modifiedAt),
         changeFrequency: "weekly",
         priority: 0.7,
