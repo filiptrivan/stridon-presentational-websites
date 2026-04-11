@@ -64,6 +64,14 @@ export async function getCategories(): Promise<Category[]> {
   );
 }
 
+export async function getFlatCategories(count = 6): Promise<Category[]> {
+  cacheLife("days");
+  cacheTag(TAGS.categories);
+  return apiFetch<Category[]>(
+    `/api/Storefront/FlatCategories?brandSlug=${BRAND_SLUG}&count=${count}`,
+  );
+}
+
 export async function getAllCategoriesFlat(): Promise<Category[]> {
   const { flattenAllCategories } = await import("./categories");
   return flattenAllCategories(await getCategories());

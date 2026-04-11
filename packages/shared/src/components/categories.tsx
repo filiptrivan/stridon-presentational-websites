@@ -2,14 +2,14 @@ import CategoryCard from "./products/category-card";
 import SectionHeader from "./section-header";
 import Section from "./section";
 import Wrapper from "./wrapper";
-import { getCategories } from "@brand/shared/lib/api";
+import { getFlatCategories } from "@brand/shared/lib/api";
 import type { Category } from "@brand/shared/types/categories";
 
 /** @see ./categories-skeleton.tsx — update the skeleton when this layout changes */
 const Categories = async () => {
   let categories: Category[] = [];
   try {
-    categories = await getCategories();
+    categories = await getFlatCategories(6);
   } catch {
     return null;
   }
