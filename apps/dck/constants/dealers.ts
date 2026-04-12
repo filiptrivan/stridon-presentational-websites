@@ -11,7 +11,7 @@ export const DEALERS: Dealer[] = [
     website: "https://www.prodavnicaalata.rs/",
     logoSrc: "/companies/svgs/prodavnicaalata.svg",
     category: "online",
-    coordinates: { lat: 44.7724, lng: 20.4989 },
+    coordinates: { lat: 44.785937879592375, lng: 20.500689934951087 },
   },
   {
     id: "stridon-group",
@@ -23,7 +23,7 @@ export const DEALERS: Dealer[] = [
     website: "https://www.stridon.rs/",
     logoSrc: "/companies/svgs/stridon.webp",
     category: "dealer",
-    coordinates: { lat: 44.7724, lng: 20.4989 },
+    coordinates: { lat: 44.785937879592375, lng: 20.500689934951087 },
   },
 ];
 
