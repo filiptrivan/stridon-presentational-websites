@@ -65,7 +65,7 @@ export default function CompanyTimeline({
                         : "object-cover"
                     }
                     sizes="(min-width: 768px) 24rem, 100vw"
-                    unoptimized={item.image.contain}
+                    unoptimized={item.image.src.endsWith(".svg")}
                   />
                 </div>
               )}
