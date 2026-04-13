@@ -8,6 +8,7 @@ import {
   TimelineSeparator,
 } from "@brand/ui/timeline";
 import type { LucideIcon } from "lucide-react";
+import Image from "next/image";
 import { Feature } from "./feature";
 
 export type Milestone = {
@@ -18,6 +19,11 @@ export type Milestone = {
   color: string;
   bg: string;
   border: string;
+  image?: {
+    src: string;
+    alt: string;
+    contain?: boolean;
+  };
 };
 
 interface CompanyTimelineProps {
@@ -37,20 +43,37 @@ export default function CompanyTimeline({
             <TimelineIndicator />
           </TimelineHeader>
           <TimelineContent className="h-full">
-            <Feature
-              className="px-0! border-0!"
-              bg={item.bg}
-              border={item.border}
-              color={item.color}
-              desc={item.description}
-              icon={item.icon}
-              title={item.title}
-            />
+            <div className="grid gap-6 md:grid-cols-2 md:items-center">
+              <Feature
+                className="px-0! border-0!"
+                bg={item.bg}
+                border={item.border}
+                color={item.color}
+                desc={item.description}
+                icon={item.icon}
+                title={item.title}
+              />
+              {item.image && (
+                <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-muted">
+                  <Image
+                    src={item.image.src}
+                    alt={item.image.alt}
+                    fill
+                    className={
+                      item.image.contain
+                        ? "object-contain p-8"
+                        : "object-cover"
+                    }
+                    sizes="(min-width: 1280px) 640px, (min-width: 768px) 50vw, 100vw"
+                    unoptimized={item.image.contain}
+                  />
+                </div>
+              )}
+            </div>
           </TimelineContent>
         </TimelineItem>
       ))}
 
-      {/* These two items extends line further downward */}
       <TimelineItem key="tail-1" step={milestones.length + 1}>
         <TimelineHeader>
           <TimelineSeparator />

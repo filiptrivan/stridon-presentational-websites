@@ -1,6 +1,5 @@
 import CTA from "@/components/cta";
 import {
-  ABOUT_GALLERY,
   ABOUT_MILESTONES,
   ABOUT_PARAGRAPHS,
   COMPANY_BENEFITS,
@@ -32,7 +31,6 @@ const AboutPage = () => {
       <CompanyValues
         milestones={ABOUT_MILESTONES}
         title="Kako je nastao DCK"
-        galleryImages={ABOUT_GALLERY}
       />
       <CompanyBenefits benefits={COMPANY_BENEFITS} />
 

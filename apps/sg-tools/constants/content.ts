@@ -53,6 +53,10 @@ export const ABOUT_MILESTONES = [
     color: "text-amber-400",
     bg: "bg-amber-500/15",
     border: "border-amber-500/30",
+    image: {
+      src: "/about/buvljak.jpg",
+      alt: "Tezga sa alatima na Novobeogradskom buvljaku",
+    },
   },
   {
     date: "2009.",
@@ -63,16 +67,10 @@ export const ABOUT_MILESTONES = [
     color: "text-blue-400",
     bg: "bg-blue-500/15",
     border: "border-blue-500/30",
-  },
-  {
-    date: "2012.",
-    title: "Otvaranje lokacije na Altini",
-    description:
-      "Širenjem poslovanja nastavili smo da učimo iz prakse i da još bolje razumemo šta tržište zaista traži od alata.",
-    icon: Speech,
-    color: "text-emerald-400",
-    bg: "bg-emerald-500/15",
-    border: "border-emerald-500/30",
+    image: {
+      src: "/about/vojislava-ilica.jpeg",
+      alt: "Radnja u ulici Vojislava Ilića",
+    },
   },
   {
     date: "2014.",
@@ -83,6 +81,25 @@ export const ABOUT_MILESTONES = [
     color: "text-violet-400",
     bg: "bg-violet-500/15",
     border: "border-violet-500/30",
+    image: {
+      src: "/about/prodavnicaalata.svg",
+      alt: "Logo prodavnicaalata.rs",
+      contain: true,
+    },
+  },
+  {
+    date: "2015.",
+    title: "Otvaranje lokacije na Altini",
+    description:
+      "Širenjem poslovanja nastavili smo da učimo iz prakse i da još bolje razumemo šta tržište zaista traži od alata.",
+    icon: Speech,
+    color: "text-emerald-400",
+    bg: "bg-emerald-500/15",
+    border: "border-emerald-500/30",
+    image: {
+      src: "/about/altina.jpeg",
+      alt: "Radnja na Altini",
+    },
   },
   {
     date: "2023.",
@@ -93,34 +110,11 @@ export const ABOUT_MILESTONES = [
     color: "text-rose-400",
     bg: "bg-rose-500/15",
     border: "border-rose-500/30",
-  },
-];
-
-export const ABOUT_GALLERY = [
-  {
-    src: "/categories/diamond.jpg",
-    alt: "SG Tools diamond tools",
-    className: "col-start-1 row-span-3 min-h-[13rem] lg:min-h-0",
-  },
-  {
-    src: "/categories/electric.jpg",
-    alt: "SG Tools electric tools category",
-    className: "col-start-1 row-start-4 row-span-3 min-h-[13rem] lg:min-h-0",
-  },
-  {
-    src: "/categories/grinder.jpg",
-    alt: "SG Tools grinder category",
-    className: "col-start-2 row-span-2 min-h-[13rem] lg:min-h-0",
-  },
-  {
-    src: "/categories/hand-tools.jpg",
-    alt: "SG Tools hand tools category",
-    className: "col-start-2 row-span-2 min-h-[13rem] lg:min-h-0",
-  },
-  {
-    src: "/categories/diamond.jpg",
-    alt: "SG Tools diamond tools detail",
-    className: "col-start-2 row-span-2 min-h-[13rem] lg:min-h-0",
+    image: {
+      src: "/sg-tools-logo.svg",
+      alt: "SG Tools logo",
+      contain: true,
+    },
   },
 ];
 

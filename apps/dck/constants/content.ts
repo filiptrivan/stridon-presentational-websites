@@ -59,6 +59,10 @@ export const ABOUT_MILESTONES = [
     color: "text-amber-400",
     bg: "bg-amber-500/15",
     border: "border-amber-500/30",
+    image: {
+      src: "/about/dck-trade-show-booth.webp",
+      alt: "DCK trade show booth",
+    },
   },
   {
     title: "Sopstvena proizvodnja od A do Š",
@@ -68,6 +72,10 @@ export const ABOUT_MILESTONES = [
     color: "text-blue-400",
     bg: "bg-blue-500/15",
     border: "border-blue-500/30",
+    image: {
+      src: "/about/dck-product-demo-event.webp",
+      alt: "DCK product demo event",
+    },
   },
   {
     title: "390.000 m² kapaciteta",
@@ -77,6 +85,10 @@ export const ABOUT_MILESTONES = [
     color: "text-emerald-400",
     bg: "bg-emerald-500/15",
     border: "border-emerald-500/30",
+    image: {
+      src: "/about/dck-sponsored-driver.webp",
+      alt: "DCK sponsored driver holding tools",
+    },
   },
   {
     title: "100% brushless bežični program",
@@ -86,6 +98,10 @@ export const ABOUT_MILESTONES = [
     color: "text-violet-400",
     bg: "bg-violet-500/15",
     border: "border-violet-500/30",
+    image: {
+      src: "/about/dck-stage-brand-presentation.webp",
+      alt: "DCK stage brand presentation",
+    },
   },
   {
     title: "Zvanična distribucija u Srbiji",
@@ -95,34 +111,10 @@ export const ABOUT_MILESTONES = [
     color: "text-rose-400",
     bg: "bg-rose-500/15",
     border: "border-rose-500/30",
-  },
-];
-
-export const ABOUT_GALLERY = [
-  {
-    src: "/about/dck-trade-show-booth.webp",
-    alt: "DCK trade show booth",
-    className: "col-start-1 row-span-3 min-h-[13rem] lg:min-h-0",
-  },
-  {
-    src: "/about/dck-product-demo-event.webp",
-    alt: "DCK product demo event",
-    className: "col-start-1 row-start-4 row-span-3 min-h-[13rem] lg:min-h-0",
-  },
-  {
-    src: "/about/dck-sponsored-driver.webp",
-    alt: "DCK sponsored driver holding tools",
-    className: "col-start-2 row-span-2 min-h-[13rem] lg:min-h-0",
-  },
-  {
-    src: "/about/dck-stage-brand-presentation.webp",
-    alt: "DCK stage brand presentation",
-    className: "col-start-2 row-span-2 min-h-[13rem] lg:min-h-0",
-  },
-  {
-    src: "/about/dck-desert-atv-race-support.webp",
-    alt: "DCK desert ATV race support",
-    className: "col-start-2 row-span-2 min-h-[13rem] lg:min-h-0",
+    image: {
+      src: "/about/dck-desert-atv-race-support.webp",
+      alt: "DCK desert ATV race support",
+    },
   },
 ];
 
