@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const Hero = () => {
   const common = {
-    alt: "DCK električni alati",
+    alt: "DCK alati",
     sizes: "(min-width: 1280px) 1280px, 100vw",
   };
 
@@ -32,9 +32,9 @@ const Hero = () => {
     <HeroHeader
       title={
         <>
-          Profesionalni električni alati{" "}
+          Posvećeni služenju{" "}
           <br className="hidden lg:inline-block" />
-          za svaki posao
+          globalnim profesionalcima
         </>
       }
       description="DCK električni i aku alati sa zvaničnom distribucijom, servisom i produženom garancijom uz registraciju u Srbiji."
