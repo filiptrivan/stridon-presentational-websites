@@ -5,7 +5,7 @@ export const TESTIMONIALS = [
     companyName: "Galens",
     personName: "Miodrag Pećanac",
     quote:
-      "Akumulatorsku mazalicu koristimo za podmazivanje kamiona. Napunili smo bateriju oko 2 sata, a zatim ubacili jednu tubu masti u mazalicu. Bez problema smo podmazali ceo kamion, a nakon što je tuba potrošena, baterija je i dalje bila puna. Mazalica ima malo težine, ali ništa strašno, a uz nju dolazi i kaiš za rame ako treba da se radi duže vreme bez prekida.",
+      "Akumulatorsku mazalicu koristimo za podmazivanje kamiona. Napunili smo bateriju oko 2 sata, a zatim ubacili jednu tubu masti u mazalicu. Bez problema smo podmazali ceo kamion, a nakon što je tuba potrošena, baterija je i dalje bila puna.",
     logoSrc: "/companies/svgs/galens.svg",
   },
   {
@@ -19,7 +19,7 @@ export const TESTIMONIALS = [
     companyName: "MBM RAD",
     personName: "Goran Šotra",
     quote:
-      "SDS-Max bušilicu za beton smo kupili za svakodnevno bušenje na gradilištu i za sada smo vrlo zadovoljni. Mašina ima ozbiljnu snagu, radi stabilno i ne ostavlja utisak alata koji je napravljen za lagane poslove. Posebno nam znači što može da izdrži jači tempo rada na terenu, gde alat mora da bude pouzdan iz dana u dan.",
+      "SDS-Max bušilicu za beton smo kupili za svakodnevno bušenje na gradilištu. Mašina ima snagu, radi stabilno i ne ostavlja utisak alata koji je napravljen za lagane poslove. Posebno nam znači što može da izdrži jači tempo rada na terenu, gde alat mora da bude pouzdan iz dana u dan.",
     logoSrc: "/companies/svgs/mbmrad.svg",
   },
   {
