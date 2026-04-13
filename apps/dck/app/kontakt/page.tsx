@@ -1,4 +1,3 @@
-import CTA from "@/components/cta";
 import { CONTACT_EMAIL } from "@/constants";
 import ContactHero from "@brand/shared/components/contact/contact-hero";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
@@ -15,7 +14,6 @@ const ContactPage = () => {
   return (
     <div>
       <ContactHero email={CONTACT_EMAIL} submitContact={sendContactEmail} />
-      <CTA />
     </div>
   );
 };
