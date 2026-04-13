@@ -2,59 +2,38 @@ export const CONTACT_EMAIL = "office@stridon.rs";
 
 export const TESTIMONIALS = [
   {
-    companyName: "ENTERIJER JANKOVIC",
-    personName: "Jelena Simić",
-    quote:
-      "Vrlo dobro iskustvo u radu sa firmom Stridon Group. Odlični u komunikaciji, drže se rokova, uvek imaju dobar profesionalni savet i alat na lageru!",
-    logoSrc: "/companies/svgs/enterijerjankovic.svg",
-  },
-  {
     companyName: "Galens",
     personName: "Miodrag Pećanac",
     quote:
-      "Stridon uvek ima dovoljno alata za vas. Isporuka sutradan, alati kvalitetni, a želja da se kupcu pomogne - nemerljiva!",
+      "Akumulatorsku mazalicu koristimo za podmazivanje kamiona. Napunili smo bateriju oko 2 sata, a zatim ubacili jednu tubu masti u mazalicu. Bez problema smo podmazali ceo kamion, a nakon što je tuba potrošena, baterija je i dalje bila puna. Mazalica ima malo težine, ali ništa strašno, a uz nju dolazi i kaiš za rame ako treba da se radi duže vreme bez prekida.",
     logoSrc: "/companies/svgs/galens.svg",
   },
   {
     companyName: "TERMO TIM",
     personName: "Goran Sobić",
     quote:
-      "Jednostavna i brza svakodnevna saradnja. Ljudi koji su uvek spremni da izađu u susret potrebama kupaca.",
+      "Za razliku od nekoliko drugih akumulatorskih ugaonih brusilica koje imamo, ova zadržava izabranu brzinu i ne vraća se na najnižu brzinu nakon nekoliko sekundi mirovanja, što je zaista velika prednost. Alat je robusno izrađen, radi odlično i nema vibracija.",
     logoSrc: "/companies/svgs/termotim.svg",
   },
   {
     companyName: "MBM RAD",
     personName: "Goran Šotra",
     quote:
-      "Saveti profesionalnih prodavaca Stridona doveli su do skraćenja rada naše firme na pojedinim delovima projekata i do 50%!",
+      "SDS-Max bušilicu za beton smo kupili za svakodnevno bušenje na gradilištu i za sada smo vrlo zadovoljni. Mašina ima ozbiljnu snagu, radi stabilno i ne ostavlja utisak alata koji je napravljen za lagane poslove. Posebno nam znači što može da izdrži jači tempo rada na terenu, gde alat mora da bude pouzdan iz dana u dan.",
     logoSrc: "/companies/svgs/mbmrad.svg",
-  },
-  {
-    companyName: "HIDRO INA",
-    personName: "Zoran Aćimović",
-    quote:
-      "Firma koja uvek zna šta nam treba. Neprocenjivi saveti i rešenja koja samo veliki profesionalci znaju. Sve preporuke!",
-    logoSrc: "/companies/svgs/hidroina.svg",
   },
   {
     companyName: "IN GRADNJA",
     personName: "Miloš Veselinović",
     quote:
-      "Veliki profesionalci i dobri ljudi, uvek spremni da ispune zahteve i rokove. Sve preporuke za bilo koju vrstu saradnje.",
+      "Štemaricu smo kupili za ekipu koja radi teža štemovanja i mogu da kažem da je vrlo upotrebljiva za profesionalne svrhe. Udar je jak, alat radi stabilno i lepo leži u radu za ovu klasu mašina. Dobra stvar je što dolazi u metalnom koferu i sa dletima, pa je odmah spremna za teren.",
     logoSrc: "/companies/svgs/ingradnja.svg",
-  },
-  {
-    companyName: "SILMAX doo",
-    personName: "Sladimir Ilić",
-    quote:
-      "Odličan lager alata i poznavanje potreba kupaca. Takođe, veliki broj brendova koje Stridon uvozi, čini ih nezaobilaznim svakodnevnim dobavljačem!",
-    logoSrc: "/companies/svgs/silmaxlogo.svg",
   },
   {
     companyName: "COLLIGO ARS",
     personName: "Dragan Ćeranić",
     quote:
-      "Verni saradnik na svim našim projektima. U dugogodišnjoj saradnji nas ni jednom nisu izneverili. Preporuke za firmu Stridon!",
+      "Ovaj udarni odvijač smo uzeli za svakodnevne montaže i završne radove na terenu i baš se dobro pokazao. Mašina je baš kompaktna, glava je čak kraća od tela mašine. Jaka je i vrlo zahvalna kada se radi duže.",
     logoSrc: "/companies/svgs/coligoars.svg",
   },
 ];
