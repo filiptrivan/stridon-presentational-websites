@@ -43,7 +43,7 @@ export default function CompanyTimeline({
             <TimelineIndicator />
           </TimelineHeader>
           <TimelineContent className="h-full">
-            <div className="grid gap-6 md:grid-cols-2 md:items-center">
+            <div className="grid gap-6 md:grid-cols-[1fr_24rem] md:items-center">
               <Feature
                 className="px-0! border-0!"
                 bg={item.bg}
@@ -54,17 +54,17 @@ export default function CompanyTimeline({
                 title={item.title}
               />
               {item.image && (
-                <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-muted">
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-muted">
                   <Image
                     src={item.image.src}
                     alt={item.image.alt}
                     fill
                     className={
                       item.image.contain
-                        ? "object-contain p-8"
+                        ? "object-contain p-6"
                         : "object-cover"
                     }
-                    sizes="(min-width: 1280px) 640px, (min-width: 768px) 50vw, 100vw"
+                    sizes="(min-width: 768px) 24rem, 100vw"
                     unoptimized={item.image.contain}
                   />
                 </div>
@@ -74,14 +74,9 @@ export default function CompanyTimeline({
         </TimelineItem>
       ))}
 
-      <TimelineItem key="tail-1" step={milestones.length + 1}>
+      <TimelineItem key="tail" step={milestones.length + 1}>
         <TimelineHeader>
-          <TimelineSeparator />
-        </TimelineHeader>
-      </TimelineItem>
-      <TimelineItem key="tail-2" step={milestones.length + 2}>
-        <TimelineHeader>
-          <TimelineSeparator />
+          <TimelineIndicator />
         </TimelineHeader>
       </TimelineItem>
     </Timeline>
