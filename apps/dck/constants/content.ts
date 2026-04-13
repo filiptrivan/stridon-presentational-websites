@@ -2,7 +2,6 @@ import type { TrustBadge } from "@brand/shared/components/cta";
 import {
   Award,
   BadgePercent,
-  Cpu,
   Factory,
   Globe,
   Layers,
@@ -60,8 +59,8 @@ export const ABOUT_MILESTONES = [
     bg: "bg-amber-500/15",
     border: "border-amber-500/30",
     image: {
-      src: "/about/dck-trade-show-booth.webp",
-      alt: "DCK trade show booth",
+      src: "/about/dck-sponsored-driver.webp",
+      alt: "DCK sponsored driver holding tools",
     },
   },
   {
@@ -86,21 +85,8 @@ export const ABOUT_MILESTONES = [
     bg: "bg-emerald-500/15",
     border: "border-emerald-500/30",
     image: {
-      src: "/about/dck-sponsored-driver.webp",
-      alt: "DCK sponsored driver holding tools",
-    },
-  },
-  {
-    title: "100% brushless bežični program",
-    description:
-      "Kompletan DCK aku program koristi isključivo brushless motore - bez četkica, bez kompromisa, bez izuzetaka.",
-    icon: Cpu,
-    color: "text-violet-400",
-    bg: "bg-violet-500/15",
-    border: "border-violet-500/30",
-    image: {
-      src: "/about/dck-stage-brand-presentation.webp",
-      alt: "DCK stage brand presentation",
+      src: "/about/dck-trade-show-booth.webp",
+      alt: "DCK trade show booth",
     },
   },
   {
@@ -112,8 +98,8 @@ export const ABOUT_MILESTONES = [
     bg: "bg-rose-500/15",
     border: "border-rose-500/30",
     image: {
-      src: "/about/dck-desert-atv-race-support.webp",
-      alt: "DCK desert ATV race support",
+      src: "/about/dck-stage-brand-presentation.webp",
+      alt: "DCK stage brand presentation",
     },
   },
 ];

@@ -36,7 +36,11 @@ export default function CompanyTimeline({
   return (
     <Timeline defaultValue={milestones.length + 1}>
       {milestones.map((item, index) => (
-        <TimelineItem key={item.date ?? item.title} step={index + 1}>
+        <TimelineItem
+          key={index}
+          step={index + 1}
+          className={index === milestones.length - 1 ? "pb-0!" : undefined}
+        >
           <TimelineHeader>
             <TimelineSeparator />
             {item.date && <TimelineDate>{item.date}</TimelineDate>}
