@@ -15,11 +15,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { ProductAutocomplete } from "@/components/warranty/product-autocomplete";
 import {
   ACCEPTED_FILE_TYPES,
   FILE_TOO_LARGE_ERROR,
   FILE_TYPE_ERROR,
   MAX_FILE_SIZE,
+  RECEIPT_REQUIRED_ERROR,
   warrantySchema,
   type WarrantyFormData,
 } from "@/lib/schemas/warranty";
@@ -28,6 +30,23 @@ import { TURNSTILE_VERIFICATION_FAILED } from "@brand/shared/lib/turnstile";
 import { Button } from "@brand/ui/button";
 import { Input } from "@brand/ui/input";
 import { Label } from "@brand/ui/label";
+
+function downloadPdf(base64: string, fileName: string) {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  const blob = new Blob([bytes], { type: "application/pdf" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
 
 const WarrantyForm = () => {
   const {
@@ -43,7 +62,7 @@ const WarrantyForm = () => {
       lastName: "",
       email: "",
       phoneNumber: "",
-      productModel: "",
+      product: undefined,
       serialNumber: "",
       purchaseDate: "",
     },
@@ -88,23 +107,29 @@ const WarrantyForm = () => {
     }
 
     const file = fileInputRef.current?.files?.[0];
+    if (!file) {
+      setFileError(RECEIPT_REQUIRED_ERROR);
+      return;
+    }
 
     const formData = new FormData();
-    for (const [key, value] of Object.entries(data)) {
-      formData.append(key, value);
-    }
+    formData.append("firstName", data.firstName);
+    formData.append("lastName", data.lastName);
+    formData.append("email", data.email);
+    formData.append("phoneNumber", data.phoneNumber);
+    formData.append("productSlug", data.product.slug);
+    formData.append("serialNumber", data.serialNumber);
+    formData.append("purchaseDate", data.purchaseDate);
     formData.append("turnstileToken", turnstileToken);
-
-    if (file) {
-      formData.append("receiptImage", file);
-    }
+    formData.append("receiptImage", file);
 
     const result = await submitWarrantyRegistration(formData);
 
     resetTurnstile();
 
     if (result.success) {
-      toast.success("Garancija je uspešno registrovana!");
+      toast.success("Garancija je uspešno registrovana! PDF sertifikat se preuzima.");
+      downloadPdf(result.pdfBase64, result.pdfFileName);
       reset();
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
@@ -188,28 +213,14 @@ const WarrantyForm = () => {
         </div>
       </div>
 
+      <ProductAutocomplete control={control} />
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div className="space-y-3">
-          <Label htmlFor="productModel">Model proizvoda</Label>
-          <Input
-            id="productModel"
-            placeholder="npr. DCJZ04-10"
-            className="bg-background border-border/50"
-            aria-invalid={!!errors.productModel}
-            {...register("productModel")}
-          />
-          {errors.productModel && (
-            <p className="text-sm text-destructive">
-              {errors.productModel.message}
-            </p>
-          )}
-        </div>
-
-        <div className="space-y-3">
-          <Label htmlFor="serialNumber">Serijski broj</Label>
+          <Label htmlFor="serialNumber">Serijski broj alata</Label>
           <Input
             id="serialNumber"
-            placeholder="Nalazi se na nalepnici proizvoda"
+            placeholder="Nalazi se na nalepnici alata"
             className="bg-background border-border/50"
             aria-invalid={!!errors.serialNumber}
             {...register("serialNumber")}
@@ -220,60 +231,57 @@ const WarrantyForm = () => {
             </p>
           )}
         </div>
+
+        <Controller
+          name="purchaseDate"
+          control={control}
+          render={({ field }) => {
+            const selectedDate = field.value
+              ? new Date(field.value + "T00:00:00")
+              : undefined;
+            return (
+              <div className="space-y-3">
+                <Label id="purchaseDate-label">Datum kupovine</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      data-empty={!field.value}
+                      className="w-full justify-start text-left font-normal bg-background border-border/50 data-[empty=true]:text-muted-foreground"
+                      aria-invalid={!!errors.purchaseDate}
+                      aria-labelledby="purchaseDate-label"
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {selectedDate
+                        ? format(selectedDate, "PPP", { locale: srLatn })
+                        : "Izaberi datum"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={selectedDate}
+                      onSelect={(date) =>
+                        field.onChange(date ? format(date, "yyyy-MM-dd") : "")
+                      }
+                      disabled={(date) => date > new Date()}
+                      locale={srLatn}
+                    />
+                  </PopoverContent>
+                </Popover>
+                {errors.purchaseDate && (
+                  <p className="text-sm text-destructive">
+                    {errors.purchaseDate.message}
+                  </p>
+                )}
+              </div>
+            );
+          }}
+        />
       </div>
 
-      <Controller
-        name="purchaseDate"
-        control={control}
-        render={({ field }) => {
-          const selectedDate = field.value
-            ? new Date(field.value + "T00:00:00")
-            : undefined;
-          return (
-            <div className="space-y-3">
-              <Label id="purchaseDate-label">Datum kupovine</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    data-empty={!field.value}
-                    className="w-full justify-start text-left font-normal bg-background border-border/50 data-[empty=true]:text-muted-foreground"
-                    aria-invalid={!!errors.purchaseDate}
-                    aria-labelledby="purchaseDate-label"
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {selectedDate
-                      ? format(selectedDate, "PPP", { locale: srLatn })
-                      : "Izaberi datum"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={selectedDate}
-                    onSelect={(date) =>
-                      field.onChange(date ? format(date, "yyyy-MM-dd") : "")
-                    }
-                    disabled={(date) => date > new Date()}
-                    locale={srLatn}
-                  />
-                </PopoverContent>
-              </Popover>
-              {errors.purchaseDate && (
-                <p className="text-sm text-destructive">
-                  {errors.purchaseDate.message}
-                </p>
-              )}
-            </div>
-          );
-        }}
-      />
-
       <div className="space-y-3">
-        <Label id="receiptImage-label">
-          Fotografija računa{" "}
-          <span className="text-muted-foreground font-normal">(opciono)</span>
-        </Label>
+        <Label id="receiptImage-label">Fotografija računa</Label>
         <input
           type="file"
           accept=".jpg,.jpeg,.png,.webp,.pdf"

@@ -1,6 +1,13 @@
 import { z } from "zod";
 
-export const warrantySchema = z.object({
+export const warrantyProductSchema = z.object({
+  slug: z.string().min(1, "Izaberi proizvod iz kataloga"),
+  title: z.string().min(1),
+  sku: z.string().nullable().optional(),
+  imageUrl: z.string().nullable().optional(),
+});
+
+const customerFields = {
   firstName: z.string().min(1, "Unesi ime").max(50),
   lastName: z.string().min(1, "Unesi prezime").max(50),
   email: z
@@ -8,9 +15,19 @@ export const warrantySchema = z.object({
     .min(1, "Unesi e-mail")
     .email("Unesi ispravnu e-mail adresu"),
   phoneNumber: z.string().min(6, "Unesi broj telefona").max(20),
-  productModel: z.string().min(1, "Unesi model proizvoda").max(200),
   serialNumber: z.string().min(1, "Unesi serijski broj").max(100),
   purchaseDate: z.string().min(1, "Izaberi datum kupovine"),
+};
+
+export const warrantySchema = z.object({
+  ...customerFields,
+  product: warrantyProductSchema,
+});
+
+// Server action receives a flat productSlug (everything else is client-only display state).
+export const warrantyServerSchema = z.object({
+  ...customerFields,
+  productSlug: z.string().min(1),
 });
 
 export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -24,5 +41,6 @@ export const FILE_TOO_LARGE_ERROR =
   "Fajl je prevelik. Maksimalna veličina je 5MB.";
 export const FILE_TYPE_ERROR =
   "Nepodržan format fajla. Dozvoljeni su: JPG, PNG, WebP, PDF.";
+export const RECEIPT_REQUIRED_ERROR = "Dodaj fotografiju računa.";
 
 export type WarrantyFormData = z.infer<typeof warrantySchema>;

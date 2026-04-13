@@ -1,23 +1,26 @@
 "use server";
 
 import {
-  warrantySchema,
+  warrantyServerSchema,
   MAX_FILE_SIZE,
   ACCEPTED_FILE_TYPES,
   FILE_TOO_LARGE_ERROR,
   FILE_TYPE_ERROR,
+  RECEIPT_REQUIRED_ERROR,
 } from "@/lib/schemas/warranty";
 import { reportError } from "@brand/shared/lib/report-error";
 import { TURNSTILE_VERIFICATION_FAILED } from "@brand/shared/lib/turnstile";
 import { validateTurnstileToken } from "@brand/shared/lib/turnstile-server";
-import type { ActionResult } from "@brand/shared/types/actions";
 
 const BRAND_SLUG = "dck";
 
+export type WarrantyActionResult =
+  | { success: true; pdfBase64: string; pdfFileName: string }
+  | { success: false; error: string };
+
 export async function submitWarrantyRegistration(
   formData: FormData,
-): Promise<ActionResult> {
-  // Verify Turnstile token
+): Promise<WarrantyActionResult> {
   const turnstileToken = formData.get("turnstileToken");
   if (typeof turnstileToken !== "string" || !turnstileToken) {
     return { success: false, error: TURNSTILE_VERIFICATION_FAILED };
@@ -33,41 +36,33 @@ export async function submitWarrantyRegistration(
     lastName: formData.get("lastName"),
     email: formData.get("email"),
     phoneNumber: formData.get("phoneNumber"),
-    productModel: formData.get("productModel"),
+    productSlug: formData.get("productSlug"),
     serialNumber: formData.get("serialNumber"),
     purchaseDate: formData.get("purchaseDate"),
   };
 
-  const parsed = warrantySchema.safeParse(raw);
+  const parsed = warrantyServerSchema.safeParse(raw);
   if (!parsed.success) {
     return { success: false, error: "Podaci nisu ispravni. Proveri unos." };
   }
 
   const receiptFile = formData.get("receiptImage");
-  const hasReceipt =
-    receiptFile instanceof File && receiptFile.size > 0;
-
-  if (hasReceipt) {
-    if (receiptFile.size > MAX_FILE_SIZE) {
-      return { success: false, error: FILE_TOO_LARGE_ERROR };
-    }
-    if (!ACCEPTED_FILE_TYPES.includes(receiptFile.type)) {
-      return { success: false, error: FILE_TYPE_ERROR };
-    }
+  if (!(receiptFile instanceof File) || receiptFile.size === 0) {
+    return { success: false, error: RECEIPT_REQUIRED_ERROR };
+  }
+  if (receiptFile.size > MAX_FILE_SIZE) {
+    return { success: false, error: FILE_TOO_LARGE_ERROR };
+  }
+  if (!ACCEPTED_FILE_TYPES.includes(receiptFile.type)) {
+    return { success: false, error: FILE_TYPE_ERROR };
   }
 
   const apiUrl = process.env.API_URL;
-  if (!apiUrl) {
-    reportError(new Error("API_URL is not set"), { source: "submitWarrantyRegistration" });
-    return {
-      success: false,
-      error: "Registracija trenutno nije moguća. Pokušaj ponovo kasnije.",
-    };
-  }
-
   const apiKey = process.env.PACMS_API_KEY;
-  if (!apiKey) {
-    reportError(new Error("PACMS_API_KEY is not set"), { source: "submitWarrantyRegistration" });
+  if (!apiUrl || !apiKey) {
+    reportError(new Error("API_URL or PACMS_API_KEY missing"), {
+      source: "submitWarrantyRegistration",
+    });
     return {
       success: false,
       error: "Registracija trenutno nije moguća. Pokušaj ponovo kasnije.",
@@ -75,28 +70,25 @@ export async function submitWarrantyRegistration(
   }
 
   try {
-    const payload = {
-      ...parsed.data,
-      purchaseDate: `${parsed.data.purchaseDate}T00:00:00.000Z`,
-    };
-
     const apiFormData = new FormData();
-    for (const [key, value] of Object.entries(payload)) {
-      apiFormData.append(key, value);
-    }
+    apiFormData.append("firstName", parsed.data.firstName);
+    apiFormData.append("lastName", parsed.data.lastName);
+    apiFormData.append("email", parsed.data.email);
+    apiFormData.append("phoneNumber", parsed.data.phoneNumber);
+    apiFormData.append("productSlug", parsed.data.productSlug);
+    apiFormData.append("serialNumber", parsed.data.serialNumber);
+    apiFormData.append(
+      "purchaseDate",
+      `${parsed.data.purchaseDate}T00:00:00.000Z`,
+    );
     apiFormData.append("brandSlug", BRAND_SLUG);
-
-    if (hasReceipt) {
-      apiFormData.append("receiptImage", receiptFile);
-    }
+    apiFormData.append("receiptImage", receiptFile);
 
     const response = await fetch(
       `${apiUrl}/api/Storefront/SubmitWarrantyRegistration`,
       {
         method: "POST",
-        headers: {
-          "X-Api-Key": apiKey,
-        },
+        headers: { "X-Api-Key": apiKey },
         body: apiFormData,
       },
     );
@@ -113,7 +105,16 @@ export async function submitWarrantyRegistration(
       };
     }
 
-    return { success: true };
+    const result = (await response.json()) as {
+      pdfBase64: string;
+      pdfFileName: string;
+    };
+
+    return {
+      success: true,
+      pdfBase64: result.pdfBase64,
+      pdfFileName: result.pdfFileName,
+    };
   } catch (error) {
     reportError(error, { source: "submitWarrantyRegistration" });
     return {
