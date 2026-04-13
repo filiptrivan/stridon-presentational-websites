@@ -1,10 +1,14 @@
 import type { TrustBadge } from "@brand/shared/components/cta";
+import type { FeatureItem } from "@brand/shared/components/features";
 import {
   Clock,
+  Gauge,
   Globe,
+  GraduationCap,
   Layers,
   MapPin,
   Rocket,
+  ShieldCheck,
   Speech,
   Store,
   Users,
@@ -18,22 +22,26 @@ export const CTA_TRUST_BADGES: TrustBadge[] = [
   { icon: Layers, text: "Širok asortiman" },
 ];
 
-export const FEATURES = [
+export const FEATURES: FeatureItem[] = [
   {
-    title: "Razvijen iz prakse",
-    desc: "SG Tools je oblikovan kroz stvarne potrebe ljudi koji ga koriste svaki dan.",
+    title: "Građen znanjem",
+    desc: "Iza naših proizvoda stoje godine slušanja majstora.",
+    icon: GraduationCap,
   },
   {
-    title: "Dobar odnos cene i kvaliteta",
-    desc: "Pouzdan alat za ozbiljan rad, bez preplaćivanja.",
+    title: "Kvalitet bez kompromisa",
+    desc: "Pouzdani alati profesionalnog kvaliteta.",
+    icon: ShieldCheck,
   },
   {
-    title: "Testiran za svakodnevnu upotrebu",
-    desc: "Biramo proizvode i rešenja koja imaju smisla u radionici, na terenu i na gradilištu.",
+    title: "Širok asortiman",
+    desc: "Preko 300 ručnih alata i pribora za sve tipove radova.",
+    icon: Layers,
   },
   {
-    title: "Iza brenda stoji iskustvo",
-    desc: "SG Tools je nastao na temeljima porodičnog posla u alatima i oslanja se na znanje stečeno kroz rad sa hiljadama kupaca.",
+    title: "Performanse > cena",
+    desc: "Performanse koje daleko prevazilaze cenovni rang.",
+    icon: Gauge,
   },
 ];
 
