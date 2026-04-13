@@ -19,7 +19,7 @@ const WarrantyRegistrationPage = () => {
     <div>
       <HeroHeader
         title="Registracija garancije"
-        description="Registruj garanciju za svoj DCK alat - popuni formular ispod i osiguraj svoju garanciju brzo i jednostavno."
+        description="Registruj garanciju u roku od 4 nedelje od datuma kupovine i ostvari pravo na 3 godine garancije - i za hobi i za profesionalne korisnike. Bez registracije garancija traje 2 godine za kućnu upotrebu, odnosno godinu dana za profesionalnu."
       />
       <Section>
         <Wrapper>
