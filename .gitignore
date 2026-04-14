@@ -27,9 +27,12 @@ Thumbs.db
 # Claude Code
 .agents/
 .claude/settings.local.json
-.claude/skills/brevo/
-.claude/skills/db-query/
-.claude/skills/plaky/
+# Ignore all skills by default — whitelist only the ones we intentionally share.
+# Keeps personal/secret-bearing skills (db-query, hangfire, brevo, plaky, …) out of git.
+.claude/skills/*
+!.claude/skills/agent-browser/
+!.claude/skills/env-update/
+!.claude/skills/prod-vercel/
 skills-lock.json
 bash.exe.stackdump
 
