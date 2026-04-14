@@ -19,9 +19,9 @@ export const config: BrandConfig = {
     external: false,
   },
 
-  defaultTitle: "SG Tools - Profesionalni alat nastao iz 30 godina iskustva",
+  defaultTitle: "SG Tools - Građen znanjem",
   siteDescription:
-    "SG Tools je profesionalni alat nastao iz 30 godina iskustva u prodaji i distribuciji alata.",
+    "SG Tools je rođen iz porodičnog biznisa sa alatima koji traje 30 godina.",
   productsPageDescription:
     "Pregledaj kompletnu ponudu SG Tools profesionalnog alata - bušilice, brusilice, testere i još mnogo toga.",
 

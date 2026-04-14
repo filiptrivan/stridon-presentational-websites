@@ -12,8 +12,8 @@ export default async function Image() {
 
   return new ImageResponse(
     <DefaultTemplate
-      title="Profesionalni alat nastao iz 30 godina iskustva"
-      description="Razvijen na osnovu višedecenijskog iskustva u prodaji i distribuciji alata."
+      title="Građen znanjem"
+      description="Porodična firma sa 30 godina iskustva u prodaji i distribuciji alata."
     />,
     { ...size, fonts },
   );

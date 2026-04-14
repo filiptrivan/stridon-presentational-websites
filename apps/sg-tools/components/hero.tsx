@@ -1,22 +1,20 @@
-import { ExternalLinkIcon } from "lucide-react";
-import Link from "next/link";
 import Container from "@brand/shared/components/container";
 import HeroHeader from "@brand/shared/components/hero-header";
 import { Button } from "@brand/ui/button";
+import { ExternalLinkIcon } from "lucide-react";
+import Link from "next/link";
 
 const Hero = () => {
   return (
     <HeroHeader
-      title="Profesionalni alat nastao iz 30 godina iskustva"
-      description="SG Tools je razvijen na osnovu višedecenijskog iskustva u prodaji i distribuciji alata, iz svakodnevnog rada sa majstorima, serviserima i firmama koje traže pouzdan, trajan i cenovno pristupačan alat."
+      title="Građen znanjem"
+      description="SG Tools je rođen iz porodičnog biznisa sa alatima koji traje 30 godina, iz svakodnevnog rada sa majstorima, serviserima i firmama koje traže pouzdan, trajan i cenovno pristupačan alat."
       showSvgGrid={true}
     >
       <Container delay={0.3}>
         <div className="flex gap-3 mt-6">
           <Button asChild>
-            <Link href="/kontakt">
-              Postani distributer
-            </Link>
+            <Link href="/kontakt">Postani distributer</Link>
           </Button>
           <Button variant="outline" asChild>
             <Link href="https://stridon.milev.rs/" target="_blank">
