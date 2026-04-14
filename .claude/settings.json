@@ -32,6 +32,7 @@
       "Bash(wc *)",
       "Bash(find *)",
       "Bash(grep *)",
+      "Bash(cd \"C:\\Users\\user\\Documents\\Projects\\SGAndDCKWebsites\" && pnpm -C apps/dck test:*)",
       "Bash(npx playwright test)",
       "WebFetch(domain:www.spiderly.dev)",
       "WebFetch(domain:nextjs.org)",
