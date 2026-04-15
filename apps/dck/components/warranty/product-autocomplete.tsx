@@ -7,23 +7,22 @@ import { Loader2, Pencil } from "lucide-react";
 
 import type { ProductAutocompleteHit } from "@/app/api/products/search/route";
 import type { WarrantyFormData } from "@/lib/schemas/warranty";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@brand/ui/command";
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from "@/components/ui/combobox";
 import { Button } from "@brand/ui/button";
 import { Label } from "@brand/ui/label";
+
+const DEBOUNCE_MS = 250;
 
 type Props = {
   control: Control<WarrantyFormData>;
 };
-
-const DEBOUNCE_MS = 250;
 
 export function ProductAutocomplete({ control }: Props) {
   return (
@@ -87,7 +86,7 @@ function SelectedCard({
       </div>
       <Button type="button" variant="ghost" size="sm" onClick={onClear}>
         <Pencil className="h-4 w-4" />
-        Promeni
+        <span className="hidden sm:inline">Promeni</span>
       </Button>
     </div>
   );
@@ -100,14 +99,19 @@ function ProductPicker({
   onSelect: (hit: ProductAutocompleteHit) => void;
   invalid?: boolean;
 }) {
-  const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [hits, setHits] = useState<ProductAutocompleteHit[]>([]);
   const [loading, setLoading] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
-    if (!open) return;
+    const trimmed = query.trim();
+    if (trimmed.length === 0) {
+      abortRef.current?.abort();
+      setHits((prev) => (prev.length === 0 ? prev : []));
+      setLoading(false);
+      return;
+    }
 
     const handle = setTimeout(async () => {
       abortRef.current?.abort();
@@ -117,101 +121,86 @@ function ProductPicker({
       setLoading(true);
       try {
         const res = await fetch(
-          `/api/products/search?q=${encodeURIComponent(query)}`,
+          `/api/products/search?q=${encodeURIComponent(trimmed)}`,
           { signal: controller.signal },
         );
+        if (controller.signal.aborted) return;
         if (!res.ok) {
           setHits([]);
           return;
         }
         const data = (await res.json()) as { hits: ProductAutocompleteHit[] };
+        if (controller.signal.aborted) return;
         setHits(data.hits);
       } catch (err) {
         if ((err as Error).name !== "AbortError") {
           setHits([]);
         }
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) setLoading(false);
       }
     }, DEBOUNCE_MS);
 
     return () => clearTimeout(handle);
-  }, [query, open]);
+  }, [query]);
+
+  useEffect(() => () => abortRef.current?.abort(), []);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full justify-start bg-background border-border/50 font-normal text-muted-foreground"
-          aria-invalid={invalid}
-          aria-labelledby="product-label"
-        >
-          Pretraži i odaberi alat...
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent
-        className="w-[--radix-popover-trigger-width] p-0"
-        align="start"
-      >
-        <Command shouldFilter={false}>
-          <CommandInput
-            placeholder="Pretraži po nazivu ili šifri..."
-            value={query}
-            onValueChange={setQuery}
-          />
-          <CommandList>
-            {loading && (
-              <div className="flex items-center justify-center py-6 text-sm text-muted-foreground">
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Tražim...
+    <Combobox
+      items={hits}
+      filter={null}
+      inputValue={query}
+      onInputValueChange={setQuery}
+      onValueChange={(hit: ProductAutocompleteHit | null) => {
+        if (hit) onSelect(hit);
+      }}
+      itemToStringLabel={(hit: ProductAutocompleteHit) => hit.title}
+      itemToStringValue={(hit: ProductAutocompleteHit) => hit.slug}
+    >
+      <ComboboxInput
+        placeholder="Pretraži po nazivu ili šifri..."
+        aria-invalid={invalid}
+        aria-labelledby="product-label"
+        showClear={query.length > 0}
+        className="w-full"
+      />
+      <ComboboxContent>
+        {loading && (
+          <div className="flex items-center justify-center py-6 text-sm text-muted-foreground">
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Tražim...
+          </div>
+        )}
+        {!loading && <ComboboxEmpty>Nema rezultata.</ComboboxEmpty>}
+        <ComboboxList>
+          {(hit: ProductAutocompleteHit) => (
+            <ComboboxItem key={hit.slug} value={hit} className="gap-3">
+              {hit.imageUrl ? (
+                <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-sm bg-muted">
+                  <Image
+                    src={hit.imageUrl}
+                    alt={hit.title}
+                    fill
+                    sizes="40px"
+                    className="object-contain"
+                  />
+                </div>
+              ) : (
+                <div className="h-10 w-10 shrink-0 rounded-sm bg-muted" />
+              )}
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm">{hit.title}</p>
+                {hit.sku && (
+                  <p className="truncate text-xs text-muted-foreground">
+                    {hit.sku}
+                  </p>
+                )}
               </div>
-            )}
-            {!loading && hits.length === 0 && (
-              <CommandEmpty>Nema rezultata.</CommandEmpty>
-            )}
-            {!loading && hits.length > 0 && (
-              <CommandGroup>
-                {hits.map((hit) => (
-                  <CommandItem
-                    key={hit.slug}
-                    value={hit.slug}
-                    onSelect={() => {
-                      onSelect(hit);
-                      setOpen(false);
-                      setQuery("");
-                    }}
-                    className="gap-3"
-                  >
-                    {hit.imageUrl ? (
-                      <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-sm bg-muted">
-                        <Image
-                          src={hit.imageUrl}
-                          alt={hit.title}
-                          fill
-                          sizes="40px"
-                          className="object-contain"
-                        />
-                      </div>
-                    ) : (
-                      <div className="h-10 w-10 shrink-0 rounded-sm bg-muted" />
-                    )}
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm">{hit.title}</p>
-                      {hit.sku && (
-                        <p className="truncate text-xs text-muted-foreground">
-                          {hit.sku}
-                        </p>
-                      )}
-                    </div>
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            )}
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+            </ComboboxItem>
+          )}
+        </ComboboxList>
+      </ComboboxContent>
+    </Combobox>
   );
 }
