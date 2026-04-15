@@ -3,9 +3,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { srLatn } from "date-fns/locale/sr-Latn";
-import { CalendarIcon, Loader2, Send, Upload } from "lucide-react";
+import {
+  Building2,
+  CalendarIcon,
+  Loader2,
+  Send,
+  Upload,
+  X,
+} from "lucide-react";
 import { useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
 import { submitWarrantyRegistration } from "@/app/registracija-garancije/actions";
@@ -25,6 +32,7 @@ import {
   warrantySchema,
   type WarrantyFormData,
 } from "@/lib/schemas/warranty";
+import { useAutofillSync } from "@brand/shared/lib/hooks/useAutofillSync";
 import { useTurnstile } from "@brand/shared/lib/hooks/useTurnstile";
 import { TURNSTILE_VERIFICATION_FAILED } from "@brand/shared/lib/turnstile";
 import { Button } from "@brand/ui/button";
@@ -54,9 +62,12 @@ const WarrantyForm = () => {
     handleSubmit,
     reset,
     control,
+    setValue,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm<WarrantyFormData>({
     resolver: zodResolver(warrantySchema),
+    mode: "onTouched",
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -65,8 +76,13 @@ const WarrantyForm = () => {
       product: undefined,
       serialNumber: "",
       purchaseDate: "",
+      isCompanyOrder: false,
+      companyPib: "",
     },
   });
+
+  const isCompanyOrder = useWatch({ control, name: "isCompanyOrder" });
+  const formRef = useAutofillSync(getValues, setValue);
 
   const [fileError, setFileError] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
@@ -120,6 +136,9 @@ const WarrantyForm = () => {
     formData.append("productSlug", data.product.slug);
     formData.append("serialNumber", data.serialNumber);
     formData.append("purchaseDate", data.purchaseDate);
+    if (data.companyPib) {
+      formData.append("companyPib", data.companyPib);
+    }
     formData.append("turnstileToken", turnstileToken);
     formData.append("receiptImage", file);
 
@@ -142,6 +161,7 @@ const WarrantyForm = () => {
 
   return (
     <form
+      ref={formRef}
       onSubmit={(e) => handleSubmit(onSubmit)(e)}
       className="max-w-3xl mx-auto w-full space-y-6"
     >
@@ -151,6 +171,7 @@ const WarrantyForm = () => {
           <Input
             id="firstName"
             placeholder="Petar"
+            autoComplete="given-name"
             className="bg-background border-border/50"
             aria-invalid={!!errors.firstName}
             {...register("firstName")}
@@ -167,6 +188,7 @@ const WarrantyForm = () => {
           <Input
             id="lastName"
             placeholder="Petrović"
+            autoComplete="family-name"
             className="bg-background border-border/50"
             aria-invalid={!!errors.lastName}
             {...register("lastName")}
@@ -186,6 +208,7 @@ const WarrantyForm = () => {
             id="email"
             type="email"
             placeholder="petar@primer.rs"
+            autoComplete="email"
             className="bg-background border-border/50"
             aria-invalid={!!errors.email}
             {...register("email")}
@@ -201,6 +224,7 @@ const WarrantyForm = () => {
             id="phoneNumber"
             type="tel"
             placeholder="065 123 4567"
+            autoComplete="tel"
             className="bg-background border-border/50"
             aria-invalid={!!errors.phoneNumber}
             {...register("phoneNumber")}
@@ -314,6 +338,54 @@ const WarrantyForm = () => {
           JPG, PNG, WebP ili PDF - do 5MB
         </p>
       </div>
+
+      {isCompanyOrder ? (
+        <div className="space-y-3 rounded-lg border border-border/50 bg-background p-4">
+          <div className="flex items-center justify-between">
+            <span className="flex items-center gap-1.5 text-sm font-medium">
+              <Building2 className="size-3.5" />
+              Registruješ kao firma
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                setValue("isCompanyOrder", false);
+                setValue("companyPib", "");
+              }}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Otkaži registraciju kao firma"
+            >
+              <X className="size-4" />
+            </button>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="companyPib">PIB</Label>
+            <Input
+              id="companyPib"
+              placeholder="123456789"
+              inputMode="numeric"
+              maxLength={9}
+              className="bg-background border-border/50"
+              aria-invalid={!!errors.companyPib}
+              {...register("companyPib")}
+            />
+            {errors.companyPib && (
+              <p className="text-sm text-destructive">
+                {errors.companyPib.message}
+              </p>
+            )}
+          </div>
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={() => setValue("isCompanyOrder", true)}
+          className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <Building2 className="size-3.5" />
+          Registruješ kao firma?
+        </button>
+      )}
 
       {turnstileWidget}
 

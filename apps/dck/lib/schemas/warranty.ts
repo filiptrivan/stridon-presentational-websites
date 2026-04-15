@@ -22,15 +22,41 @@ const customerFields = {
   purchaseDate: z.string().min(1, "Izaberi datum kupovine"),
 };
 
-export const warrantySchema = z.object({
-  ...customerFields,
-  product: warrantyProductSchema,
-});
+const companyFields = {
+  isCompanyOrder: z.boolean(),
+  companyPib: z.string().optional(),
+};
+
+const refineCompanyPib = (
+  data: { isCompanyOrder: boolean; companyPib?: string },
+  ctx: z.RefinementCtx,
+) => {
+  if (data.isCompanyOrder && !/^\d{9}$/.test(data.companyPib ?? "")) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "PIB mora imati tačno 9 cifara.",
+      path: ["companyPib"],
+    });
+  }
+};
+
+export const warrantySchema = z
+  .object({
+    ...customerFields,
+    ...companyFields,
+    product: warrantyProductSchema,
+  })
+  .superRefine(refineCompanyPib);
 
 // Server action receives a flat productSlug (everything else is client-only display state).
+// `isCompanyOrder` is purely a client-side toggle; the server only needs the optional companyPib value.
 export const warrantyServerSchema = z.object({
   ...customerFields,
   productSlug: z.string().min(1),
+  companyPib: z
+    .string()
+    .regex(/^\d{9}$/, "PIB mora imati tačno 9 cifara.")
+    .optional(),
 });
 
 export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB

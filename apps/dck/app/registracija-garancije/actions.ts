@@ -31,6 +31,7 @@ export async function submitWarrantyRegistration(
     return { success: false, error: TURNSTILE_VERIFICATION_FAILED };
   }
 
+  const rawCompanyPib = formData.get("companyPib");
   const raw = {
     firstName: formData.get("firstName"),
     lastName: formData.get("lastName"),
@@ -39,6 +40,10 @@ export async function submitWarrantyRegistration(
     productSlug: formData.get("productSlug"),
     serialNumber: formData.get("serialNumber"),
     purchaseDate: formData.get("purchaseDate"),
+    companyPib:
+      typeof rawCompanyPib === "string" && rawCompanyPib.length > 0
+        ? rawCompanyPib
+        : undefined,
   };
 
   const parsed = warrantyServerSchema.safeParse(raw);
@@ -82,6 +87,9 @@ export async function submitWarrantyRegistration(
       `${parsed.data.purchaseDate}T00:00:00.000Z`,
     );
     apiFormData.append("brandSlug", BRAND_SLUG);
+    if (parsed.data.companyPib) {
+      apiFormData.append("companyPib", parsed.data.companyPib);
+    }
     apiFormData.append("receiptImage", receiptFile);
 
     const response = await fetch(
