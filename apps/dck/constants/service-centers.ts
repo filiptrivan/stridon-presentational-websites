@@ -7,6 +7,7 @@ export const SERVICE_CENTERS: ContactLocation[] = [
     coords: { lat: 45.286782, lng: 19.832287 },
     phone: "+381-21-410000",
     email: "office@proservis.rs",
+    badge: "Glavni servis",
   },
   {
     name: "Elektroservis SG",

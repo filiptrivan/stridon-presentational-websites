@@ -4,4 +4,5 @@ export interface ContactLocation {
   coords: { lat: number; lng: number };
   phone?: string;
   email?: string;
+  badge?: string;
 }

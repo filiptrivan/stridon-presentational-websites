@@ -52,6 +52,11 @@ function ContactLocations({
                     name={location.name}
                   />
                 </div>
+                {location.badge && (
+                  <span className="absolute top-3 right-3 z-10 inline-block text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full bg-primary text-primary-foreground shadow-md">
+                    {location.badge}
+                  </span>
+                )}
 
                 <div className="relative p-3 sm:p-5 flex items-center gap-4">
                   <IconBox
