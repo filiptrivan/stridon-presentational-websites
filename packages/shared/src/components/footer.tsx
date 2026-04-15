@@ -1,5 +1,5 @@
 import { getBrandConfig } from "@brand/config";
-import { Facebook, Instagram, Youtube } from "lucide-react";
+import { Facebook, Instagram, Mail, Youtube } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import Container from "./container";
@@ -133,8 +133,12 @@ const Footer = ({
                 {footerTagline}
               </p>
               <div className="mt-4 text-sm text-muted-foreground px-4 py-2 cursor-pointer rounded-full border border-border/40 bg-foreground/5 hover:bg-foreground/10 transition-colors duration-300">
-                <a href="tel:+381114520171">
-                  <p>011-4520-171</p>
+                <a
+                  href="mailto:office@stridon.rs"
+                  className="flex items-center gap-2"
+                >
+                  <Mail className="size-4" />
+                  <p>office@stridon.rs</p>
                 </a>
               </div>
               <div className="mt-6 flex items-center gap-3">
