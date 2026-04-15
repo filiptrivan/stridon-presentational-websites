@@ -146,7 +146,7 @@ const WarrantyForm = () => {
       className="max-w-3xl mx-auto w-full space-y-6"
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div className="space-y-3">
+        <div className="space-y-2">
           <Label htmlFor="firstName">Ime</Label>
           <Input
             id="firstName"
@@ -162,7 +162,7 @@ const WarrantyForm = () => {
           )}
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-2">
           <Label htmlFor="lastName">Prezime</Label>
           <Input
             id="lastName"
@@ -180,7 +180,7 @@ const WarrantyForm = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div className="space-y-3">
+        <div className="space-y-2">
           <Label htmlFor="email">E-mail</Label>
           <Input
             id="email"
@@ -195,7 +195,7 @@ const WarrantyForm = () => {
           )}
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-2">
           <Label htmlFor="phoneNumber">Broj telefona</Label>
           <Input
             id="phoneNumber"
@@ -216,7 +216,7 @@ const WarrantyForm = () => {
       <ProductAutocomplete control={control} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div className="space-y-3">
+        <div className="space-y-2">
           <Label htmlFor="serialNumber">Serijski broj alata</Label>
           <Input
             id="serialNumber"
@@ -240,7 +240,7 @@ const WarrantyForm = () => {
               ? new Date(field.value + "T00:00:00")
               : undefined;
             return (
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <Label id="purchaseDate-label">Datum kupovine</Label>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -280,7 +280,7 @@ const WarrantyForm = () => {
         />
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2">
         <Label id="receiptImage-label">Fotografija računa</Label>
         <input
           type="file"

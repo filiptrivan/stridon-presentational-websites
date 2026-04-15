@@ -30,7 +30,7 @@ export function ProductAutocomplete({ control }: Props) {
       name="product"
       control={control}
       render={({ field, fieldState }) => (
-        <div className="space-y-3">
+        <div className="space-y-2">
           <Label id="product-label">Proizvod</Label>
           {field.value?.slug ? (
             <SelectedCard
@@ -172,7 +172,13 @@ function ProductPicker({
             Tražim...
           </div>
         )}
-        {!loading && <ComboboxEmpty>Nema rezultata.</ComboboxEmpty>}
+        {!loading && (
+          <ComboboxEmpty>
+            {query.trim().length === 0
+              ? "Kucaj naziv ili šifru proizvoda."
+              : "Nema rezultata."}
+          </ComboboxEmpty>
+        )}
         <ComboboxList>
           {(hit: ProductAutocompleteHit) => (
             <ComboboxItem key={hit.slug} value={hit} className="gap-3">

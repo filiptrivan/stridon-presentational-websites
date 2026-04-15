@@ -1,11 +1,14 @@
 import { z } from "zod";
 
-export const warrantyProductSchema = z.object({
-  slug: z.string().min(1, "Izaberi proizvod iz kataloga"),
-  title: z.string().min(1),
-  sku: z.string().nullable().optional(),
-  imageUrl: z.string().nullable().optional(),
-});
+export const warrantyProductSchema = z.object(
+  {
+    slug: z.string().min(1),
+    title: z.string().min(1),
+    sku: z.string().nullable().optional(),
+    imageUrl: z.string().nullable().optional(),
+  },
+  { error: "Izaberi proizvod iz kataloga" },
+);
 
 const customerFields = {
   firstName: z.string().min(1, "Unesi ime").max(50),
