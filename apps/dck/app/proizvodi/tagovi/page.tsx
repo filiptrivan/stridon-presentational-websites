@@ -7,9 +7,9 @@ import { createPageMetadata } from "@brand/shared/lib/metadata";
 import { Tag } from "lucide-react";
 
 export const metadata = createPageMetadata({
-  title: "Tagovi",
+  title: "Linije proizvoda",
   description:
-    "Pregledaj aktuelne ponude i promocije DCK profesionalnog alata.",
+    "Pregledaj linije proizvoda DCK profesionalnog alata.",
   canonicalUrl: "https://www.dcksrbija.rs/proizvodi/tagovi/",
 });
 
@@ -19,15 +19,15 @@ const TagsPage = async () => {
   return (
     <div>
       <HeroHeader
-        title="Tagovi"
-        description="Pregledaj aktuelne ponude i promocije DCK profesionalnog alata."
+        title="Linije proizvoda"
+        description="Pregledaj linije proizvoda DCK profesionalnog alata."
       />
 
       <Wrapper className="pb-16">
         {tags.length === 0 ? (
           <StatusMessage
             icon={Tag}
-            title="Trenutno nema dostupnih tagova."
+            title="Trenutno nema dostupnih linija proizvoda."
             description="Proveri ponovo uskoro."
           />
         ) : (

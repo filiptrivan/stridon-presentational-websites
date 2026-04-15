@@ -20,8 +20,8 @@ const Tags = async () => {
     <Section className="relative">
       <Wrapper>
         <SectionHeader
-          title="Asortiman"
-          description="Pogledaj aktuelne ponude i promocije iz našeg asortimana."
+          title="Linije proizvoda"
+          description="Pogledaj linije proizvoda iz našeg asortimana."
           action={{ label: "Pogledaj sve", href: "/proizvodi/tagovi" }}
         />
 

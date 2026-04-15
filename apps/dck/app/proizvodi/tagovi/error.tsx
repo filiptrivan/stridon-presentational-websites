@@ -11,7 +11,7 @@ export default function TagsError({
   return (
     <ErrorPage
       title="Greška pri učitavanju"
-      description="Došlo je do greške prilikom učitavanja tagova ili proizvoda. Probaj ponovo ili se vrati na početnu stranu."
+      description="Došlo je do greške prilikom učitavanja linija proizvoda. Probaj ponovo ili se vrati na početnu stranu."
       reset={reset}
     />
   );

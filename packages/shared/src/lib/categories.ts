@@ -11,7 +11,7 @@ export const BASE_BREADCRUMBS: BreadcrumbSegment[] = [
 
 export const TAG_BASE_BREADCRUMBS: BreadcrumbSegment[] = [
   { label: "Početna", href: "/" },
-  { label: "Tagovi", href: "/proizvodi/tagovi" },
+  { label: "Linije proizvoda", href: "/proizvodi/tagovi" },
 ];
 
 export function flattenAllCategories(categories: Category[]): Category[] {
