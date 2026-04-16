@@ -133,7 +133,7 @@ export async function getCategoryBySlug(
   cacheTag(TAGS.categories);
   try {
     return await apiFetch<Category>(
-      `/api/Storefront/CategoryBySlug?slug=${encodeURIComponent(slug)}`,
+      `/api/Storefront/CategoryBySlug?slug=${encodeURIComponent(slug)}&brandSlug=${BRAND_SLUG}`,
     );
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) return null;
