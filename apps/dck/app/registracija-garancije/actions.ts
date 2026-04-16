@@ -15,7 +15,7 @@ import { validateTurnstileToken } from "@brand/shared/lib/turnstile-server";
 const BRAND_SLUG = "dck";
 
 export type WarrantyActionResult =
-  | { success: true; pdfBase64: string; pdfFileName: string }
+  | { success: true }
   | { success: false; error: string };
 
 export async function submitWarrantyRegistration(
@@ -113,16 +113,7 @@ export async function submitWarrantyRegistration(
       };
     }
 
-    const result = (await response.json()) as {
-      pdfBase64: string;
-      pdfFileName: string;
-    };
-
-    return {
-      success: true,
-      pdfBase64: result.pdfBase64,
-      pdfFileName: result.pdfFileName,
-    };
+    return { success: true };
   } catch (error) {
     reportError(error, { source: "submitWarrantyRegistration" });
     return {

@@ -39,23 +39,6 @@ import { Button } from "@brand/ui/button";
 import { Input } from "@brand/ui/input";
 import { Label } from "@brand/ui/label";
 
-function downloadPdf(base64: string, fileName: string) {
-  const binary = atob(base64);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) {
-    bytes[i] = binary.charCodeAt(i);
-  }
-  const blob = new Blob([bytes], { type: "application/pdf" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = fileName;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
 const WarrantyForm = () => {
   const {
     register,
@@ -147,8 +130,7 @@ const WarrantyForm = () => {
     resetTurnstile();
 
     if (result.success) {
-      toast.success("Garancija je uspešno registrovana! PDF sertifikat se preuzima.");
-      downloadPdf(result.pdfBase64, result.pdfFileName);
+      toast.success("Garancija je uspešno registrovana! Potvrda je poslata na e-mail.");
       reset();
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
