@@ -10,7 +10,7 @@ export const metadata = createPageMetadata({
   title: "Linije proizvoda",
   description:
     "Pregledaj linije proizvoda DCK profesionalnog alata.",
-  canonicalUrl: "https://www.dcksrbija.rs/proizvodi/tagovi/",
+  canonicalUrl: "/proizvodi/tagovi/",
 });
 
 const TagsPage = async () => {

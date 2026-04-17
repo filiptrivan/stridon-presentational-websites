@@ -168,20 +168,9 @@ export function createProductMetadata({
   description: string;
   slug: string;
 }): Metadata {
-  return {
+  return createPageMetadata({
     title,
     description,
-    alternates: {
-      canonical: `https://www.prodavnicaalata.rs/proizvodi/${slug}/`,
-    },
-    openGraph: {
-      title: `${title} | ${brand.siteName}`,
-      description,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `${title} | ${brand.siteName}`,
-      description,
-    },
-  };
+    canonicalUrl: `${brand.siteUrl}/proizvodi/${slug}/`,
+  });
 }
