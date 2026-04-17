@@ -25,7 +25,7 @@ export const FEATURES = [
   },
   {
     title: "Zvanična garancija",
-    desc: "3 godine garancije, registracija online, ovlašćeni servis i tehnička podrška - sve u Srbiji.",
+    desc: "3 godine garancije, produžetak online, ovlašćeni servis i tehnička podrška - sve u Srbiji.",
     icon: ShieldCheck,
   },
   {

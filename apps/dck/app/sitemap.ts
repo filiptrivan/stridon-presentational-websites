@@ -12,7 +12,7 @@ const staticPages = [
   { path: "/o-nama", changeFrequency: "monthly" as const, priority: 0.7 },
   { path: "/kontakt", changeFrequency: "monthly" as const, priority: 0.6 },
   { path: "/gde-kupiti", changeFrequency: "monthly" as const, priority: 0.7 },
-  { path: "/registracija-garancije", changeFrequency: "monthly" as const, priority: 0.6 },
+  { path: "/produzetak-garancije", changeFrequency: "monthly" as const, priority: 0.6 },
   { path: "/servis", changeFrequency: "monthly" as const, priority: 0.6 },
   {
     path: "/proizvodi",

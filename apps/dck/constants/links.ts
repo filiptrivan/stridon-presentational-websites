@@ -12,7 +12,7 @@ export const NAV_LINKS: readonly NavLink[] = [
   { label: "Gde kupiti", href: "/gde-kupiti" },
   { label: "Servis", href: "/servis" },
   { label: "Kontakt", href: "/kontakt" },
-  { label: "Registracija garancije", href: "/registracija-garancije" },
+  { label: "Produžetak garancije", href: "/produzetak-garancije" },
 ];
 
 export const PRODUCTS_FOOTER_LINKS: readonly NavLink[] = [
@@ -27,7 +27,7 @@ export const COMPANY_FOOTER_LINKS: readonly NavLink[] = [
   { label: "Gde kupiti", href: "/gde-kupiti" },
   { label: "Servis", href: "/servis" },
   { label: "Kontakt", href: "/kontakt" },
-  { label: "Registracija garancije", href: "/registracija-garancije" },
+  { label: "Produžetak garancije", href: "/produzetak-garancije" },
   {
     label: "Stridon Group",
     href: "https://www.stridon.rs",

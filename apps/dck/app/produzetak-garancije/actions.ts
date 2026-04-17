@@ -70,7 +70,7 @@ export async function submitWarrantyRegistration(
     });
     return {
       success: false,
-      error: "Registracija trenutno nije moguća. Pokušaj ponovo kasnije.",
+      error: "Produžetak garancije trenutno nije moguć. Pokušaj ponovo kasnije.",
     };
   }
 
@@ -109,7 +109,7 @@ export async function submitWarrantyRegistration(
       });
       return {
         success: false,
-        error: "Registracija nije uspela. Pokušaj ponovo kasnije.",
+        error: "Produžetak garancije nije uspeo. Pokušaj ponovo kasnije.",
       };
     }
 
@@ -118,7 +118,7 @@ export async function submitWarrantyRegistration(
     reportError(error, { source: "submitWarrantyRegistration" });
     return {
       success: false,
-      error: "Registracija nije uspela. Pokušaj ponovo kasnije.",
+      error: "Produžetak garancije nije uspeo. Pokušaj ponovo kasnije.",
     };
   }
 }

@@ -15,7 +15,7 @@ import { useRef, useState } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
-import { submitWarrantyRegistration } from "@/app/registracija-garancije/actions";
+import { submitWarrantyRegistration } from "@/app/produzetak-garancije/actions";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -130,7 +130,7 @@ const WarrantyForm = () => {
     resetTurnstile();
 
     if (result.success) {
-      toast.success("Garancija je uspešno registrovana! Potvrda je poslata na e-mail.");
+      toast.success("Garancija je uspešno produžena! Potvrda je poslata na e-mail.");
       reset();
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
@@ -326,7 +326,7 @@ const WarrantyForm = () => {
           <div className="flex items-center justify-between">
             <span className="flex items-center gap-1.5 text-sm font-medium">
               <Building2 className="size-3.5" />
-              Registruješ kao firma
+              Produžetak za firmu
             </span>
             <button
               type="button"
@@ -335,7 +335,7 @@ const WarrantyForm = () => {
                 setValue("companyPib", "");
               }}
               className="text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="Otkaži registraciju kao firma"
+              aria-label="Otkaži produžetak za firmu"
             >
               <X className="size-4" />
             </button>
@@ -365,7 +365,7 @@ const WarrantyForm = () => {
           className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           <Building2 className="size-3.5" />
-          Registruješ kao firma?
+          Produžetak za firmu?
         </button>
       )}
 
@@ -380,7 +380,7 @@ const WarrantyForm = () => {
         ) : (
           <>
             <Send className="mr-2 h-4 w-4" />
-            Registruj garanciju
+            Produži garanciju
           </>
         )}
       </Button>

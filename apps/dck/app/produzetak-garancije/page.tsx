@@ -8,18 +8,18 @@ import Wrapper from "@brand/shared/components/wrapper";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
 
 export const metadata = createPageMetadata({
-  title: "Registracija garancije",
+  title: "Produžetak garancije",
   description:
-    "Registruj garanciju za svoj DCK alat - brzo, jednostavno i potpuno besplatno.",
-  canonicalUrl: "/registracija-garancije",
+    "Produži garanciju na svoj DCK alat - brzo, jednostavno i potpuno besplatno.",
+  canonicalUrl: "/produzetak-garancije",
 });
 
-const WarrantyRegistrationPage = () => {
+const WarrantyExtensionPage = () => {
   return (
     <div>
       <HeroHeader
-        title="Registracija garancije"
-        description="Registruj garanciju u roku od 4 nedelje od datuma kupovine i ostvari pravo na 3 godine garancije - i za hobi i za profesionalne korisnike. Bez registracije garancija traje 2 godine za kućnu upotrebu, odnosno godinu dana za profesionalnu."
+        title="Produžetak garancije"
+        description="Produži garanciju u roku od 4 nedelje od datuma kupovine i ostvari pravo na 3 godine garancije - i za hobi i za profesionalne korisnike. Bez produžetka garancija traje 2 godine za kućnu upotrebu, odnosno godinu dana za profesionalnu."
       />
       <Section>
         <Wrapper>
@@ -37,4 +37,4 @@ const WarrantyRegistrationPage = () => {
   );
 };
 
-export default WarrantyRegistrationPage;
+export default WarrantyExtensionPage;

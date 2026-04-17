@@ -77,7 +77,7 @@ Each app (`apps/sg-tools/`, `apps/dck/`) contains only:
 - `lib/og/` - Brand-specific OG templates, logo SVG, color constants
 - `public/` - Brand-specific assets (logos, images)
 
-DCK additionally has: `app/registracija-garancije/`, `components/warranty/`, `lib/schemas/warranty.ts`
+DCK additionally has: `app/produzetak-garancije/`, `components/warranty/`, `lib/schemas/warranty.ts`
 
 ### Brand Config Injection
 
@@ -110,7 +110,7 @@ Three patterns for consuming brand-specific values in shared code:
 | `app/proizvodi/kategorije/[slug]/` | `/proizvodi/kategorije/[slug]` |
 | `app/proizvodi/[slug]/`            | `/proizvodi/[slug]`            |
 
-DCK also has: `app/registracija-garancije/` → `/registracija-garancije`
+DCK also has: `app/produzetak-garancije/` → `/produzetak-garancije` (with 308 redirect from the old `/registracija-garancije` URL)
 
 ### Key Patterns
 
@@ -138,7 +138,7 @@ This repo depends on the **PACMS** platform (`c:\Users\user\Documents\Projects\P
 - `apps/*/instrumentation.ts` - `onRequestError` via `Sentry.captureRequestError`
 - `packages/shared/src/lib/report-error.ts` - `reportError()` via `Sentry.captureException` for explicitly-caught errors
 
-**Warranty registration** (DCK only): `apps/dck/app/registracija-garancije/actions.ts` submits warranty forms to `/api/Storefront/SubmitWarrantyRegistration` (authenticated via `PACMS_API_KEY` / `X-Api-Key` header).
+**Warranty extension** (DCK only, user-facing name "Produžetak garancije"): `apps/dck/app/produzetak-garancije/actions.ts` submits warranty forms to `/api/Storefront/SubmitWarrantyRegistration` (authenticated via `PACMS_API_KEY` / `X-Api-Key` header). Backend endpoint name remains `SubmitWarrantyRegistration` — internal identifiers (`submitWarrantyRegistration`, `WarrantyForm`, `warrantySchema`) were intentionally not renamed.
 
 **Shared patterns with PACMS storefront** (`c:\Users\user\Documents\Projects\PACMS\pa-storefront`): Both repos use the same Sentry instrumentation pattern, the same `report-error.ts` utility structure, and the same Turnstile verification flow. When adding cross-cutting features (error handling, auth, caching), check the PACMS storefront for existing patterns to replicate.
 
