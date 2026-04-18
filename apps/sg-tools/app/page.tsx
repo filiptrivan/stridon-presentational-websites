@@ -1,7 +1,7 @@
 import Categories from "@brand/shared/components/categories";
 import CategoriesSkeleton from "@brand/shared/components/categories-skeleton";
 import Companies from "@brand/shared/components/companies";
-import CTA from "@/components/cta";
+import SharedCTA from "@brand/shared/components/cta";
 import FeaturedProducts from "@brand/shared/components/featured-products";
 import FeaturedProductsSkeleton from "@brand/shared/components/featured-products-skeleton";
 import Features from "@brand/shared/components/features";
@@ -11,6 +11,7 @@ import HomeAbout from "@brand/shared/components/home-about";
 import Stats from "@brand/shared/components/stats";
 import Testimonials from "@brand/shared/components/testimonials";
 import {
+  CTA_TRUST_BADGES,
   FEATURES,
   HOME_ABOUT_PARAGRAPH,
   STATS,
@@ -50,7 +51,7 @@ const HomePage = () => {
       <HomeAbout description={HOME_ABOUT_PARAGRAPH} />
       <Stats stats={STATS} layout="three-up-from-sm" />
       <Testimonials items={TESTIMONIALS} />
-      <CTA />
+      <SharedCTA trustBadges={CTA_TRUST_BADGES} />
     </div>
   );
 };

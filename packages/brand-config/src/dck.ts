@@ -24,6 +24,12 @@ export const config: BrandConfig = {
     "DCK je profesionalni brend kompanije Dongcheng, osnovane 1995. godine, prisutan u 100+ zemalja sa zvaničnom distribucijom i podrškom u Srbiji.",
   productsPageDescription:
     "Pregledaj kompletnu ponudu DCK profesionalnog električnog alata - bušilice, brusilice, testere i još mnogo toga.",
+  productsPageHeroDescription:
+    "Pregledaj kompletnu ponudu DCK profesionalnog alata.",
+  whereToBuyDescription:
+    "Pronađi ovlašćene prodavnice i servise DCK alata širom Srbije.",
+  contactDescription:
+    "Kontaktiraj DCK Srbija - pitanja o alatima, pomoć pri izboru proizvoda ili saradnja. Tu smo da pomognemo.",
 
   emailSender: { name: "DCK Srbija", email: "noreply@dcksrbija.rs" },
   emailRecipient: { name: "DCK Srbija", email: "aleksatrivan@gmail.com" },

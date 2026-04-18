@@ -1,9 +1,14 @@
 import Hero from "@/components/hero";
-import CTA from "@/components/cta";
-import { FEATURES, HOME_ABOUT_PARAGRAPH, STATS } from "@/constants/content";
+import {
+  CTA_TRUST_BADGES,
+  FEATURES,
+  HOME_ABOUT_PARAGRAPH,
+  STATS,
+} from "@/constants/content";
 import { TESTIMONIALS } from "@/constants";
 import Categories from "@brand/shared/components/categories";
 import CategoriesSkeleton from "@brand/shared/components/categories-skeleton";
+import SharedCTA from "@brand/shared/components/cta";
 import FeaturedProducts from "@brand/shared/components/featured-products";
 import FeaturedProductsSkeleton from "@brand/shared/components/featured-products-skeleton";
 import Features from "@brand/shared/components/features";
@@ -31,7 +36,7 @@ const HomePage = () => {
       <HomeAbout title="O DCK" description={HOME_ABOUT_PARAGRAPH} />
       <Stats stats={STATS} layout="four-up-no-three" />
       <Testimonials items={TESTIMONIALS} />
-      <CTA />
+      <SharedCTA trustBadges={CTA_TRUST_BADGES} />
     </div>
   );
 };

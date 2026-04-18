@@ -2,13 +2,14 @@ import AboutStory from "@brand/shared/components/about-story";
 import CompanyBenefits from "@brand/shared/components/company-benefits";
 import CompanyStats from "@brand/shared/components/company-stats";
 import CompanyValues from "@brand/shared/components/company-values";
-import CTA from "@/components/cta";
+import SharedCTA from "@brand/shared/components/cta";
 import HeroHeader from "@brand/shared/components/hero-header";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
 import {
   ABOUT_MILESTONES,
   ABOUT_PARAGRAPHS,
   COMPANY_BENEFITS,
+  CTA_TRUST_BADGES,
   STATS,
 } from "@/constants/content";
 
@@ -30,7 +31,7 @@ const AboutPage = () => {
       <AboutStory paragraphs={ABOUT_PARAGRAPHS} />
       <CompanyValues milestones={ABOUT_MILESTONES} />
       <CompanyBenefits benefits={COMPANY_BENEFITS} />
-      <CTA />
+      <SharedCTA trustBadges={CTA_TRUST_BADGES} />
     </div>
   );
 };

@@ -7,3 +7,7 @@ export { cn } from "@brand/ui/lib/utils";
 export function formatTelHref(number: string): string {
   return `tel:+381${number.replace(/^0/, "").replace(/[\/-]/g, "")}`;
 }
+
+export function parsePageParam(strana: string | undefined): number {
+  return Math.max(1, parseInt(strana ?? "1", 10) || 1);
+}

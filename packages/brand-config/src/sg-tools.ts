@@ -24,6 +24,12 @@ export const config: BrandConfig = {
     "SG Tools je rođen iz porodičnog biznisa sa alatima koji traje 30 godina.",
   productsPageDescription:
     "Pregledaj kompletnu ponudu SG Tools profesionalnog alata - bušilice, brusilice, testere i još mnogo toga.",
+  productsPageHeroDescription:
+    "Pregledaj kompletnu ponudu SG Tools profesionalnog alata.",
+  whereToBuyDescription:
+    "Pronađi ovlašćene prodavnice i servise SG Tools alata širom Srbije.",
+  contactDescription:
+    "Kontaktiraj SG Tools - pitanja o alatima, pomoć pri izboru proizvoda ili saradnja. Tu smo da pomognemo.",
 
   emailSender: { name: "SG Tools", email: "noreply@sgtools.rs" },
   emailRecipient: { name: "SG Tools", email: "aleksatrivan@gmail.com" },

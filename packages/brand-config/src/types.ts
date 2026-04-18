@@ -19,6 +19,9 @@ export interface BrandConfig {
   defaultTitle: string;
   siteDescription: string;
   productsPageDescription: string;
+  productsPageHeroDescription: string;
+  whereToBuyDescription: string;
+  contactDescription: string;
 
   // Email (contact form)
   emailSender: { name: string; email: string };

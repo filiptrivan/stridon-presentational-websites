@@ -1,8 +1,9 @@
-import CTA from "@/components/cta";
+import SharedCTA from "@brand/shared/components/cta";
 import {
   ABOUT_MILESTONES,
   ABOUT_PARAGRAPHS,
   COMPANY_BENEFITS,
+  CTA_TRUST_BADGES,
   STATS,
 } from "@/constants/content";
 import AboutStory from "@brand/shared/components/about-story";
@@ -34,7 +35,7 @@ const AboutPage = () => {
       />
       <CompanyBenefits benefits={COMPANY_BENEFITS} />
 
-      <CTA />
+      <SharedCTA trustBadges={CTA_TRUST_BADGES} />
     </div>
   );
 };

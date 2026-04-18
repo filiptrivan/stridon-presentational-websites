@@ -1,27 +1,9 @@
-import CTA from "@/components/cta";
-import HeroHeader from "@brand/shared/components/hero-header";
-import WhereToBuyContent from "@brand/shared/components/where-to-buy/where-to-buy-content";
-import { createPageMetadata } from "@brand/shared/lib/metadata";
+import WhereToBuyPage from "@brand/shared/components/where-to-buy-page";
+import { CTA_TRUST_BADGES } from "@/constants/content";
 import { DEALERS } from "@/constants/dealers";
 
-export const metadata = createPageMetadata({
-  title: "Gde kupiti",
-  description:
-    "Pronađi ovlašćene prodavnice i servise SG Tools alata širom Srbije.",
-  canonicalUrl: "/gde-kupiti",
-});
+export { metadata } from "@brand/shared/components/where-to-buy-page";
 
-const WhereToBuyPage = () => {
-  return (
-    <div>
-      <HeroHeader
-        title="Gde kupiti"
-        description="Pronađi ovlašćene prodavnice i servise SG Tools alata širom Srbije."
-      />
-      <WhereToBuyContent dealers={DEALERS} />
-      <CTA />
-    </div>
-  );
-};
-
-export default WhereToBuyPage;
+export default function Page() {
+  return <WhereToBuyPage dealers={DEALERS} trustBadges={CTA_TRUST_BADGES} />;
+}
