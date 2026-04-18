@@ -6,43 +6,56 @@ import ProductCard from "./product-card";
 interface ProductGridProps {
   products: ProductCardData[];
   totalRecords?: number;
+  variant?: "count" | "section";
+  withTopDivider?: boolean;
 }
 
 const ProductGrid = ({
   products: productList,
   totalRecords,
+  variant = "count",
+  withTopDivider = false,
 }: ProductGridProps) => {
-  const displayCount = totalRecords ?? productList.length;
-  const productsFoundText =
-    displayCount === 0
-      ? "Nema proizvoda"
-      : displayCount === 1
-        ? "1 proizvod"
-        : `${displayCount} proizvoda`;
-
-  return (
-    <div className="w-full">
-      {productList.length === 0 ? (
+  if (productList.length === 0) {
+    return (
+      <div className="w-full">
         <StatusMessage
           icon={Package}
           title="Još nema proizvoda u ovoj kategoriji."
           description="Proveri ponovo uskoro ili pogledaj druge kategorije."
         />
+      </div>
+    );
+  }
+
+  const displayCount = totalRecords ?? productList.length;
+
+  return (
+    <section
+      className={
+        withTopDivider ? "border-t border-border pt-10 mt-8" : undefined
+      }
+    >
+      {variant === "section" ? (
+        <h2 className="text-xl font-semibold mb-4">
+          Proizvodi{" "}
+          <span className="text-muted-foreground font-normal">
+            ({displayCount})
+          </span>
+        </h2>
       ) : (
-        <>
-          <div className="flex items-center mb-6">
-            <span className="text-sm text-muted-foreground">
-              {productsFoundText}
-            </span>
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 lg:gap-6">
-            {productList.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        </>
+        <div className="flex items-center mb-6">
+          <span className="text-sm text-muted-foreground">
+            {displayCount === 1 ? "1 proizvod" : `${displayCount} proizvoda`}
+          </span>
+        </div>
       )}
-    </div>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 lg:gap-6">
+        {productList.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
+    </section>
   );
 };
 

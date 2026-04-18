@@ -96,6 +96,13 @@ async function CategoryProducts({
 
 export default async function CategoryPage({ params, searchParams }: Props) {
   const { slug } = await params;
+  // Category and products are fetched sequentially on purpose. Parallelizing
+  // them (productsPromise kickoff at page level) would require reading
+  // searchParams outside a Suspense boundary, which Cache Components forbids.
+  // The alternative — two Suspense boundaries with a shared categoryPromise —
+  // was evaluated and rejected: most routes are static-prerendered (cache hit,
+  // no benefit), and splitting the hero into its own Suspense risks worse LCP
+  // from a skeleton flash. Revisit if telemetry shows a category-page bottleneck.
   const category = await getCategoryBySlug(slug);
   if (!category) notFound();
 
