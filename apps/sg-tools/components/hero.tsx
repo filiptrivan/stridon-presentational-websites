@@ -7,8 +7,13 @@ import Link from "next/link";
 const Hero = () => {
   return (
     <HeroHeader
-      title="Građen znanjem"
-      description="SG Tools je rođen iz porodičnog biznisa sa alatima koji traje 30 godina, iz svakodnevnog rada sa majstorima, serviserima i firmama koje traže pouzdan, trajan i cenovno pristupačan alat."
+      title={
+        <>
+          SG TOOLS
+          <span className="block">Građen znanjem</span>
+        </>
+      }
+      description="SG TOOLS je brend nastao iz višedecenijskog iskustva porodične firme koja poznaje potrebe majstora, servisa i kompanija koje se oslanjaju na alat svaki dan."
       showSvgGrid={true}
     >
       <Container delay={0.3}>
