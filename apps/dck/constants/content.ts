@@ -128,7 +128,7 @@ export const COMPANY_BENEFITS = [
 ];
 
 export const HOME_ABOUT_PARAGRAPH =
-  "DCK je profesionalni brend nastao sa jasnom idejom - da vrhunski kvalitet i pristupačna cena mogu ići zajedno. Iza svakog alata stoji Dongcheng, kompanija sa skoro tri decenije iskustva i sopstvenom proizvodnjom motora, baterija i elektronike. Kompletan bežični program je brushless, bez kompromisa - jer tvoj alat treba da radi jednako dobro kao i najskuplji na tržištu, samo bez preterane cene.";
+  "DCK je profesionalni brend nastao sa jasnom idejom - da vrhunski kvalitet i pristupačna cena mogu ići zajedno. Iza svakog alata stoji kompanija sa skoro tri decenije iskustva i sopstvenom proizvodnjom motora, baterija i elektronike. Kompletan bežični program je brushless, bez kompromisa - jer tvoj alat treba da radi jednako dobro kao i najskuplji na tržištu, samo bez preterane cene.";
 
 export const ABOUT_PARAGRAPHS = [
   "DCK nije nastao kao još jedan brend u moru alata. Nastao je iz uverenja da profesionalci, majstori i hobisti zaslužuju alat koji radi posao bez izgovora - i bez preterane cene. Kompanija Jiangsu Dongcheng Power Tools, osnovana 1995. godine, taj princip živi od prvog dana. Sa preko 5.500 zaposlenih, 390.000 m² proizvodnog prostora i prisustvom u više od 100 zemalja, Dongcheng nije mali igrač koji pokušava da se probije - to je proizvođač koji kontroliše svaki korak, od sirovine do gotovog alata.",
