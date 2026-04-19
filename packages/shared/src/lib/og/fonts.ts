@@ -1,12 +1,10 @@
+import { cacheLife } from "next/cache";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
-let fontsCache:
-  | { name: string; data: ArrayBuffer; style: "normal"; weight: 400 | 600 }[]
-  | null = null;
-
 export async function loadFonts() {
-  if (fontsCache) return fontsCache;
+  "use cache";
+  cacheLife("weeks");
 
   const fontsDir = join(process.cwd(), "public", "fonts");
 
@@ -15,7 +13,7 @@ export async function loadFonts() {
     readFile(join(fontsDir, "Inter-Regular.ttf")),
   ]);
 
-  fontsCache = [
+  return [
     {
       name: "Space Grotesk",
       data: spaceGrotesk.buffer as ArrayBuffer,
@@ -29,6 +27,4 @@ export async function loadFonts() {
       weight: 400 as const,
     },
   ];
-
-  return fontsCache;
 }
