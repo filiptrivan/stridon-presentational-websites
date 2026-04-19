@@ -5,7 +5,11 @@ import { Button } from "@brand/ui/button";
 import Wrapper from "../wrapper";
 import { getDistanceKm } from "@brand/shared/lib/geo";
 import { cn } from "@brand/shared/lib/utils";
-import type { Dealer, DealerCategory } from "@brand/shared/types/dealers";
+import {
+  DEALER_CATEGORY_LABELS,
+  type Dealer,
+  type DealerCategory,
+} from "@brand/shared/types/dealers";
 import { LocateFixed, Search, ShieldAlert, X } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -22,6 +26,8 @@ const DealerMap = dynamic(() => import("./dealer-map"), {
 
 type CategoryFilter = "all" | DealerCategory;
 type LocationStatus = "idle" | "loading" | "granted" | "denied" | "unavailable";
+
+const CATEGORY_ORDER: DealerCategory[] = ["online", "dealer", "service"];
 
 interface WhereToBuyContentProps {
   dealers: Dealer[];
@@ -43,13 +49,18 @@ export default function WhereToBuyContent({
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<HTMLDivElement>(null);
 
-  const categories: { key: CategoryFilter; label: string }[] = [
-    { key: "all", label: "Sve" },
-    { key: "online", label: "Online prodavnice" },
-    { key: "dealer", label: "Ovlašćene prodavnice" },
-    { key: "service", label: "Ovlašćeni servis" },
-    { key: "outOfWarranty", label: "Servis van garantnog roka" },
-  ];
+  const categories = useMemo(() => {
+    const present = new Set(dealers.map((d) => d.category));
+    const result: { key: CategoryFilter; label: string }[] = [
+      { key: "all", label: "Sve" },
+    ];
+    for (const key of CATEGORY_ORDER) {
+      if (present.has(key)) {
+        result.push({ key, label: DEALER_CATEGORY_LABELS[key] });
+      }
+    }
+    return result;
+  }, [dealers]);
 
   const distances = useMemo(() => {
     if (!userLocation) return null;

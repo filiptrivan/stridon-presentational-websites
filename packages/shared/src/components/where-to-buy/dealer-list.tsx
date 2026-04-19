@@ -1,7 +1,11 @@
 "use client";
 
 import { cn, formatTelHref } from "@brand/shared/lib/utils";
-import type { Dealer, DealerCategory } from "@brand/shared/types/dealers";
+import {
+  DEALER_CATEGORY_LABELS,
+  type Dealer,
+  type DealerCategory,
+} from "@brand/shared/types/dealers";
 import { Badge } from "@brand/ui/badge";
 import { ExternalLink, Mail, MapPin, Navigation, Phone } from "lucide-react";
 import { useEffect, useRef } from "react";
@@ -18,20 +22,12 @@ const categoryColors: Record<DealerCategory, string> = {
   online: "bg-blue-500/20 text-blue-400",
   dealer: "bg-purple-500/20 text-purple-400",
   service: "bg-green-500/20 text-green-400",
-  outOfWarranty: "bg-amber-500/20 text-amber-400",
-};
-
-const categoryLabels: Record<DealerCategory, string> = {
-  online: "Online prodavnice",
-  dealer: "Ovlašćene prodavnice",
-  service: "Ovlašćeni servis",
-  outOfWarranty: "Servis van garantnog roka",
 };
 
 function CategoryBadge({ category }: { category: DealerCategory }) {
   return (
     <Badge className={categoryColors[category]}>
-      {categoryLabels[category]}
+      {DEALER_CATEGORY_LABELS[category]}
     </Badge>
   );
 }

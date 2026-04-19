@@ -60,8 +60,7 @@ export default async function ProductDetailPage({
         product={product}
         categoryBreadcrumbs={categoryBreadcrumbs}
         dealers={dealers.filter(
-          (d) =>
-            d.logoSrc && d.category !== "service" && d.category !== "outOfWarranty",
+          (d) => d.logoSrc && d.category !== "service",
         )}
       />
       {relatedProducts.length > 0 && (

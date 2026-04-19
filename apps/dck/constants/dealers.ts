@@ -1,4 +1,15 @@
 import type { Dealer } from "@brand/shared/types/dealers";
+import { SERVICE_CENTERS } from "./service-centers";
+
+const SERVICE_DEALERS: Dealer[] = SERVICE_CENTERS.map((sc) => ({
+  id: sc.id,
+  name: sc.name,
+  address: sc.address,
+  phone: sc.phone,
+  email: sc.email,
+  category: "service",
+  coordinates: sc.coords,
+}));
 
 export const DEALERS: Dealer[] = [
   {
@@ -25,6 +36,7 @@ export const DEALERS: Dealer[] = [
     category: "dealer",
     coordinates: { lat: 44.785937879592375, lng: 20.500689934951087 },
   },
+  ...SERVICE_DEALERS,
 ];
 
 export const UNIQUE_DEALER_NAMES = [
