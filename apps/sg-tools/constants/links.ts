@@ -17,7 +17,11 @@ export const PRODUCTS_FOOTER_LINKS: readonly NavLink[] = [
   { label: "Svi proizvodi", href: "/proizvodi" },
   { label: "Kategorije", href: "/proizvodi/kategorije" },
   { label: "Postani distributer", href: "/kontakt" },
-  { label: "Katalog", href: "https://stridon.milev.rs/", external: true },
+  {
+    label: "Katalog",
+    href: "https://media.prodavnicaalata.rs/uploads//catalogues/58/files/SG%20TOOLS%20katalog.pdf",
+    external: true,
+  },
 ];
 
 export const COMPANY_FOOTER_LINKS: readonly NavLink[] = [

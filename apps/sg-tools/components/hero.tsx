@@ -17,7 +17,10 @@ const Hero = () => {
             <Link href="/kontakt">Postani distributer</Link>
           </Button>
           <Button variant="outline" asChild>
-            <Link href="https://stridon.milev.rs/" target="_blank">
+            <Link
+              href="https://media.prodavnicaalata.rs/uploads//catalogues/58/files/SG%20TOOLS%20katalog.pdf"
+              target="_blank"
+            >
               Pogledaj katalog
               <ExternalLinkIcon className="size-4" />
             </Link>
