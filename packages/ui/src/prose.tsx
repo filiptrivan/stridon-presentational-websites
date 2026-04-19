@@ -8,10 +8,8 @@ const proseVariants = cva("prose max-w-full dark:prose-invert", {
     variant: {
       default:
         "prose-p:text-muted-foreground prose-li:text-muted-foreground prose-strong:text-foreground prose-headings:font-heading marker:text-primary",
-      category:
-        "whitespace-pre-line prose-p:text-muted-foreground prose-p:leading-relaxed",
-      product:
-        "prose-sm prose-a:text-primary prose-a:hover:opacity-80",
+      category: "prose-p:text-muted-foreground prose-p:leading-relaxed",
+      product: "prose-sm prose-a:text-primary prose-a:hover:opacity-80",
     },
   },
   defaultVariants: {
