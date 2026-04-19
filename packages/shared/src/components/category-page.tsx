@@ -4,6 +4,7 @@ import PageBreadcrumbs from "@brand/shared/components/products/page-breadcrumbs"
 import ProductGrid from "@brand/shared/components/products/product-grid";
 import ProductGridSkeleton from "@brand/shared/components/products/product-grid-skeleton";
 import SubcategoriesGrid from "@brand/shared/components/products/subcategories-grid";
+import SectionDivider from "@brand/shared/components/section-divider";
 import { SectionErrorBoundary } from "@brand/ui/section-error-boundary";
 import { Prose } from "@brand/ui/prose";
 import Wrapper from "@brand/shared/components/wrapper";
@@ -55,11 +56,9 @@ export async function generateMetadata({
 async function CategoryProducts({
   slug,
   searchParams,
-  withTopDivider,
 }: {
   slug: string;
   searchParams: Promise<{ strana?: string }>;
-  withTopDivider: boolean;
 }) {
   const { strana } = await searchParams;
   const currentPage = parsePageParam(strana);
@@ -81,7 +80,6 @@ async function CategoryProducts({
         products={products.data}
         totalRecords={products.totalRecords}
         variant="section"
-        withTopDivider={withTopDivider}
       />
       <Suspense>
         <ListingPagination
@@ -127,31 +125,25 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
         <SubcategoriesGrid categories={category.subCategories} />
 
+        {category.subCategories.length > 0 && <SectionDivider />}
+
         <SectionErrorBoundary>
-          <Suspense
-            fallback={
-              <ProductGridSkeleton
-                variant="section"
-                withTopDivider={category.subCategories.length > 0}
-              />
-            }
-          >
-            <CategoryProducts
-              slug={slug}
-              searchParams={searchParams}
-              withTopDivider={category.subCategories.length > 0}
-            />
+          <Suspense fallback={<ProductGridSkeleton variant="section" />}>
+            <CategoryProducts slug={slug} searchParams={searchParams} />
           </Suspense>
         </SectionErrorBoundary>
 
         {category.description && (
-          <section className="mt-16 border-t border-border pt-10">
-            <h2 className="text-xl font-semibold mb-4">Opis kategorije</h2>
-            <Prose
-              variant="category"
-              dangerouslySetInnerHTML={{ __html: category.description }}
-            />
-          </section>
+          <>
+            <SectionDivider />
+            <section>
+              <h2 className="text-xl font-semibold mb-4">Opis kategorije</h2>
+              <Prose
+                variant="category"
+                dangerouslySetInnerHTML={{ __html: category.description }}
+              />
+            </section>
+          </>
         )}
       </Wrapper>
     </div>

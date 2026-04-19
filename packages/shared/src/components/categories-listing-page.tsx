@@ -1,5 +1,6 @@
 import HeroHeader from "@brand/shared/components/hero-header";
 import CategoryCardsGrid from "@brand/shared/components/products/category-cards-grid";
+import Section from "@brand/shared/components/section";
 import StatusMessage from "@brand/shared/components/status-message";
 import Wrapper from "@brand/shared/components/wrapper";
 import { getCategories } from "@brand/shared/lib/api";
@@ -23,17 +24,19 @@ const CategoriesListingPage = async () => {
         description="Pregledaj kompletnu ponudu profesionalnog alata po kategorijama."
       />
 
-      <Wrapper className="pb-16">
-        {categories.length === 0 ? (
-          <StatusMessage
-            icon={Package}
-            title="Trenutno nema dostupnih kategorija."
-            description="Proveri ponovo uskoro."
-          />
-        ) : (
-          <CategoryCardsGrid categories={categories} />
-        )}
-      </Wrapper>
+      <Section>
+        <Wrapper>
+          {categories.length === 0 ? (
+            <StatusMessage
+              icon={Package}
+              title="Trenutno nema dostupnih kategorija."
+              description="Proveri ponovo uskoro."
+            />
+          ) : (
+            <CategoryCardsGrid categories={categories} />
+          )}
+        </Wrapper>
+      </Section>
     </div>
   );
 };

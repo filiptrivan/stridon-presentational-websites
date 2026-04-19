@@ -7,14 +7,12 @@ interface ProductGridProps {
   products: ProductCardData[];
   totalRecords?: number;
   variant?: "count" | "section";
-  withTopDivider?: boolean;
 }
 
 const ProductGrid = ({
   products: productList,
   totalRecords,
   variant = "count",
-  withTopDivider = false,
 }: ProductGridProps) => {
   if (productList.length === 0) {
     return (
@@ -31,11 +29,7 @@ const ProductGrid = ({
   const displayCount = totalRecords ?? productList.length;
 
   return (
-    <section
-      className={
-        withTopDivider ? "border-t border-border pt-10 mt-8" : undefined
-      }
-    >
+    <section>
       {variant === "section" ? (
         <h2 className="text-xl font-semibold mb-4">
           Proizvodi{" "}
