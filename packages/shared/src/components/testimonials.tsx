@@ -4,10 +4,8 @@ import Wrapper from "./wrapper";
 import TestimonialsCarousel from "./testimonials-carousel";
 
 export type Testimonial = {
-  companyName: string;
   personName: string;
   quote: string;
-  logoSrc: string;
 };
 
 interface TestimonialsProps {
