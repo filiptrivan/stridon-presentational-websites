@@ -1,18 +1,15 @@
-import { cacheLife } from "next/cache";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
-export async function loadFonts() {
-  "use cache";
-  cacheLife("weeks");
-
+// Load fonts once at module init, outside any render path. Cache Components
+// only inspects IO inside render callbacks; doing readFile here sidesteps
+// vercel/next.js#88043 (silent "use cache" drop in opengraph-image routes).
+const fontsPromise = (async () => {
   const fontsDir = join(process.cwd(), "public", "fonts");
-
   const [spaceGrotesk, inter] = await Promise.all([
     readFile(join(fontsDir, "SpaceGrotesk-SemiBold.ttf")),
     readFile(join(fontsDir, "Inter-Regular.ttf")),
   ]);
-
   return [
     {
       name: "Space Grotesk",
@@ -27,4 +24,6 @@ export async function loadFonts() {
       weight: 400 as const,
     },
   ];
-}
+})();
+
+export const loadFonts = () => fontsPromise;
