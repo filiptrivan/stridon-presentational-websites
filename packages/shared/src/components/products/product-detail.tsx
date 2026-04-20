@@ -1,8 +1,11 @@
-import Container from "../container";
-import Wrapper from "../wrapper";
-import { type BreadcrumbSegment, buildBreadcrumbJsonLd } from "@brand/shared/lib/categories";
+import {
+  type BreadcrumbSegment,
+  buildBreadcrumbJsonLd,
+} from "@brand/shared/lib/categories";
 import type { Dealer } from "@brand/shared/types/dealers";
 import type { Product } from "@brand/shared/types/products";
+import Container from "../container";
+import Wrapper from "../wrapper";
 import PageBreadcrumbs from "./page-breadcrumbs";
 import ProductDistributors from "./product-distributors";
 import ProductGallery from "./product-gallery";
@@ -28,7 +31,7 @@ const ProductDetail = ({
     image: product.imageUrl,
     brand: {
       "@type": "Brand",
-      name: product.brandName || "SG Tools",
+      name: product.brandName || "SG TOOLS",
     },
   };
 
@@ -83,7 +86,9 @@ const ProductDetail = ({
             <div className="mt-8 pt-6 border-t border-border/20 space-y-2 text-sm">
               {product.sku != null && (
                 <div className="flex gap-2">
-                  <span className="text-muted-foreground">Šifra proizvoda:</span>
+                  <span className="text-muted-foreground">
+                    Šifra proizvoda:
+                  </span>
                   <span>{product.sku}</span>
                 </div>
               )}
@@ -117,7 +122,6 @@ const ProductDetail = ({
           />
         </Container>
       )}
-
     </Wrapper>
   );
 };

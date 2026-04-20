@@ -2,8 +2,8 @@ import type { LucideIcon } from "lucide-react";
 import { BadgePercent, History, ShieldCheck, Users } from "lucide-react";
 import Container from "./container";
 import { Feature } from "./feature";
-import SectionHeader from "./section-header";
 import Section from "./section";
+import SectionHeader from "./section-header";
 import Wrapper from "./wrapper";
 
 export type FeatureItem = {
@@ -44,10 +44,7 @@ interface FeaturesProps {
   title?: string;
 }
 
-const Features = ({
-  items,
-  title = "Zašto SG Tools?",
-}: FeaturesProps) => {
+const Features = ({ items, title = "Zašto SG TOOLS?" }: FeaturesProps) => {
   return (
     <Section>
       <Wrapper>

@@ -9,7 +9,7 @@ import Link from "next/link";
 export const metadata = createPageMetadata({
   title: "Uslovi korišćenja",
   description:
-    "Uslovi korišćenja sajta SG Tools - pravila i uslovi za korišćenje sajta sgtools.rs.",
+    "Uslovi korišćenja sajta SG TOOLS - pravila i uslovi za korišćenje sajta sgtools.rs.",
   canonicalUrl: "/uslovi-koriscenja",
 });
 
@@ -37,7 +37,7 @@ const TermsPage = () => {
               <h2>Korišćenje sajta</h2>
               <p>
                 Sajt sgtools.rs je informativnog i marketinškog karaktera. Služi
-                za prikaz proizvoda brenda SG Tools, uključujući opise,
+                za prikaz proizvoda brenda SG TOOLS, uključujući opise,
                 specifikacije i fotografije. Na ovom sajtu{" "}
                 <strong>nije moguća kupovina</strong> - svi proizvodi se kupuju
                 isključivo putem sajta{" "}

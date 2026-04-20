@@ -1,9 +1,9 @@
 import type { BrandConfig } from "./types";
 
 export const config: BrandConfig = {
-  brandName: "SG Tools",
+  brandName: "SG TOOLS",
   brandSlug: "sg-tools",
-  siteName: "SG Tools",
+  siteName: "SG TOOLS",
   siteUrl: "https://www.sgtools.rs",
 
   colorScheme: "dark",
@@ -11,7 +11,7 @@ export const config: BrandConfig = {
   bodyClassName: "dark",
 
   logoSrc: "/sg-tools-logo.svg",
-  logoAlt: "SG Tools Logo",
+  logoAlt: "SG TOOLS Logo",
   navbarLogoHeight: "h-3",
   headerCta: {
     label: "Postani distributer",
@@ -19,21 +19,21 @@ export const config: BrandConfig = {
     external: false,
   },
 
-  defaultTitle: "SG Tools - Građen znanjem",
+  defaultTitle: "SG TOOLS - Građen znanjem",
   siteDescription:
-    "SG Tools je rođen iz porodičnog biznisa sa alatima koji traje 30 godina.",
+    "SG TOOLS je rođen iz porodičnog biznisa sa alatima koji traje 30 godina.",
   productsPageDescription:
-    "Pregledaj kompletnu ponudu SG Tools profesionalnog alata - bušilice, brusilice, testere i još mnogo toga.",
+    "Pregledaj kompletnu ponudu SG TOOLS profesionalnog alata - bušilice, brusilice, testere i još mnogo toga.",
   productsPageHeroDescription:
-    "Pregledaj kompletnu ponudu SG Tools profesionalnog alata.",
+    "Pregledaj kompletnu ponudu SG TOOLS profesionalnog alata.",
   whereToBuyDescription:
-    "Pronađi ovlašćene prodavnice i servise SG Tools alata širom Srbije.",
+    "Pronađi ovlašćene prodavnice i servise SG TOOLS alata širom Srbije.",
   contactDescription:
-    "Kontaktiraj SG Tools - pitanja o alatima, pomoć pri izboru proizvoda ili saradnja. Tu smo da pomognemo.",
+    "Kontaktiraj SG TOOLS - pitanja o alatima, pomoć pri izboru proizvoda ili saradnja. Tu smo da pomognemo.",
 
-  emailSender: { name: "SG Tools", email: "noreply@sgtools.rs" },
-  emailRecipient: { name: "SG Tools", email: "aleksatrivan@gmail.com" },
-  emailSubject: "SG Tools - Contact Form",
+  emailSender: { name: "SG TOOLS", email: "noreply@sgtools.rs" },
+  emailRecipient: { name: "SG TOOLS", email: "aleksatrivan@gmail.com" },
+  emailSubject: "SG TOOLS - Contact Form",
   emailHeading: "Nova poruka sa sgtools.rs",
 
   heroGradient:

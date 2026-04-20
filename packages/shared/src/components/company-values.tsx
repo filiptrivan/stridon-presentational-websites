@@ -1,6 +1,6 @@
 import CompanyTimeline, { type Milestone } from "./company-timeline";
-import SectionHeader from "./section-header";
 import Section from "./section";
+import SectionHeader from "./section-header";
 import Wrapper from "./wrapper";
 
 interface CompanyValuesProps {
@@ -10,16 +10,12 @@ interface CompanyValuesProps {
 
 function CompanyValues({
   milestones,
-  title = "Kako je nastao SG Tools",
+  title = "Kako je nastao SG TOOLS",
 }: CompanyValuesProps) {
   return (
     <Section>
       <Wrapper>
-        <SectionHeader
-          title={title}
-          align="left"
-          className="mb-10 max-w-3xl"
-        />
+        <SectionHeader title={title} align="left" className="mb-10 max-w-3xl" />
         <CompanyTimeline milestones={milestones} />
       </Wrapper>
     </Section>

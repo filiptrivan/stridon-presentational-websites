@@ -8,7 +8,7 @@ import { Prose } from "@brand/ui/prose";
 export const metadata = createPageMetadata({
   title: "Politika privatnosti",
   description:
-    "Politika privatnosti SG Tools - kako prikupljamo, koristimo i štitimo tvoje podatke na sajtu sgtools.rs.",
+    "Politika privatnosti SG TOOLS - kako prikupljamo, koristimo i štitimo tvoje podatke na sajtu sgtools.rs.",
   canonicalUrl: "/politika-privatnosti",
 });
 
@@ -49,7 +49,7 @@ const PrivacyPolicyPage = () => {
                 Ovom politikom privatnosti objašnjavamo koje podatke
                 prikupljamo, u koje svrhe ih koristimo i kako ih štitimo. Sajt
                 sgtools.rs je informativnog karaktera - služi za prikaz
-                proizvoda brenda SG Tools, bez mogućnosti kupovine. Kupovina se
+                proizvoda brenda SG TOOLS, bez mogućnosti kupovine. Kupovina se
                 obavlja isključivo na sajtu{" "}
                 <a
                   href="https://www.prodavnicaalata.rs"

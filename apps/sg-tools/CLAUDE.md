@@ -1,4 +1,4 @@
-# CLAUDE.md - SG Tools
+# CLAUDE.md - SG TOOLS
 
 See root `../../CLAUDE.md` for shared principles, architecture patterns, and domain map.
 

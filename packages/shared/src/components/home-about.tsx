@@ -1,6 +1,6 @@
 import Container from "./container";
-import SectionHeader from "./section-header";
 import Section from "./section";
+import SectionHeader from "./section-header";
 import Wrapper from "./wrapper";
 
 interface HomeAboutProps {
@@ -8,10 +8,7 @@ interface HomeAboutProps {
   title?: string;
 }
 
-function HomeAbout({
-  description,
-  title = "O SG Tools",
-}: HomeAboutProps) {
+function HomeAbout({ description, title = "O SG TOOLS" }: HomeAboutProps) {
   return (
     <Section>
       <Wrapper>

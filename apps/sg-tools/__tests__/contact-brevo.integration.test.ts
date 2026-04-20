@@ -4,19 +4,19 @@ const BREVO_API_KEY = process.env.BREVO_API_KEY;
 const BREVO_URL = "https://api.brevo.com/v3/smtp/email";
 
 const payload = {
-  sender: { name: "SG Tools", email: "noreply@sgtools.rs" },
+  sender: { name: "SG TOOLS", email: "noreply@sgtools.rs" },
   to: [{ email: "filiptrivan5@gmail.com", name: "Test" }],
   replyTo: { email: "test@example.com" },
-  subject: "[TEST] SG Tools - Contact Form",
+  subject: "[TEST] SG TOOLS - Contact Form",
   htmlContent: `
     <h2>[Automated Test] Nova poruka sa sgtools.rs</h2>
     <p><strong>E-mail:</strong> test@example.com</p>
     <p><strong>Poruka:</strong></p>
-    <p>This is an automated test email from the SG Tools contact form test suite.</p>
+    <p>This is an automated test email from the SG TOOLS contact form test suite.</p>
   `,
 };
 
-describe.skipIf(!BREVO_API_KEY)("Brevo Integration - SG Tools", () => {
+describe.skipIf(!BREVO_API_KEY)("Brevo Integration - SG TOOLS", () => {
   it("sends email successfully with valid API key", async () => {
     const response = await fetch(BREVO_URL, {
       method: "POST",

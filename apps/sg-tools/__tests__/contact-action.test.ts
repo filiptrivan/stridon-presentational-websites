@@ -33,7 +33,7 @@ beforeEach(() => {
   });
 });
 
-describe("sendContactEmail - SG Tools", () => {
+describe("sendContactEmail - SG TOOLS", () => {
   it("returns success on happy path", async () => {
     const result = await sendContactEmail(validData, "valid-token");
     expect(result).toEqual({ success: true });
@@ -110,14 +110,14 @@ describe("sendContactEmail - SG Tools", () => {
 
     const body = JSON.parse(options.body);
     expect(body.sender).toEqual({
-      name: "SG Tools",
+      name: "SG TOOLS",
       email: "noreply@sgtools.rs",
     });
     expect(body.to).toEqual([
-      { email: "aleksatrivan@gmail.com", name: "SG Tools" },
+      { email: "aleksatrivan@gmail.com", name: "SG TOOLS" },
     ]);
     expect(body.replyTo).toEqual({ email: validData.email });
-    expect(body.subject).toBe("SG Tools - Contact Form");
+    expect(body.subject).toBe("SG TOOLS - Contact Form");
     expect(body.htmlContent).toContain("Nova poruka sa sgtools.rs");
     expect(body.htmlContent).toContain(validData.email);
     expect(body.htmlContent).toContain(validData.message);

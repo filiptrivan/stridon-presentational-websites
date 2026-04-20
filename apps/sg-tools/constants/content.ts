@@ -111,16 +111,16 @@ export const ABOUT_MILESTONES = [
   },
   {
     date: "2023.",
-    title: "Pokretanje brenda SG Tools",
+    title: "Pokretanje brenda SG TOOLS",
     description:
-      "SG Tools je nastao kao prirodan nastavak tog puta, sa ciljem da ponudi alat koji je pouzdan, funkcionalan i cenovno pristupačan.",
+      "SG TOOLS je nastao kao prirodan nastavak tog puta, sa ciljem da ponudi alat koji je pouzdan, funkcionalan i cenovno pristupačan.",
     icon: Rocket,
     color: "text-rose-400",
     bg: "bg-rose-500/15",
     border: "border-rose-500/30",
     image: {
       src: "/sg-tools-logo.svg",
-      alt: "SG Tools logo",
+      alt: "SG TOOLS logo",
       contain: true,
     },
   },
@@ -150,9 +150,9 @@ export const COMPANY_BENEFITS = [
 ];
 
 export const ABOUT_PARAGRAPHS = [
-  "Naša priča počinje mnogo pre nego što je SG Tools dobio ime. Počela je 1996. godine, na tezgi Novobeogradskog buvljaka - iz bliskog kontakta sa kupcima i iz razumevanja šta ljudima zaista treba od alata. Od samog početka, alat za nas nije bio samo roba. Bio je sredstvo rada, poverenja i dugoročnog odnosa. Kroz godine smo učili direktno od vas - od majstora, hobista, instalatera i servisera koji tačno znaju šta od alata očekuju. Vaše sugestije nismo posmatrali kao komentare, već kao smernice.",
-  "Materijale biramo promišljeno, sa naglaskom na trajnost i otpornost u realnim uslovima rada. Ergonomija za nas nije dodatak, već polazna tačka - alat mora prirodno ležati u ruci, pružati siguran hvat i omogućiti dugotrajan rad bez nepotrebnog zamora. Dizajn je uvek u službi funkcije, bez suvišnih detalja. Od izbora sirovina do završne obrade, ništa nije prepušteno slučaju. SG Tools je zajednički uspeh koji nastavljamo da gradimo zajedno sa našim kupcima - profesionalni kvalitet po cenama koje imaju smisla.",
+  "Naša priča počinje mnogo pre nego što je SG TOOLS dobio ime. Počela je 1996. godine, na tezgi Novobeogradskog buvljaka - iz bliskog kontakta sa kupcima i iz razumevanja šta ljudima zaista treba od alata. Od samog početka, alat za nas nije bio samo roba. Bio je sredstvo rada, poverenja i dugoročnog odnosa. Kroz godine smo učili direktno od vas - od majstora, hobista, instalatera i servisera koji tačno znaju šta od alata očekuju. Vaše sugestije nismo posmatrali kao komentare, već kao smernice.",
+  "Materijale biramo promišljeno, sa naglaskom na trajnost i otpornost u realnim uslovima rada. Ergonomija za nas nije dodatak, već polazna tačka - alat mora prirodno ležati u ruci, pružati siguran hvat i omogućiti dugotrajan rad bez nepotrebnog zamora. Dizajn je uvek u službi funkcije, bez suvišnih detalja. Od izbora sirovina do završne obrade, ništa nije prepušteno slučaju. SG TOOLS je zajednički uspeh koji nastavljamo da gradimo zajedno sa našim kupcima - profesionalni kvalitet po cenama koje imaju smisla.",
 ];
 
 export const HOME_ABOUT_PARAGRAPH =
-  "SG Tools je brend koji je nastao prirodno, kao sledeći korak našeg porodičnog posla sa alatima. Nakon godina rada sa različitim proizvođačima, svakodnevnog kontakta sa kupcima i praćenja šta se zaista traži na tržištu, odlučili smo da razvijemo sopstveni brend. Cilj nam je bio jasan: da ponudimo alat koji je pouzdan, funkcionalan i cenovno pristupačan.";
+  "SG TOOLS je brend koji je nastao prirodno, kao sledeći korak našeg porodičnog posla sa alatima. Nakon godina rada sa različitim proizvođačima, svakodnevnog kontakta sa kupcima i praćenja šta se zaista traži na tržištu, odlučili smo da razvijemo sopstveni brend. Cilj nam je bio jasan: da ponudimo alat koji je pouzdan, funkcionalan i cenovno pristupačan.";

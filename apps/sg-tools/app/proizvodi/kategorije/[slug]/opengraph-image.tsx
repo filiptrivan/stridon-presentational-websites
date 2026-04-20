@@ -4,7 +4,7 @@ import { getAllCategoriesFlat, getCategoryBySlug } from "@brand/shared/lib/api";
 import { loadFonts } from "@brand/shared/lib/og/fonts";
 import { ImageResponse } from "next/og";
 
-export const alt = "Kategorija - SG Tools";
+export const alt = "Kategorija - SG TOOLS";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 

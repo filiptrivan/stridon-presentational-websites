@@ -4,7 +4,7 @@ import { getProductBySlug, getSitemapProducts } from "@brand/shared/lib/api";
 import { loadFonts } from "@brand/shared/lib/og/fonts";
 import { ImageResponse } from "next/og";
 
-export const alt = "Proizvod - SG Tools";
+export const alt = "Proizvod - SG TOOLS";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 

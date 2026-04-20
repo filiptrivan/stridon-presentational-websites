@@ -13,7 +13,7 @@
 
 | Project  | Directory        | Domain       | Theme      | Brand slug |
 | -------- | ---------------- | ------------ | ---------- | ---------- |
-| SG Tools | `apps/sg-tools/` | sgtools.rs   | Dark only  | `sg-tools` |
+| SG TOOLS | `apps/sg-tools/` | sgtools.rs   | Dark only  | `sg-tools` |
 | DCK      | `apps/dck/`      | dcksrbija.rs | Light only | `dck`      |
 
 **Purpose**: Display brand products (fetched server-side from the main platform's REST API), these sites are display-only - no cart or checkout, the core of the websites is to interest and enable dealers to sell our brands, not to push buying from prodavnicaalata.rs.
@@ -146,7 +146,7 @@ This repo depends on the **PACMS** platform (`c:\Users\user\Documents\Projects\P
 
 ## Domain Map
 
-- `sgtools.rs` - SG Tools brand site (`apps/sg-tools/`)
+- `sgtools.rs` - SG TOOLS brand site (`apps/sg-tools/`)
 - `dcksrbija.rs` - DCK brand site (`apps/dck/`)
 - `stridon.rs` - Parent company (Stridon Group DOO)
 - `prodavnicaalata.rs` - Online shop (where users buy products)
