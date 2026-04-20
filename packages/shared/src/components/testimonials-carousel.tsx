@@ -46,7 +46,7 @@ function TestimonialItem({ item }: { item: Testimonial }) {
           </p>
         </div>
         <div className="mt-5 pt-4 border-t border-border/30">
-          <p className="text-sm font-medium">— {item.personName}</p>
+          <p className="text-sm font-medium">{item.personName}</p>
         </div>
       </div>
     </Container>
