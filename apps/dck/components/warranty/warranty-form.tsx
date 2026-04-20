@@ -3,16 +3,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { srLatn } from "date-fns/locale/sr-Latn";
-import {
-  Building2,
-  CalendarIcon,
-  Loader2,
-  Send,
-  Upload,
-  X,
-} from "lucide-react";
+import { CalendarIcon, Loader2, Send, Upload } from "lucide-react";
 import { useRef, useState } from "react";
-import { Controller, useForm, useWatch } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { submitWarrantyRegistration } from "@/app/produzetak-garancije/actions";
@@ -59,12 +52,10 @@ const WarrantyForm = () => {
       product: undefined,
       serialNumber: "",
       purchaseDate: "",
-      isCompanyOrder: false,
       companyPib: "",
     },
   });
 
-  const isCompanyOrder = useWatch({ control, name: "isCompanyOrder" });
   const formRef = useAutofillSync(getValues, setValue);
 
   const [fileError, setFileError] = useState<string | null>(null);
@@ -321,53 +312,23 @@ const WarrantyForm = () => {
         </p>
       </div>
 
-      {isCompanyOrder ? (
-        <div className="space-y-3 rounded-lg border border-border/50 bg-background p-4">
-          <div className="flex items-center justify-between">
-            <span className="flex items-center gap-1.5 text-sm font-medium">
-              <Building2 className="size-3.5" />
-              Produžetak za firmu
-            </span>
-            <button
-              type="button"
-              onClick={() => {
-                setValue("isCompanyOrder", false);
-                setValue("companyPib", "");
-              }}
-              className="text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="Otkaži produžetak za firmu"
-            >
-              <X className="size-4" />
-            </button>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="companyPib">PIB</Label>
-            <Input
-              id="companyPib"
-              placeholder="123456789"
-              inputMode="numeric"
-              maxLength={9}
-              className="bg-background border-border/50"
-              aria-invalid={!!errors.companyPib}
-              {...register("companyPib")}
-            />
-            {errors.companyPib && (
-              <p className="text-sm text-destructive">
-                {errors.companyPib.message}
-              </p>
-            )}
-          </div>
-        </div>
-      ) : (
-        <button
-          type="button"
-          onClick={() => setValue("isCompanyOrder", true)}
-          className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <Building2 className="size-3.5" />
-          Produžetak za firmu?
-        </button>
-      )}
+      <div className="space-y-2">
+        <Label htmlFor="companyPib">PIB firme (opciono)</Label>
+        <Input
+          id="companyPib"
+          placeholder="123456789"
+          inputMode="numeric"
+          maxLength={9}
+          className="bg-background border-border/50"
+          aria-invalid={!!errors.companyPib}
+          {...register("companyPib")}
+        />
+        {errors.companyPib && (
+          <p className="text-sm text-destructive">
+            {errors.companyPib.message}
+          </p>
+        )}
+      </div>
 
       {turnstileWidget}
 
