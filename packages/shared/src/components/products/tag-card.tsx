@@ -11,7 +11,7 @@ const TagCard = ({ tag }: TagCardProps) => {
   return (
     <Link
       href={`/proizvodi/tagovi/${tag.slug}`}
-      className="group relative flex aspect-[3/2] overflow-hidden rounded-lg lg:rounded-xl border border-border/20 hover:border-border transition-colors"
+      className="group relative flex aspect-[3/4] overflow-hidden rounded-lg lg:rounded-xl border border-border/20 hover:border-border transition-colors"
     >
       {tag.imageUrl ? (
         <Image
