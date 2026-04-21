@@ -17,6 +17,7 @@ import {
   TAG_BASE_BREADCRUMBS,
   buildTagBreadcrumbJsonLd,
 } from "@brand/shared/lib/categories";
+import { isVideoUrl } from "@brand/shared/lib/media";
 import { createTagMetadata } from "@brand/shared/lib/metadata";
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -110,14 +111,40 @@ export default async function TagPage({ params, searchParams }: Props) {
 
       {tag.bannerMediaUrl && (
         <div className="w-full max-w-7xl mx-auto px-4 lg:px-10 -mt-4 mb-8">
-          <Image
-            src={tag.bannerMediaUrl}
-            alt={tag.name}
-            width={tag.bannerImageWidth ?? 1200}
-            height={tag.bannerImageHeight ?? 400}
-            className="w-full h-auto rounded-lg lg:rounded-xl"
-            priority
-          />
+          {isVideoUrl(tag.bannerMediaUrl) ? (
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              poster={tag.bannerVideoThumbnailUrl ?? undefined}
+              aria-label={tag.name}
+              className="w-full h-auto rounded-lg lg:rounded-xl"
+            >
+              <source src={tag.bannerMediaUrl} type="video/mp4" />
+            </video>
+          ) : tag.bannerImageWidth && tag.bannerImageHeight ? (
+            <Image
+              src={tag.bannerMediaUrl}
+              alt={tag.name}
+              width={tag.bannerImageWidth}
+              height={tag.bannerImageHeight}
+              className="w-full h-auto rounded-lg lg:rounded-xl"
+              priority
+            />
+          ) : (
+            <div className="relative aspect-video overflow-hidden rounded-lg bg-muted lg:rounded-xl">
+              <Image
+                src={tag.bannerMediaUrl}
+                alt={tag.name}
+                fill
+                sizes="(max-width: 1280px) 100vw, 1280px"
+                className="object-contain"
+                priority
+              />
+            </div>
+          )}
         </div>
       )}
 
