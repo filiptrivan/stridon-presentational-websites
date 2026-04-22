@@ -25,7 +25,7 @@ export interface ProductCardData {
   imageUrl: string;
   brandName: string;
   brandImageUrl: string;
-  brandWarrantyImageUrl: string | null;
+  warrantyImageUrl: string | null;
   isBackorder: boolean;
   tags: { name: string; color: string; orderNumber: number }[];
   averageRating: number | null;
@@ -42,8 +42,8 @@ export interface Product extends ProductCardData {
   metaTitle: string;
   metaDescription: string;
   brandSlug: string;
-  brandWarrantyImageWidth: number | null;
-  brandWarrantyImageHeight: number | null;
+  warrantyName: string | null;
+  warrantyDurationMonths: number | null;
   categoryName: string;
   categorySlug: string;
   categoryBreadcrumbs: CategoryBreadcrumb[];
