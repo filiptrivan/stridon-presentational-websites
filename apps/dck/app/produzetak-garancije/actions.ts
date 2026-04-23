@@ -7,6 +7,9 @@ import {
   FILE_TOO_LARGE_ERROR,
   FILE_TYPE_ERROR,
   RECEIPT_REQUIRED_ERROR,
+  INVALID_PAYLOAD_ERROR,
+  WARRANTY_UNAVAILABLE_ERROR,
+  WARRANTY_SUBMISSION_FAILED_ERROR,
 } from "@/lib/schemas/warranty";
 import { reportError } from "@brand/shared/lib/report-error";
 import { TURNSTILE_VERIFICATION_FAILED } from "@brand/shared/lib/turnstile";
@@ -48,7 +51,7 @@ export async function submitWarrantyRegistration(
 
   const parsed = warrantyServerSchema.safeParse(raw);
   if (!parsed.success) {
-    return { success: false, error: "Podaci nisu ispravni. Proveri unos." };
+    return { success: false, error: INVALID_PAYLOAD_ERROR };
   }
 
   const receiptFile = formData.get("receiptImage");
@@ -70,7 +73,7 @@ export async function submitWarrantyRegistration(
     });
     return {
       success: false,
-      error: "Produžetak garancije trenutno nije moguć. Pokušaj ponovo kasnije.",
+      error: WARRANTY_UNAVAILABLE_ERROR,
     };
   }
 
@@ -109,7 +112,7 @@ export async function submitWarrantyRegistration(
       });
       return {
         success: false,
-        error: "Produžetak garancije nije uspeo. Pokušaj ponovo kasnije.",
+        error: WARRANTY_SUBMISSION_FAILED_ERROR,
       };
     }
 
@@ -118,7 +121,7 @@ export async function submitWarrantyRegistration(
     reportError(error, { source: "submitWarrantyRegistration" });
     return {
       success: false,
-      error: "Produžetak garancije nije uspeo. Pokušaj ponovo kasnije.",
+      error: WARRANTY_SUBMISSION_FAILED_ERROR,
     };
   }
 }

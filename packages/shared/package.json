@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "test": "vitest run",
+    "test:unit": "vitest run --exclude \"**/*.integration.test.ts\"",
+    "test:integration": "vitest run integration.test",
     "test:watch": "vitest"
   },
   "exports": {

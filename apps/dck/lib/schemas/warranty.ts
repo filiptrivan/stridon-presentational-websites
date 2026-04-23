@@ -53,5 +53,10 @@ export const FILE_TOO_LARGE_ERROR =
 export const FILE_TYPE_ERROR =
   "Nepodržan format fajla. Dozvoljeni su: JPG, PNG, WebP, PDF.";
 export const RECEIPT_REQUIRED_ERROR = "Dodaj fotografiju računa.";
+export const INVALID_PAYLOAD_ERROR = "Podaci nisu ispravni. Proveri unos.";
+export const WARRANTY_UNAVAILABLE_ERROR =
+  "Produžetak garancije trenutno nije moguć. Pokušaj ponovo kasnije.";
+export const WARRANTY_SUBMISSION_FAILED_ERROR =
+  "Produžetak garancije nije uspeo. Pokušaj ponovo kasnije.";
 
 export type WarrantyFormData = z.infer<typeof warrantySchema>;
