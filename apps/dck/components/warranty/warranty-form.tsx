@@ -286,14 +286,17 @@ const WarrantyForm = () => {
       </div>
 
       <div className="space-y-2">
-        <div className="flex gap-2 rounded-md border border-border/50 bg-muted/40 p-3 text-sm text-muted-foreground">
+        <Label id="receiptImage-label">Fotografija računa</Label>
+        <div
+          id="receiptImage-hint"
+          className="flex gap-2 rounded-md border border-border/50 bg-muted/40 p-3 text-sm text-muted-foreground"
+        >
           <Info className="size-4 shrink-0 mt-0.5" aria-hidden="true" />
           <span>
             Slika mora biti jasna i čitljiva, ako podaci sa računa nisu
             vidljivi, ne možemo da prihvatimo garanciju.
           </span>
         </div>
-        <Label id="receiptImage-label">Fotografija računa</Label>
         <input
           type="file"
           accept=".jpg,.jpeg,.png,.webp,.pdf"
@@ -301,6 +304,7 @@ const WarrantyForm = () => {
           onChange={handleFileChange}
           className="sr-only"
           aria-labelledby="receiptImage-label"
+          aria-describedby="receiptImage-hint"
           tabIndex={-1}
         />
         <div className="flex items-center gap-3">
@@ -311,6 +315,7 @@ const WarrantyForm = () => {
             onClick={() => fileInputRef.current?.click()}
             aria-invalid={!!fileError}
             aria-labelledby="receiptImage-label"
+            aria-describedby="receiptImage-hint"
           >
             <Upload className="mr-2 h-4 w-4" />
             Izaberi fajl
@@ -322,9 +327,6 @@ const WarrantyForm = () => {
           )}
         </div>
         {fileError && <p className="text-sm text-destructive">{fileError}</p>}
-        <p className="text-xs text-muted-foreground">
-          JPG, PNG, WebP ili PDF - do 5MB
-        </p>
       </div>
 
       <div className="space-y-2">
