@@ -1,5 +1,16 @@
 import { PNG_1X1 } from "./png";
 
+// Computed at import time; tests assume a recent purchase so the 28-day
+// window check in warrantySchema passes. Uses yesterday (UTC) to stay safe
+// against any TZ boundary effects during local test runs.
+const YESTERDAY_UTC = (() => {
+  const d = new Date();
+  d.setUTCDate(d.getUTCDate() - 1);
+  return d.toISOString().slice(0, 10);
+})();
+
+export const DEFAULT_PURCHASE_DATE = YESTERDAY_UTC;
+
 export type WarrantyFormDataOverrides = {
   firstName?: string;
   lastName?: string;
@@ -27,7 +38,7 @@ export function buildWarrantyFormData(
   set("phoneNumber", overrides.phoneNumber, "0601234567");
   set("productSlug", overrides.productSlug, "dck-test-product");
   set("serialNumber", overrides.serialNumber, "SN-TEST-123");
-  set("purchaseDate", overrides.purchaseDate, "2026-01-15");
+  set("purchaseDate", overrides.purchaseDate, DEFAULT_PURCHASE_DATE);
   if (overrides.companyPib !== undefined) {
     fd.append("companyPib", overrides.companyPib);
   }

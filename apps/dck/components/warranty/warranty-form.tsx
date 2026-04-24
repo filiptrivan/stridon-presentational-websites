@@ -1,9 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
+import { format, startOfDay, subDays } from "date-fns";
 import { srLatn } from "date-fns/locale/sr-Latn";
-import { CalendarIcon, Loader2, Send, Upload } from "lucide-react";
+import { CalendarIcon, Info, Loader2, Send, Upload } from "lucide-react";
 import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -22,6 +22,7 @@ import {
   FILE_TYPE_ERROR,
   MAX_FILE_SIZE,
   RECEIPT_REQUIRED_ERROR,
+  WARRANTY_WINDOW_DAYS,
   warrantySchema,
   type WarrantyFormData,
 } from "@/lib/schemas/warranty";
@@ -236,6 +237,8 @@ const WarrantyForm = () => {
             const selectedDate = field.value
               ? new Date(field.value + "T00:00:00")
               : undefined;
+            const today = startOfDay(new Date());
+            const earliest = subDays(today, WARRANTY_WINDOW_DAYS);
             return (
               <div className="space-y-2">
                 <Label id="purchaseDate-label">Datum kupovine</Label>
@@ -261,14 +264,18 @@ const WarrantyForm = () => {
                       onSelect={(date) =>
                         field.onChange(date ? format(date, "yyyy-MM-dd") : "")
                       }
-                      disabled={(date) => date > new Date()}
+                      disabled={(date) => date > today || date < earliest}
                       locale={srLatn}
                     />
                   </PopoverContent>
                 </Popover>
-                {errors.purchaseDate && (
+                {errors.purchaseDate ? (
                   <p className="text-sm text-destructive">
                     {errors.purchaseDate.message}
+                  </p>
+                ) : (
+                  <p className="text-xs text-muted-foreground">
+                    Moguće je registrovati samo kupovine ne starije od 4 nedelje.
                   </p>
                 )}
               </div>
@@ -279,6 +286,12 @@ const WarrantyForm = () => {
 
       <div className="space-y-2">
         <Label id="receiptImage-label">Fotografija računa</Label>
+        <div className="flex gap-2 rounded-md border border-border/50 bg-muted/40 p-3 text-sm text-muted-foreground">
+          <Info className="size-4 shrink-0 mt-0.5" aria-hidden="true" />
+          <span>
+            Slika mora biti jasna i čitljiva — ako podaci sa računa nisu vidljivi, ne možemo da prihvatimo garanciju.
+          </span>
+        </div>
         <input
           type="file"
           accept=".jpg,.jpeg,.png,.webp,.pdf"

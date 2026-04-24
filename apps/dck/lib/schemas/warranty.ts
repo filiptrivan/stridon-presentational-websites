@@ -1,5 +1,30 @@
 import { z } from "zod";
 
+export const WARRANTY_WINDOW_DAYS = 28;
+const PURCHASE_DATE_OUT_OF_WINDOW_ERROR =
+  "Produžetak garancije se može aktivirati samo u roku od 4 nedelje od kupovine.";
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+// Server check tolerates 1 day on each side to cover timezone offset between
+// the user's local calendar (client uses local midnight) and UTC (server).
+const isPurchaseDateWithinWindow = (value: string) => {
+  const parsed = new Date(`${value}T00:00:00Z`);
+  if (Number.isNaN(parsed.getTime())) return false;
+
+  const now = new Date();
+  const todayUtc = Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate(),
+  );
+  const earliest = todayUtc - (WARRANTY_WINDOW_DAYS + 1) * DAY_MS;
+  const latest = todayUtc + DAY_MS;
+
+  const purchase = parsed.getTime();
+  return purchase >= earliest && purchase <= latest;
+};
+
 export const warrantyProductSchema = z.object(
   {
     slug: z.string().min(1),
@@ -19,7 +44,10 @@ const customerFields = {
     .email("Unesi ispravnu e-mail adresu"),
   phoneNumber: z.string().min(6, "Unesi broj telefona").max(20),
   serialNumber: z.string().min(1, "Unesi serijski broj").max(100),
-  purchaseDate: z.string().min(1, "Izaberi datum kupovine"),
+  purchaseDate: z
+    .string()
+    .min(1, "Izaberi datum kupovine")
+    .refine(isPurchaseDateWithinWindow, PURCHASE_DATE_OUT_OF_WINDOW_ERROR),
 };
 
 const PIB_REGEX = /^\d{9}$/;

@@ -1,6 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { PNG_1X1 } from "./fixtures/png";
-import { buildWarrantyFormData } from "./fixtures/warranty";
+import {
+  DEFAULT_PURCHASE_DATE,
+  buildWarrantyFormData,
+} from "./fixtures/warranty";
 
 vi.mock("@brand/shared/lib/report-error", () => ({
   reportError: vi.fn(),
@@ -156,6 +159,56 @@ describe("submitWarrantyRegistration - DCK", () => {
     expect(reportError).toHaveBeenCalled();
   });
 
+  it("rejects purchaseDate older than 4 weeks", async () => {
+    const old = new Date();
+    old.setUTCDate(old.getUTCDate() - 40);
+    const result = await submitWarrantyRegistration(
+      buildWarrantyFormData({
+        purchaseDate: old.toISOString().slice(0, 10),
+      }),
+    );
+    expect(result).toEqual({
+      success: false,
+      error: INVALID_PAYLOAD_ERROR,
+    });
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  it("accepts purchaseDate exactly on the 28-day boundary", async () => {
+    const boundary = new Date();
+    boundary.setUTCDate(boundary.getUTCDate() - 28);
+    const result = await submitWarrantyRegistration(
+      buildWarrantyFormData({
+        purchaseDate: boundary.toISOString().slice(0, 10),
+      }),
+    );
+    expect(result).toEqual({ success: true });
+  });
+
+  it("rejects future purchaseDate", async () => {
+    const future = new Date();
+    future.setUTCDate(future.getUTCDate() + 5);
+    const result = await submitWarrantyRegistration(
+      buildWarrantyFormData({
+        purchaseDate: future.toISOString().slice(0, 10),
+      }),
+    );
+    expect(result).toEqual({
+      success: false,
+      error: INVALID_PAYLOAD_ERROR,
+    });
+  });
+
+  it("rejects malformed purchaseDate", async () => {
+    const result = await submitWarrantyRegistration(
+      buildWarrantyFormData({ purchaseDate: "not-a-date" }),
+    );
+    expect(result).toEqual({
+      success: false,
+      error: INVALID_PAYLOAD_ERROR,
+    });
+  });
+
   it("rejects malformed companyPib", async () => {
     const result = await submitWarrantyRegistration(
       buildWarrantyFormData({ companyPib: "12345" }),
@@ -184,7 +237,7 @@ describe("submitWarrantyRegistration - DCK", () => {
     expect(body.get("phoneNumber")).toBe("0601234567");
     expect(body.get("productSlug")).toBe("dck-test-product");
     expect(body.get("serialNumber")).toBe("SN-TEST-123");
-    expect(body.get("purchaseDate")).toBe("2026-01-15T00:00:00.000Z");
+    expect(body.get("purchaseDate")).toBe(`${DEFAULT_PURCHASE_DATE}T00:00:00.000Z`);
     expect(body.get("brandSlug")).toBe("dck");
     expect(body.get("receiptImage")).toBeInstanceOf(File);
     expect(body.has("companyPib")).toBe(false);
