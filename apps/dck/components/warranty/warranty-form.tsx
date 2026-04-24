@@ -122,7 +122,9 @@ const WarrantyForm = () => {
     resetTurnstile();
 
     if (result.success) {
-      toast.success("Garancija je uspešno produžena! Potvrda je poslata na e-mail.");
+      toast.success(
+        "Garancija je uspešno produžena! Potvrda je poslata na e-mail.",
+      );
       reset();
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
@@ -265,17 +267,16 @@ const WarrantyForm = () => {
                         field.onChange(date ? format(date, "yyyy-MM-dd") : "")
                       }
                       disabled={(date) => date > today || date < earliest}
+                      startMonth={earliest}
+                      endMonth={today}
+                      defaultMonth={selectedDate ?? today}
                       locale={srLatn}
                     />
                   </PopoverContent>
                 </Popover>
-                {errors.purchaseDate ? (
+                {errors.purchaseDate && (
                   <p className="text-sm text-destructive">
                     {errors.purchaseDate.message}
-                  </p>
-                ) : (
-                  <p className="text-xs text-muted-foreground">
-                    Moguće je registrovati samo kupovine ne starije od 4 nedelje.
                   </p>
                 )}
               </div>
@@ -285,13 +286,14 @@ const WarrantyForm = () => {
       </div>
 
       <div className="space-y-2">
-        <Label id="receiptImage-label">Fotografija računa</Label>
         <div className="flex gap-2 rounded-md border border-border/50 bg-muted/40 p-3 text-sm text-muted-foreground">
           <Info className="size-4 shrink-0 mt-0.5" aria-hidden="true" />
           <span>
-            Slika mora biti jasna i čitljiva — ako podaci sa računa nisu vidljivi, ne možemo da prihvatimo garanciju.
+            Slika mora biti jasna i čitljiva, ako podaci sa računa nisu
+            vidljivi, ne možemo da prihvatimo garanciju.
           </span>
         </div>
+        <Label id="receiptImage-label">Fotografija računa</Label>
         <input
           type="file"
           accept=".jpg,.jpeg,.png,.webp,.pdf"
