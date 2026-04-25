@@ -11,6 +11,7 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -44,6 +45,9 @@ const MobileMenu = ({ categories, navLinks }: MobileMenuProps) => {
       <SheetContent side="right" className="p-4">
         <SheetHeader className="sr-only">
           <SheetTitle>Meni</SheetTitle>
+          <SheetDescription>
+            Navigacija kroz kategorije i stranice.
+          </SheetDescription>
         </SheetHeader>
         <div className="flex flex-col gap-2 mt-8">
           {navLinks.map((link, index) =>
