@@ -4,6 +4,12 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   transpilePackages: ["@brand/config", "@brand/ui", "@brand/shared"],
   cacheComponents: true,
+  experimental: {
+    serverActions: {
+      // MAX_FILE_SIZE (4MB) + 1MB headroom for multipart envelope and form fields.
+      bodySizeLimit: "5mb",
+    },
+  },
   env: {
     BUILD_YEAR: String(new Date().getFullYear()),
   },

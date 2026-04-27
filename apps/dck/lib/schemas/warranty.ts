@@ -69,15 +69,14 @@ export const warrantyServerSchema = z.object({
   companyPib: z.string().regex(PIB_REGEX, PIB_ERROR).optional(),
 });
 
-export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+export const MAX_FILE_SIZE = 4 * 1024 * 1024;
 export const ACCEPTED_FILE_TYPES = [
   "image/jpeg",
   "image/png",
   "image/webp",
   "application/pdf",
 ];
-export const FILE_TOO_LARGE_ERROR =
-  "Fajl je prevelik. Maksimalna veličina je 5MB.";
+export const FILE_TOO_LARGE_ERROR = `Fajl je prevelik. Maksimalna veličina je ${MAX_FILE_SIZE / (1024 * 1024)}MB.`;
 export const FILE_TYPE_ERROR =
   "Nepodržan format fajla. Dozvoljeni su: JPG, PNG, WebP, PDF.";
 export const RECEIPT_REQUIRED_ERROR = "Dodaj fotografiju računa.";
