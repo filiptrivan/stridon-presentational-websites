@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { format, startOfDay, subDays } from "date-fns";
 import { srLatn } from "date-fns/locale/sr-Latn";
 import { CalendarIcon, Info, Loader2, Send, Upload } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -67,10 +67,6 @@ const WarrantyForm = () => {
     today: Date;
     earliest: Date;
   } | null>(null);
-  useEffect(() => {
-    const today = startOfDay(new Date());
-    setBounds({ today, earliest: subDays(today, WARRANTY_WINDOW_DAYS) });
-  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -251,7 +247,16 @@ const WarrantyForm = () => {
             return (
               <div className="space-y-2">
                 <Label id="purchaseDate-label">Datum kupovine</Label>
-                <Popover>
+                <Popover
+                  onOpenChange={(open) => {
+                    if (!open || bounds) return;
+                    const today = startOfDay(new Date());
+                    setBounds({
+                      today,
+                      earliest: subDays(today, WARRANTY_WINDOW_DAYS),
+                    });
+                  }}
+                >
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
