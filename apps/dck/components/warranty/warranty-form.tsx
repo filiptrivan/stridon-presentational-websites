@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { format, startOfDay, subDays } from "date-fns";
 import { srLatn } from "date-fns/locale/sr-Latn";
 import { CalendarIcon, Info, Loader2, Send, Upload } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -62,6 +62,15 @@ const WarrantyForm = () => {
   const [fileError, setFileError] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [bounds, setBounds] = useState<{
+    today: Date;
+    earliest: Date;
+  } | null>(null);
+  useEffect(() => {
+    const today = startOfDay(new Date());
+    setBounds({ today, earliest: subDays(today, WARRANTY_WINDOW_DAYS) });
+  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -239,8 +248,6 @@ const WarrantyForm = () => {
             const selectedDate = field.value
               ? new Date(field.value + "T00:00:00")
               : undefined;
-            const today = startOfDay(new Date());
-            const earliest = subDays(today, WARRANTY_WINDOW_DAYS);
             return (
               <div className="space-y-2">
                 <Label id="purchaseDate-label">Datum kupovine</Label>
@@ -259,20 +266,24 @@ const WarrantyForm = () => {
                         : "Izaberi datum"}
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={selectedDate}
-                      onSelect={(date) =>
-                        field.onChange(date ? format(date, "yyyy-MM-dd") : "")
-                      }
-                      disabled={(date) => date > today || date < earliest}
-                      startMonth={earliest}
-                      endMonth={today}
-                      defaultMonth={selectedDate ?? today}
-                      locale={srLatn}
-                    />
-                  </PopoverContent>
+                  {bounds && (
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={selectedDate}
+                        onSelect={(date) =>
+                          field.onChange(date ? format(date, "yyyy-MM-dd") : "")
+                        }
+                        disabled={(date) =>
+                          date > bounds.today || date < bounds.earliest
+                        }
+                        startMonth={bounds.earliest}
+                        endMonth={bounds.today}
+                        defaultMonth={selectedDate ?? bounds.today}
+                        locale={srLatn}
+                      />
+                    </PopoverContent>
+                  )}
                 </Popover>
                 {errors.purchaseDate && (
                   <p className="text-sm text-destructive">
