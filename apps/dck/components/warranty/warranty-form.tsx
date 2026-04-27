@@ -248,6 +248,7 @@ const WarrantyForm = () => {
               <div className="space-y-2">
                 <Label id="purchaseDate-label">Datum kupovine</Label>
                 <Popover
+                  // Lazy on open — `new Date()` in the render path fails Next.js cacheComponents prerender.
                   onOpenChange={(open) => {
                     if (!open || bounds) return;
                     const today = startOfDay(new Date());
