@@ -6,6 +6,7 @@
 
 import { getBrandConfig } from "@brand/config";
 import { cacheLife, cacheTag } from "next/cache";
+import type { Catalog } from "../types/catalogs";
 import type { Category } from "../types/categories";
 import type {
   Product,
@@ -76,6 +77,14 @@ export async function getFlatCategories(count = 6): Promise<Category[]> {
 export async function getAllCategoriesFlat(): Promise<Category[]> {
   const { flattenAllCategories } = await import("./categories");
   return flattenAllCategories(await getCategories());
+}
+
+export async function getCatalogs(): Promise<Catalog[]> {
+  cacheLife("days");
+  cacheTag(TAGS.catalogs);
+  return apiFetch<Catalog[]>(
+    `/api/Storefront/CatalogsByBrand?brandSlug=${BRAND_SLUG}`,
+  );
 }
 
 export async function getSitemapProducts(): Promise<SitemapEntry[]> {

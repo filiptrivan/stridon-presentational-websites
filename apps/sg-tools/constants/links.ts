@@ -16,12 +16,8 @@ export const NAV_LINKS: readonly NavLink[] = [
 export const PRODUCTS_FOOTER_LINKS: readonly NavLink[] = [
   { label: "Svi proizvodi", href: "/proizvodi" },
   { label: "Kategorije", href: "/proizvodi/kategorije" },
+  { label: "Katalozi", href: "/katalozi" },
   { label: "Postani distributer", href: "/kontakt" },
-  {
-    label: "Katalog",
-    href: "https://media.prodavnicaalata.rs/uploads//catalogues/58/files/SG%20TOOLS%20katalog.pdf",
-    external: true,
-  },
 ];
 
 export const COMPANY_FOOTER_LINKS: readonly NavLink[] = [

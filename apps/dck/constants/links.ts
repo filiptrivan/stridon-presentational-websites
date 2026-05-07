@@ -19,6 +19,7 @@ export const PRODUCTS_FOOTER_LINKS: readonly NavLink[] = [
   { label: "Svi proizvodi", href: "/proizvodi" },
   { label: "Kategorije", href: "/proizvodi/kategorije" },
   { label: "Linije proizvoda", href: "/proizvodi/tagovi" },
+  { label: "Katalozi", href: "/katalozi" },
   { label: "Postani distributer", href: "/kontakt" },
 ];
 

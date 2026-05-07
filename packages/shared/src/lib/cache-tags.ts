@@ -1,5 +1,6 @@
 export const TAGS = {
   categories: "categories",
+  catalogs: "catalogs",
   products: "products",
   tags: "tags",
 } as const;
