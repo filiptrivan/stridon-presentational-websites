@@ -45,6 +45,9 @@ const Hero = () => {
           <Button asChild>
             <Link href="/kontakt">Postani distributer</Link>
           </Button>
+          <Button asChild variant="outline">
+            <Link href="/katalozi">Pogledaj kataloge</Link>
+          </Button>
         </div>
       </Container>
 
