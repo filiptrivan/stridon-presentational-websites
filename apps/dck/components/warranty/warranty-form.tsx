@@ -311,7 +311,7 @@ const WarrantyForm = () => {
           <Info className="size-4 shrink-0 mt-0.5" aria-hidden="true" />
           <span>
             Slika mora biti jasna i čitljiva, ako podaci sa računa nisu
-            vidljivi, ne možemo da prihvatimo garanciju.
+            vidljivi, servis neće moći da prihvati garanciju.
           </span>
         </div>
         <input
