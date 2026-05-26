@@ -98,8 +98,8 @@ export const ABOUT_MILESTONES = [
     bg: "bg-rose-500/15",
     border: "border-rose-500/30",
     image: {
-      src: "/about/dck-stage-brand-presentation.webp",
-      alt: "DCK stage brand presentation",
+      src: "/about/sgtools_i_dck_tim.jpg",
+      alt: "Tim SG TOOLS i DCK",
     },
   },
 ];

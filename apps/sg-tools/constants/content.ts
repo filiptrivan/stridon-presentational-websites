@@ -119,9 +119,8 @@ export const ABOUT_MILESTONES = [
     bg: "bg-rose-500/15",
     border: "border-rose-500/30",
     image: {
-      src: "/sg-tools-logo.svg",
-      alt: "SG TOOLS logo",
-      contain: true,
+      src: "/about/sgtools_i_dck_tim.jpg",
+      alt: "Tim SG TOOLS i DCK",
     },
   },
 ];
