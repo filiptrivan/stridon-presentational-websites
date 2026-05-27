@@ -59,9 +59,7 @@ export default async function ProductDetailPage({
       <ProductDetail
         product={product}
         categoryBreadcrumbs={categoryBreadcrumbs}
-        dealers={dealers.filter(
-          (d) => d.logoSrc && d.category !== "service",
-        )}
+        dealers={dealers.filter((d) => d.category !== "service")}
       />
       {relatedProducts.length > 0 && (
         <RelatedProducts products={relatedProducts} />

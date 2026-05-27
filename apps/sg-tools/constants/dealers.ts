@@ -25,4 +25,14 @@ export const DEALERS: Dealer[] = [
     category: "dealer",
     coordinates: { lat: 44.785937879592375, lng: 20.500689934951087 },
   },
+  {
+    id: "srnic-alati",
+    name: "Srnić Alati",
+    address: "Kralja Milutina 112",
+    city: "Šabac",
+    phone: "062/166-6202",
+    email: "markosrnic@gmail.com",
+    category: "dealer",
+    coordinates: { lat: 44.743224, lng: 19.696605 },
+  },
 ];
