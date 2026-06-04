@@ -44,7 +44,7 @@ export async function sendContactEmail(
       },
       body: JSON.stringify({
         sender: { name: "SG TOOLS", email: "noreply@sgtools.rs" },
-        to: [{ email: "aleksatrivan@gmail.com", name: "SG TOOLS" }],
+        to: [{ email: "aleksa.trivan@stridon.rs", name: "SG TOOLS" }],
         replyTo: { email: parsed.data.email },
         subject: "SG TOOLS - Contact Form",
         htmlContent: `

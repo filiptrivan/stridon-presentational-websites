@@ -114,7 +114,7 @@ describe("sendContactEmail - DCK", () => {
       email: "noreply@dcksrbija.rs",
     });
     expect(body.to).toEqual([
-      { email: "aleksatrivan@gmail.com", name: "DCK Srbija" },
+      { email: "aleksa.trivan@stridon.rs", name: "DCK Srbija" },
     ]);
     expect(body.replyTo).toEqual({ email: validData.email });
     expect(body.subject).toBe("DCK Srbija - Kontakt forma");

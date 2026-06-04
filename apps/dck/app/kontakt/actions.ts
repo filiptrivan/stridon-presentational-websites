@@ -44,7 +44,7 @@ export async function sendContactEmail(
       },
       body: JSON.stringify({
         sender: { name: "DCK Srbija", email: "noreply@dcksrbija.rs" },
-        to: [{ email: "aleksatrivan@gmail.com", name: "DCK Srbija" }],
+        to: [{ email: "aleksa.trivan@stridon.rs", name: "DCK Srbija" }],
         replyTo: { email: parsed.data.email },
         subject: "DCK Srbija - Kontakt forma",
         htmlContent: `

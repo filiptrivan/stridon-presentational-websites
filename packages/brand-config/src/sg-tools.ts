@@ -32,7 +32,7 @@ export const config: BrandConfig = {
     "Kontaktiraj SG TOOLS - pitanja o alatima, pomoć pri izboru proizvoda ili saradnja. Tu smo da pomognemo.",
 
   emailSender: { name: "SG TOOLS", email: "noreply@sgtools.rs" },
-  emailRecipient: { name: "SG TOOLS", email: "aleksatrivan@gmail.com" },
+  emailRecipient: { name: "SG TOOLS", email: "aleksa.trivan@stridon.rs" },
   emailSubject: "SG TOOLS - Contact Form",
   emailHeading: "Nova poruka sa sgtools.rs",
 

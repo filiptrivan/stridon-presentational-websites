@@ -32,7 +32,7 @@ export const config: BrandConfig = {
     "Kontaktiraj DCK Srbija - pitanja o alatima, pomoć pri izboru proizvoda ili saradnja. Tu smo da pomognemo.",
 
   emailSender: { name: "DCK Srbija", email: "noreply@dcksrbija.rs" },
-  emailRecipient: { name: "DCK Srbija", email: "aleksatrivan@gmail.com" },
+  emailRecipient: { name: "DCK Srbija", email: "aleksa.trivan@stridon.rs" },
   emailSubject: "DCK Srbija - Kontakt forma",
   emailHeading: "Nova poruka sa dcksrbija.rs",
 

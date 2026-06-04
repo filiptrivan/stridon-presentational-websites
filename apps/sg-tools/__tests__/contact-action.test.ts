@@ -114,7 +114,7 @@ describe("sendContactEmail - SG TOOLS", () => {
       email: "noreply@sgtools.rs",
     });
     expect(body.to).toEqual([
-      { email: "aleksatrivan@gmail.com", name: "SG TOOLS" },
+      { email: "aleksa.trivan@stridon.rs", name: "SG TOOLS" },
     ]);
     expect(body.replyTo).toEqual({ email: validData.email });
     expect(body.subject).toBe("SG TOOLS - Contact Form");
