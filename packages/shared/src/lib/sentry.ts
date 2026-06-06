@@ -7,23 +7,8 @@ export function initSentry() {
   });
 }
 
-// TODO: drop the wrapper once vercel/next.js#88043 ships a fix.
-// Cache Components misattributes calls to "use cache"-annotated functions in
-// packages/shared/src/lib/api.ts as uncached IO when awaited from opengraph-image
-// routes during dynamic fallback (slugs not in generateStaticParams). The image
-// still renders correctly; only the false-positive DYNAMIC_SERVER_USAGE noise
-// reaches Sentry. Filter narrowly so real OG errors still surface.
-export const onRequestError: typeof Sentry.captureRequestError = (
-  err,
-  request,
-  errorContext,
-) => {
-  const digest = (err as Error & { digest?: string })?.digest;
-  if (
-    digest === "DYNAMIC_SERVER_USAGE" &&
-    errorContext.routePath.endsWith("/opengraph-image")
-  ) {
-    return;
-  }
-  return Sentry.captureRequestError(err, request, errorContext);
-};
+// Re-exported by each app's instrumentation.ts. The opengraph-image workaround
+// for vercel/next.js#88043 is gone — OG images now render via the on-demand
+// /api/og route handler, which isn't subject to the cache-components dynamic
+// fallback that produced the false-positive DYNAMIC_SERVER_USAGE noise.
+export const onRequestError = Sentry.captureRequestError;

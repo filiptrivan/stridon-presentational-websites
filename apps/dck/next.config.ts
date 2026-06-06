@@ -1,3 +1,4 @@
+import { TRUSTED_IMAGE_HOSTS } from "@brand/config/public-assets";
 import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
@@ -9,19 +10,24 @@ const nextConfig: NextConfig = {
       // MAX_FILE_SIZE (4MB) + 1MB headroom for multipart envelope and form fields.
       bodySizeLimit: "5mb",
     },
+    // Retry a transient page-prerender failure (e.g. a backend blip) instead of
+    // aborting the whole build on the first ETIMEDOUT.
+    staticGenerationRetryCount: 2,
+  },
+  // The OG route reads font files at runtime; ensure they're bundled into its
+  // lambda (public/ assets aren't traced into functions by default).
+  outputFileTracingIncludes: {
+    "/api/og": ["./public/fonts/**"],
   },
   env: {
     BUILD_YEAR: String(new Date().getFullYear()),
   },
   images: {
     formats: ["image/avif", "image/webp"],
-    remotePatterns: [
-      { protocol: "https", hostname: "*.prodavnicaalata.rs" },
-      {
-        protocol: "https",
-        hostname: "pub-0c08792ef71a4e14abb8d23b3a1fcdaf.r2.dev",
-      },
-    ],
+    remotePatterns: TRUSTED_IMAGE_HOSTS.map((hostname) => ({
+      protocol: "https" as const,
+      hostname,
+    })),
   },
   async redirects() {
     return [

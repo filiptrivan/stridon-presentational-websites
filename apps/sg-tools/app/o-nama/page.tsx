@@ -18,6 +18,11 @@ export const metadata = createPageMetadata({
   description:
     "Brend SG TOOLS nastao je iz porodične priče, dugogodišnjeg rada u alatima i svakodnevnog kontakta sa kupcima koji od alata traže pouzdanost, funkcionalnost i pristupačnu cenu.",
   canonicalUrl: "/o-nama",
+  // Curated OG card copy (was the dedicated opengraph-image headline) — beats the
+  // dry "O nama" SEO title on social shares.
+  ogTitle: "Brend iz porodične priče",
+  ogDescription:
+    "SG TOOLS je nastao iz stvarnog iskustva, rada sa kupcima i dugogodišnjeg poznavanja tržišta alata.",
 });
 
 const AboutPage = () => {
