@@ -70,7 +70,7 @@ Each app (`apps/sg-tools/`, `apps/dck/`) contains only:
 - `app/layout.tsx` - Viewport, structured data, body class
 - `app/page.tsx` - Homepage composition
 - `app/**/page.tsx` - Route pages (thin, compose shared components)
-- `app/**/opengraph-image.tsx` - Brand-specific OG images
+- `app/api/og/route.tsx` - Brand-specific on-demand OG image route (query-param driven; wired via `buildOgImageUrl` in shared `metadata.ts`)
 - `app/kontakt/actions.ts` - Email sender config (uses `getBrandConfig()`)
 - `components/hero.tsx` - Brand-specific hero (SG has decorations/badges, DCK has dashboard)
 - `constants/` - Brand-specific content strings, links, dealers
@@ -119,7 +119,9 @@ DCK also has: `app/produzetak-garancije/` → `/produzetak-garancije` (with 308 
 **Dynamic IO under `cacheComponents: true`** (set in both `apps/*/next.config.ts`): zero-arg dynamic APIs — `new Date()`, `Date.now()`, `Math.random()`, `cookies()`, `headers()` — fail static prerender if called during render, including inside `"use client"` components. Acceptable patterns:
 
 - **Client components**: defer the call to an event handler (e.g., `Popover.onOpenChange` in `apps/dck/components/warranty/warranty-form.tsx`) or to `useSyncExternalStore`. Do NOT use `useEffect` + `setState` — React 19 flags it as cascading renders. Lazy `useState(() => new Date())` also fails because the initializer runs during the first render.
-- **Server components**: wrap dynamic subtrees in `<Suspense>` or use `"use cache"`. Caveat: `"use cache"` is silently dropped in `opengraph-image` routes (next#88043) — load the IO at module init via an IIFE that resolves to a top-level Promise, then `await` it inside the handler.
+- **Server components**: wrap dynamic subtrees in `<Suspense>` or use `"use cache"`.
+
+**OpenGraph images**: served on demand from a single per-app route handler (`app/api/og/route.tsx`) that reads title/type/image from query params — not the per-route `opengraph-image.tsx` file convention (removed; it prerendered one image per entity at build, fanning out backend fetches until they timed out). Pages declare their OG URL via the metadata helpers (`buildOgImageUrl` in `metadata.ts`). Product images are passed as raw URLs from trusted hosts (R2 + the legacy `media.prodavnicaalata.rs`, enforced by `isTrustedImageUrl`); satori fetches them at request time and the result is CDN-cached for a year.
 
 **Layout wrapper components** (in `@brand/shared`):
 

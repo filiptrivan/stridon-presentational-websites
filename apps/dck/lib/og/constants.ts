@@ -8,5 +8,3 @@ export const colors = {
   card: "#f5f5f5",
   border: "rgba(0,0,0,0.10)",
 } as const;
-
-export const OG_SIZE = { width: 1200, height: 630 } as const;

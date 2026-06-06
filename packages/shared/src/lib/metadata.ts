@@ -1,9 +1,30 @@
 import { getBrandConfig } from "@brand/config";
 import type { Metadata } from "next";
+import { buildOgImageUrl, OG_SIZE, type OgImageParams } from "./og/utils";
 
 const brand = getBrandConfig();
 
+// Builds the `openGraph.images` / `twitter.images` pair from one OG URL so every
+// page exposes `og:image:alt` + dimensions (the file-convention used to inject
+// these automatically; the query-param route doesn't, so we set them here).
+function ogImageMeta(params: OgImageParams, alt: string) {
+  const url = buildOgImageUrl(params);
+  return {
+    openGraph: [{ url, width: OG_SIZE.width, height: OG_SIZE.height, alt }],
+    twitter: [{ url, alt }],
+  };
+}
+
 export function createRootMetadata(): Metadata {
+  const og = ogImageMeta(
+    {
+      type: "default",
+      title: brand.defaultTitle,
+      description: brand.siteDescription,
+    },
+    brand.siteName,
+  );
+
   return {
     metadataBase: new URL(brand.siteUrl),
     title: {
@@ -15,17 +36,11 @@ export function createRootMetadata(): Metadata {
       siteName: brand.siteName,
       locale: "sr_RS",
       type: "website",
-      images: [
-        {
-          url: "/og-image.png",
-          width: 1200,
-          height: 630,
-          alt: brand.siteName,
-        },
-      ],
+      images: og.openGraph,
     },
     twitter: {
       card: "summary_large_image",
+      images: og.twitter,
     },
     alternates: {
       canonical: "/",
@@ -40,63 +55,75 @@ export function createRootMetadata(): Metadata {
   };
 }
 
+// The single page-shape builder. `createListingMetadata` and
+// `createProductMetadata` delegate here, differing only in their `ogParams`.
 export function createPageMetadata({
   title,
   description,
   canonicalUrl,
+  ogTitle,
+  ogDescription,
+  ogParams,
 }: {
   title: string;
   description: string;
   canonicalUrl: string;
+  // Escape hatch: override the OG card copy where a curated headline beats the
+  // SEO title (e.g. the About page). Defaults to the page title/description.
+  ogTitle?: string;
+  ogDescription?: string;
+  // Non-default OG card (product/category/tag). Defaults to a `default`-type card
+  // built from the page title/description; entity pages pass their own.
+  ogParams?: OgImageParams;
 }): Metadata {
+  const resolvedOgParams: OgImageParams = ogParams ?? {
+    type: "default",
+    title: ogTitle ?? title,
+    description: ogDescription ?? description,
+  };
+  const og = ogImageMeta(resolvedOgParams, resolvedOgParams.title);
+  const socialTitle = `${title} | ${brand.siteName}`;
+
   return {
     title,
     description,
-    alternates: {
-      canonical: canonicalUrl,
-    },
-    openGraph: {
-      title: `${title} | ${brand.siteName}`,
-      description,
-    },
+    alternates: { canonical: canonicalUrl },
+    openGraph: { title: socialTitle, description, images: og.openGraph },
     twitter: {
       card: "summary_large_image",
-      title: `${title} | ${brand.siteName}`,
+      title: socialTitle,
       description,
+      images: og.twitter,
     },
   };
 }
 
+// Listing pages (products/category/tag) share pagination: the "Strana N" title
+// suffix and the `?strana=` canonical. The OG card always reflects the base entity,
+// never the paginated page — so `ogParams` carries the unsuffixed title.
 function createListingMetadata({
   title,
   description,
   canonicalBase,
   currentPage,
+  ogParams,
 }: {
   title: string;
   description: string;
   canonicalBase: string;
   currentPage: number;
+  ogParams: OgImageParams;
 }): Metadata {
   const pageSuffix = currentPage > 1 ? ` - Strana ${currentPage}` : "";
-  const fullTitle = `${title}${pageSuffix}`;
   const canonical =
     currentPage > 1 ? `${canonicalBase}?strana=${currentPage}` : canonicalBase;
 
-  return {
-    title: fullTitle,
+  return createPageMetadata({
+    title: `${title}${pageSuffix}`,
     description,
-    alternates: { canonical },
-    openGraph: {
-      title: `${fullTitle} | ${brand.siteName}`,
-      description,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `${fullTitle} | ${brand.siteName}`,
-      description,
-    },
-  };
+    canonicalUrl: canonical,
+    ogParams,
+  });
 }
 
 export function createProductsPageMetadata({
@@ -109,6 +136,11 @@ export function createProductsPageMetadata({
     description: brand.productsPageDescription,
     canonicalBase: `${brand.siteUrl}/proizvodi`,
     currentPage,
+    ogParams: {
+      type: "default",
+      title: "Svi proizvodi",
+      description: brand.productsPageDescription,
+    },
   });
 }
 
@@ -128,6 +160,7 @@ export function createCategoryMetadata({
     description,
     canonicalBase: `${brand.siteUrl}/proizvodi/kategorije/${slug}`,
     currentPage,
+    ogParams: { type: "category", title, description },
   });
 }
 
@@ -147,6 +180,7 @@ export function createTagMetadata({
     description,
     canonicalBase: `${brand.siteUrl}/proizvodi/tagovi/${slug}`,
     currentPage,
+    ogParams: { type: "tag", title, description },
   });
 }
 
@@ -163,14 +197,17 @@ export function createProductMetadata({
   title,
   description,
   slug,
+  image,
 }: {
   title: string;
   description: string;
   slug: string;
+  image?: string;
 }): Metadata {
   return createPageMetadata({
     title,
     description,
     canonicalUrl: `${brand.siteUrl}/proizvodi/${slug}/`,
+    ogParams: { type: "product", title, image },
   });
 }
