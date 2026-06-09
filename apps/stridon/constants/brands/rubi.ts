@@ -1,0 +1,37 @@
+import type { Brand } from "./types";
+
+export const rubi: Brand = {
+    slug: "rubi",
+    name: "Rubi",
+    logoSrc: "/logos/rubi-logo.svg",
+    description: "Rubi, sinonim za profesionalnost i preciznost, nudi vrhunsku kolekciju ma\u0161ina i alata za keramiku koji zadovoljavaju visoke standarde industrije.",
+    heroDescription: { sr: "Rubi alati - Uvoznik za Srbiju", en: "Rubi Tools - Importer for Serbia" },
+    paragraphs: [
+      {
+        title: { sr: "Istorijat", en: "History" },
+        body: {
+          sr: "Desetog aprila 1951. godine, mladi inovator Joan Boada podneo je u Kancelariji za registraciju i patente u Barseloni zahtev za za\u0161titu pronalaska novog alata, ru\u010dnog reza\u010da za mozaik i plo\u010dice. Ovaj alat \u0107e kasnije postati poznat \u0161irom sveta kao \u010duveni RUBI reza\u010d za plo\u010dice, jedan od najpoznatijih alata za se\u010denje keramike.\n\nRUBI reza\u010d za plo\u010dice dobio je zlatnu medalju na Prvoj nacionalnoj izlo\u017ebi pronalazaka odr\u017eanoj 1953. godine u Barseloni. Nakon toga, bra\u0107a Joan i Antoni Boada usmeravaju sve resurse na razvoj i proizvodnju ovog alata. Tokom \u0161ezdesetih godina, RUBI uvodi i udarni razbija\u010d, dodatak koji je tako\u0111e patentiran i zna\u010dajno unapre\u0111uje funkcionalnost ru\u010dnih alata za se\u010denje.\n\nZbog sve ve\u0107e potra\u017enje, 1969. godine bra\u0107i Boada se pridru\u017euje Miquel Escayol, a time je zvani\u010dno osnovana kompanija GERMANS BOADA, S.A. Ova kompanija postaje klju\u010dni nosilac brenda RUBI.\n\nSedamdesetih godina RUBI ru\u010dni reza\u010di za plo\u010dice postaju jo\u0161 sofisticiraniji. Kompanija ula\u017ee u \u0161irenje izvoza i razvija mehani\u010dki razbija\u010d koji postaje model TS, referenca u svetu profesionalnih alata za plo\u010dice.\n\nKrajem osamdesetih, sa pojavom porcelanskog granita, RUBI odgovara novim zahtevima tr\u017ei\u0161ta lansiranjem nove serije reza\u010da za plo\u010dice, posebno dizajniranih za tvr\u0111e materijale.\n\nTokom devedesetih godina RUBI do\u017eivljava pravi procvat. GERMANS BOADA, S.A. pro\u0161iruje svoje poslovanje otvaranjem filijala u Portugalu, Italiji, Francuskoj i drugim evropskim zemljama, \u0161to dodatno ja\u010da prisustvo RUBI alata na me\u0111unarodnom tr\u017ei\u0161tu.\n\nUlaskom u novo milenijum, RUBI nastavlja sa konstantnim rastom. Razvoj reza\u010da za plo\u010dice prati modernizaciju i primenu najnovijih tehnologija, prilago\u0111avaju\u0107i se savremenim izazovima u industriji.",
+          en: "On April 10th, 1951, young inventor Joan Boada submitted a patent application at the Registration and Patents Office in Barcelona for a new tool, a manual cutter for mosaic and tiles. This tool would later become globally recognized as the famous RUBI tile cutter, a benchmark in the field of ceramic cutting tools.\n\nAfter winning the gold medal at the First National Invention Exhibition in Barcelona in 1953, brothers Joan and Antoni Boada focused on producing and improving this groundbreaking tool. In the 1960s, RUBI introduced the impact breaker, also invented and patented by the Boada brothers, further enhancing the performance of their manual cutting tools.\n\nDue to increasing demand, Miquel Escayol joined the brothers in 1969, marking the official establishment of GERMANS BOADA, S.A., the parent company behind the RUBI brand.\n\nDuring the 1970s, RUBI cutters continued to evolve. The company invested in exports while also developing the mechanical breaker, launching the TS model, which became a global standard for manual tile cutters.\n\nWith the emergence of porcelain granite in the late 1980s, RUBI developed a new line of manual cutters adapted to tougher materials and global market demands.\n\nThe 1990s marked a golden era for RUBI. GERMANS BOADA, S.A. expanded by opening subsidiaries in Portugal, Italy, France, and other European countries, further strengthening RUBI\u2019s position in the tile tool industry.\n\nEntering the new millennium, RUBI\u2019s growth continued steadily. The development of tile cutters adopted modern technologies, adjusting to new trends and challenges in the construction and tile-laying sectors.",
+        },
+      },
+      {
+        title: { sr: "Tehnologije i inovacije", en: "Technologies and innovations" },
+        body: {
+          sr: "RUBI se isti\u010de po konstantnoj inovaciji i razvoju tehnologija koje profesionalcima olak\u0161avaju rad. RUBI alati su dizajnirani sa posebnim fokusom na ergonomiju, izdr\u017eljivost i jednostavnost kori\u0161\u0107enja.\n\nOd 2013. godine, RUBI uvodi na tr\u017ei\u0161te revolucionarne proizvode kao \u0161to su SLIM SYSTEM, TZ serija i elektri\u010dni reza\u010di ZERO DUST, vrhunska re\u0161enja za profesionalce koji rade sa kerami\u010dkim plo\u010dicama i prirodnim kamenom.\n\nPoseban akcenat stavlja se na lagane, ali robusne konstrukcije i udobne ru\u010dke koje omogu\u0107avaju komforan rad tokom celog dana. RUBI alati su sinonim za pouzdanost u gra\u0111evinskoj i kerami\u010darskoj industriji.",
+          en: "RUBI is known for constant innovation, adapting tools to the needs of professionals. RUBI tools are designed with ergonomics, durability, and usability in mind.\n\nSince 2013, RUBI has launched advanced product lines such as the SLIM SYSTEM, TZ series, and the ZERO DUST electric cutters, providing industry-leading solutions for working with ceramic tiles and natural stone.\n\nTheir lightweight design, combined with comfortable grips, makes long work sessions easier. RUBI tools have become a symbol of reliability in the tiling and construction industry.",
+        },
+      },
+      {
+        title: { sr: "Asortiman proizvoda", en: "Product range" },
+        body: {
+          sr: "RUBI nudi \u0161irok spektar alata i ma\u0161ina, od osnovnih ru\u010dnih reza\u010da za plo\u010dice do specijalizovanih elektri\u010dnih ure\u0111aja za se\u010denje keramike i kamena.\n\nNjihovi ru\u010dni reza\u010di predstavljaju siguran i precizan alat za profesionalce, bez o\u0161trih delova koji bi mogli ugroziti bezbednost korisnika. RUBI elektri\u010dni reza\u010di omogu\u0107avaju efikasno i precizno se\u010denje razli\u010ditih materijala, uklju\u010duju\u0107i granit i mermer.\n\nDodatno, RUBI asortiman obuhvata dijamantske se\u010dice za mokro i suvo se\u010denje. Ove se\u010dice su dostupne u pre\u010dnicima od 115 mm do 350 mm i kompatibilne su sa gotovo svim vrstama materijala, \u0161to ih \u010dini idealnim izborom za razne tipove kerami\u010darskih radova.",
+          en: "RUBI offers a broad range of tools and machines, from basic manual tile cutters to complex electric devices for ceramic and stone cutting.\n\nTheir manual cutters ensure safety and precision, free of sharp parts that could pose a risk to users. RUBI electric cutters allow for precise, efficient cutting of materials like granite and marble.\n\nAdditionally, the RUBI product lineup includes diamond blades for wet and dry cutting, available in diameters from 115 mm to 350 mm, compatible with nearly every type of material. These blades are an ideal choice for a wide range of professional tiling tasks.",
+        },
+      },
+    ],
+    catalogs: [
+      { name: "Rubi akcija 2023", pdfUrl: "https://drive.google.com/file/d/1Pu0Sd3ZYpC0pF6NHKWoyE0qMG8Upuxv7/view?usp=share" },
+    ],
+    color: "#FF0000",
+    storeUrl: "https://www.prodavnicaalata.rs/proizvodjaci/rubi/",
+  };
