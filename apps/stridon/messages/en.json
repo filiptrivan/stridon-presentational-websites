@@ -1,0 +1,100 @@
+{
+  "Nav": {
+    "home": "Home",
+    "brands": "Brands",
+    "catalogs": "Catalogs",
+    "service": "Service",
+    "b2b": "B2B",
+    "contact": "Contact",
+    "store": "Online store"
+  },
+  "Home": {
+    "heroTitle": "Importer and distributor of leading tool brands",
+    "heroDescription": "Wholesale, retail and online sales of power and hand tools, protective equipment for professionals and tradespeople, machines and accessories.",
+    "heroCta": "Online store",
+    "brandsTitle": "Our brands",
+    "brandsDescription": "Stridon offers tools and equipment from the most recognized brands including DeWalt, Stanley, Bosch, Knipex, Wiha, Högert, GTV, REMS, MAX, Wera, Black+Decker, Rubi, Senco and many more.",
+    "allBrands": "All brands",
+    "statsTitle": "Numbers speak for us",
+    "testimonialsTitle": "What our partners say about us",
+    "testimonialsDescription": "Our strength lies in the trust we build with partners. Read what our partners think about working with us."
+  },
+  "Brands": {
+    "title": "Brands",
+    "description": "Authorized importers and distributors of leading global tool brands in Serbia.",
+    "viewBrand": "View brand",
+    "viewCatalogs": "View catalogs",
+    "storeLink": "View in store"
+  },
+  "Brand": {
+    "viewCatalogs": "PDF Catalogs",
+    "viewPdf": "Open PDF",
+    "storeLink": "View in store",
+    "backToBrands": "All brands"
+  },
+  "Catalogs": {
+    "title": "Catalogs",
+    "description": "Download our PDF catalogs for all brands we represent.",
+    "viewPdf": "View PDF catalog",
+    "viewBrand": "Go to brand"
+  },
+  "About": {
+    "title": "About us",
+    "description": "A reliable partner for quality tools and equipment in Serbia, with you since 2009."
+  },
+  "Service": {
+    "title": "Tool service",
+    "description": "We service and maintain electric, cordless and hand tools — for professional and hobby use.",
+    "brandsTitle": "Brands we service",
+    "partnerTitle": "SG Servis — our reliable partner",
+    "partnerDescription": "Our partner SG Servis is your reliable partner for servicing electric tools. A dedicated team of experts specializing in maintenance and repair of a wide range of tool brands.",
+    "workingHours": "Working hours",
+    "workingHoursValue": "Mon–Fri 8:00–16:00, Sat 9:00–15:00"
+  },
+  "Contact": {
+    "title": "Contact",
+    "description": "Contact Stridon Group — wholesale, B2B partnerships and general inquiries.",
+    "name": "Full name",
+    "email": "Email address",
+    "phone": "Phone number",
+    "message": "Message",
+    "send": "Send message",
+    "sending": "Sending...",
+    "successTitle": "Message sent!",
+    "successDescription": "We will get back to you as soon as possible.",
+    "errorTitle": "Error",
+    "errorDescription": "Something went wrong. Please try again or contact us directly."
+  },
+  "B2B": {
+    "title": "B2B partnership",
+    "description": "Interested in wholesale or distribution? Contact us for B2B partnership terms.",
+    "company": "Company name",
+    "name": "Contact person",
+    "email": "Email address",
+    "phone": "Phone number",
+    "message": "Description of needs",
+    "send": "Send inquiry",
+    "sending": "Sending...",
+    "successTitle": "Inquiry received!",
+    "successDescription": "Our team will contact you within 1–2 business days.",
+    "errorTitle": "Error",
+    "errorDescription": "Something went wrong. Please try again or contact us directly."
+  },
+  "Footer": {
+    "company": "Company",
+    "store": "Store",
+    "rights": "All rights reserved.",
+    "privacy": "Privacy policy"
+  },
+  "Common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "backHome": "Back to home",
+    "learnMore": "Learn more"
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "description": "The page you are looking for does not exist or has been moved.",
+    "cta": "Back to home"
+  }
+}

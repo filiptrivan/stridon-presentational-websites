@@ -5,6 +5,7 @@
   "scripts": {
     "dev:sg": "turbo dev --filter=sg-tools-storefront",
     "dev:dck": "turbo dev --filter=dck-storefront",
+    "dev:stridon": "turbo dev --filter=stridon-storefront",
     "build": "turbo build",
     "lint": "turbo lint",
     "test": "turbo test",

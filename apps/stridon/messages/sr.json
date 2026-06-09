@@ -1,0 +1,100 @@
+{
+  "Nav": {
+    "home": "Početna",
+    "brands": "Brendovi",
+    "catalogs": "Katalozi",
+    "service": "Servis",
+    "b2b": "B2B",
+    "contact": "Kontakt",
+    "store": "Online prodavnica"
+  },
+  "Home": {
+    "heroTitle": "Uvoznik i distributer vodećih brendova alata",
+    "heroDescription": "Veleprodaja, maloprodaja i online prodaja električnog i ručnog alata, zaštitne opreme za profesionalce i majstore, mašina i pribora.",
+    "heroCta": "Online prodavnica",
+    "brandsTitle": "Naši brendovi",
+    "brandsDescription": "Stridon nudi alate i opremu najpoznatijih brendova kao što su DeWalt, Stanley, Bosch, Knipex, Wiha, Högert, GTV, REMS, MAX, Wera, Black+Decker, Rubi, Senco i mnogi drugi.",
+    "allBrands": "Svi brendovi",
+    "statsTitle": "Brojevi govore umesto nas",
+    "testimonialsTitle": "Šta naši saradnici kažu o nama",
+    "testimonialsDescription": "Naša snaga leži u poverenju koje gradimo sa partnerima. U nastavku pročitajte šta naši saradnici misle o radu sa nama."
+  },
+  "Brands": {
+    "title": "Brendovi",
+    "description": "Ovlašćeni uvoznici i distributeri vodećih svetskih brendova alata u Srbiji.",
+    "viewBrand": "Pogledaj brend",
+    "viewCatalogs": "Pogledaj kataloge",
+    "storeLink": "Pogledaj u prodavnici"
+  },
+  "Brand": {
+    "viewCatalogs": "PDF Katalozi",
+    "viewPdf": "Otvori PDF",
+    "storeLink": "Pogledaj u prodavnici",
+    "backToBrands": "Svi brendovi"
+  },
+  "Catalogs": {
+    "title": "Katalozi",
+    "description": "Preuzmite naše PDF kataloge za sve brendove koje zastupamo.",
+    "viewPdf": "Pogledaj PDF katalog",
+    "viewBrand": "Idi na brend"
+  },
+  "About": {
+    "title": "O nama",
+    "description": "Pouzdan partner za kvalitetan alat i opremu u Srbiji, uz vas od 2009. godine."
+  },
+  "Service": {
+    "title": "Servis alata",
+    "description": "Servisiramo i održavamo električne, akumulatorske i ručne alate — za profesionalnu i hobi upotrebu.",
+    "brandsTitle": "Brendovi koje servisiramo",
+    "partnerTitle": "SG Servis — naš pouzdani partner",
+    "partnerDescription": "Naša firma saradnik SG Servis je vaš pouzdani partner za servisiranje električnih alata. Posvećena ekipa stručnjaka specijalizovana je za održavanje i popravku širokog spektra brendova.",
+    "workingHours": "Radno vreme",
+    "workingHoursValue": "Pon–Pet 8:00–16:00, Sub 9:00–15:00"
+  },
+  "Contact": {
+    "title": "Kontakt",
+    "description": "Kontaktirajte Stridon Group — veleprodaja, B2B saradnja i opšti upiti.",
+    "name": "Ime i prezime",
+    "email": "Email adresa",
+    "phone": "Broj telefona",
+    "message": "Poruka",
+    "send": "Pošalji poruku",
+    "sending": "Slanje...",
+    "successTitle": "Poruka poslata!",
+    "successDescription": "Javićemo ti se u najkraćem mogućem roku.",
+    "errorTitle": "Greška",
+    "errorDescription": "Nešto nije prošlo. Pokušaj ponovo ili nas kontaktiraj direktno."
+  },
+  "B2B": {
+    "title": "B2B saradnja",
+    "description": "Zainteresovani ste za veleprodaju ili distribuciju? Kontaktirajte nas za B2B uslove saradnje.",
+    "company": "Naziv firme",
+    "name": "Kontakt osoba",
+    "email": "Email adresa",
+    "phone": "Broj telefona",
+    "message": "Opis potreba",
+    "send": "Pošalji upit",
+    "sending": "Slanje...",
+    "successTitle": "Upit primljen!",
+    "successDescription": "Naš tim će te kontaktirati u roku od 1–2 radna dana.",
+    "errorTitle": "Greška",
+    "errorDescription": "Nešto nije prošlo. Pokušaj ponovo ili nas kontaktiraj direktno."
+  },
+  "Footer": {
+    "company": "Kompanija",
+    "store": "Prodavnica",
+    "rights": "Sva prava zadržana.",
+    "privacy": "Politika privatnosti"
+  },
+  "Common": {
+    "loading": "Učitavanje...",
+    "error": "Greška",
+    "backHome": "Nazad na početnu",
+    "learnMore": "Saznaj više"
+  },
+  "NotFound": {
+    "title": "Stranica nije pronađena",
+    "description": "Stranica koju tražiš ne postoji ili je premeštena.",
+    "cta": "Nazad na početnu"
+  }
+}
