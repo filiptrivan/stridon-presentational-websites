@@ -10,7 +10,7 @@ export const config: BrandConfig = {
   themeColor: "#FFFFFF",
   bodyClassName: "",
 
-  logoSrc: "/stridon-logo.svg",
+  logoSrc: "/stridon-logo.webp",
   logoAlt: "Stridon Group Logo",
   navbarLogoHeight: "h-7",
   headerCta: {

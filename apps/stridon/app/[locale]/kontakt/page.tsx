@@ -1,6 +1,7 @@
 import HeroHeader from "@brand/shared/components/hero-header";
 import Wrapper from "@brand/shared/components/wrapper";
 import Container from "@brand/shared/components/container";
+import ContactForm from "@/components/contact-form";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { MapPinIcon, MailIcon, PhoneIcon } from "lucide-react";
 import type { Metadata } from "next";
@@ -60,15 +61,10 @@ export default async function KontaktPage({ params }: { params: Promise<{ locale
             </div>
           </Container>
 
-          {/* Placeholder form note */}
+          {/* Contact form */}
           <Container animation="fadeRight" delay={0.15}>
-            <div className="rounded-xl border border-border bg-card p-6">
-              <p className="text-muted-foreground text-sm">
-                Kontakt forma je u pripremi. U međuvremenu, slobodno nas kontaktirajte direktno na{" "}
-                <a href="mailto:office@stridon.rs" className="text-primary hover:underline">
-                  office@stridon.rs
-                </a>.
-              </p>
+            <div className="rounded-xl border border-border/60 bg-card p-6">
+              <ContactForm />
             </div>
           </Container>
         </div>

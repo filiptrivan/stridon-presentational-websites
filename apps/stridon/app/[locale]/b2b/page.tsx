@@ -1,6 +1,7 @@
 import HeroHeader from "@brand/shared/components/hero-header";
 import Wrapper from "@brand/shared/components/wrapper";
 import Container from "@brand/shared/components/container";
+import B2BForm from "@/components/b2b-form";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { BuildingIcon, HandshakeIcon, TruckIcon } from "lucide-react";
 import type { Metadata } from "next";
@@ -52,16 +53,12 @@ export default async function B2BPage({ params }: { params: Promise<{ locale: st
           ))}
         </div>
 
-        {/* Contact CTA */}
+        {/* B2B form */}
         <Container animation="fadeUp" delay={0.3}>
-          <div className="rounded-xl border border-border bg-card p-6 max-w-xl">
-            <p className="text-muted-foreground text-sm">
-              Za B2B upite i uslove saradnje, kontaktirajte nas direktno na{" "}
-              <a href="mailto:office@stridon.rs" className="text-primary hover:underline">
-                office@stridon.rs
-              </a>{" "}
-              ili pozovite naš tim. B2B forma je u pripremi.
-            </p>
+          <div className="rounded-xl border border-border/60 bg-card p-6 max-w-xl">
+            <h2 className="font-semibold mb-1">Pošalji upit</h2>
+            <p className="text-sm text-muted-foreground mb-6">Popuni formu i javićemo ti se u roku od 24h.</p>
+            <B2BForm />
           </div>
         </Container>
       </Wrapper>

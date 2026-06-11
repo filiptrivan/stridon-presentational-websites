@@ -123,7 +123,7 @@ export default async function BrandPage({ params }: Props) {
                     href={catalog.pdfUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-4 rounded-lg border border-border bg-card hover:border-primary/30 hover:shadow-sm transition-all duration-200 group"
+                    className="flex items-center gap-3 p-4 rounded-lg border border-border/60 bg-card hover:border-primary/25 hover:bg-muted/30 transition-all duration-200 group"
                   >
                     <FileTextIcon className="size-5 text-muted-foreground shrink-0" />
                     <span className="font-medium text-sm flex-1">{catalog.name}</span>
