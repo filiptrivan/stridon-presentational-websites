@@ -1,6 +1,7 @@
 {
   "Nav": {
     "home": "Home",
+    "about": "About us",
     "brands": "Brands",
     "catalogs": "Catalogs",
     "service": "Service",
@@ -9,6 +10,8 @@
     "store": "Online store"
   },
   "Home": {
+    "metaTitle": "Importer and distributor of tools",
+    "metaDescription": "Stridon Group DOO — importer and distributor of leading global tool brands in Serbia. Wholesale, retail and online sales.",
     "heroTitle": "Importer and distributor of leading tool brands",
     "heroDescription": "Wholesale, retail and online sales of power and hand tools, protective equipment for professionals and tradespeople, machines and accessories.",
     "heroCta": "Online store",
@@ -78,13 +81,24 @@
     "successTitle": "Inquiry received!",
     "successDescription": "Our team will contact you within 1–2 business days.",
     "errorTitle": "Error",
-    "errorDescription": "Something went wrong. Please try again or contact us directly."
+    "errorDescription": "Something went wrong. Please try again or contact us directly.",
+    "benefit0Title": "Fast delivery",
+    "benefit0Description": "Delivery in 1–5 business days for all wholesale orders.",
+    "benefit1Title": "Favorable terms",
+    "benefit1Description": "Special price lists and discounts for registered B2B partners.",
+    "benefit2Title": "Support",
+    "benefit2Description": "Personal account manager and technical support for all brands."
   },
   "Footer": {
     "company": "Company",
     "store": "Store",
+    "contact": "Contact",
     "rights": "All rights reserved.",
-    "privacy": "Privacy policy"
+    "privacy": "Privacy policy",
+    "onlineStore": "Online store",
+    "dewaltTools": "DeWalt tools",
+    "boschTools": "Bosch tools",
+    "stanleyTools": "Stanley tools"
   },
   "Common": {
     "loading": "Loading...",

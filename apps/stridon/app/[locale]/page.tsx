@@ -12,11 +12,14 @@ import Link from "next/link";
 import { ArrowRightIcon, ExternalLinkIcon, QuoteIcon } from "lucide-react";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Stridon Group | Uvoznik i distributer alata",
-  description:
-    "Stridon Group DOO — uvoznik i distributer vodećih svetskih brendova alata u Srbiji. Veleprodaja, maloprodaja i online prodaja.",
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Home" });
+  return {
+    title: `Stridon Group | ${t("metaTitle")}`,
+    description: t("metaDescription"),
+  };
+}
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;

@@ -8,10 +8,14 @@ import Link from "next/link";
 import { ArrowRightIcon } from "lucide-react";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Brendovi | Stridon Group",
-  description: "Ovlašćeni uvoznici i distributeri vodećih svetskih brendova alata u Srbiji.",
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Brands" });
+  return {
+    title: `${t("title")} | Stridon Group`,
+    description: t("description"),
+  };
+}
 
 export default async function BrendoviPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;

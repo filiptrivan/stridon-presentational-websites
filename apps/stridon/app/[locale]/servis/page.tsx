@@ -6,10 +6,14 @@ import { SERVICE_BRANDS } from "@/constants/content";
 import { ClockIcon, WrenchIcon } from "lucide-react";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Servis alata | Stridon Group",
-  description: "Servisiramo i održavamo električne, akumulatorske i ručne alate — za profesionalnu i hobi upotrebu.",
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Service" });
+  return {
+    title: `${t("title")} | Stridon Group`,
+    description: t("description"),
+  };
+}
 
 export default async function ServisPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;

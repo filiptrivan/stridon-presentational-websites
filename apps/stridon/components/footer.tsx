@@ -5,29 +5,32 @@ import Wrapper from "@brand/shared/components/wrapper";
 import { Mail, Instagram, Facebook } from "lucide-react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { FOOTER_LINKS, STORE_URL } from "@/constants/links";
+import { STORE_URL } from "@/constants/links";
+import { getTranslations } from "next-intl/server";
 
 const { logoSrc, logoAlt, siteName, footerTagline, footerGradientEdge } =
   getBrandConfig();
 
-const COMPANY_LINKS = [
-  { label: "O nama", href: "/o-nama" },
-  { label: "Brendovi", href: "/brendovi" },
-  { label: "Katalozi", href: "/katalozi" },
-  { label: "Servis", href: "/servis" },
-  { label: "B2B", href: "/b2b" },
-  { label: "Kontakt", href: "/kontakt" },
-];
-
-const STORE_LINKS = [
-  { label: "Online prodavnica", href: STORE_URL, external: true },
-  { label: "DeWalt alati", href: `${STORE_URL}/proizvodjaci/dewalt/`, external: true },
-  { label: "Bosch alati", href: `${STORE_URL}/proizvodjaci/bosch/`, external: true },
-  { label: "Stanley alati", href: `${STORE_URL}/proizvodjaci/stanley/`, external: true },
-];
-
-const Footer = () => {
+const Footer = async () => {
+  const t = await getTranslations("Footer");
+  const tNav = await getTranslations("Nav");
   const year = process.env.BUILD_YEAR ?? new Date().getFullYear().toString();
+
+  const COMPANY_LINKS = [
+    { label: tNav("about"), href: "/o-nama" },
+    { label: tNav("brands"), href: "/brendovi" },
+    { label: tNav("catalogs"), href: "/katalozi" },
+    { label: tNav("service"), href: "/servis" },
+    { label: tNav("b2b"), href: "/b2b" },
+    { label: tNav("contact"), href: "/kontakt" },
+  ];
+
+  const STORE_LINKS = [
+    { label: t("onlineStore"), href: STORE_URL },
+    { label: t("dewaltTools"), href: `${STORE_URL}/proizvodjaci/dewalt/` },
+    { label: t("boschTools"), href: `${STORE_URL}/proizvodjaci/bosch/` },
+    { label: t("stanleyTools"), href: `${STORE_URL}/proizvodjaci/stanley/` },
+  ];
 
   return (
     <footer className="relative pt-16 w-full overflow-hidden">
@@ -81,7 +84,7 @@ const Footer = () => {
           {/* Company links */}
           <Container animation="fadeUp" delay={0.5}>
             <div>
-              <h3 className="text-base font-medium">Kompanija</h3>
+              <h3 className="text-base font-medium">{t("company")}</h3>
               <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
                 {COMPANY_LINKS.map((link) => (
                   <li key={link.href}>
@@ -97,7 +100,7 @@ const Footer = () => {
           {/* Store links */}
           <Container animation="fadeUp" delay={0.6}>
             <div>
-              <h3 className="text-base font-medium">Prodavnica</h3>
+              <h3 className="text-base font-medium">{t("store")}</h3>
               <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
                 {STORE_LINKS.map((link) => (
                   <li key={link.href}>
@@ -119,7 +122,7 @@ const Footer = () => {
           {/* Contact info */}
           <Container animation="fadeUp" delay={0.7}>
             <div>
-              <h3 className="text-base font-medium">Kontakt</h3>
+              <h3 className="text-base font-medium">{t("contact")}</h3>
               <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
                 <li>Borivoja Stevanovića, Beograd</li>
                 <li>Vojislava Ilića 141g, Beograd</li>
@@ -139,7 +142,7 @@ const Footer = () => {
           <div className="mt-10 border-t border-border/80 py-8 flex flex-col md:flex-row items-center justify-center gap-2 text-sm text-muted-foreground">
             <p>{`© ${year} ${siteName}`}</p>
             <span className="hidden md:inline">&middot;</span>
-            <p>Sva prava zadržana.</p>
+            <p>{t("rights")}</p>
           </div>
         </Container>
       </Wrapper>

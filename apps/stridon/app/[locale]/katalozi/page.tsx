@@ -9,10 +9,14 @@ import { ExternalLinkIcon, ArrowRightIcon } from "lucide-react";
 import { Button } from "@brand/ui/button";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Katalozi | Stridon Group",
-  description: "Preuzmite naše PDF kataloge za sve brendove koje zastupamo.",
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Catalogs" });
+  return {
+    title: `${t("title")} | Stridon Group`,
+    description: t("description"),
+  };
+}
 
 export default async function KataloziPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;

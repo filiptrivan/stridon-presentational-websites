@@ -6,10 +6,14 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { MapPinIcon, MailIcon, PhoneIcon } from "lucide-react";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Kontakt | Stridon Group",
-  description: "Kontaktirajte Stridon Group — veleprodaja, B2B saradnja i opšti upiti.",
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Contact" });
+  return {
+    title: `${t("title")} | Stridon Group`,
+    description: t("description"),
+  };
+}
 
 export default async function KontaktPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;

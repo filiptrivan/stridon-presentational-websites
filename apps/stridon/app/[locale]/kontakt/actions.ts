@@ -2,6 +2,8 @@
 
 import { getBrandConfig } from "@brand/config";
 import { reportError } from "@brand/shared/lib/report-error";
+import { validateTurnstileToken } from "@brand/shared/lib/turnstile-server";
+import { TURNSTILE_VERIFICATION_FAILED } from "@brand/shared/lib/turnstile";
 
 export type ContactFormState = {
   success: boolean;
@@ -12,6 +14,12 @@ export async function submitContactForm(
   _prevState: ContactFormState,
   formData: FormData,
 ): Promise<ContactFormState> {
+  const turnstileToken = formData.get("turnstile") as string;
+  const isValidToken = await validateTurnstileToken(turnstileToken);
+  if (!isValidToken) {
+    return { success: false, error: TURNSTILE_VERIFICATION_FAILED };
+  }
+
   const name = (formData.get("name") as string)?.trim();
   const email = (formData.get("email") as string)?.trim();
   const message = (formData.get("message") as string)?.trim();

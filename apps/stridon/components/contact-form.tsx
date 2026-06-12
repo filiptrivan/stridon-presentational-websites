@@ -6,12 +6,14 @@ import { Input } from "@brand/ui/input";
 import { Label } from "@brand/ui/label";
 import { Textarea } from "@brand/ui/textarea";
 import { Loader2, Send, CheckCircle2 } from "lucide-react";
+import { useTurnstile } from "@brand/shared/lib/hooks/useTurnstile";
 import { submitContactForm, type ContactFormState } from "@/app/[locale]/kontakt/actions";
 
 const initialState: ContactFormState = { success: false };
 
 export default function ContactForm() {
   const [state, action, isPending] = useActionState(submitContactForm, initialState);
+  const { token: turnstileToken, widget: turnstileWidget } = useTurnstile();
 
   if (state.success) {
     return (
@@ -25,6 +27,8 @@ export default function ContactForm() {
 
   return (
     <form action={action} className="space-y-5">
+      <input type="hidden" name="turnstile" value={turnstileToken ?? ""} />
+
       <div className="space-y-1.5">
         <Label htmlFor="name">Ime i prezime</Label>
         <Input id="name" name="name" placeholder="Petar Petrović" required />
@@ -46,11 +50,13 @@ export default function ContactForm() {
         />
       </div>
 
+      {turnstileWidget}
+
       {state.error && (
         <p className="text-sm text-destructive">{state.error}</p>
       )}
 
-      <Button type="submit" className="w-full" disabled={isPending}>
+      <Button type="submit" className="w-full" disabled={isPending || !turnstileToken}>
         {isPending ? (
           <><Loader2 className="size-4 animate-spin" /> Šalje se...</>
         ) : (

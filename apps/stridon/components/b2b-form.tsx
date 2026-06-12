@@ -6,12 +6,14 @@ import { Input } from "@brand/ui/input";
 import { Label } from "@brand/ui/label";
 import { Textarea } from "@brand/ui/textarea";
 import { Loader2, Send, CheckCircle2 } from "lucide-react";
+import { useTurnstile } from "@brand/shared/lib/hooks/useTurnstile";
 import { submitB2BForm, type B2BFormState } from "@/app/[locale]/b2b/actions";
 
 const initialState: B2BFormState = { success: false };
 
 export default function B2BForm() {
   const [state, action, isPending] = useActionState(submitB2BForm, initialState);
+  const { token: turnstileToken, widget: turnstileWidget } = useTurnstile();
 
   if (state.success) {
     return (
@@ -25,6 +27,8 @@ export default function B2BForm() {
 
   return (
     <form action={action} className="space-y-5">
+      <input type="hidden" name="turnstile" value={turnstileToken ?? ""} />
+
       <div className="space-y-1.5">
         <Label htmlFor="company">Naziv firme <span className="text-destructive">*</span></Label>
         <Input id="company" name="company" placeholder="Firma d.o.o." required />
@@ -56,11 +60,13 @@ export default function B2BForm() {
         />
       </div>
 
+      {turnstileWidget}
+
       {state.error && (
         <p className="text-sm text-destructive">{state.error}</p>
       )}
 
-      <Button type="submit" className="w-full" disabled={isPending}>
+      <Button type="submit" className="w-full" disabled={isPending || !turnstileToken}>
         {isPending ? (
           <><Loader2 className="size-4 animate-spin" /> Šalje se...</>
         ) : (

@@ -6,34 +6,26 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { BuildingIcon, HandshakeIcon, TruckIcon } from "lucide-react";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "B2B saradnja | Stridon Group",
-  description: "Zainteresovani ste za veleprodaju ili distribuciju? Kontaktirajte nas za B2B uslove saradnje.",
-};
-
-const B2B_BENEFITS = [
-  {
-    icon: TruckIcon,
-    title: "Brza isporuka",
-    description: "Isporuka 1–5 radnih dana za sve veleprodajne narudžbine.",
-  },
-  {
-    icon: BuildingIcon,
-    title: "Povoljni uslovi",
-    description: "Posebni cenovnici i popusti za registrovane B2B partnere.",
-  },
-  {
-    icon: HandshakeIcon,
-    title: "Podrška",
-    description: "Lični account manager i tehnička podrška za sve brendove.",
-  },
-];
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "B2B" });
+  return {
+    title: `${t("title")} | Stridon Group`,
+    description: t("description"),
+  };
+}
 
 export default async function B2BPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);
 
   const t = await getTranslations("B2B");
+
+  const B2B_BENEFITS = [
+    { icon: TruckIcon, title: t("benefit0Title"), description: t("benefit0Description") },
+    { icon: BuildingIcon, title: t("benefit1Title"), description: t("benefit1Description") },
+    { icon: HandshakeIcon, title: t("benefit2Title"), description: t("benefit2Description") },
+  ];
 
   return (
     <div>

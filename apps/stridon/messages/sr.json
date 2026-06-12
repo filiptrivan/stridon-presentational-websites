@@ -1,6 +1,7 @@
 {
   "Nav": {
     "home": "Početna",
+    "about": "O nama",
     "brands": "Brendovi",
     "catalogs": "Katalozi",
     "service": "Servis",
@@ -9,6 +10,8 @@
     "store": "Online prodavnica"
   },
   "Home": {
+    "metaTitle": "Uvoznik i distributer alata",
+    "metaDescription": "Stridon Group DOO — uvoznik i distributer vodećih svetskih brendova alata u Srbiji. Veleprodaja, maloprodaja i online prodaja.",
     "heroTitle": "Uvoznik i distributer vodećih brendova alata",
     "heroDescription": "Veleprodaja, maloprodaja i online prodaja električnog i ručnog alata, zaštitne opreme za profesionalce i majstore, mašina i pribora.",
     "heroCta": "Online prodavnica",
@@ -78,13 +81,24 @@
     "successTitle": "Upit primljen!",
     "successDescription": "Naš tim će te kontaktirati u roku od 1–2 radna dana.",
     "errorTitle": "Greška",
-    "errorDescription": "Nešto nije prošlo. Pokušaj ponovo ili nas kontaktiraj direktno."
+    "errorDescription": "Nešto nije prošlo. Pokušaj ponovo ili nas kontaktiraj direktno.",
+    "benefit0Title": "Brza isporuka",
+    "benefit0Description": "Isporuka 1–5 radnih dana za sve veleprodajne narudžbine.",
+    "benefit1Title": "Povoljni uslovi",
+    "benefit1Description": "Posebni cenovnici i popusti za registrovane B2B partnere.",
+    "benefit2Title": "Podrška",
+    "benefit2Description": "Lični account manager i tehnička podrška za sve brendove."
   },
   "Footer": {
     "company": "Kompanija",
     "store": "Prodavnica",
+    "contact": "Kontakt",
     "rights": "Sva prava zadržana.",
-    "privacy": "Politika privatnosti"
+    "privacy": "Politika privatnosti",
+    "onlineStore": "Online prodavnica",
+    "dewaltTools": "DeWalt alati",
+    "boschTools": "Bosch alati",
+    "stanleyTools": "Stanley alati"
   },
   "Common": {
     "loading": "Učitavanje...",

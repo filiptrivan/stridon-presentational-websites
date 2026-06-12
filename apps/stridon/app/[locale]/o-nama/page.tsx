@@ -5,10 +5,14 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ABOUT_SECTIONS, STATS } from "@/constants/content";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "O nama | Stridon Group",
-  description: "Pouzdan partner za kvalitetan alat i opremu u Srbiji, uz vas od 2009. godine.",
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "About" });
+  return {
+    title: `${t("title")} | Stridon Group`,
+    description: t("description"),
+  };
+}
 
 export default async function ONamaPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
