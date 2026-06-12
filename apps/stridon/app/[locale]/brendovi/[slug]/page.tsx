@@ -22,12 +22,12 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const brand = getBrandBySlug(slug);
   if (!brand) return {};
   return {
     title: `${brand.name} | Stridon Group`,
-    description: brand.description,
+    description: brand.heroDescription[locale as "sr" | "en"],
   };
 }
 

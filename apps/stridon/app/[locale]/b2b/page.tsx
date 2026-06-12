@@ -47,9 +47,9 @@ export default async function B2BPage({ params }: { params: Promise<{ locale: st
 
         {/* B2B form */}
         <Container animation="fadeUp" delay={0.3}>
-          <div className="rounded-xl border border-border/60 bg-card p-6 max-w-xl">
-            <h2 className="font-semibold mb-1">Pošalji upit</h2>
-            <p className="text-sm text-muted-foreground mb-6">Popuni formu i javićemo ti se u roku od 24h.</p>
+          <div>
+            <h2 className="font-semibold mb-1">{t("formTitle")}</h2>
+            <p className="text-sm text-muted-foreground mb-6">{t("formDescription")}</p>
             <B2BForm />
           </div>
         </Container>

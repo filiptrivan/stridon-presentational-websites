@@ -2,34 +2,42 @@ import { getBrandConfig } from "@brand/config";
 import Container from "@brand/shared/components/container";
 import Glow from "@brand/shared/components/glow";
 import Wrapper from "@brand/shared/components/wrapper";
-import { Mail, Instagram, Facebook } from "lucide-react";
-import Image from "next/image";
+import { Youtube, Instagram, Facebook } from "lucide-react";
 import { Link } from "@/i18n/navigation";
-import { STORE_URL } from "@/constants/links";
 import { getTranslations } from "next-intl/server";
 
-const { logoSrc, logoAlt, siteName, footerTagline, footerGradientEdge } =
-  getBrandConfig();
+const { siteName, footerGradientEdge } = getBrandConfig();
 
 const Footer = async () => {
+  const year = process.env.BUILD_YEAR ?? new Date().getFullYear().toString();
   const t = await getTranslations("Footer");
   const tNav = await getTranslations("Nav");
-  const year = process.env.BUILD_YEAR ?? new Date().getFullYear().toString();
 
-  const COMPANY_LINKS = [
+  const INFORMATION_LINKS = [
+    { label: tNav("home"), href: "/" },
     { label: tNav("about"), href: "/o-nama" },
-    { label: tNav("brands"), href: "/brendovi" },
-    { label: tNav("catalogs"), href: "/katalozi" },
-    { label: tNav("service"), href: "/servis" },
-    { label: tNav("b2b"), href: "/b2b" },
     { label: tNav("contact"), href: "/kontakt" },
   ];
 
-  const STORE_LINKS = [
-    { label: t("onlineStore"), href: STORE_URL },
-    { label: t("dewaltTools"), href: `${STORE_URL}/proizvodjaci/dewalt/` },
-    { label: t("boschTools"), href: `${STORE_URL}/proizvodjaci/bosch/` },
-    { label: t("stanleyTools"), href: `${STORE_URL}/proizvodjaci/stanley/` },
+  const COMPANY_LINKS = [
+    { label: tNav("brands"), href: "/brendovi" },
+    { label: tNav("b2b"), href: "/b2b" },
+    { label: tNav("catalogs"), href: "/katalozi" },
+    { label: tNav("service"), href: "/servis" },
+  ];
+
+  const CALL_CENTER_ITEMS = [
+    { label: "office@stridon.rs", href: "mailto:office@stridon.rs", isLink: true },
+    { label: t("altina"), href: "", isLink: false },
+    { label: "011/210-0230", href: "tel:0112100230", isLink: true },
+    { label: t("vojislava"), href: "", isLink: false },
+    { label: "011/2886-509", href: "tel:0112886509", isLink: true },
+  ];
+
+  const WORKING_HOURS = [
+    t("hoursWeekdays"),
+    t("hoursSaturday"),
+    t("hoursSunday"),
   ];
 
   return (
@@ -45,50 +53,49 @@ const Footer = async () => {
           />
         </Container>
 
-        <div className="pt-8 grid gap-10 grid-cols-2 md:grid-cols-4 xl:gap-8">
-          {/* Brand column */}
-          <Container animation="fadeLeft" delay={0.4} className="col-span-2 md:col-span-1">
-            <div className="flex flex-col items-start">
-              <Image src={logoSrc} alt={logoAlt} width={120} height={32} className="h-8 w-auto" />
-              <p className="text-muted-foreground mt-4 text-sm">{footerTagline}</p>
-              <a
-                href="mailto:office@stridon.rs"
-                className="mt-4 text-sm text-muted-foreground px-4 py-2 rounded-full border border-border/40 bg-foreground/5 hover:bg-foreground/10 transition-colors flex items-center gap-2"
-              >
-                <Mail className="size-4" />
-                office@stridon.rs
-              </a>
-              <div className="mt-5 flex items-center gap-3">
-                <a
-                  href="https://www.instagram.com/stridongroup/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Instagram"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <Instagram className="size-5" />
-                </a>
-                <a
-                  href="https://www.facebook.com/stridongroup"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Facebook"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <Facebook className="size-5" />
-                </a>
-              </div>
+        <div className="pt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 xl:gap-8">
+          {/* Call center */}
+          <Container animation="fadeUp" delay={0.4}>
+            <div>
+              <h3 className="text-sm font-semibold mb-4">{t("callCenter")}</h3>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                {CALL_CENTER_ITEMS.map((item, i) =>
+                  item.isLink ? (
+                    <li key={i}>
+                      <a href={item.href} className="hover:text-primary transition-colors">
+                        {item.label}
+                      </a>
+                    </li>
+                  ) : (
+                    <li key={i} className="font-medium text-foreground pt-1">
+                      {item.label}
+                    </li>
+                  )
+                )}
+              </ul>
             </div>
           </Container>
 
-          {/* Company links */}
+          {/* Working hours */}
           <Container animation="fadeUp" delay={0.5}>
             <div>
-              <h3 className="text-base font-medium">{t("company")}</h3>
-              <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-                {COMPANY_LINKS.map((link) => (
+              <h3 className="text-sm font-semibold mb-4">{t("workingHours")}</h3>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                {WORKING_HOURS.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </Container>
+
+          {/* Information */}
+          <Container animation="fadeUp" delay={0.6}>
+            <div>
+              <h3 className="text-sm font-semibold mb-4">{t("information")}</h3>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                {INFORMATION_LINKS.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} className="hover:text-foreground transition-colors">
+                    <Link href={link.href} className="hover:text-primary transition-colors">
                       {link.label}
                     </Link>
                   </li>
@@ -97,52 +104,67 @@ const Footer = async () => {
             </div>
           </Container>
 
-          {/* Store links */}
-          <Container animation="fadeUp" delay={0.6}>
+          {/* Company */}
+          <Container animation="fadeUp" delay={0.7}>
             <div>
-              <h3 className="text-base font-medium">{t("store")}</h3>
-              <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-                {STORE_LINKS.map((link) => (
+              <h3 className="text-sm font-semibold mb-4">{t("company")}</h3>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                {COMPANY_LINKS.map((link) => (
                   <li key={link.href}>
-                    <a
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:text-foreground transition-colors"
-                    >
+                    <Link href={link.href} className="hover:text-primary transition-colors">
                       {link.label}
-                      <span className="ml-1 text-xs">&#8599;</span>
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
             </div>
           </Container>
-
-          {/* Contact info */}
-          <Container animation="fadeUp" delay={0.7}>
-            <div>
-              <h3 className="text-base font-medium">{t("contact")}</h3>
-              <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-                <li>Borivoja Stevanovića, Beograd</li>
-                <li>Vojislava Ilića 141g, Beograd</li>
-                <li>Ugrinovačka 212 (Altina)</li>
-                <li className="pt-1">
-                  <a href="tel:+38111000000" className="hover:text-foreground transition-colors">
-                    +381 11 000 0000
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </Container>
         </div>
 
-        {/* Copyright */}
+        {/* Bottom bar */}
         <Container animation="fadeUp" delay={0.8}>
-          <div className="mt-10 border-t border-border/80 py-8 flex flex-col md:flex-row items-center justify-center gap-2 text-sm text-muted-foreground">
-            <p>{`© ${year} ${siteName}`}</p>
-            <span className="hidden md:inline">&middot;</span>
-            <p>{t("rights")}</p>
+          <div className="mt-10 border-t border-border/80 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+            <p>{`© ${year} ${t("rights")} ${siteName}.`}</p>
+
+            <div className="flex items-center gap-4">
+              <Link href="/podaci-za-identifikaciju" className="hover:text-primary transition-colors">
+                {t("identificationData")}
+              </Link>
+              <span className="text-border">·</span>
+              <Link href="/politika-privatnosti" className="hover:text-primary transition-colors">
+                {t("privacy")}
+              </Link>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <a
+                href="https://www.facebook.com/stridongroup"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="p-2 rounded-full bg-foreground/10 text-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
+              >
+                <Facebook className="size-4" />
+              </a>
+              <a
+                href="https://www.instagram.com/stridongroup/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="p-2 rounded-full bg-foreground/10 text-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
+              >
+                <Instagram className="size-4" />
+              </a>
+              <a
+                href="https://www.youtube.com/@prodavnicaalata5203"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="YouTube"
+                className="p-2 rounded-full bg-foreground/10 text-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
+              >
+                <Youtube className="size-4" />
+              </a>
+            </div>
           </div>
         </Container>
       </Wrapper>

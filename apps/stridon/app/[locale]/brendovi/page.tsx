@@ -22,6 +22,7 @@ export default async function BrendoviPage({ params }: { params: Promise<{ local
   setRequestLocale(locale);
 
   const t = await getTranslations("Brands");
+  const loc = locale as "sr" | "en";
 
   return (
     <div>
@@ -49,7 +50,7 @@ export default async function BrendoviPage({ params }: { params: Promise<{ local
                 <div className="text-center">
                   <p className="font-medium text-sm">{brand.name}</p>
                   <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                    {brand.description}
+                    {brand.heroDescription[loc]}
                   </p>
                 </div>
                 <span className="text-xs font-medium text-primary flex items-center gap-1 group-hover:gap-2 transition-all">

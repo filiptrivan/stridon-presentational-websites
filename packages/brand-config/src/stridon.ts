@@ -34,7 +34,7 @@ export const config: BrandConfig = {
   emailHeading: "Nova poruka sa stridon.rs",
 
   heroGradient:
-    "bg-[radial-gradient(86.02%_172.05%_at_50%_-40%,rgba(30,58,138,0.25)_0%,rgba(255,255,255,0)_80%)]",
+    "bg-[radial-gradient(86.02%_172.05%_at_50%_-40%,rgba(138,27,27,0.18)_0%,rgba(255,255,255,0)_80%)]",
 
   ctaHeading: "Pouzdan partner \n za kvalitetan alat",
   ctaGradientClasses: "from-neutral-900 to-neutral-600",
@@ -45,8 +45,8 @@ export const config: BrandConfig = {
   ogColors: {
     background: "#ffffff",
     foreground: "#1a1a1a",
-    primary: "#1e3a8a",
-    primaryBright: "#2563eb",
+    primary: "#8a1b1b",
+    primaryBright: "#b02020",
     muted: "#666666",
     card: "#f5f5f5",
     border: "rgba(0,0,0,0.10)",

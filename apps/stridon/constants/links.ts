@@ -31,3 +31,4 @@ export const FOOTER_LINKS: NavLink[] = [
 ];
 
 export const STORE_URL = "https://www.prodavnicaalata.rs";
+export const SITE_URL = "https://stridon.rs";
