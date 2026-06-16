@@ -9,16 +9,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  claude-review:
-    # Public repo: only same-repo PRs can run the gate. Fork PRs run with a read-only
-    # token and NO secrets (so a malicious fork can't steal CLAUDE_CODE_OAUTH_TOKEN),
-    # so the gate skips them entirely — external contributions get maintainer review +
-    # admin-bypass instead of auto-merging. Also skip drafts.
-    if: >-
-      github.event.pull_request.draft == false &&
-      github.event.pull_request.head.repo.full_name == github.repository
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
+  review:
     permissions:
       contents: read
       pull-requests: write
@@ -26,113 +17,20 @@ jobs:
       checks: write
       id-token: write
       actions: read
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
-        with:
-          fetch-depth: 1
+    uses: filiptrivan/ci-workflows/.github/workflows/claude-gate.yml@main
+    with:
+      same_repo_only: true
+      review_spec: |
+        Two Next.js 16 brand presentational websites (SG TOOLS, DCK) — Turborepo monorepo, display-only (no cart/checkout).
 
-      - name: Run Claude Code Review
-        id: review
-        continue-on-error: true
-        uses: anthropics/claude-code-action@d5726de019ec4498aa667642bc3a80fca83aa102 # v1
-        with:
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          # Opus for precision on the "cite or don't post" bar. If every-push reviews
-          # start hitting your Max weekly usage cap, change `--model opus` to `--model sonnet`.
-          # Verdict transported via a Write to claude-verdict.json (this pinned action build
-          # does not surface --json-schema structured_output); the gate step reads that file.
-          claude_args: '--model opus --max-turns 20 --allowed-tools "mcp__github_inline_comment__create_inline_comment,Write,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*)"'
-          prompt: |
-            REPO: ${{ github.repository }}
-            PR NUMBER: ${{ github.event.pull_request.number }}
-            REVIEW ROUND: ${{ (github.event.action == 'opened' || github.event.action == 'ready_for_review') && 'first' || 'subsequent' }}
+        BLOCK CLASS (hard-block — high bar, objectively checkable):
+        - cacheComponents dynamic-IO violation: a zero-arg dynamic API (new Date()/Date.now()/Math.random()/cookies()/headers()) read during render — including inside "use client" or "use cache" — that breaks static prerender.
+        - a server-only secret (API_URL, BREVO_API_KEY, PACMS_API_KEY) exposed via a NEXT_PUBLIC_ var or leaked into the client bundle, OR a committed secret/credential, OR PII in a response/log.
 
-            You are the autonomous review gate for two Next.js 16 brand presentational websites (SG TOOLS,
-            DCK) — a Turborepo monorepo, display-only (no cart/checkout). Routine team PRs have NO required
-            human reviewer, so the verdict you emit is load-bearing. Review the FULL cumulative PR diff (base..head).
-            Follow the conventions in CLAUDE.md, especially:
-            - Push back on hacks / fragile workarounds; be critical of naming, architecture, data flow, UX
-              against a Shopify/IKEA quality bar.
-            - Next.js 16 + cacheComponents: zero-arg dynamic APIs (`new Date()`, `Date.now()`, `Math.random()`,
-              `cookies()`, `headers()`) called during render — including inside `"use client"` or `"use cache"` —
-              break static prerender. Verify Next.js APIs against the docs, not training data.
-            - Multi-brand sharing: edits duplicated across `apps/sg-tools` and `apps/dck` should be extracted to
-              `packages/shared` (or `packages/ui` / `packages/brand-config`) instead.
-            - Serbian copy uses the informal "ti" form (never formal "Vi"); routes use Serbian path names.
-            - Logic errors, security, SEO regressions (metadata, canonical, structured data).
+        OWNER-RESERVED: packages/shared/** or packages/brand-config/** (cross-cutting — changes BOTH brand sites), OR logic duplicated across apps/sg-tools and apps/dck that should be extracted to a package, OR a new cross-cutting pattern.
 
-            ## Severity & output discipline
-            - Tag every finding 🔴 Important (should be fixed before merge) or 🟡 Nit (minor, non-blocking).
-            - Post at most 5 🟡 Nits inline. If there are more, give a "+N more nits" count in the summary instead.
-            - Open the summary with a one-line tally like "2 important, 4 nits", and lead with "No blocking issues" when there are no Important findings.
-            - If REVIEW ROUND is "subsequent": post 🔴 Important findings ONLY — suppress all 🟡 Nits, lead with
-              "✓ previous findings addressed" where true, and note "(nits suppressed on re-review)".
+        CONVENTIONS (advisory): push back on hacks; be critical to a Shopify/IKEA bar; verify Next.js APIs against the docs not training data; Serbian copy uses the informal "ti" form (never "Vi"); routes use Serbian path names; SEO (metadata, canonical, structured data).
 
-            ## Verification bar — post only what you can prove
-            - Every behavior or bug claim must cite the concrete file:line that proves it, not an inference from a name or convention.
-            - If you cannot verify a finding against the actual code, do NOT post it inline; at most raise it as an open question in the summary.
-
-            ## Skip entirely
-            node_modules/, .next/, and generated/build output.
-
-            Use `mcp__github_inline_comment__create_inline_comment` for inline comments on specific lines and `gh pr comment` for the summary. Post ALL human-facing review through those tools — never as a regular message.
-
-            ## Gate verdict (REQUIRED final action)
-            Your FINAL action MUST be a single Write tool call that writes this exact JSON to `claude-verdict.json` in the repository root (the merge gate reads this file; humans read your inline comments + summary):
-            {"blocking": <bool>, "owner_reserved": <bool>, "owner_reasons": [<strings>], "summary": "<one line, matches your PR summary tally>"}
-            - "blocking": true ONLY for a hard-block item — high bar, objectively checkable:
-              - a cacheComponents dynamic-IO violation: a zero-arg dynamic API (`new Date()`/`Date.now()`/`Math.random()`/`cookies()`/`headers()`) read during render or inside a `"use cache"` scope, OR
-              - a server-only secret (`API_URL`, `BREVO_API_KEY`, `PACMS_API_KEY`) exposed via a `NEXT_PUBLIC_` var or leaked into the client bundle, OR a committed secret/credential, or PII in a response/log.
-              Everything else (copy / "ti" tone / Serbian URLs / SEO nits / a11y / design / naming / all 🟡 Nits) is NON-blocking → blocking=false.
-            - "owner_reserved": true if the diff touches `packages/shared/**` or `packages/brand-config/**` (cross-cutting — changes BOTH brand sites), OR duplicates logic across `apps/sg-tools` and `apps/dck` that should be extracted to a package, OR introduces a new cross-cutting pattern. Put concrete reasons in owner_reasons.
-            Write claude-verdict.json even when there are no findings (blocking=false, owner_reserved=false). This file is mandatory — a missing file fails the gate closed.
-
-      - name: Post claude-gate check and escalation
-        if: always()
-        env:
-          REVIEW_OUTCOME: ${{ steps.review.outcome }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-          PR: ${{ github.event.pull_request.number }}
-          REPO: ${{ github.repository }}
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -uo pipefail
-
-          blocking="true"
-          owner_reserved="false"
-          summary="Gate could not evaluate (no verdict file written by the review). Failing closed - re-run the review."
-          reasons=""
-
-          VERDICT_FILE="$GITHUB_WORKSPACE/claude-verdict.json"
-          if [ "$REVIEW_OUTCOME" = "success" ] && [ -f "$VERDICT_FILE" ] && jq -e . "$VERDICT_FILE" >/dev/null 2>&1; then
-            # Compare booleans explicitly. Do NOT use `.blocking // true`: jq's `//` treats
-            # `false` as empty, so a correct `false` would flip to `true` and never pass.
-            # Fail closed: anything that isn't an explicit `false` blocks.
-            [ "$(jq -r '.blocking' "$VERDICT_FILE")" = "false" ] && blocking="false" || blocking="true"
-            [ "$(jq -r '.owner_reserved' "$VERDICT_FILE")" = "true" ] && owner_reserved="true" || owner_reserved="false"
-            summary=$(jq -r '.summary // "No blocking issues."' "$VERDICT_FILE")
-            reasons=$(jq -r '(.owner_reasons // []) | map("- " + .) | join("\n")' "$VERDICT_FILE")
-          fi
-
-          conclusion="success"; title="No blocking issues"
-          if [ "$blocking" = "true" ]; then conclusion="failure"; title="Blocking issues found"; fi
-
-          gh api -X POST "repos/$REPO/check-runs" \
-            -f name=claude-gate \
-            -f head_sha="$HEAD_SHA" \
-            -f status=completed \
-            -f conclusion="$conclusion" \
-            -f "output[title]=$title" \
-            -f "output[summary]=$summary"
-
-          # Escalate once: only label + @mention the first time owner-reserved is detected,
-          # so iterative pushes don't spam a new comment on every re-review.
-          if [ "$owner_reserved" = "true" ]; then
-            already=$(gh pr view "$PR" --json labels --jq '.labels[].name' | grep -Fx awaiting-owner || true)
-            if [ -z "$already" ]; then
-              gh pr edit "$PR" --add-label awaiting-owner
-              printf '@filiptrivan owner-reserved change - needs your sign-off before merge:\n\n%s\n' "$reasons" \
-                | gh pr comment "$PR" --body-file -
-            fi
-          fi
+        SKIP: node_modules/, .next/, generated build output.
+    secrets:
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
