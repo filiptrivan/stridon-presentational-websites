@@ -8,6 +8,10 @@ on:
   pull_request_review:
     types: [submitted]
 
+concurrency:
+  group: claude-bot-${{ github.event.issue.number || github.event.pull_request.number }}
+  cancel-in-progress: false
+
 jobs:
   claude:
     # PUBLIC REPO SECURITY: only maintainers (write/admin) can trigger @claude, so an
