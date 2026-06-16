@@ -1,0 +1,5 @@
+# Owner-reserved cross-cutting packages — a change here affects BOTH brand sites
+# (sg-tools + dck) at once. Require @filiptrivan review.
+# Only enforced when branch protection requires Code Owner review.
+/packages/shared/        @filiptrivan
+/packages/brand-config/  @filiptrivan
