@@ -1,0 +1,30 @@
+name: Claude Code (maintainer-triggered)
+
+# Thin caller of the shared @claude bot. All hardening — the maintainer author_association
+# gate and the read-and-comment-only tool scope — lives in the reusable workflow so it stays
+# in sync across repos and can't be weakened here. This file owns only the per-repo bits:
+# triggers, permissions, concurrency, and the secret.
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  pull_request_review:
+    types: [submitted]
+
+concurrency:
+  group: claude-bot-${{ github.event.issue.number || github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  claude:
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: read
+      id-token: write
+      actions: read
+    uses: filiptrivan/ci-workflows/.github/workflows/claude-bot.yml@v1
+    secrets:
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
