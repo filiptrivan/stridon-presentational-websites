@@ -13,7 +13,7 @@ const HeroDecorations = () => {
         className="absolute -left-30 -top-52 lg:-left-40 lg:-top-120"
       >
         <Image
-          src="/klešta.png"
+          src="/klesta.png"
           alt=""
           aria-hidden="true"
           width={900}
@@ -29,7 +29,7 @@ const HeroDecorations = () => {
         className="absolute -right-45 -top-85 lg:-right-80 lg:-top-187"
       >
         <Image
-          src="/ključ.png"
+          src="/kljuc.png"
           alt=""
           aria-hidden="true"
           width={280}
