@@ -81,8 +81,7 @@
       "WebFetch(domain:www.lightinject.net)",
       "WebFetch(domain:docs.anthropic.com)",
       "WebFetch(domain:www.nuget.org)"
-    ],
-    "defaultMode": "plan"
+    ]
   },
   "hooks": {
     "PreToolUse": [
