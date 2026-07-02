@@ -42,18 +42,4 @@ export interface BrandConfig {
 
   // Header CTA button
   headerCta: { label: string; href: string; external: boolean };
-
-  // OG image colors (hex - Satori doesn't support OKLCH)
-  ogColors: {
-    background: string;
-    foreground: string;
-    primary: string;
-    primaryBright: string;
-    muted: string;
-    card: string;
-    border: string;
-  };
-
-  // OG footer domain text
-  ogDomain: string;
 }

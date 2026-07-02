@@ -1,3 +1,5 @@
+import { colors, fontFamilies } from "./constants";
+
 export function Logo({ width = 200 }: { width?: number }) {
   // Placeholder until real DCK logo SVG is added
   const height = Math.round(width * 0.35);
@@ -6,9 +8,9 @@ export function Logo({ width = 200 }: { width?: number }) {
     <span
       style={{
         fontSize: height,
-        fontWeight: 700,
-        fontFamily: "Space Grotesk",
-        color: "#E31E24",
+        fontWeight: 600,
+        fontFamily: fontFamilies.heading,
+        color: colors.primary,
         display: "flex",
         letterSpacing: 2,
       }}

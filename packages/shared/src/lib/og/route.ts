@@ -2,7 +2,7 @@ import { isTrustedImageUrl } from "@brand/config/public-assets";
 import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
 import type { ReactElement } from "react";
-import { loadFonts } from "./fonts";
+import { loadFonts, type OgFontSpec } from "./fonts";
 import { OG_SIZE, type OgImageParams } from "./utils";
 
 // Crawlers fetch this once per page; the CDN serves it for a year thereafter.
@@ -23,10 +23,13 @@ export type OgTemplateMap = { default: OgRenderer } & Partial<
   Record<OgImageParams["type"], OgRenderer>
 >;
 
-// Builds the GET handler for an app's `/api/og` route. The brand supplies only its
-// templates — the part that genuinely differs per brand — while param parsing, the
-// image-host gate, title validation, font loading, and caching stay shared.
-export function createOgImageRoute(templates: OgTemplateMap) {
+// Builds the GET handler for an app's `/api/og` route. The brand supplies its
+// templates and fonts — the parts that genuinely differ per brand — while param
+// parsing, the image-host gate, title validation, and caching stay shared.
+export function createOgImageRoute(templates: OgTemplateMap, fonts: OgFontSpec[]) {
+  // Kick off font loading at module init, outside the request path (see loadFonts).
+  const fontsPromise = loadFonts(fonts);
+
   return async function GET(request: NextRequest) {
     const { searchParams } = request.nextUrl;
     const type = (searchParams.get("type") ?? "default") as OgImageParams["type"];
@@ -40,7 +43,7 @@ export function createOgImageRoute(templates: OgTemplateMap) {
     }
 
     const render = templates[type] ?? templates.default;
-    const fonts = await loadFonts();
+    const fonts = await fontsPromise;
 
     return new ImageResponse(render({ title, description, image }), {
       ...OG_SIZE,

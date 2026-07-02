@@ -1,5 +1,5 @@
 import { truncateText } from "@brand/shared/lib/og/utils";
-import { colors } from "./constants";
+import { colors, fontFamilies, primaryRgb } from "./constants";
 import { Logo } from "./logo";
 
 //#region Shared Components
@@ -26,7 +26,7 @@ function OgBackground({ children }: { children: React.ReactNode }) {
           bottom: 0,
           display: "flex",
           background:
-            "radial-gradient(ellipse at 0% -50%, rgba(227,30,36,0.15) 0%, transparent 75%)",
+            `radial-gradient(ellipse at 0% -50%, rgba(${primaryRgb},0.15) 0%, transparent 75%)`,
         }}
       />
       {/* Vertical grid lines */}
@@ -77,7 +77,7 @@ function AccentLine() {
         width: "100%",
         height: 1,
         display: "flex",
-        background: `linear-gradient(to right, ${colors.background}, rgba(227,30,36,0.5), ${colors.background})`,
+        background: `linear-gradient(to right, ${colors.background}, rgba(${primaryRgb},0.5), ${colors.background})`,
       }}
     />
   );
@@ -114,13 +114,13 @@ function OgFooter() {
               width: 6,
               height: 6,
               borderRadius: 3,
-              backgroundColor: colors.primaryBright,
+              backgroundColor: colors.primary,
               display: "flex",
             }}
           />
           <span
             style={{
-              fontFamily: "Inter",
+              fontFamily: fontFamilies.body,
               fontSize: 18,
               color: colors.muted,
             }}
@@ -169,7 +169,7 @@ export function DefaultTemplate({
           <div
             style={{
               display: "flex",
-              fontFamily: "Space Grotesk",
+              fontFamily: fontFamilies.heading,
               fontSize: 72,
               color: colors.foreground,
               lineHeight: 1.2,
@@ -182,7 +182,7 @@ export function DefaultTemplate({
             <div
               style={{
                 display: "flex",
-                fontFamily: "Inter",
+                fontFamily: fontFamilies.body,
                 fontSize: 30,
                 color: colors.muted,
                 marginTop: 20,
@@ -277,7 +277,7 @@ export function ProductTemplate({
             <div
               style={{
                 display: "flex",
-                fontFamily: "Space Grotesk",
+                fontFamily: fontFamilies.heading,
                 fontSize: truncatedTitle.length > 40 ? 44 : 52,
                 color: colors.foreground,
                 marginBottom: 24,
@@ -331,16 +331,16 @@ export function CategoryTemplate({
             style={{
               width: 32,
               height: 2,
-              backgroundColor: colors.primaryBright,
+              backgroundColor: colors.primary,
               display: "flex",
             }}
           />
           <div
             style={{
               display: "flex",
-              fontFamily: "Inter",
+              fontFamily: fontFamilies.body,
               fontSize: 22,
-              color: colors.primaryBright,
+              color: colors.primary,
               letterSpacing: 3,
             }}
           >
@@ -352,7 +352,7 @@ export function CategoryTemplate({
         <div
           style={{
             display: "flex",
-            fontFamily: "Space Grotesk",
+            fontFamily: fontFamilies.heading,
             fontSize: 72,
             color: colors.foreground,
             lineHeight: 1.2,
@@ -366,7 +366,7 @@ export function CategoryTemplate({
           <div
             style={{
               display: "flex",
-              fontFamily: "Inter",
+              fontFamily: fontFamilies.body,
               fontSize: 30,
               color: colors.muted,
               marginTop: 20,
@@ -399,7 +399,7 @@ export function CategoryTemplate({
                 width: size,
                 height: size,
                 borderRadius: size / 2,
-                border: `1px solid rgba(227,30,36,${size === 280 ? 0.2 : size === 210 ? 0.15 : size === 140 ? 0.1 : 0.07})`,
+                border: `1px solid rgba(${primaryRgb},${size === 280 ? 0.2 : size === 210 ? 0.15 : size === 140 ? 0.1 : 0.07})`,
                 display: "flex",
               }}
             />
@@ -425,7 +425,7 @@ export function CategoryTemplate({
                 width: 3,
                 height: 3,
                 borderRadius: 2,
-                backgroundColor: "rgba(227,30,36,0.25)",
+                backgroundColor: `rgba(${primaryRgb},0.25)`,
                 display: "flex",
               }}
             />

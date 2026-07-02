@@ -1,5 +1,5 @@
 import { truncateText } from "@brand/shared/lib/og/utils";
-import { colors } from "./constants";
+import { colors, fontFamilies } from "./constants";
 import { Logo } from "./logo";
 
 //#region Shared Components
@@ -120,7 +120,7 @@ function OgFooter() {
           />
           <span
             style={{
-              fontFamily: "Inter",
+              fontFamily: fontFamilies.body,
               fontSize: 18,
               color: colors.muted,
             }}
@@ -169,7 +169,7 @@ export function DefaultTemplate({
           <div
             style={{
               display: "flex",
-              fontFamily: "Space Grotesk",
+              fontFamily: fontFamilies.heading,
               fontSize: 72,
               color: colors.foreground,
               lineHeight: 1.2,
@@ -182,7 +182,7 @@ export function DefaultTemplate({
             <div
               style={{
                 display: "flex",
-                fontFamily: "Inter",
+                fontFamily: fontFamilies.body,
                 fontSize: 30,
                 color: colors.muted,
                 marginTop: 20,
@@ -277,7 +277,7 @@ export function ProductTemplate({
             <div
               style={{
                 display: "flex",
-                fontFamily: "Space Grotesk",
+                fontFamily: fontFamilies.heading,
                 fontSize: truncatedTitle.length > 40 ? 44 : 52,
                 color: colors.foreground,
                 marginBottom: 24,
@@ -336,7 +336,7 @@ export function CategoryTemplate({
           <div
             style={{
               display: "flex",
-              fontFamily: "Inter",
+              fontFamily: fontFamilies.body,
               fontSize: 22,
               color: colors.primaryBright,
               letterSpacing: 3,
@@ -350,7 +350,7 @@ export function CategoryTemplate({
         <div
           style={{
             display: "flex",
-            fontFamily: "Space Grotesk",
+            fontFamily: fontFamilies.heading,
             fontSize: 72,
             color: colors.foreground,
             lineHeight: 1.2,
@@ -364,7 +364,7 @@ export function CategoryTemplate({
           <div
             style={{
               display: "flex",
-              fontFamily: "Inter",
+              fontFamily: fontFamilies.body,
               fontSize: 30,
               color: colors.muted,
               marginTop: 20,
