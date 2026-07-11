@@ -46,6 +46,13 @@ export function TurnstileWidget({
   }));
 
   useEffect(() => {
+    // Bypass on localhost: Cloudflare validates domain, so the widget always fails on localhost
+    const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+    if (!TURNSTILE_SITE_KEY || isLocal) {
+      onSuccessRef.current("dev-bypass");
+      return;
+    }
+
     let removed = false;
 
     loadTurnstileScript()
@@ -72,6 +79,8 @@ export function TurnstileWidget({
       }
     };
   }, []);
+
+  if (!TURNSTILE_SITE_KEY) return null;
 
   return <div ref={containerRef} />;
 }

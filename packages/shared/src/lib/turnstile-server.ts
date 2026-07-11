@@ -9,8 +9,11 @@ export async function validateTurnstileToken(token: string): Promise<boolean> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
 
   if (!secret) {
-    reportError(new Error("Missing TURNSTILE_SECRET_KEY"), { source: "validateTurnstileToken" });
-    return false;
+    if (process.env.NODE_ENV === "production") {
+      reportError(new Error("Missing TURNSTILE_SECRET_KEY in production"), { source: "validateTurnstileToken" });
+      return false;
+    }
+    return true; // dev bypass when key not configured
   }
 
   const response = await fetch(

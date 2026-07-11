@@ -1,10 +1,12 @@
 import type { BrandConfig } from "./types";
 import { config as sgToolsConfig } from "./sg-tools";
 import { config as dckConfig } from "./dck";
+import { config as stridonConfig } from "./stridon";
 
 const configs: Record<string, BrandConfig> = {
   "sg-tools": sgToolsConfig,
   dck: dckConfig,
+  stridon: stridonConfig,
 };
 
 export function getBrandConfig(): BrandConfig {

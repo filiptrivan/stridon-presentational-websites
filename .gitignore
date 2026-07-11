@@ -39,3 +39,8 @@ bash.exe.stackdump
 # Debug
 npm-debug.log*
 pnpm-debug.log*
+
+# Local docs / planning notes (not for git)
+docs/
+apps/stridon/tsconfig.tsbuildinfo
+apps/stridon/next-env.d.ts
