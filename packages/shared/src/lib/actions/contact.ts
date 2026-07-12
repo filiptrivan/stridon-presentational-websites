@@ -1,5 +1,6 @@
 "use server";
 
+import { getBrandConfig } from "@brand/config";
 import { reportError } from "@brand/shared/lib/report-error";
 import {
   contactSchema,
@@ -26,6 +27,12 @@ export async function sendContactEmail(
     };
   }
 
+  // Sender / recipient / subject / heading are the only per-brand bits; they live
+  // in brand-config (resolved from NEXT_PUBLIC_BRAND_SLUG), so one action serves
+  // every brand instead of a hand-copied file per app.
+  const { emailSender, emailRecipient, emailSubject, emailHeading } =
+    getBrandConfig();
+
   try {
     const response = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
@@ -35,12 +42,12 @@ export async function sendContactEmail(
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        sender: { name: "DCK Srbija", email: "noreply@dcksrbija.rs" },
-        to: [{ email: "aleksa.trivan@stridon.rs", name: "DCK Srbija" }],
+        sender: emailSender,
+        to: [emailRecipient],
         replyTo: { email: parsed.data.email },
-        subject: "DCK Srbija - Kontakt forma",
+        subject: emailSubject,
         htmlContent: `
-          <h2>Nova poruka sa dcksrbija.rs</h2>
+          <h2>${emailHeading}</h2>
           <p><strong>E-mail:</strong> ${parsed.data.email}</p>
           <p><strong>Poruka:</strong></p>
           <p>${parsed.data.message.replace(/\n/g, "<br>")}</p>

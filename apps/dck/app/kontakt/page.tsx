@@ -1,6 +1,6 @@
 import ContactPage from "@brand/shared/components/contact-page";
+import { sendContactEmail } from "@brand/shared/lib/actions/contact";
 import { CONTACT_EMAIL } from "@/constants";
-import { sendContactEmail } from "./actions";
 
 export { metadata } from "@brand/shared/components/contact-page";
 

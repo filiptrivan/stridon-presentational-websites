@@ -4,8 +4,8 @@ vi.mock("@brand/shared/lib/report-error", () => ({
   reportError: vi.fn(),
 }));
 
+import { sendContactEmail } from "@brand/shared/lib/actions/contact";
 import { reportError } from "@brand/shared/lib/report-error";
-import { sendContactEmail } from "../app/kontakt/actions";
 
 const mockFetch = vi.fn();
 
@@ -18,6 +18,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   vi.stubGlobal("fetch", mockFetch);
   vi.stubEnv("BREVO_API_KEY", "test-api-key");
+  vi.stubEnv("NEXT_PUBLIC_BRAND_SLUG", "dck");
 
   mockFetch.mockResolvedValue({
     ok: true,
