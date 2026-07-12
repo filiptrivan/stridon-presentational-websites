@@ -12,8 +12,6 @@ import {
   WARRANTY_SUBMISSION_FAILED_ERROR,
 } from "@/lib/schemas/warranty";
 import { reportError } from "@brand/shared/lib/report-error";
-import { TURNSTILE_VERIFICATION_FAILED } from "@brand/shared/lib/turnstile";
-import { validateTurnstileToken } from "@brand/shared/lib/turnstile-server";
 
 const BRAND_SLUG = "dck";
 
@@ -24,16 +22,6 @@ export type WarrantyActionResult =
 export async function submitWarrantyRegistration(
   formData: FormData,
 ): Promise<WarrantyActionResult> {
-  const turnstileToken = formData.get("turnstileToken");
-  if (typeof turnstileToken !== "string" || !turnstileToken) {
-    return { success: false, error: TURNSTILE_VERIFICATION_FAILED };
-  }
-
-  const isValidToken = await validateTurnstileToken(turnstileToken);
-  if (!isValidToken) {
-    return { success: false, error: TURNSTILE_VERIFICATION_FAILED };
-  }
-
   const rawCompanyPib = formData.get("companyPib");
   const raw = {
     firstName: formData.get("firstName"),

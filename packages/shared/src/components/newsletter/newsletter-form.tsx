@@ -2,23 +2,18 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Mail } from "lucide-react";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { subscribeNewsletter } from "@brand/shared/lib/actions/newsletter";
-import { useTurnstile } from "@brand/shared/lib/hooks/useTurnstile";
 import {
   newsletterSchema,
   type NewsletterFormData,
 } from "@brand/shared/lib/schemas/newsletter";
-import { TURNSTILE_VERIFICATION_FAILED } from "@brand/shared/lib/turnstile";
 import { Button } from "@brand/ui/button";
 import { Input } from "@brand/ui/input";
 
 const NewsletterForm = () => {
-  const [activated, setActivated] = useState(false);
-
   const {
     register,
     handleSubmit,
@@ -29,21 +24,8 @@ const NewsletterForm = () => {
     defaultValues: { email: "" },
   });
 
-  const {
-    token: turnstileToken,
-    reset: resetTurnstile,
-    widget: turnstileWidget,
-  } = useTurnstile();
-
   const onSubmit = async (data: NewsletterFormData) => {
-    if (!turnstileToken) {
-      toast.error(TURNSTILE_VERIFICATION_FAILED);
-      return;
-    }
-
-    const result = await subscribeNewsletter(data, turnstileToken);
-
-    resetTurnstile();
+    const result = await subscribeNewsletter(data);
 
     if (result.success) {
       toast.success("Uspešno si se prijavio/la na newsletter!");
@@ -66,10 +48,7 @@ const NewsletterForm = () => {
           className="border-border/50"
           aria-invalid={!!errors.email}
           aria-describedby={errors.email ? "newsletter-email-error" : undefined}
-          {...register("email", {
-            onBlur: () => setActivated(true),
-          })}
-          onFocus={() => setActivated(true)}
+          {...register("email")}
         />
         <Button type="submit" disabled={isSubmitting} className="shrink-0">
           {isSubmitting ? (
@@ -90,7 +69,6 @@ const NewsletterForm = () => {
           {errors.email.message}
         </p>
       )}
-      {activated && turnstileWidget}
     </div>
   );
 };

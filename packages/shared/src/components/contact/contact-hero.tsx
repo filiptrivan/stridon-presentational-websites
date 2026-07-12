@@ -6,10 +6,7 @@ import ContactForm from "./contact-form";
 
 interface ContactHeroProps {
   email: string;
-  submitContact: (
-    data: ContactFormData,
-    turnstileToken: string,
-  ) => Promise<ActionResult>;
+  submitContact: (data: ContactFormData) => Promise<ActionResult>;
 }
 
 function ContactHero({ email, submitContact }: ContactHeroProps) {

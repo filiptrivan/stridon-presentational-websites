@@ -5,9 +5,7 @@ import { Loader2, Send } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { useTurnstile } from "@brand/shared/lib/hooks/useTurnstile";
 import { contactSchema, type ContactFormData } from "@brand/shared/lib/schemas/contact";
-import { TURNSTILE_VERIFICATION_FAILED } from "@brand/shared/lib/turnstile";
 import type { ActionResult } from "@brand/shared/types/actions";
 import { Button } from "@brand/ui/button";
 import { Input } from "@brand/ui/input";
@@ -15,10 +13,7 @@ import { Label } from "@brand/ui/label";
 import { Textarea } from "@brand/ui/textarea";
 
 interface ContactFormProps {
-  submitContact: (
-    data: ContactFormData,
-    turnstileToken: string,
-  ) => Promise<ActionResult>;
+  submitContact: (data: ContactFormData) => Promise<ActionResult>;
 }
 
 const ContactForm = ({ submitContact }: ContactFormProps) => {
@@ -32,21 +27,8 @@ const ContactForm = ({ submitContact }: ContactFormProps) => {
     defaultValues: { email: "", message: "" },
   });
 
-  const {
-    token: turnstileToken,
-    reset: resetTurnstile,
-    widget: turnstileWidget,
-  } = useTurnstile();
-
   const onSubmit = async (data: ContactFormData) => {
-    if (!turnstileToken) {
-      toast.error(TURNSTILE_VERIFICATION_FAILED);
-      return;
-    }
-
-    const result = await submitContact(data, turnstileToken);
-
-    resetTurnstile();
+    const result = await submitContact(data);
 
     if (result.success) {
       toast.success("Poruka je uspešno poslata!");
@@ -89,8 +71,6 @@ const ContactForm = ({ submitContact }: ContactFormProps) => {
           <p className="text-sm text-destructive">{errors.message.message}</p>
         )}
       </div>
-
-      {turnstileWidget}
 
       <Button type="submit" className="w-full" disabled={isSubmitting}>
         {isSubmitting ? (

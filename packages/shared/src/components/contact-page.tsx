@@ -14,10 +14,7 @@ export const metadata = createPageMetadata({
 
 type ContactPageProps = {
   email: string;
-  submitContact: (
-    data: ContactFormData,
-    turnstileToken: string,
-  ) => Promise<ActionResult>;
+  submitContact: (data: ContactFormData) => Promise<ActionResult>;
 };
 
 const ContactPage = ({ email, submitContact }: ContactPageProps) => {

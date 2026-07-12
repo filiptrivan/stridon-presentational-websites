@@ -9,12 +9,7 @@ vi.mock("@brand/shared/lib/report-error", () => ({
   reportError: vi.fn(),
 }));
 
-vi.mock("@brand/shared/lib/turnstile-server", () => ({
-  validateTurnstileToken: vi.fn(),
-}));
-
 import { reportError } from "@brand/shared/lib/report-error";
-import { validateTurnstileToken } from "@brand/shared/lib/turnstile-server";
 import { submitWarrantyRegistration } from "../app/produzetak-garancije/actions";
 import {
   FILE_TOO_LARGE_ERROR,
@@ -26,7 +21,6 @@ import {
   WARRANTY_UNAVAILABLE_ERROR,
 } from "../lib/schemas/warranty";
 
-const mockedValidateToken = vi.mocked(validateTurnstileToken);
 const mockFetch = vi.fn();
 
 beforeEach(() => {
@@ -35,7 +29,6 @@ beforeEach(() => {
   vi.stubEnv("API_URL", "http://api.test");
   vi.stubEnv("PACMS_API_KEY", "test-pacms-key");
 
-  mockedValidateToken.mockResolvedValue(true);
   mockFetch.mockResolvedValue({
     ok: true,
     status: 200,
@@ -47,27 +40,6 @@ describe("submitWarrantyRegistration - DCK", () => {
   it("returns success on happy path", async () => {
     const result = await submitWarrantyRegistration(buildWarrantyFormData());
     expect(result).toEqual({ success: true });
-  });
-
-  it("returns error when turnstileToken is missing", async () => {
-    const result = await submitWarrantyRegistration(
-      buildWarrantyFormData({ turnstileToken: null }),
-    );
-    expect(result).toEqual({
-      success: false,
-      error: expect.stringContaining("Verifikacija nije uspela"),
-    });
-    expect(mockedValidateToken).not.toHaveBeenCalled();
-  });
-
-  it("returns error when Turnstile verification fails", async () => {
-    mockedValidateToken.mockResolvedValue(false);
-    const result = await submitWarrantyRegistration(buildWarrantyFormData());
-    expect(result).toEqual({
-      success: false,
-      error: expect.stringContaining("Verifikacija nije uspela"),
-    });
-    expect(mockFetch).not.toHaveBeenCalled();
   });
 
   it("returns error when payload is invalid", async () => {

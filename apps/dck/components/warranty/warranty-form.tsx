@@ -27,8 +27,6 @@ import {
   type WarrantyFormData,
 } from "@/lib/schemas/warranty";
 import { useAutofillSync } from "@brand/shared/lib/hooks/useAutofillSync";
-import { useTurnstile } from "@brand/shared/lib/hooks/useTurnstile";
-import { TURNSTILE_VERIFICATION_FAILED } from "@brand/shared/lib/turnstile";
 import { Button } from "@brand/ui/button";
 import { Input } from "@brand/ui/input";
 import { Label } from "@brand/ui/label";
@@ -90,18 +88,7 @@ const WarrantyForm = () => {
     setFileName(file.name);
   };
 
-  const {
-    token: turnstileToken,
-    reset: resetTurnstile,
-    widget: turnstileWidget,
-  } = useTurnstile();
-
   const onSubmit = async (data: WarrantyFormData) => {
-    if (!turnstileToken) {
-      toast.error(TURNSTILE_VERIFICATION_FAILED);
-      return;
-    }
-
     const file = fileInputRef.current?.files?.[0];
     if (!file) {
       setFileError(RECEIPT_REQUIRED_ERROR);
@@ -119,12 +106,9 @@ const WarrantyForm = () => {
     if (data.companyPib) {
       formData.append("companyPib", data.companyPib);
     }
-    formData.append("turnstileToken", turnstileToken);
     formData.append("receiptImage", file);
 
     const result = await submitWarrantyRegistration(formData);
-
-    resetTurnstile();
 
     if (result.success) {
       toast.success(
@@ -363,8 +347,6 @@ const WarrantyForm = () => {
           </p>
         )}
       </div>
-
-      {turnstileWidget}
 
       <Button type="submit" className="w-full" disabled={isSubmitting}>
         {isSubmitting ? (

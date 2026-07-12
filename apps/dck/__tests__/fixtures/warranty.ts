@@ -20,7 +20,6 @@ export type WarrantyFormDataOverrides = {
   serialNumber?: string;
   purchaseDate?: string;
   companyPib?: string;
-  turnstileToken?: string | null;
   receiptImage?: File | null;
 };
 
@@ -41,9 +40,6 @@ export function buildWarrantyFormData(
   set("purchaseDate", overrides.purchaseDate, DEFAULT_PURCHASE_DATE);
   if (overrides.companyPib !== undefined) {
     fd.append("companyPib", overrides.companyPib);
-  }
-  if (overrides.turnstileToken !== null) {
-    fd.append("turnstileToken", overrides.turnstileToken ?? "valid-token");
   }
   if (overrides.receiptImage !== null) {
     fd.append(

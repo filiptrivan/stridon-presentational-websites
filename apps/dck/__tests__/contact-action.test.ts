@@ -4,15 +4,9 @@ vi.mock("@brand/shared/lib/report-error", () => ({
   reportError: vi.fn(),
 }));
 
-vi.mock("@brand/shared/lib/turnstile-server", () => ({
-  validateTurnstileToken: vi.fn(),
-}));
-
 import { reportError } from "@brand/shared/lib/report-error";
-import { validateTurnstileToken } from "@brand/shared/lib/turnstile-server";
 import { sendContactEmail } from "../app/kontakt/actions";
 
-const mockedValidateToken = vi.mocked(validateTurnstileToken);
 const mockFetch = vi.fn();
 
 const validData = {
@@ -25,7 +19,6 @@ beforeEach(() => {
   vi.stubGlobal("fetch", mockFetch);
   vi.stubEnv("BREVO_API_KEY", "test-api-key");
 
-  mockedValidateToken.mockResolvedValue(true);
   mockFetch.mockResolvedValue({
     ok: true,
     status: 201,
@@ -35,25 +28,12 @@ beforeEach(() => {
 
 describe("sendContactEmail - DCK", () => {
   it("returns success on happy path", async () => {
-    const result = await sendContactEmail(validData, "valid-token");
+    const result = await sendContactEmail(validData);
     expect(result).toEqual({ success: true });
   });
 
-  it("returns error when Turnstile verification fails", async () => {
-    mockedValidateToken.mockResolvedValue(false);
-
-    const result = await sendContactEmail(validData, "bad-token");
-    expect(result).toEqual({
-      success: false,
-      error: expect.stringContaining("Verifikacija nije uspela"),
-    });
-  });
-
   it("returns error when form data is invalid", async () => {
-    const result = await sendContactEmail(
-      { email: "", message: "" },
-      "valid-token",
-    );
+    const result = await sendContactEmail({ email: "", message: "" });
     expect(result).toEqual({
       success: false,
       error: "Podaci nisu ispravni. Proveri unos.",
@@ -63,7 +43,7 @@ describe("sendContactEmail - DCK", () => {
   it("returns error and reports when BREVO_API_KEY is missing", async () => {
     vi.stubEnv("BREVO_API_KEY", "");
 
-    const result = await sendContactEmail(validData, "valid-token");
+    const result = await sendContactEmail(validData);
     expect(result).toEqual({
       success: false,
       error: "Slanje poruke trenutno nije moguće. Pokušaj ponovo kasnije.",
@@ -78,7 +58,7 @@ describe("sendContactEmail - DCK", () => {
       text: () => Promise.resolve("Internal Server Error"),
     });
 
-    const result = await sendContactEmail(validData, "valid-token");
+    const result = await sendContactEmail(validData);
     expect(result).toEqual({
       success: false,
       error: "Slanje poruke nije uspelo. Pokušaj ponovo kasnije.",
@@ -89,7 +69,7 @@ describe("sendContactEmail - DCK", () => {
   it("returns error and reports when fetch throws", async () => {
     mockFetch.mockRejectedValue(new Error("Network error"));
 
-    const result = await sendContactEmail(validData, "valid-token");
+    const result = await sendContactEmail(validData);
     expect(result).toEqual({
       success: false,
       error: "Slanje poruke nije uspelo. Pokušaj ponovo kasnije.",
@@ -98,7 +78,7 @@ describe("sendContactEmail - DCK", () => {
   });
 
   it("sends correct payload to Brevo", async () => {
-    await sendContactEmail(validData, "valid-token");
+    await sendContactEmail(validData);
 
     expect(mockFetch).toHaveBeenCalledOnce();
     const [url, options] = mockFetch.mock.calls[0];
