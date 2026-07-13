@@ -35,7 +35,13 @@ export async function GET(request: Request) {
     });
 
     if (!res.ok) {
-      return NextResponse.json({ hits: [] });
+      // Surface upstream failures (e.g. a 429 from the backend rate limiter)
+      // instead of laundering them into an empty result — the client shows
+      // "search unavailable", not "no products" (2026-07-13 warranty incident).
+      reportError(new Error(`Products search API error: ${res.status}`), {
+        source: "GET /api/products/search",
+      });
+      return NextResponse.json({ hits: [] }, { status: 502 });
     }
 
     const hits = (await res.json()) as ProductAutocompleteHit[];

@@ -102,6 +102,7 @@ function ProductPicker({
   const [query, setQuery] = useState("");
   const [hits, setHits] = useState<ProductAutocompleteHit[]>([]);
   const [loading, setLoading] = useState(false);
+  const [searchFailed, setSearchFailed] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
@@ -110,6 +111,7 @@ function ProductPicker({
       abortRef.current?.abort();
       setHits((prev) => (prev.length === 0 ? prev : []));
       setLoading(false);
+      setSearchFailed(false);
       return;
     }
 
@@ -119,6 +121,7 @@ function ProductPicker({
       abortRef.current = controller;
 
       setLoading(true);
+      setSearchFailed(false);
       try {
         const res = await fetch(
           `/api/products/search?q=${encodeURIComponent(trimmed)}`,
@@ -127,6 +130,7 @@ function ProductPicker({
         if (controller.signal.aborted) return;
         if (!res.ok) {
           setHits([]);
+          setSearchFailed(true);
           return;
         }
         const data = (await res.json()) as { hits: ProductAutocompleteHit[] };
@@ -135,6 +139,7 @@ function ProductPicker({
       } catch (err) {
         if ((err as Error).name !== "AbortError") {
           setHits([]);
+          setSearchFailed(true);
         }
       } finally {
         if (!controller.signal.aborted) setLoading(false);
@@ -174,9 +179,11 @@ function ProductPicker({
         )}
         {!loading && (
           <ComboboxEmpty>
-            {query.trim().length === 0
-              ? "Kucaj naziv ili šifru proizvoda."
-              : "Nema rezultata."}
+            {searchFailed
+              ? "Pretraga trenutno nije dostupna, pokušaj ponovo."
+              : query.trim().length === 0
+                ? "Kucaj naziv ili šifru proizvoda."
+                : "Nema rezultata."}
           </ComboboxEmpty>
         )}
         <ComboboxList>
