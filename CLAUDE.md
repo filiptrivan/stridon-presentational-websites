@@ -35,6 +35,7 @@
 - Key variables (same for both):
   - `API_URL` - Base URL for the PACMS backend REST API (server-only)
   - `BREVO_API_KEY` - Brevo email service API key (contact form)
+  - `PACMS_RATELIMIT_BYPASS_SECRET` - Shared secret sent as the `X-Internal-Bypass` header on every `apiFetch` call; the Cloudflare edge fronting `api.pacms.in.rs` validates + strips it and injects the trusted rate-limit marker, so SSG build reads aren't throttled as anonymous. Optional (absent ⇒ anonymous). Set in each app's Vercel project; same value as the CMS `TF_VAR_storefront_ratelimit_bypass_secret`. See the PACMS repo `docs/trusted-first-party-caller.md`.
 
 ## Architecture
 

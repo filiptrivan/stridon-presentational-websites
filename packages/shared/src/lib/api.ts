@@ -30,6 +30,15 @@ class ApiError extends Error {
 }
 
 const API_URL = process.env.API_URL;
+// Trusted first-party caller secret, sent as X-Internal-Bypass on every apiFetch. The Cloudflare
+// edge fronting api.pacms.in.rs validates + strips it and injects the trusted marker, so SSG build
+// reads aren't rate-limited as anonymous. Absent ⇒ not sent (local/dev); never touches auth.
+// See PACMS docs/trusted-first-party-caller.md.
+const RATELIMIT_BYPASS_SECRET = process.env.PACMS_RATELIMIT_BYPASS_SECRET;
+// Built once at module load, not per request.
+const BYPASS_HEADERS: Record<string, string> = RATELIMIT_BYPASS_SECRET
+  ? { "X-Internal-Bypass": RATELIMIT_BYPASS_SECRET }
+  : {};
 const BRAND_SLUG = getBrandConfig().brandSlug;
 
 async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
@@ -39,6 +48,7 @@ async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
     ...options,
     headers: {
       "Content-Type": "application/json",
+      ...BYPASS_HEADERS,
       ...(options?.headers as Record<string, string>),
     },
   });
