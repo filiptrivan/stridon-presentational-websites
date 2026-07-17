@@ -1,6 +1,6 @@
 "use client";
 
-import { isVideoMedia } from "@brand/shared/lib/media";
+import { isRenderableMedia, isVideoMedia } from "@brand/shared/lib/media";
 import { cn } from "@brand/shared/lib/utils";
 import type { ProductMedia } from "@brand/shared/types/products";
 import useEmblaCarousel from "embla-carousel-react";
@@ -32,9 +32,12 @@ interface ProductGalleryProps {
 }
 
 const ProductGallery = ({ media, fallbackUrl, title }: ProductGalleryProps) => {
+  // Drop YouTube (and any non-image/video) items — these sites can't render an embed, and a bare
+  // video id in `url` would become a broken <img>. The PACMS storefront renders the video instead.
+  const renderableMedia = media.filter(isRenderableMedia);
   const allMedia: ProductMedia[] =
-    media.length > 0
-      ? media
+    renderableMedia.length > 0
+      ? renderableMedia
       : fallbackUrl
         ? [
             {
