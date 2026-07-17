@@ -24,7 +24,7 @@
     "test:integration": {
       "dependsOn": [],
       "cache": false,
-      "env": ["API_URL", "BREVO_API_KEY", "PACMS_API_KEY"]
+      "env": ["API_URL", "PACMS_API_KEY"]
     }
   }
 }
