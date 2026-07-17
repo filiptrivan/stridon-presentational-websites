@@ -28,7 +28,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       API_URL: ${{ secrets.API_URL }}
-      BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
       PACMS_API_KEY: ${{ secrets.PACMS_API_KEY }}
     steps:
       - uses: actions/checkout@v4
