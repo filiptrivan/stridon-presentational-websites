@@ -1,14 +1,14 @@
-import { getFeaturedProductsByBrand } from "@brand/shared/lib/api";
+import { getTopProductsByBrand } from "@brand/shared/lib/api";
 import ProductCard from "./products/product-card";
 import SectionHeader from "./section-header";
 import Section from "./section";
 import Wrapper from "./wrapper";
 
-/** @see ./featured-products-skeleton.tsx — update the skeleton when this layout changes */
-const FeaturedProducts = async () => {
+/** @see ./top-products-skeleton.tsx — update the skeleton when this layout changes */
+const TopProducts = async () => {
   let products;
   try {
-    products = await getFeaturedProductsByBrand(4);
+    products = await getTopProductsByBrand();
   } catch {
     return null;
   }
@@ -34,4 +34,4 @@ const FeaturedProducts = async () => {
   );
 };
 
-export default FeaturedProducts;
+export default TopProducts;

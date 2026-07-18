@@ -177,19 +177,13 @@ export async function getFilteredProducts(
   });
 }
 
-export async function getFeaturedProductsByBrand(
-  count?: number,
+export async function getTopProductsByBrand(
+  count = 4,
 ): Promise<ProductCardData[]> {
   cacheLife("hours");
   cacheTag(TAGS.products);
-
-  const searchParams = new URLSearchParams({ brandSlug: BRAND_SLUG });
-  if (count !== undefined) {
-    searchParams.set("count", String(count));
-  }
-
   return apiFetch<ProductCardData[]>(
-    `/api/Storefront/FeaturedProductsByBrand?${searchParams.toString()}`,
+    `/api/Storefront/TopProductsByBrand?brandSlug=${BRAND_SLUG}&count=${count}`,
   );
 }
 

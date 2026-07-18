@@ -3,8 +3,8 @@ import ProductCardSkeleton from "./products/product-card-skeleton";
 import Section from "./section";
 import Wrapper from "./wrapper";
 
-/** @see ./featured-products.tsx — update this skeleton when the featured products layout changes */
-const FeaturedProductsSkeleton = () => {
+/** @see ./top-products.tsx — update this skeleton when the top products layout changes */
+const TopProductsSkeleton = () => {
   return (
     <div aria-hidden="true">
       <Section>
@@ -25,4 +25,4 @@ const FeaturedProductsSkeleton = () => {
   );
 };
 
-export default FeaturedProductsSkeleton;
+export default TopProductsSkeleton;

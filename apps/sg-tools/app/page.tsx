@@ -2,14 +2,14 @@ import Categories from "@brand/shared/components/categories";
 import CategoriesSkeleton from "@brand/shared/components/categories-skeleton";
 import Companies from "@brand/shared/components/companies";
 import SharedCTA from "@brand/shared/components/cta";
-import FeaturedProducts from "@brand/shared/components/featured-products";
-import FeaturedProductsSkeleton from "@brand/shared/components/featured-products-skeleton";
 import Features from "@brand/shared/components/features";
 import Hero from "@/components/hero";
 import HeroDecorations from "@/components/hero-decorations";
 import HomeAbout from "@brand/shared/components/home-about";
 import Stats from "@brand/shared/components/stats";
 import Testimonials from "@brand/shared/components/testimonials";
+import TopProducts from "@brand/shared/components/top-products";
+import TopProductsSkeleton from "@brand/shared/components/top-products-skeleton";
 import {
   CTA_TRUST_BADGES,
   FEATURES,
@@ -41,8 +41,8 @@ const HomePage = () => {
       <HeroDecorations />
       <Hero />
       <Companies companies={companies} />
-      <Suspense fallback={<FeaturedProductsSkeleton />}>
-        <FeaturedProducts />
+      <Suspense fallback={<TopProductsSkeleton />}>
+        <TopProducts />
       </Suspense>
       <Suspense fallback={<CategoriesSkeleton />}>
         <Categories />
