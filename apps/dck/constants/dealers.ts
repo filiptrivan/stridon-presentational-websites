@@ -182,7 +182,3 @@ export const DEALERS: Dealer[] = [
   },
   ...SERVICE_DEALERS,
 ];
-
-export const UNIQUE_DEALER_NAMES = [
-  ...new Set(DEALERS.map((d) => d.name)),
-].sort((a, b) => a.localeCompare(b, "sr"));

@@ -21,7 +21,8 @@ export const DEALERS: Dealer[] = [
     phone: "024/525-091",
     email: "sualati@gmail.com",
     website: "https://www.sualati.com/",
-    logoSrc: "/companies/svgs/sualati.png",
+    // SG-only variant: dark text neutralized to #98999D for the dark theme (DCK keeps the full-color original)
+    logoSrc: "/companies/svgs/sualati-neutral.png",
     category: "online",
     coordinates: { lat: 46.099807, lng: 19.6966443 },
   },
