@@ -25,7 +25,6 @@ export interface ProductCardData {
   imageUrl: string;
   brandName: string;
   brandImageUrl: string;
-  warrantyImageUrl: string | null;
   isBackorder: boolean;
   tags: { name: string; color: string; orderNumber: number }[];
   averageRating: number | null;
