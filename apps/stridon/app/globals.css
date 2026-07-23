@@ -1,0 +1,65 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "@brand/shared/styles/base.css";
+
+@source "../../../packages/shared/src";
+@source "../../../packages/ui/src";
+@source "../../../packages/brand-config/src";
+
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Prevent Chrome Android from inverting colors via Auto Dark Mode
+     https://developer.chrome.com/blog/auto-dark-theme */
+  color-scheme: only light;
+  --radius: 0.625rem;
+
+  /* Editorial light theme: near-neutral surfaces, Stridon red (#e50113) used
+     only as an accent. Red ~ oklch(0.58 0.236 27.9). */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.16 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.16 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.16 0 0);
+  --primary: oklch(0.58 0.236 27.9);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.968 0 0);
+  --muted-foreground: oklch(0.5 0 0);
+  --accent: oklch(0.968 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.916 0 0);
+  --input: oklch(0.916 0 0);
+  --ring: oklch(0.58 0.236 27.9);
+  --chart-1: oklch(0.58 0.236 27.9);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.16 0 0);
+  --sidebar-primary: oklch(0.58 0.236 27.9);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.968 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.916 0 0);
+  --sidebar-ring: oklch(0.58 0.236 27.9);
+}
+
+::selection {
+  background-color: color-mix(in srgb, var(--primary) 22%, transparent);
+  color: #000;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #c8c8c8;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
+}
