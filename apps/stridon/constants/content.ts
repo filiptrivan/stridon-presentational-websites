@@ -7,46 +7,45 @@ import {
   Layers,
   MapPin,
   ShieldCheck,
-  Tag,
-  ToolCase,
+  Truck,
   Wrench,
 } from "lucide-react";
 
 export const FEATURES = [
   {
-    title: "Proveren kvalitet",
-    desc: "ISO i CE sertifikovane laboratorije, automatizovane linije i kontrola kvaliteta na nivou premium brendova.",
-    icon: Award,
-  },
-  {
-    title: "Širok izbor alata",
-    desc: "12V kompakt, 20V za svakodnevni rad, 40V HPT za teške zadatke, plus baštenski i žičani program.",
-    icon: ToolCase,
-  },
-  {
-    title: "Zvanična garancija",
-    desc: "3 godine garancije, produžetak online, ovlašćeni servis i tehnička podrška - sve u Srbiji.",
+    title: "Zvanični uvoz",
+    desc: "Originalni proizvodi sa punom garancijom i tehničkom podrškom, direktno od proizvođača.",
     icon: ShieldCheck,
   },
   {
-    title: "Odnos cene i kvaliteta",
-    desc: "Kvalitet i performanse na nivou najskupljih brendova, razlika je samo u ceni.",
+    title: "Preko 30 brendova",
+    desc: "DeWalt, Bosch, Stanley, Makita, Knipex i još desetine svetskih brendova na jednom mestu.",
+    icon: Layers,
+  },
+  {
+    title: "Veleprodaja i B2B",
+    desc: "Veleprodajne cene, posebni uslovi i podrška za dilere širom Srbije.",
     icon: BadgePercent,
+  },
+  {
+    title: "Brza isporuka",
+    desc: "Isporuka za 1 do 5 radnih dana, uz besplatnu dostavu preko 15.000 RSD.",
+    icon: Truck,
   },
 ];
 
 export const CTA_TRUST_BADGES: TrustBadge[] = [
-  { icon: ShieldCheck, text: "Garancija 3 godine" },
-  { icon: Award, text: "Premium kvalitet" },
-  { icon: Layers, text: "Širok asortiman" },
-  { icon: Tag, text: "Pristupačne cene" },
+  { icon: ShieldCheck, text: "Zvanični uvoz" },
+  { icon: Award, text: "Originalni proizvodi" },
+  { icon: Layers, text: "30+ brendova" },
+  { icon: Truck, text: "Brza isporuka" },
 ];
 
 export const STATS = [
-  { value: "1995", label: "Godina osnivanja" },
-  { value: "100+", label: "Zemalja prisustva" },
-  { value: "350.000", label: "m² proizvodne baze" },
-  { value: "5.500+", label: "Zaposlenih" },
+  { value: "10.630+", label: "Veleprodajnih kupaca" },
+  { value: "120+", label: "Dilera u Srbiji" },
+  { value: "30+", label: "Zastupanih brendova" },
+  { value: "2", label: "Lokacije u Beogradu" },
 ];
 
 export const ABOUT_MILESTONES = [

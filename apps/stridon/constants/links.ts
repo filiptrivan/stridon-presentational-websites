@@ -1,4 +1,4 @@
-export const SITE_URL = "https://www.dcksrbija.rs";
+export const SITE_URL = "https://www.stridon.rs";
 
 export interface NavLink {
   label: string;
@@ -7,31 +7,31 @@ export interface NavLink {
 }
 
 export const NAV_LINKS: readonly NavLink[] = [
-  { label: "Kategorije", href: "/proizvodi/kategorije" },
-  { label: "O nama", href: "/o-nama" },
-  { label: "Gde kupiti", href: "/gde-kupiti" },
+  { label: "Brendovi", href: "/brendovi" },
+  { label: "Katalozi", href: "/katalozi" },
   { label: "Servis", href: "/servis" },
+  { label: "O nama", href: "/o-nama" },
   { label: "Kontakt", href: "/kontakt" },
-  { label: "Produžetak garancije", href: "/produzetak-garancije" },
 ];
 
 export const PRODUCTS_FOOTER_LINKS: readonly NavLink[] = [
-  { label: "Svi proizvodi", href: "/proizvodi" },
-  { label: "Kategorije", href: "/proizvodi/kategorije" },
-  { label: "Linije proizvoda", href: "/proizvodi/tagovi" },
+  { label: "Svi brendovi", href: "/brendovi" },
   { label: "Katalozi", href: "/katalozi" },
-  { label: "Postani distributer", href: "/kontakt" },
+  {
+    label: "Online prodavnica",
+    href: "https://www.prodavnicaalata.rs",
+    external: true,
+  },
+  { label: "Postani partner", href: "/kontakt" },
 ];
 
 export const COMPANY_FOOTER_LINKS: readonly NavLink[] = [
   { label: "O nama", href: "/o-nama" },
-  { label: "Gde kupiti", href: "/gde-kupiti" },
   { label: "Servis", href: "/servis" },
   { label: "Kontakt", href: "/kontakt" },
-  { label: "Produžetak garancije", href: "/produzetak-garancije" },
   {
-    label: "Stridon Group",
-    href: "https://www.stridon.rs",
+    label: "Prodavnica alata",
+    href: "https://www.prodavnicaalata.rs",
     external: true,
   },
 ];

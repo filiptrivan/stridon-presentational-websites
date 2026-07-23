@@ -29,6 +29,9 @@ type RootLayoutProps = {
   companyLinks: readonly FooterNavLink[];
   legalLinks: readonly FooterNavLink[];
   socialLinks: readonly FooterSocialLink[];
+  /** When false, render the plain Navbar without fetching product categories
+      (for brands like Stridon that don't expose a product category catalog). */
+  showCategoryMenu?: boolean;
 };
 
 export default function RootLayout({
@@ -39,6 +42,7 @@ export default function RootLayout({
   companyLinks,
   legalLinks,
   socialLinks,
+  showCategoryMenu = true,
 }: RootLayoutProps) {
   return (
     <html lang="sr">
@@ -66,9 +70,13 @@ export default function RootLayout({
             }),
           }}
         />
-        <Suspense fallback={<Navbar categories={[]} navLinks={navLinks} />}>
-          <NavbarWithCategories navLinks={navLinks} />
-        </Suspense>
+        {showCategoryMenu ? (
+          <Suspense fallback={<Navbar categories={[]} navLinks={navLinks} />}>
+            <NavbarWithCategories navLinks={navLinks} />
+          </Suspense>
+        ) : (
+          <Navbar categories={[]} navLinks={navLinks} />
+        )}
         <main className="pt-16">{children}</main>
         <Footer
           productLinks={productLinks}
