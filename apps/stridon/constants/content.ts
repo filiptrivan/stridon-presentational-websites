@@ -11,6 +11,22 @@ import {
   Wrench,
 } from "lucide-react";
 
+// Brands Stridon officially imports/distributes (roster order = prominence).
+export const BRANDS = [
+  "DeWalt",
+  "Bosch",
+  "Stanley",
+  "Makita",
+  "Knipex",
+  "Wiha",
+  "Wera",
+  "REMS",
+  "Högert",
+  "GTV",
+  "Rubi",
+  "Senco",
+] as const;
+
 export const FEATURES = [
   {
     title: "Zvanični uvoz",

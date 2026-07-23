@@ -1,18 +1,19 @@
+import Brands from "@/components/brands";
 import Hero from "@/components/hero";
-import { CTA_TRUST_BADGES, FEATURES, STATS } from "@/constants/content";
-import SharedCTA from "@brand/shared/components/cta";
-import Features from "@brand/shared/components/features";
-import Stats from "@brand/shared/components/stats";
+import PartnerCta from "@/components/partner-cta";
+import StatsBand from "@/components/stats-band";
+import WhyStridon from "@/components/why-stridon";
 
 // Preview-safe homepage: static sections only (no backend fetches yet).
-// Product/brand data wiring and the remaining signature sections come later.
+// Katalozi / Servis / Klijenti sections come later.
 const HomePage = () => {
   return (
     <div>
       <Hero />
-      <Features items={FEATURES} title="Zašto Stridon?" />
-      <Stats stats={STATS} layout="four-up-no-three" />
-      <SharedCTA trustBadges={CTA_TRUST_BADGES} />
+      <Brands />
+      <WhyStridon />
+      <StatsBand />
+      <PartnerCta />
     </div>
   );
 };

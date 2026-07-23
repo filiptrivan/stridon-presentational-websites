@@ -1,23 +1,9 @@
 import Container from "@brand/shared/components/container";
 import Wrapper from "@brand/shared/components/wrapper";
 import { Button } from "@brand/ui/button";
+import { BRANDS } from "@/constants/content";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import Link from "next/link";
-
-// Brands Stridon officially imports/distributes. Rendered as a typographic
-// roster (no logo assets needed) that doubles as the hero's signature strip.
-const BRANDS = [
-  "DeWalt",
-  "Bosch",
-  "Stanley",
-  "Makita",
-  "Knipex",
-  "Wiha",
-  "Högert",
-  "REMS",
-  "Wera",
-  "GTV",
-];
 
 const TRUST = [
   { value: "30+", label: "brendova" },
@@ -28,38 +14,55 @@ const TRUST = [
 const Hero = () => {
   return (
     <div className="relative overflow-hidden border-b border-border">
-      {/* Soft brand-red glow, kept subtle - the accent, not the subject. */}
+      {/* Background ornament: the logo's diagonal beam geometry, as hairlines. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-40 right-[-12%] h-[38rem] w-[38rem] rounded-full bg-[radial-gradient(circle,rgba(229,1,19,0.10),transparent_70%)]"
+        className="pointer-events-none absolute -right-24 top-16 hidden h-[26rem] w-[34rem] -skew-x-[14deg] border border-border lg:block"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute right-40 top-40 hidden h-[26rem] w-24 -skew-x-[14deg] bg-muted lg:block"
       />
 
-      <Wrapper className="py-20 sm:py-28 lg:py-32">
-        <div className="max-w-3xl">
+      <Wrapper className="relative py-20 sm:py-24 lg:py-28">
+        <div className="max-w-4xl">
           <Container>
-            <p className="inline-flex items-center gap-3 text-sm font-medium uppercase tracking-[0.14em] text-primary">
-              <span className="h-px w-8 bg-primary" />
+            <p className="inline-flex items-center gap-3 text-[13px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+              <span
+                aria-hidden
+                className="inline-block h-3.5 w-6 -skew-x-[14deg] bg-primary"
+              />
               Zvanični uvoznik i distributer alata
             </p>
           </Container>
 
           <Container delay={0.5}>
-            <h1 className="mt-6 text-balance text-5xl font-semibold leading-[1.03] tracking-tight sm:text-6xl lg:text-7xl">
-              <span className="text-primary">Najbolja</span> prodavnica alata u
-              Srbiji.
+            <h1 className="mt-8 text-[clamp(2.75rem,7.5vw,5.5rem)] font-semibold leading-[0.98] tracking-tight">
+              <span className="relative inline-block px-3 sm:px-4">
+                <span
+                  aria-hidden
+                  className="absolute inset-0 -skew-x-[10deg] bg-primary"
+                />
+                <span className="relative text-primary-foreground">
+                  Najbolja
+                </span>
+              </span>{" "}
+              prodavnica
+              <br />
+              alata u Srbiji.
             </h1>
           </Container>
 
           <Container delay={1}>
-            <p className="mt-6 max-w-xl text-lg text-muted-foreground">
-              Stridon Group je uvoznik i veleprodaja profesionalnog alata. Preko
-              30 brendova, tehnička podrška, garancija i brza isporuka širom
-              Srbije.
+            <p className="mt-7 max-w-xl text-lg text-muted-foreground">
+              Uvoz, veleprodaja i maloprodaja profesionalnog alata. Preko 30
+              svetskih brendova, uz tehničku podršku, garanciju i brzu isporuku
+              širom Srbije.
             </p>
           </Container>
 
           <Container delay={1.5}>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
+            <div className="mt-9 flex flex-wrap items-center gap-3">
               <Button asChild size="lg">
                 <a
                   href="https://www.prodavnicaalata.rs"
@@ -80,10 +83,13 @@ const Hero = () => {
           </Container>
 
           <Container delay={2}>
-            <dl className="mt-12 flex flex-wrap gap-x-10 gap-y-4">
-              {TRUST.map((t) => (
-                <div key={t.label} className="flex items-baseline gap-2">
-                  <dt className="font-heading text-2xl font-bold tracking-tight">
+            <dl className="mt-14 flex flex-wrap divide-x divide-border">
+              {TRUST.map((t, i) => (
+                <div
+                  key={t.label}
+                  className={`flex items-baseline gap-2 pr-8 ${i > 0 ? "pl-8" : ""}`}
+                >
+                  <dt className="font-heading text-3xl font-bold tracking-tight">
                     {t.value}
                   </dt>
                   <dd className="text-sm text-muted-foreground">{t.label}</dd>
@@ -94,23 +100,22 @@ const Hero = () => {
         </div>
       </Wrapper>
 
-      {/* Brand roster strip - the signature element of this hero. */}
-      <div className="border-t border-border bg-muted/40">
-        <Wrapper className="py-5">
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            <span className="text-xs font-semibold uppercase tracking-[0.16em] text-foreground/50">
-              Zastupamo
-            </span>
-            {BRANDS.map((brand) => (
+      {/* Brand marquee: full-bleed, seamless loop (track holds two copies). */}
+      <div className="overflow-hidden border-t border-border bg-muted/30 py-4">
+        <div className="flex w-max animate-[stridon-marquee_45s_linear_infinite]">
+          {[...BRANDS, ...BRANDS].map((brand, i) => (
+            <span
+              key={`${brand}-${i}`}
+              className="flex items-center text-sm font-medium uppercase tracking-[0.16em] text-muted-foreground"
+            >
+              <span className="px-7">{brand}</span>
               <span
-                key={brand}
-                className="text-sm font-medium text-muted-foreground"
-              >
-                {brand}
-              </span>
-            ))}
-          </div>
-        </Wrapper>
+                aria-hidden
+                className="inline-block h-3.5 w-[2px] -skew-x-[20deg] bg-border"
+              />
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   );
