@@ -45,8 +45,8 @@ const Hero = () => {
 
           <Container delay={0.5}>
             <h1 className="mt-6 text-balance text-5xl font-semibold leading-[1.03] tracking-tight sm:text-6xl lg:text-7xl">
-              Svetski brendovi alata,{" "}
-              <span className="text-primary">zvanično</span> u Srbiji.
+              <span className="text-primary">Najbolja</span> prodavnica alata u
+              Srbiji.
             </h1>
           </Container>
 
