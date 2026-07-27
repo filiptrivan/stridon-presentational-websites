@@ -6,7 +6,7 @@ export interface Category {
   slug: string;
   imageUrl: string;
   ogImageUrl: string | null;
-  description: string;
+  htmlDescription: string | null;
   metaTitle: string;
   metaDescription: string;
   subCategories: Category[];

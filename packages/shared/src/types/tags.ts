@@ -4,7 +4,6 @@ export interface Tag {
   slug: string;
   color: string;
   orderNumber: number | null;
-  description: string;
   metaTitle: string;
   metaDescription: string;
   imageUrl: string;

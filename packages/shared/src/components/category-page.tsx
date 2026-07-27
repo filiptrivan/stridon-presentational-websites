@@ -133,14 +133,14 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           </Suspense>
         </SectionErrorBoundary>
 
-        {category.description && (
+        {category.htmlDescription && (
           <>
             <SectionDivider />
             <section>
               <h2 className="text-xl font-semibold mb-4">Opis kategorije</h2>
               <Prose
                 variant="category"
-                dangerouslySetInnerHTML={{ __html: category.description }}
+                dangerouslySetInnerHTML={{ __html: category.htmlDescription }}
               />
             </section>
           </>
