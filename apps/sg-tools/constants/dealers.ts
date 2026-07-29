@@ -27,6 +27,18 @@ export const DEALERS: Dealer[] = [
     coordinates: { lat: 46.099807, lng: 19.6966443 },
   },
   {
+    // "G-SCENT" D.O.O. (PIB 108666525) - webshop only, no retail location
+    id: "alati-i-oprema",
+    name: "Alati i Oprema",
+    address: "Jurija Gagarina 68",
+    city: "Novi Beograd",
+    phone: "061/243-4739",
+    email: "info@alati-i-oprema.rs",
+    website: "https://alati-i-oprema.rs/",
+    category: "online",
+    coordinates: { lat: 44.8036781, lng: 20.3803287 },
+  },
+  {
     id: "stridon-group",
     name: "Stridon Group D.O.O.",
     address: "Vojislava Ilića 141g",
