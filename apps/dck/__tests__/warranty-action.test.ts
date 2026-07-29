@@ -121,6 +121,84 @@ describe("submitWarrantyRegistration - DCK", () => {
     expect(reportError).toHaveBeenCalled();
   });
 
+  // A 400 is Spiderly's BusinessException: a user-correctable mistake whose message is written
+  // in Serbian to be shown to the customer. Collapsing it into "pokušajte ponovo kasnije" told
+  // people to retry a file that could never succeed, and hid a client/server format skew for
+  // weeks (DCK Sentry 137227658).
+  it("surfaces the server's message on 400 instead of the generic error", async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 400,
+      text: () =>
+        Promise.resolve(
+          JSON.stringify({
+            statusCode: 400,
+            message: "Tip fajla 'image/webp' nije dozvoljen.",
+          }),
+        ),
+    });
+    const result = await submitWarrantyRegistration(buildWarrantyFormData());
+    expect(result).toEqual({
+      success: false,
+      error: "Tip fajla 'image/webp' nije dozvoljen.",
+    });
+  });
+
+  // Still reported: the client pre-validates type, size, PIB and payload with the same rules,
+  // so any 400 that reaches here means client and server disagree — a skew signal, not user error.
+  it("reports a 400 with the server message in the Sentry title", async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 400,
+      text: () =>
+        Promise.resolve(
+          JSON.stringify({ statusCode: 400, message: "PIB mora imati tačno 9 cifara." }),
+        ),
+    });
+    await submitWarrantyRegistration(buildWarrantyFormData());
+    expect(reportError).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: "Warranty API error: 400: PIB mora imati tačno 9 cifara.",
+      }),
+      expect.objectContaining({ source: "submitWarrantyRegistration" }),
+    );
+  });
+
+  // 401/403 is a credential problem and 5xx is ours — neither is anything the customer can act
+  // on, and a 403's Serbian message ("Nemate potrebnu dozvolu…") would blame them for it.
+  it.each([401, 403, 422, 429, 500])(
+    "keeps the generic error for status %i even when the body carries a message",
+    async (status) => {
+      mockFetch.mockResolvedValue({
+        ok: false,
+        status,
+        text: () =>
+          Promise.resolve(
+            JSON.stringify({ statusCode: status, message: "Nemate potrebnu dozvolu." }),
+          ),
+      });
+      const result = await submitWarrantyRegistration(buildWarrantyFormData());
+      expect(result).toEqual({
+        success: false,
+        error: WARRANTY_SUBMISSION_FAILED_ERROR,
+      });
+      expect(reportError).toHaveBeenCalled();
+    },
+  );
+
+  it("falls back to the generic error when a 400 body is not parseable JSON", async () => {
+    mockFetch.mockResolvedValue({
+      ok: false,
+      status: 400,
+      text: () => Promise.resolve("<html>502 Bad Gateway</html>"),
+    });
+    const result = await submitWarrantyRegistration(buildWarrantyFormData());
+    expect(result).toEqual({
+      success: false,
+      error: WARRANTY_SUBMISSION_FAILED_ERROR,
+    });
+  });
+
   it("returns error and reports when fetch throws", async () => {
     mockFetch.mockRejectedValue(new Error("Network error"));
     const result = await submitWarrantyRegistration(buildWarrantyFormData());

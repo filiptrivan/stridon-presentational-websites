@@ -15,6 +15,32 @@ import { reportError } from "@brand/shared/lib/report-error";
 
 const BRAND_SLUG = "dck";
 
+/**
+ * The one status whose message belongs on screen. PACMS maps `BusinessException` — and only that —
+ * to 400, and those messages are hand-written Serbian addressed to the customer ("Tip fajla ... nije
+ * dozvoljen.", "PIB mora imati tačno 9 cifara."). Every other failure is ours, not theirs: 401/403 is
+ * a credential problem whose message would blame them for it, 422 is a client/server schema skew,
+ * 5xx carries a generic placeholder anyway. Developer-facing text can't leak through here — PACMS's
+ * handler sends unmapped exceptions (its English `ArgumentException` strings) as 500.
+ */
+const STATUS_WITH_CUSTOMER_FACING_MESSAGE = 400;
+
+/** The `message` of a PACMS `ApiErrorDTO`, or null if the body isn't one (proxy HTML, empty body). */
+function readApiErrorMessage(body: string): string | null {
+  try {
+    const parsed: unknown = JSON.parse(body);
+    if (parsed !== null && typeof parsed === "object" && "message" in parsed) {
+      const { message } = parsed as { message: unknown };
+      if (typeof message === "string" && message.trim() !== "") {
+        return message.trim();
+      }
+    }
+  } catch {
+    // Not JSON — nothing to surface, and not worth distinguishing from a missing message.
+  }
+  return null;
+}
+
 export type WarrantyActionResult =
   | { success: true }
   | { success: false; error: string };
@@ -94,13 +120,25 @@ export async function submitWarrantyRegistration(
 
     if (!response.ok) {
       const body = await response.text();
-      reportError(new Error(`Warranty API error: ${response.status}`), {
-        source: "submitWarrantyRegistration",
-        details: body,
-      });
+      const serverMessage = readApiErrorMessage(body);
+
+      // Reported even for a 400: this action already validated payload, file type, size and PIB
+      // against the same rules, so a 400 reaching here means the client and the server disagree.
+      // The message rides in the title so the Sentry issue splits per cause and is readable
+      // without opening an event — the WebP skew cost a round-trip to learn it was about WebP.
+      reportError(
+        new Error(
+          `Warranty API error: ${response.status}${serverMessage ? `: ${serverMessage}` : ""}`,
+        ),
+        { source: "submitWarrantyRegistration", details: body },
+      );
+
       return {
         success: false,
-        error: WARRANTY_SUBMISSION_FAILED_ERROR,
+        error:
+          response.status === STATUS_WITH_CUSTOMER_FACING_MESSAGE && serverMessage
+            ? serverMessage
+            : WARRANTY_SUBMISSION_FAILED_ERROR,
       };
     }
 
