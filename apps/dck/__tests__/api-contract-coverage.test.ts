@@ -66,20 +66,27 @@ function endpointsIn(pathspec: string[]): Set<string> {
   return found;
 }
 
+// Scanned once: endpointsIn spawns `git ls-files` and reads every match (~200 files), and both
+// tests need the same two sets. Computing them at module scope also means the two checks can never
+// disagree about what "called" means — a pathspec added to one copy and not the other would have
+// made the staleness check silently authoritative over a different file set.
+const COVERED_PATHSPEC = ["apps/*/__tests__/*.integration.test.ts"];
+const CALLED_PATHSPEC = [
+  "apps/*/app/**",
+  "apps/*/lib/**",
+  "apps/*/components/**",
+  "packages/**",
+  ":(exclude)**/*.test.ts",
+  ":(exclude)**/*.test.tsx",
+];
+
+// Derived, not hand-listed: writing an integration test for an endpoint drops it out of the ledger
+// requirement automatically, so the two can never disagree.
+const covered = endpointsIn(COVERED_PATHSPEC);
+const called = endpointsIn(CALLED_PATHSPEC);
+
 describe("PACMS API contract coverage", () => {
   it("every endpoint the apps call is integration-tested or acknowledged as debt", () => {
-    // Derived, not hand-listed: writing an integration test for an endpoint drops it out of the
-    // ledger requirement automatically, so the two can never disagree.
-    const covered = endpointsIn(["apps/*/__tests__/*.integration.test.ts"]);
-    const called = endpointsIn([
-      "apps/*/app/**",
-      "apps/*/lib/**",
-      "apps/*/components/**",
-      "packages/**",
-      ":(exclude)**/*.test.ts",
-      ":(exclude)**/*.test.tsx",
-    ]);
-
     const unprotected = [...called].filter(
       (name) => !covered.has(name) && !ACKNOWLEDGED_UNCOVERED.has(name),
     );
@@ -93,16 +100,6 @@ describe("PACMS API contract coverage", () => {
   });
 
   it("the debt ledger has no stale entries", () => {
-    const covered = endpointsIn(["apps/*/__tests__/*.integration.test.ts"]);
-    const called = endpointsIn([
-      "apps/*/app/**",
-      "apps/*/lib/**",
-      "apps/*/components/**",
-      "packages/**",
-      ":(exclude)**/*.test.ts",
-      ":(exclude)**/*.test.tsx",
-    ]);
-
     // An entry that is no longer called, or that has since gained a test, is noise that makes the
     // ledger look worse than reality — and noise is how a ledger stops being read.
     const stale = [...ACKNOWLEDGED_UNCOVERED].filter(
