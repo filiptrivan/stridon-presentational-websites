@@ -45,9 +45,12 @@ export async function generateMetadata({
   const category = await getCategoryBySlug(slug);
   if (!category) return { title: "Kategorija nije pronađena" };
 
+  // PACMS nulls these deliberately on brand-filtered reads — null means "compose
+  // it yourself", not "no title". Until the generated types landed we passed the
+  // null straight through and rendered `undefined` into <title>.
   return createCategoryMetadata({
-    title: category.metaTitle,
-    description: category.metaDescription,
+    title: category.metaTitle || category.name,
+    description: category.metaDescription || category.name,
     slug,
     currentPage,
   });

@@ -1,67 +1,36 @@
-export interface CategoryBreadcrumb {
-  name: string;
-  path: string;
-}
+import type { components } from "./api";
 
-export interface ProductMedia {
-  url: string;
-  mediaType: number;
-  width: number | null;
-  height: number | null;
-  thumbnailUrl: string | null;
-  durationSeconds: number | null;
-}
+/**
+ * PACMS DTOs, ALIASED from the generated schema — never hand-written.
+ *
+ * These were transcribed by hand until 2026-08-03, and every transcription had
+ * drifted from the backend: `Tag.imageUrl` was declared `string` against a
+ * backend `string?` for its whole life, and `Category.ogImageUrl` was declared
+ * against a field the API has never sent. A hand-written interface is a *claim*
+ * about a payload rather than a derivation from one, so a wrong claim compiles
+ * perfectly and hands `null` (or `undefined`) to code the types promised would
+ * never see it. Aliasing makes that unrepresentable instead of detectable.
+ *
+ * Regenerate with `pnpm generate:types` against a running PACMS backend
+ * (`http://localhost:5000`) — same doc, same tool, same version as
+ * pa-storefront, which has consumed it this way from the start.
+ *
+ * Two consequences worth knowing before you fight the types:
+ * - A field the backend does not mark `[Required]` generates as
+ *   `field?: T | null`. Optional AND nullable is the honest shape; guard it.
+ * - Generated DTOs carry fields these sites do not render. That is fine — the
+ *   alternative is curating a subset by hand, which is the thing that broke.
+ */
+
+export type CategoryBreadcrumb = components["schemas"]["CategoryBreadcrumbDTO"];
+export type ProductMedia = components["schemas"]["StorefrontProductMediaDTO"];
 
 /** Lightweight DTO for product cards in lists, grids, and carousels. */
-export interface ProductCardData {
-  id: number;
-  defaultProductVariantId: number;
-  title: string;
-  slug: string;
-  displayPrice: number;
-  originalPrice: number | null;
-  discountPercentage: number | null;
-  hasDiscount: boolean;
-  // Null when the entity has no image. PACMS used to substitute a placeholder
-  // URL here; it now sends null, so every render site must guard. See pa-cms
-  // Backend/CLAUDE.md → "Image absence is null, never a placeholder row".
-  imageUrl: string | null;
-  brandName: string;
-  brandImageUrl: string | null;
-  isBackorder: boolean;
-  tags: { name: string; color: string; orderNumber: number }[];
-  averageRating: number | null;
-  reviewCount: number;
-  maxOrderQuantity: number | null;
-}
+export type ProductCardData = components["schemas"]["StorefrontProductCardDTO"];
 
 /** Full product DTO for product detail pages. */
-export interface Product extends ProductCardData {
-  description: string;
-  htmlDescription: string;
-  specification: string | null;
-  countryName: string | null;
-  metaTitle: string;
-  metaDescription: string;
-  brandSlug: string;
-  warrantyName: string | null;
-  warrantyDurationMonths: number | null;
-  categoryName: string;
-  categorySlug: string;
-  categoryBreadcrumbs: CategoryBreadcrumb[];
-  productMedia: ProductMedia[];
-  weightKg: number | null;
-  heightCm: number | null;
-  sku: string | null;
-  relatedProducts: ProductCardData[];
-}
+export type Product = components["schemas"]["StorefrontProductDTO"];
 
-export interface ProductCardsResult {
-  data: ProductCardData[];
-  totalRecords: number;
-}
+export type ProductCardsResult = components["schemas"]["StorefrontProductsResultDTO"];
 
-export interface SitemapEntry {
-  slug: string;
-  modifiedAt: string;
-}
+export type SitemapEntry = components["schemas"]["SitemapEntryDTO"];
