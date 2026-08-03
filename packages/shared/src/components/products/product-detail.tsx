@@ -120,8 +120,8 @@ const ProductDetail = ({
       {(product.htmlDescription || product.specification) && (
         <Container delay={2} className="mt-12 lg:mt-16">
           <ProductTabs
-            htmlDescription={product.htmlDescription ?? null}
-            specification={product.specification ?? null}
+            htmlDescription={product.htmlDescription}
+            specification={product.specification}
           />
         </Container>
       )}

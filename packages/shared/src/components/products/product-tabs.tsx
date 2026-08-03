@@ -13,12 +13,14 @@ const tabs = [
 type TabKey = (typeof tabs)[number]["key"];
 
 interface ProductTabsProps {
-  htmlDescription: string | null;
-  specification: string | null;
+  htmlDescription?: string | null;
+  specification?: string | null;
 }
 
 const ProductTabs = ({ htmlDescription, specification }: ProductTabsProps) => {
-  const contentMap: Record<TabKey, string | null> = {
+  // Absent and null are the same thing here — both mean "no tab". The two
+  // non-null assertions below are guarded by `availableTabs`' truthiness filter.
+  const contentMap: Record<TabKey, string | null | undefined> = {
     description: htmlDescription,
     specification,
   };

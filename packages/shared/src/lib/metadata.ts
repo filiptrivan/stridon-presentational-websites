@@ -202,7 +202,8 @@ export function createProductMetadata({
   title: string;
   description: string;
   slug: string;
-  image?: string;
+  /** Null-tolerant because PACMS image URLs are nullable; `OgImageParams` already is. */
+  image?: string | null;
 }): Metadata {
   return createPageMetadata({
     title,

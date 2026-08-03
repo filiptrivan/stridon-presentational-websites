@@ -39,6 +39,28 @@ const SCHEMA_FILE = resolve(__dirname, "../../../packages/shared/src/types/api.t
 const PRODUCT_SLUG =
   "dck-krh20v-28r2k-akumulatorska-busilica-za-beton-sds-plus-sa-2x80ah-baterije-i-punjacem-20v";
 
+// Parsed once: the generated file is ~6,800 lines and immutable for the run.
+const schemaSource = ts.createSourceFile(
+  SCHEMA_FILE,
+  readFileSync(SCHEMA_FILE, "utf8"),
+  ts.ScriptTarget.Latest,
+  true,
+);
+
+/** The type literal of a named member, or undefined — the two nested lookups below are identical. */
+function memberLiteral(
+  members: readonly ts.TypeElement[] | undefined,
+  name: string,
+): ts.TypeLiteralNode | undefined {
+  const member = members?.find(
+    (candidate): candidate is ts.PropertySignature =>
+      ts.isPropertySignature(candidate) &&
+      ts.isIdentifier(candidate.name) &&
+      candidate.name.text === name,
+  );
+  return member?.type && ts.isTypeLiteralNode(member.type) ? member.type : undefined;
+}
+
 /**
  * Fields a generated schema marks as always present and non-null, read out of
  * the generated file itself.
@@ -49,41 +71,29 @@ const PRODUCT_SLUG =
  * means a DTO change moves this check with no edit.
  */
 function requiredFields(schemaName: string): string[] {
-  const source = ts.createSourceFile(
-    SCHEMA_FILE,
-    readFileSync(SCHEMA_FILE, "utf8"),
-    ts.ScriptTarget.Latest,
-    true,
-  );
-
-  const components = source.statements.find(
+  const components = schemaSource.statements.find(
     (statement): statement is ts.InterfaceDeclaration =>
       ts.isInterfaceDeclaration(statement) && statement.name.text === "components",
   );
 
-  const schemas = components?.members
-    .filter(ts.isPropertySignature)
-    .find((member) => ts.isIdentifier(member.name) && member.name.text === "schemas");
+  const schema = memberLiteral(
+    memberLiteral(components?.members, "schemas")?.members,
+    schemaName,
+  );
 
-  const literal =
-    schemas?.type && ts.isTypeLiteralNode(schemas.type) ? schemas.type : undefined;
-
-  const schema = literal?.members
-    .filter(ts.isPropertySignature)
-    .find((member) => ts.isIdentifier(member.name) && member.name.text === schemaName);
-
-  if (!schema?.type || !ts.isTypeLiteralNode(schema.type)) {
+  // Never fall back to an empty list — that would make every assertion below
+  // pass vacuously, which is worse than the drift this test exists to catch.
+  if (!schema) {
     throw new Error(
-      `Schema ${schemaName} not found in ${SCHEMA_FILE}. If the DTO was renamed, update this ` +
-        `test — a silently-empty field list would make every assertion below pass vacuously.`,
+      `Schema ${schemaName} not found in ${SCHEMA_FILE}. If the DTO was renamed, update this test.`,
     );
   }
 
-  return schema.type.members
-    .filter(ts.isPropertySignature)
-    .flatMap((member) =>
-      !member.questionToken && ts.isIdentifier(member.name) ? [member.name.text] : [],
-    );
+  return schema.members.flatMap((member) =>
+    ts.isPropertySignature(member) && !member.questionToken && ts.isIdentifier(member.name)
+      ? [member.name.text]
+      : [],
+  );
 }
 
 async function read<T>(path: string, init?: RequestInit): Promise<T> {
@@ -118,16 +128,18 @@ function assertShape(
   const fields = requiredFields(schemaName);
   expect(fields.length, `${schemaName} declared no required fields`).toBeGreaterThan(0);
 
-  const violations: string[] = [];
+  // A Set, not an array: 100 items x ~15 fields would push up to 1,500 duplicate
+  // strings only to dedupe them, and every row violates the same way.
+  const violations = new Set<string>();
   for (const item of items) {
     for (const field of fields) {
-      if (!(field in item)) violations.push(`${field}: absent from the response`);
-      else if (item[field] === null) violations.push(`${field}: null`);
+      if (!(field in item)) violations.add(`${field}: absent from the response`);
+      else if (item[field] === null) violations.add(`${field}: null`);
     }
   }
 
   expect(
-    [...new Set(violations)].sort(),
+    [...violations].sort(),
     `${schemaName} declares these [Required], but ${label} sends otherwise. Fix the BACKEND — ` +
       `either the projection that produces the null, or the attribute that over-promises. ` +
       `Do not paper over it here; the generated types trust that declaration.`,
