@@ -17,6 +17,7 @@ import type {
 import type { Tag } from "../types/tags";
 import { TAGS } from "./cache-tags";
 import { reportError } from "./report-error";
+import { type FetchTier, budgetMsFor } from "./request-budget";
 
 class ApiError extends Error {
   constructor(
@@ -41,17 +42,41 @@ const BYPASS_HEADERS: Record<string, string> = RATELIMIT_BYPASS_SECRET
   : {};
 const BRAND_SLUG = getBrandConfig().brandSlug;
 
-async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
+async function apiFetch<T>(
+  path: string,
+  tier: FetchTier,
+  options?: RequestInit,
+): Promise<T> {
   if (!API_URL) throw new Error("API_URL is required");
 
-  const res = await fetch(`${API_URL}${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...BYPASS_HEADERS,
-      ...(options?.headers as Record<string, string>),
-    },
-  });
+  const budgetMs = budgetMsFor(tier);
+  let res: Response;
+  try {
+    res = await fetch(`${API_URL}${path}`, {
+      ...options,
+      // A real abort, not just a lost wait: the socket is torn down, so a
+      // saturated backend can shed the work instead of the request holding both
+      // a lambda and a connection slot.
+      signal: AbortSignal.timeout(budgetMs),
+      headers: {
+        "Content-Type": "application/json",
+        ...BYPASS_HEADERS,
+        ...(options?.headers as Record<string, string>),
+      },
+    });
+  } catch (error) {
+    // Reporting used to hang entirely off `!res.ok` below. A timeout or a network
+    // failure never produces a Response, so adding the budget without this catch
+    // would have made backend stalls *less* visible than the 100s 524s they
+    // replace — silently degrading a section with nothing in Sentry.
+    reportError(error, {
+      source: `apiFetch ${path}`,
+      details: `tier=${tier} budgetMs=${budgetMs}`,
+    });
+    // Rethrown, never swallowed: an availability failure must not reach the
+    // callers below as a resolved absence (see the 404 guards).
+    throw error;
+  }
 
   if (!res.ok) {
     const error = new ApiError(
@@ -73,6 +98,7 @@ export async function getCategories(): Promise<Category[]> {
   cacheTag(TAGS.categories);
   return apiFetch<Category[]>(
     `/api/Storefront/Categories?brandSlug=${BRAND_SLUG}`,
+    "auxiliary",
   );
 }
 
@@ -81,6 +107,7 @@ export async function getFlatCategories(count = 6): Promise<Category[]> {
   cacheTag(TAGS.categories);
   return apiFetch<Category[]>(
     `/api/Storefront/FlatCategories?brandSlug=${BRAND_SLUG}&count=${count}`,
+    "auxiliary",
   );
 }
 
@@ -94,6 +121,7 @@ export async function getCatalogs(): Promise<Catalog[]> {
   cacheTag(TAGS.catalogs);
   return apiFetch<Catalog[]>(
     `/api/Storefront/CatalogsByBrand?brandSlug=${BRAND_SLUG}`,
+    "auxiliary",
   );
 }
 
@@ -102,6 +130,7 @@ export async function getSitemapProducts(): Promise<SitemapEntry[]> {
   cacheTag(TAGS.products);
   return apiFetch<SitemapEntry[]>(
     `/api/Storefront/SitemapProductsByBrand?brandSlug=${BRAND_SLUG}`,
+    "auxiliary",
   );
 }
 
@@ -110,7 +139,10 @@ export async function getTagsByBrand(count?: number): Promise<Tag[]> {
   cacheTag(TAGS.tags);
   const params = new URLSearchParams({ brandSlug: BRAND_SLUG });
   if (count !== undefined) params.set("count", String(count));
-  return apiFetch<Tag[]>(`/api/Storefront/TagsByBrand?${params.toString()}`);
+  return apiFetch<Tag[]>(
+    `/api/Storefront/TagsByBrand?${params.toString()}`,
+    "auxiliary",
+  );
 }
 
 // Backend endpoints below are not brand-scoped — they return tags across all brands.
@@ -119,13 +151,16 @@ export async function getTagsByBrand(count?: number): Promise<Tag[]> {
 export async function getSitemapTags(): Promise<SitemapEntry[]> {
   cacheLife("days");
   cacheTag(TAGS.tags);
-  return apiFetch<SitemapEntry[]>("/api/Storefront/SitemapTags");
+  return apiFetch<SitemapEntry[]>("/api/Storefront/SitemapTags", "auxiliary");
 }
 
 export async function getPrerenderedTagSlugs(): Promise<string[]> {
   cacheLife("days");
   cacheTag(TAGS.tags);
-  return apiFetch<string[]>("/api/Storefront/PrerenderedTagSlugs");
+  return apiFetch<string[]>(
+    "/api/Storefront/PrerenderedTagSlugs",
+    "auxiliary",
+  );
 }
 
 //#endregion
@@ -138,6 +173,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
   try {
     return await apiFetch<Product>(
       `/api/Storefront/ProductBySlug?slug=${encodeURIComponent(slug)}`,
+      "critical",
     );
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) return null;
@@ -153,6 +189,7 @@ export async function getCategoryBySlug(
   try {
     return await apiFetch<Category>(
       `/api/Storefront/CategoryBySlug?slug=${encodeURIComponent(slug)}&brandSlug=${BRAND_SLUG}`,
+      "critical",
     );
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) return null;
@@ -166,15 +203,19 @@ export async function getFilteredProducts(
 ): Promise<ProductCardsResult> {
   cacheLife("hours");
   cacheTag(TAGS.products);
-  return apiFetch<ProductCardsResult>("/api/Storefront/FilteredProducts", {
-    method: "POST",
-    body: JSON.stringify({
-      brandSlugs: [BRAND_SLUG],
-      tagSlugs: [],
-      first: offset,
-      rows: limit,
-    }),
-  });
+  return apiFetch<ProductCardsResult>(
+    "/api/Storefront/FilteredProducts",
+    "auxiliary",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        brandSlugs: [BRAND_SLUG],
+        tagSlugs: [],
+        first: offset,
+        rows: limit,
+      }),
+    },
+  );
 }
 
 export async function getTopProductsByBrand(
@@ -184,6 +225,7 @@ export async function getTopProductsByBrand(
   cacheTag(TAGS.products);
   return apiFetch<ProductCardData[]>(
     `/api/Storefront/TopProductsByBrand?brandSlug=${BRAND_SLUG}&count=${count}`,
+    "auxiliary",
   );
 }
 
@@ -194,16 +236,20 @@ export async function getFilteredProductsByCategory(
 ): Promise<ProductCardsResult> {
   cacheLife("hours");
   cacheTag(TAGS.products);
-  return apiFetch<ProductCardsResult>("/api/Storefront/FilteredProducts", {
-    method: "POST",
-    body: JSON.stringify({
-      brandSlugs: [BRAND_SLUG],
-      tagSlugs: [],
-      categorySlug,
-      first: offset,
-      rows: limit,
-    }),
-  });
+  return apiFetch<ProductCardsResult>(
+    "/api/Storefront/FilteredProducts",
+    "auxiliary",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        brandSlugs: [BRAND_SLUG],
+        tagSlugs: [],
+        categorySlug,
+        first: offset,
+        rows: limit,
+      }),
+    },
+  );
 }
 
 export async function getTagBySlug(slug: string): Promise<Tag | null> {
@@ -212,6 +258,7 @@ export async function getTagBySlug(slug: string): Promise<Tag | null> {
   try {
     return await apiFetch<Tag>(
       `/api/Storefront/TagBySlug?slug=${encodeURIComponent(slug)}`,
+      "critical",
     );
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) return null;
@@ -226,15 +273,19 @@ export async function getFilteredProductsByTag(
 ): Promise<ProductCardsResult> {
   cacheLife("hours");
   cacheTag(TAGS.products);
-  return apiFetch<ProductCardsResult>("/api/Storefront/FilteredProducts", {
-    method: "POST",
-    body: JSON.stringify({
-      brandSlugs: [BRAND_SLUG],
-      tagSlugs: [tagSlug],
-      first: offset,
-      rows: limit,
-    }),
-  });
+  return apiFetch<ProductCardsResult>(
+    "/api/Storefront/FilteredProducts",
+    "auxiliary",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        brandSlugs: [BRAND_SLUG],
+        tagSlugs: [tagSlug],
+        first: offset,
+        rows: limit,
+      }),
+    },
+  );
 }
 
 //#endregion
