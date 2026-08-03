@@ -150,7 +150,7 @@ Every read is bounded by `packages/shared/src/lib/request-budget.ts`, and `apiFe
 
 **Warranty extension** (DCK only, user-facing name "Produžetak garancije"): `apps/dck/app/produzetak-garancije/actions.ts` submits warranty forms to `/api/Storefront/SubmitWarrantyRegistration` (authenticated via `PACMS_API_KEY` / `X-Api-Key` header). Backend endpoint name remains `SubmitWarrantyRegistration` — internal identifiers (`submitWarrantyRegistration`, `WarrantyForm`, `warrantySchema`) were intentionally not renamed.
 
-**Shared patterns with PACMS storefront** (`c:\Users\user\Documents\Projects\PACMS\pa-storefront`): Both repos use the same Sentry instrumentation pattern, the same `report-error.ts` utility structure, and the same Turnstile verification flow. When adding cross-cutting features (error handling, auth, caching), check the PACMS storefront for existing patterns to replicate.
+**Shared patterns with PACMS storefront** (`c:\Users\user\Documents\Projects\PACMS\pa-storefront`): Both repos use the same Sentry instrumentation pattern, and the same `report-error.ts` utility structure. When adding cross-cutting features (error handling, auth, caching), check the PACMS storefront for existing patterns to replicate.
 
 **Vercel deployment**: All projects (dck, sg-tools, pa-storefront-ba, pa-storefront-rs) are managed under one Vercel team. Credentials and project IDs are in the PACMS repo at `.claude/skills/prod-vercel/skill.md`.
 
