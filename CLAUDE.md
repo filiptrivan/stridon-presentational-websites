@@ -39,14 +39,16 @@
 
 ## Tests
 
-Two lanes, and only two — `pnpm test` (hermetic) and `pnpm test:integration` (live). Both map 1:1 onto a job in `.github/workflows/test.yml`; a lane no CI job runs is a lane that rots.
+Two lanes, and only two — `pnpm test` (hermetic) and `pnpm test:integration` (live).
 
-- **`pnpm test`** — everything except `*.integration.test.ts`, no network, no secrets. This is the default anyone types, so it must stay runnable on a plane. The exclusion lives in each workspace's `test` / `test:watch` script rather than in `vitest.config.ts`, because dck's integration lane needs those same files back.
-- **`pnpm test:integration`** — dck only; real HTTP against the production PACMS backend, needs `API_URL` + `PACMS_API_KEY`. CI runs it on `main` pushes and on `pacms-backend-deployed`, never on PRs.
+- **`pnpm test`** — everything except `*.integration.test.ts`. No network, no secrets; it is the command everyone types, so it must stay runnable on a plane. The exclusion sits in each workspace's `test` / `test:watch` script rather than in `vitest.config.ts`, because a config-level `exclude` also hides those files from dck's `vitest run integration.test` filter, leaving the live lane selecting nothing. Every workspace carries it, including the ones with no integration test yet — that is what makes a newly added one land outside this lane by default.
+- **`pnpm test:integration`** — dck only; real HTTP against the production PACMS backend.
 
 **Never fold the integration tests back into `test`, and never add `PACMS_API_KEY` to `apps/dck/.env.local` to "fix" a red run.** `warranty-registration.integration.test.ts` POSTs *real* warranty registrations; with the key present, every `pnpm test` — and every save under `test:watch` — writes rows to production. Until 2026-08-03 the root `test` lane did exactly this and was permanently red for anyone without the key, which is the only reason nobody had the key.
 
-The integration tests **throw** rather than `skipIf` when `PACMS_API_KEY` is missing. That is deliberate: a skip makes the CI job green when the secret is missing or rotated, and this suite exists precisely because a silent PACMS semantics change broke DCK's only write path for ~16h (see `apps/dck/__tests__/api-contract-coverage.test.ts`).
+Both halves are enforced rather than merely documented, by `apps/dck/__tests__/test-lane-wiring.test.ts`: it fails if a workspace runs vitest without the exclusion, and if a package holds an integration test but defines no `test:integration` script. The second case is the quiet one — turbo resolves a task a package doesn't define to `<NONEXISTENT>` and skips it without error, so that test runs in no lane at all while still counting as coverage in `api-contract-coverage.test.ts`.
+
+The integration tests **throw** rather than `skipIf` when `PACMS_API_KEY` is missing. That is deliberate: a skip makes the CI job green when the secret is missing or rotated (see `apps/dck/__tests__/api-contract-coverage.test.ts` for the outage this suite exists to catch).
 
 ## Architecture
 

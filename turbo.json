@@ -13,16 +13,18 @@
     "lint": {
       "dependsOn": ["^build"]
     },
-    // Not cached: an app's tests import @brand/shared, @brand/config and @brand/ui, but a package
-    // task only hashes files inside its own package plus its `dependsOn` edges. Any cacheable
-    // shape here replays a stale green after a change in one of those packages — `^test` would
-    // cover shared and nothing else, since config and ui have no test script. The suite is ~2.5s.
+    // Not cached. The old shape — `dependsOn: []` plus an `inputs` list — hashed only each
+    // package's own files, so an edit in packages/shared replayed a stale green for both apps.
+    // `dependsOn: ["^test"]` fixes that: measured 2026-08-03, the edge folds every internal
+    // dependency's file hash into the dependent's task hash, @brand/config and @brand/ui included,
+    // even though neither has a test script. We still don't cache, because the payoff is ~1.5s on
+    // repeat local runs and exactly nothing in CI (fresh runner per job, no remote cache), and a
+    // lane that always executes can't go stale. If it ever gets slow: cache it with `^test`, never
+    // with `dependsOn: []`.
     "test": {
-      "dependsOn": [],
       "cache": false
     },
     "test:integration": {
-      "dependsOn": [],
       "cache": false,
       "env": ["API_URL", "PACMS_API_KEY"]
     }
