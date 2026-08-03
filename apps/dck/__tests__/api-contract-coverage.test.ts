@@ -73,6 +73,12 @@ const CALLED_PATHSPEC = [
   "packages/**",
   ":(exclude)**/*.test.ts",
   ":(exclude)**/*.test.tsx",
+  // The generated OpenAPI types declare EVERY storefront route PACMS exposes, so leaving them in
+  // `packages/**` made the scanner read the backend's whole surface as calls this repo makes — 93
+  // endpoints instead of the 14 it really calls, including carts and loyalty these presentational
+  // sites have no code for. A schema is a description of what could be called, never evidence that
+  // it was; only hand-written code counts.
+  ":(exclude)packages/shared/src/types/api.ts",
 ];
 
 // Derived, not hand-listed: writing an integration test for an endpoint drops it out of the ledger
