@@ -50,33 +50,29 @@ async function apiFetch<T>(
   if (!API_URL) throw new Error("API_URL is required");
 
   const budgetMs = budgetMsFor(tier);
-  let res: Response;
-  try {
-    res = await fetch(`${API_URL}${path}`, {
-      ...options,
-      // A real abort, not just a lost wait: the socket is torn down, so a
-      // saturated backend can shed the work instead of the request holding both
-      // a lambda and a connection slot.
-      signal: AbortSignal.timeout(budgetMs),
-      headers: {
-        "Content-Type": "application/json",
-        ...BYPASS_HEADERS,
-        ...(options?.headers as Record<string, string>),
-      },
-    });
-  } catch (error) {
-    // Reporting used to hang entirely off `!res.ok` below. A timeout or a network
-    // failure never produces a Response, so adding the budget without this catch
-    // would have made backend stalls *less* visible than the 100s 524s they
-    // replace — silently degrading a section with nothing in Sentry.
-    reportError(error, {
-      source: `apiFetch ${path}`,
-      details: `tier=${tier} budgetMs=${budgetMs}`,
-    });
-    // Rethrown, never swallowed: an availability failure must not reach the
-    // callers below as a resolved absence (see the 404 guards).
+  const context = {
+    source: `apiFetch ${path}`,
+    details: `tier=${tier} budgetMs=${budgetMs}`,
+  };
+
+  const res = await fetch(`${API_URL}${path}`, {
+    ...options,
+    // A real abort, not just a lost wait: the socket is torn down, so a saturated
+    // backend can shed the work instead of the request holding both a lambda and
+    // a connection slot.
+    signal: AbortSignal.timeout(budgetMs),
+    headers: {
+      "Content-Type": "application/json",
+      ...BYPASS_HEADERS,
+      ...(options?.headers as Record<string, string>),
+    },
+  }).catch((error: unknown) => {
+    // A timeout or network failure produces no Response, so the `!res.ok` branch
+    // below structurally cannot see it. Rethrown, never swallowed — the 404
+    // guards must not receive an availability failure as a resolved absence.
+    reportError(error, context);
     throw error;
-  }
+  });
 
   if (!res.ok) {
     const error = new ApiError(
@@ -84,7 +80,7 @@ async function apiFetch<T>(
       `API error: ${res.status} ${res.statusText}`,
     );
     if (res.status !== 404) {
-      reportError(error, { source: `apiFetch ${path}` });
+      reportError(error, context);
     }
     throw error;
   }
@@ -157,10 +153,7 @@ export async function getSitemapTags(): Promise<SitemapEntry[]> {
 export async function getPrerenderedTagSlugs(): Promise<string[]> {
   cacheLife("days");
   cacheTag(TAGS.tags);
-  return apiFetch<string[]>(
-    "/api/Storefront/PrerenderedTagSlugs",
-    "auxiliary",
-  );
+  return apiFetch<string[]>("/api/Storefront/PrerenderedTagSlugs", "auxiliary");
 }
 
 //#endregion
@@ -197,12 +190,16 @@ export async function getCategoryBySlug(
   }
 }
 
-export async function getFilteredProducts(
+// The three FilteredProducts fetchers below differ only in how they narrow the
+// query. Deliberately NOT exported and NOT async: the file-level "use cache" makes
+// cache entries out of the exported fetchers, which keep their own cacheLife /
+// cacheTag and stay exactly the cache units they were — this shares the request
+// shape only. `tagSlugs: []` sits before the spread so a tag filter overrides it.
+function fetchFilteredProducts(
+  narrow: { categorySlug?: string; tagSlugs?: string[] },
   offset: number,
   limit: number,
 ): Promise<ProductCardsResult> {
-  cacheLife("hours");
-  cacheTag(TAGS.products);
   return apiFetch<ProductCardsResult>(
     "/api/Storefront/FilteredProducts",
     "auxiliary",
@@ -211,11 +208,21 @@ export async function getFilteredProducts(
       body: JSON.stringify({
         brandSlugs: [BRAND_SLUG],
         tagSlugs: [],
+        ...narrow,
         first: offset,
         rows: limit,
       }),
     },
   );
+}
+
+export async function getFilteredProducts(
+  offset: number,
+  limit: number,
+): Promise<ProductCardsResult> {
+  cacheLife("hours");
+  cacheTag(TAGS.products);
+  return fetchFilteredProducts({}, offset, limit);
 }
 
 export async function getTopProductsByBrand(
@@ -236,20 +243,7 @@ export async function getFilteredProductsByCategory(
 ): Promise<ProductCardsResult> {
   cacheLife("hours");
   cacheTag(TAGS.products);
-  return apiFetch<ProductCardsResult>(
-    "/api/Storefront/FilteredProducts",
-    "auxiliary",
-    {
-      method: "POST",
-      body: JSON.stringify({
-        brandSlugs: [BRAND_SLUG],
-        tagSlugs: [],
-        categorySlug,
-        first: offset,
-        rows: limit,
-      }),
-    },
-  );
+  return fetchFilteredProducts({ categorySlug }, offset, limit);
 }
 
 export async function getTagBySlug(slug: string): Promise<Tag | null> {
@@ -273,19 +267,7 @@ export async function getFilteredProductsByTag(
 ): Promise<ProductCardsResult> {
   cacheLife("hours");
   cacheTag(TAGS.products);
-  return apiFetch<ProductCardsResult>(
-    "/api/Storefront/FilteredProducts",
-    "auxiliary",
-    {
-      method: "POST",
-      body: JSON.stringify({
-        brandSlugs: [BRAND_SLUG],
-        tagSlugs: [tagSlug],
-        first: offset,
-        rows: limit,
-      }),
-    },
-  );
+  return fetchFilteredProducts({ tagSlugs: [tagSlug] }, offset, limit);
 }
 
 //#endregion

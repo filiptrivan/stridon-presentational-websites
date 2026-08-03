@@ -1,6 +1,10 @@
-// Latency budget for server-side backend reads. Kept free of Next and brand
-// config imports so it stays unit-testable on its own, and so api.ts can import
-// it without a cycle.
+// Latency budget for the cached catalog reads in api.ts — that is the whole reach
+// today. Other server-side fetches to the same backend do NOT inherit it (the
+// warranty POST, the search-autocomplete route handler, the Brevo calls); nothing
+// structurally enforces the funnel, so don't assume a new `fetch` is bounded.
+// Kept free of Next and brand-config imports so it stays unit-testable on its own,
+// which is the real reason it is a separate module: api.ts drags in next/cache,
+// @brand/config and a module-load read of API_URL, and needs three mocks to test.
 //
 // Why this exists: apiFetch had no timeout at all, so a stalled backend held the
 // Vercel lambda until Cloudflare gave up at ~100s. That is the shape of every
