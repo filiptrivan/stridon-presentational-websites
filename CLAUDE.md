@@ -35,7 +35,7 @@
 - Key variables (same for both):
   - `API_URL` - Base URL for the PACMS backend REST API (server-only)
   - `BREVO_API_KEY` - Brevo email service API key (contact form)
-  - `PACMS_RATELIMIT_BYPASS_SECRET` - Shared secret sent as the `X-Internal-Bypass` header on every `apiFetch` call; the Cloudflare edge fronting `api.pacms.in.rs` validates + strips it and injects the trusted rate-limit marker, so SSG build reads aren't throttled as anonymous. Optional (absent ⇒ anonymous). Set in each app's Vercel project; same value as the CMS `TF_VAR_storefront_ratelimit_bypass_secret`. See the PACMS repo `docs/trusted-first-party-caller.md`.
+  - `PACMS_RATELIMIT_BYPASS_SECRET` - Shared secret sent as the `X-Internal-Bypass` header on every `apiFetch` call; the Cloudflare edge fronting `api.pacms.in.rs` validates + strips it and injects the trusted rate-limit marker, so SSG build reads aren't throttled as anonymous. Optional (absent ⇒ anonymous). Set in each app's Vercel project; same value as the CMS `TF_VAR_storefront_ratelimit_bypass_secret`. See the PACMS repo `docs/trusted-first-party-caller.md`. **Also put it in each app's `.env.local`, or local builds break in a way that reads like a code bug.** `generateStaticParams` here returns the *complete* catalog (315 products / 91 categories on sg-tools, 139 / 64 on dck), so one `next build` is hundreds of anonymous reads against the production API — enough that the *next* build 429s mid-prerender and fails with an `ApiError` stack pointing at `api.ts`. Cost us a build on 2026-08-03.
 
 ## Architecture
 
@@ -140,6 +140,8 @@ DCK also has: `app/produzetak-garancije/` → `/produzetak-garancije` (with 308 
 This repo depends on the **PACMS** platform (`c:\Users\user\Documents\Projects\PACMS`) for several backend services:
 
 **Product data**: `API_URL` points to the PACMS backend (`/api/Storefront/*` endpoints). All product, category, and sitemap data is fetched from there via `packages/shared/src/lib/api.ts`.
+
+Every read is bounded by `packages/shared/src/lib/request-budget.ts`, and `apiFetch` takes the tier as a **required** argument so a new fetcher can't inherit a silent default: `critical` (4s) for the entity a route is *about* (product/category/tag by slug — its absence means the page can't render), `auxiliary` (2.5s) for everything else, which degrades into its `SectionErrorBoundary` instead of hanging the page. Build and dev serve lift to 60s; that lift is not optional, since a build prerenders the whole catalog against a possibly-cold backend. Two rules when touching this: the `try/catch` around `fetch` must keep reporting aborts (a timeout produces no `Response`, so the `!res.ok` branch can never see it — without the catch, a stalled backend degrades a section with *nothing* in Sentry), and an availability failure must never become `null` (only a resolved 404 may), or a timeout caches a healthy URL as gone and invites Google to deindex it. Both pinned by `packages/shared/__tests__/api-availability.test.ts`.
 
 **Error reporting**: Errors are captured by `@sentry/nextjs` and sent to Sentry (email alerts configured per-project). Implementation:
 
