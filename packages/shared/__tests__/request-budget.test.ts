@@ -1,5 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { budgetMsFor } from "../src/lib/request-budget";
+import {
+  AUTOCOMPLETE_BUDGET_MS,
+  THIRD_PARTY_BUDGET_MS,
+  budgetMsFor,
+} from "../src/lib/request-budget";
 
 describe("budgetMsFor", () => {
   beforeEach(() => {
@@ -35,5 +39,18 @@ describe("budgetMsFor", () => {
   it("lifts the budget on a dev serve", () => {
     vi.stubEnv("NODE_ENV", "development");
     expect(budgetMsFor("auxiliary")).toBeGreaterThan(30_000);
+  });
+
+  it("holds autocomplete to a tighter bound than a page render", () => {
+    // The UX ceiling is lower than the render ceiling — someone waiting mid-typing
+    // gives up long before a page would. If a future retune inverts these, the
+    // autocomplete has silently become the slowest thing a customer waits on.
+    expect(AUTOCOMPLETE_BUDGET_MS).toBeLessThan(budgetMsFor("auxiliary"));
+  });
+
+  it("does not lift the fixed budgets outside a serve — neither ever prerenders", () => {
+    vi.stubEnv("NEXT_PHASE", "phase-production-build");
+    expect(AUTOCOMPLETE_BUDGET_MS).toBeLessThan(10_000);
+    expect(THIRD_PARTY_BUDGET_MS).toBeLessThan(10_000);
   });
 });

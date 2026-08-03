@@ -2,6 +2,7 @@
 
 import { reportError } from "@brand/shared/lib/report-error";
 import { newsletterSchema } from "@brand/shared/lib/schemas/newsletter";
+import { THIRD_PARTY_BUDGET_MS } from "@brand/shared/lib/request-budget";
 import type { ActionResult } from "@brand/shared/types/actions";
 
 export async function subscribeNewsletter(
@@ -39,6 +40,7 @@ export async function subscribeNewsletter(
   try {
     const response = await fetch("https://api.brevo.com/v3/contacts", {
       method: "POST",
+      signal: AbortSignal.timeout(THIRD_PARTY_BUDGET_MS),
       headers: {
         accept: "application/json",
         "api-key": apiKey,

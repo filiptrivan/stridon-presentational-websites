@@ -1,10 +1,12 @@
-// Latency budget for the cached catalog reads in api.ts — that is the whole reach
-// today. Other server-side fetches to the same backend do NOT inherit it (the
-// warranty POST, the search-autocomplete route handler, the Brevo calls); nothing
-// structurally enforces the funnel, so don't assume a new `fetch` is bounded.
+// Timeout policy for every outbound server-side request these sites make. One home
+// so the numbers can be compared and re-tuned together; nothing structurally
+// enforces the funnel, so a new `fetch` is only bounded if its author comes here.
 // Kept free of Next and brand-config imports so it stays unit-testable on its own,
 // which is the real reason it is a separate module: api.ts drags in next/cache,
 // @brand/config and a module-load read of API_URL, and needs three mocks to test.
+//
+// Covered: the cached catalog reads (budgetMsFor), the autocomplete route handler,
+// and the Brevo calls. ONE deliberate exclusion, documented at the bottom.
 //
 // Why this exists: apiFetch had no timeout at all, so a stalled backend held the
 // Vercel lambda until Cloudflare gave up at ~100s. That is the shape of every
@@ -58,8 +60,33 @@ export function budgetMsFor(tier: FetchTier): number {
   return TIER_BUDGET_MS[tier];
 }
 
+// The product autocomplete route handler — the one read a customer waits on
+// synchronously, mid-typing, and the only uncached one. Tighter than the page tiers
+// because the UX ceiling is lower than the render ceiling: past ~2s they have typed
+// more and the answer is stale anyway. Measured backend autocomplete is 50-285ms,
+// so this is ~7x headroom. No build/dev lift — a route handler never prerenders.
+export const AUTOCOMPLETE_BUDGET_MS = 2_000;
+
+// Brevo (contact form send, newsletter upsert). Matches pa-storefront's number for
+// the same two calls. The newsletter upsert is idempotent (`updateEnabled: true`);
+// the contact send is not, so a timeout that fires after Brevo accepted can produce
+// a duplicate email if the visitor resubmits. Accepted: the blast radius is one
+// extra message in the store's own inbox, with no DB row and nothing sent to the
+// customer — which is exactly what makes it different from the warranty POST below.
+export const THIRD_PARTY_BUDGET_MS = 5_000;
+
 // Deliberately NOT copied from pa-storefront: its per-tier retry (critical retries
 // once, auxiliary never). It buys riding out a sub-second blip, at the cost of a
 // backoff loop and a retry-storm vector; these sites are almost entirely prerendered
 // and ISR-served, so a failed revalidation already degrades to serving the previous
 // complete page. Add it only with a measured reason.
+
+// DO NOT add a budget to the warranty POST (apps/dck/.../produzetak-garancije/
+// actions.ts). Aborting the client side does not stop the server: that flow uploads
+// the receipt to S3, writes a WarrantyRegistration row, then enqueues a confirmation
+// email to the customer. Abort after the write and we tell them it failed while it
+// succeeded — and there is no idempotency key and no uniqueness constraint on
+// SerialNumber, so their retry produces a second registration and a second email.
+// The payload is up to 4MB of phone-camera receipt over fra1 -> nbg1 -> R2, so any
+// budget tight enough to help is tight enough to false-fire on a slow-but-fine
+// upload. Prerequisite is a dedup key in pa-cms, not a timeout here.

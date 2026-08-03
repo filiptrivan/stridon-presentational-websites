@@ -2,6 +2,7 @@
 
 import { getBrandConfig } from "@brand/config";
 import { reportError } from "@brand/shared/lib/report-error";
+import { THIRD_PARTY_BUDGET_MS } from "@brand/shared/lib/request-budget";
 import {
   contactSchema,
   type ContactFormData,
@@ -36,6 +37,7 @@ export async function sendContactEmail(
   try {
     const response = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
+      signal: AbortSignal.timeout(THIRD_PARTY_BUDGET_MS),
       headers: {
         accept: "application/json",
         "api-key": apiKey,
