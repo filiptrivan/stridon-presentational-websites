@@ -37,6 +37,17 @@
   - `BREVO_API_KEY` - Brevo email service API key (contact form)
   - `PACMS_RATELIMIT_BYPASS_SECRET` - Shared secret sent as the `X-Internal-Bypass` header on every `apiFetch` call; the Cloudflare edge fronting `api.pacms.in.rs` validates + strips it and injects the trusted rate-limit marker, so SSG build reads aren't throttled as anonymous. Optional (absent ⇒ anonymous). Set in each app's Vercel project; same value as the CMS `TF_VAR_storefront_ratelimit_bypass_secret`. See the PACMS repo `docs/trusted-first-party-caller.md`. **Also put it in each app's `.env.local`, or local builds break in a way that reads like a code bug.** `generateStaticParams` here returns the *complete* catalog (315 products / 91 categories on sg-tools, 139 / 64 on dck), so one `next build` is hundreds of anonymous reads against the production API — enough that the *next* build 429s mid-prerender and fails with an `ApiError` stack pointing at `api.ts`. Cost us a build on 2026-08-03.
 
+## Tests
+
+Two lanes, and only two — `pnpm test` (hermetic) and `pnpm test:integration` (live). Both map 1:1 onto a job in `.github/workflows/test.yml`; a lane no CI job runs is a lane that rots.
+
+- **`pnpm test`** — everything except `*.integration.test.ts`, no network, no secrets. This is the default anyone types, so it must stay runnable on a plane. The exclusion lives in each workspace's `test` / `test:watch` script rather than in `vitest.config.ts`, because dck's integration lane needs those same files back.
+- **`pnpm test:integration`** — dck only; real HTTP against the production PACMS backend, needs `API_URL` + `PACMS_API_KEY`. CI runs it on `main` pushes and on `pacms-backend-deployed`, never on PRs.
+
+**Never fold the integration tests back into `test`, and never add `PACMS_API_KEY` to `apps/dck/.env.local` to "fix" a red run.** `warranty-registration.integration.test.ts` POSTs *real* warranty registrations; with the key present, every `pnpm test` — and every save under `test:watch` — writes rows to production. Until 2026-08-03 the root `test` lane did exactly this and was permanently red for anyone without the key, which is the only reason nobody had the key.
+
+The integration tests **throw** rather than `skipIf` when `PACMS_API_KEY` is missing. That is deliberate: a skip makes the CI job green when the secret is missing or rotated, and this suite exists precisely because a silent PACMS semantics change broke DCK's only write path for ~16h (see `apps/dck/__tests__/api-contract-coverage.test.ts`).
+
 ## Architecture
 
 ### Monorepo Structure

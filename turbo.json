@@ -13,13 +13,13 @@
     "lint": {
       "dependsOn": ["^build"]
     },
+    // Not cached: an app's tests import @brand/shared, @brand/config and @brand/ui, but a package
+    // task only hashes files inside its own package plus its `dependsOn` edges. Any cacheable
+    // shape here replays a stale green after a change in one of those packages — `^test` would
+    // cover shared and nothing else, since config and ui have no test script. The suite is ~2.5s.
     "test": {
       "dependsOn": [],
       "cache": false
-    },
-    "test:unit": {
-      "dependsOn": [],
-      "inputs": ["**/*.ts", "**/*.tsx", "vitest.config.ts"]
     },
     "test:integration": {
       "dependsOn": [],
