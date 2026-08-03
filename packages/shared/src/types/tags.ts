@@ -6,7 +6,9 @@ export interface Tag {
   orderNumber: number | null;
   metaTitle: string;
   metaDescription: string;
-  imageUrl: string;
+  // Already nullable on the backend (StorefrontTagDTO.ImageUrl has always been
+  // `string?`); this declaration was simply wrong. See the note in products.ts.
+  imageUrl: string | null;
   bannerMediaUrl: string | null;
   bannerImageWidth: number | null;
   bannerImageHeight: number | null;

@@ -22,9 +22,12 @@ export interface ProductCardData {
   originalPrice: number | null;
   discountPercentage: number | null;
   hasDiscount: boolean;
-  imageUrl: string;
+  // Null when the entity has no image. PACMS used to substitute a placeholder
+  // URL here; it now sends null, so every render site must guard. See pa-cms
+  // Backend/CLAUDE.md → "Image absence is null, never a placeholder row".
+  imageUrl: string | null;
   brandName: string;
-  brandImageUrl: string;
+  brandImageUrl: string | null;
   isBackorder: boolean;
   tags: { name: string; color: string; orderNumber: number }[];
   averageRating: number | null;

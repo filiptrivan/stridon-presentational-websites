@@ -4,7 +4,8 @@ export interface Category {
   id: number;
   name: string;
   slug: string;
-  imageUrl: string;
+  // Null when the category has no image — see the note in products.ts.
+  imageUrl: string | null;
   ogImageUrl: string | null;
   htmlDescription: string | null;
   metaTitle: string;

@@ -28,7 +28,10 @@ const ProductDetail = ({
     "@type": "Product",
     name: product.title,
     description: product.description,
-    image: product.imageUrl,
+    // Omitted rather than null when the product has no image: `"image": null`
+    // is invalid schema.org and Google reads the whole Product block as
+    // malformed. TypeScript can't catch it here (the literal is untyped).
+    ...(product.imageUrl ? { image: product.imageUrl } : {}),
     brand: {
       "@type": "Brand",
       name: product.brandName || "SG TOOLS",
@@ -63,7 +66,7 @@ const ProductDetail = ({
         <Container>
           <ProductGallery
             media={product.productMedia}
-            fallbackUrl={product.imageUrl}
+            fallbackUrl={product.imageUrl ?? undefined}
             title={product.title}
           />
         </Container>
