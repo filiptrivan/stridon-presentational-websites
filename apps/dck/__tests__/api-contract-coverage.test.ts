@@ -34,18 +34,13 @@ const ENDPOINT_PATTERN = /api\/Storefront\/([A-Za-z]+)/g;
  * because that is where a break loses customer data outright.
  */
 const ACKNOWLEDGED_UNCOVERED = new Set([
-  "CatalogsByBrand",
-  "Categories",
   "CategoryBySlug",
-  "FilteredProducts",
   "FlatCategories",
   "PrerenderedTagSlugs",
-  "ProductBySlug",
   "ProductsAutocompleteByBrand",
   "SitemapProductsByBrand",
   "SitemapTags",
   "TagBySlug",
-  "TagsByBrand",
   "TopProductsByBrand",
 ]);
 
