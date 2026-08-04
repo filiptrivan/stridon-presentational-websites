@@ -18,19 +18,17 @@ on:
     types: [pacms-backend-deployed]
 
 jobs:
-  # Lint ran nowhere in CI until 2026-08-04 — `next build` on Vercel was the only thing that ever
-  # saw a lint error, and only at deploy time. The pre-push hook runs the same command locally, but
-  # a hook is one `--no-verify` (or one un-installed clone) from silence, so the enforced copy lives
-  # here. Parallel to `unit` on purpose: a lint error and a failed test are independent facts and
-  # you want both in one run, not the second one hidden behind the first.
+  # Why lint is gated here and not only in the pre-push hook: CLAUDE.md → Preflight. Parallel to
+  # `unit` rather than folded into it, because `pnpm preflight` (turbo) halts on the first failing
+  # task, and a lint error must not hide the test result.
   lint:
     name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # No `version:` — the action reads `packageManager` from the root package.json,
+      # so the pnpm pin lives in exactly one place (pa-storefront's gates do the same).
       - uses: pnpm/action-setup@v4
-        with:
-          version: 10.29.3
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -44,8 +42,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with:
-          version: 10.29.3
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -69,8 +65,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with:
-          version: 10.29.3
       - uses: actions/setup-node@v4
         with:
           node-version: 22
