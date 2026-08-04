@@ -8,7 +8,12 @@ on:
   # just reached production is checked against the calls these sites actually make. This is the
   # trigger that was missing on 2026-07-29: the integration job below already existed and already
   # asserted the right thing, but it only ran when THIS repo pushed — and a PACMS dependency bump
-  # is not a push here. pa-cms treats a red result as a rollback signal.
+  # is not a push here. pa-cms reds its deploy run on a red result.
+  #
+  # NEVER add a `run-name:` to this workflow. pa-cms finds the run its dispatch created by
+  # matching displayTitle against the event type (its consumer-contract.sh → "SELECT BY EVENT
+  # TYPE"), and for a repository_dispatch run the displayTitle IS the event type — unless
+  # run-name overrides it. Set one and every backend deploy over there reds as `unverified`.
   repository_dispatch:
     types: [pacms-backend-deployed]
 
