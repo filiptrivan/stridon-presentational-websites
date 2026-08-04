@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+#
+# Pre-push guard: runs the same hermetic layers CI runs (lint + unit tests) so a
+# deterministic red never leaves the machine and burns a CI cycle. Measured cold:
+# ~4s lint + ~2s tests. Same shape as pa-storefront's hook, with one difference
+# that matters — installation is automatic here, via the root `prepare` script
+# (`core.hooksPath` is local config, so a hook nobody installed is a file, not a
+# gate). Bypass a known-safe push with: git push --no-verify
+#
+# It runs `pnpm preflight`, NEVER `pnpm test:integration`: that lane POSTs real
+# warranty registrations to the production PACMS backend, so a hook firing it
+# would write rows to prod at push cadence (see CLAUDE.md → Tests).
+#
+# Weaker than CI by design: it skips when node_modules is absent, and Vercel's
+# `next build` remains the only full-build check. The authoritative gates stay
+# in CI.
+set -euo pipefail
+
+cd "$(git rev-parse --show-toplevel)"
+
+if [ ! -d node_modules ]; then
+    echo "pre-push: node_modules missing — skipping preflight (CI gates still apply)." >&2
+    exit 0
+fi
+
+echo "pre-push: pnpm preflight (lint + unit tests)..." >&2
+pnpm preflight

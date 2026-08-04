@@ -50,6 +50,12 @@ Both halves are enforced rather than merely documented, by `apps/dck/__tests__/t
 
 The integration tests **throw** rather than `skipIf` when `PACMS_API_KEY` is missing. That is deliberate: a skip makes the CI job green when the secret is missing or rotated (see `apps/dck/__tests__/api-contract-coverage.test.ts` for the outage this suite exists to catch).
 
+## Preflight — the same checks run locally and in CI
+
+`pnpm preflight` = `turbo lint test`, ~6s cold. `.githooks/pre-push` runs it on every push, and the root `prepare` script arms the hook (`git config core.hooksPath .githooks`) on `pnpm install` — deliberately unlike pa-cms and pa-storefront, which install their hooks by hand via `scripts/setup-hooks.sh`. `core.hooksPath` is local config that does not travel with a clone, so a hook nobody installed is a file rather than a gate; hanging it off the one step you cannot skip removes that failure mode. Bypass a known-safe push with `git push --no-verify`.
+
+The hook must never run `test:integration` (see above — it writes to production). It is also not the enforcement point: `test.yml` runs `lint` and `unit` as parallel jobs, because a hook is one `--no-verify` away from silence. Lint ran nowhere in CI until 2026-08-04, and both apps now lint with `--max-warnings=0` — without it the warning tier is decorative, which is how `ComboboxChipsInput` sat destructuring `children` and dropping it.
+
 ## Architecture
 
 ### Monorepo Structure

@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "eslint --max-warnings=0",
     "test": "vitest run --exclude \"**/*.integration.test.ts\"",
     "test:watch": "vitest --exclude \"**/*.integration.test.ts\""
   },

@@ -3,12 +3,14 @@
   "private": true,
   "packageManager": "pnpm@10.29.3",
   "scripts": {
+    "prepare": "git config core.hooksPath .githooks",
     "dev:sg": "turbo dev --filter=sg-tools-storefront",
     "dev:dck": "turbo dev --filter=dck-storefront",
     "build": "turbo build",
     "lint": "turbo lint",
     "test": "turbo test",
     "test:integration": "turbo test:integration",
+    "preflight": "turbo lint test",
     "generate:types": "openapi-typescript http://localhost:5000/swagger/storefront/swagger.json -o packages/shared/src/types/api.ts"
   },
   "pnpm": {

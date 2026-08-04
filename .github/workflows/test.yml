@@ -13,6 +13,26 @@ on:
     types: [pacms-backend-deployed]
 
 jobs:
+  # Lint ran nowhere in CI until 2026-08-04 — `next build` on Vercel was the only thing that ever
+  # saw a lint error, and only at deploy time. The pre-push hook runs the same command locally, but
+  # a hook is one `--no-verify` (or one un-installed clone) from silence, so the enforced copy lives
+  # here. Parallel to `unit` on purpose: a lint error and a failed test are independent facts and
+  # you want both in one run, not the second one hidden behind the first.
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.29.3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+
   unit:
     name: Unit tests
     runs-on: ubuntu-latest
