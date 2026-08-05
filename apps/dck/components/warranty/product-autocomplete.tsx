@@ -16,6 +16,7 @@ import {
   ComboboxList,
 } from "@/components/ui/combobox";
 import { Button } from "@brand/ui/button";
+import { ImagePlaceholder } from "@brand/ui/image-placeholder";
 import { Label } from "@brand/ui/label";
 
 const DEBOUNCE_MS = 250;
@@ -74,7 +75,7 @@ function SelectedCard({
           />
         </div>
       ) : (
-        <div className="h-16 w-16 shrink-0 rounded-sm bg-muted" />
+        <ImagePlaceholder className="h-16 w-16 shrink-0 rounded-sm" />
       )}
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-medium">{product.title}</p>
@@ -200,7 +201,7 @@ function ProductPicker({
                   />
                 </div>
               ) : (
-                <div className="h-10 w-10 shrink-0 rounded-sm bg-muted" />
+                <ImagePlaceholder className="h-10 w-10 shrink-0 rounded-sm" />
               )}
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm">{hit.title}</p>

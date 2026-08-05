@@ -15,8 +15,6 @@ const CategoryCard = ({ category }: CategoryCardProps) => {
       className="flex flex-col bg-foreground/5 border border-border/20 hover:border-border transition-colors rounded-lg lg:rounded-xl overflow-hidden h-full"
     >
       <div className="aspect-square shrink-0 relative">
-        {/* PACMS sends null for a category with no image instead of a
-            placeholder URL, so the absent branch renders one locally. */}
         {category.imageUrl ? (
           <Image
             src={category.imageUrl}

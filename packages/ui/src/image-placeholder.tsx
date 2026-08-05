@@ -10,27 +10,25 @@ interface ImagePlaceholderProps {
 
 /**
  * What a card renders in place of a PACMS image the catalogue does not have.
+ * Which surfaces use it, and which two deliberately don't: repo CLAUDE.md →
+ * "A missing PACMS image is `null`".
  *
- * PACMS stopped fabricating images in August 2026: a product with no photo now
- * gets zero `ProductMedia` rows and a category with no image gets `null`, where
- * both used to carry a stored grey `default.jpg`. These sites read those fields
- * straight, so the guards that were added for the null left empty boxes behind.
+ * Three properties are load-bearing and invisible from the call sites:
+ * - **Inline SVG, never a file** — absence must have no URL to crawl, index or
+ *   hand to a feed.
+ * - **Accepts no prop that could carry a label.** The stored `default.jpg` this
+ *   replaces carried the product title, so one grey card claimed to be a
+ *   specific tool everywhere it was republished; a `...props` spread would let
+ *   that back in through `aria-label`/`title`. Callers already name the thing in
+ *   adjacent link text. Rationale: pa-cms `Backend/CLAUDE.md` → "Image absence
+ *   is null, never a placeholder row".
+ * - **Neutral, not brand-stamped** — a grid of store logos reads as a broken
+ *   page, not as missing photography.
  *
- * Inline SVG, never a file — absence must have no URL to crawl, index, or hand
- * to a feed. `aria-hidden` with no alt for the same reason the backend dropped
- * the sentinel: it carried the product title, so one grey card claimed to be a
- * specific tool on every surface that republished it. Every site rendering this
- * already names the thing in adjacent link text, so a screen reader gets that
- * name once rather than twice. Full rationale: pa-cms `Backend/CLAUDE.md` →
- * "Image absence is null, never a placeholder row".
- *
- * Deliberately neutral rather than brand-stamped: a grid of store logos reads as
- * a broken page, not as missing photography.
- *
- * `fill` + `className` only, on purpose. pa-storefront's twin also takes
- * `width`/`height` because a shared `Image` wrapper feeds it fixed-size call
- * sites; nothing here does, and without `fill` the caller sizes this through
- * `className` like any other element. Add the props when something needs them.
+ * Sizing is either `fill` (absolute, for a positioned parent) or `className`
+ * (for fixed-size callers like the warranty autocomplete). pa-storefront's twin
+ * carries `width`/`height` props instead, because its shared `Image` wrapper
+ * passes numbers through; nothing here needs them.
  */
 export function ImagePlaceholder({ fill, className }: ImagePlaceholderProps) {
   return (
