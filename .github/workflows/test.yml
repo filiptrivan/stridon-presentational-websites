@@ -4,18 +4,15 @@ on:
   push:
     branches: [main]
   pull_request:
-  # Fired by pa-cms's deploy-backend workflow after its identity gate passes, so the backend that
-  # just reached production is checked against the calls these sites actually make. This is the
-  # trigger that was missing on 2026-07-29: the integration job below already existed and already
-  # asserted the right thing, but it only ran when THIS repo pushed — and a PACMS dependency bump
-  # is not a push here. pa-cms reds its deploy run on a red result.
-  #
-  # NEVER add a `run-name:` to this workflow. pa-cms finds the run its dispatch created by
-  # matching displayTitle against the event type (its consumer-contract.sh → "SELECT BY EVENT
-  # TYPE"), and for a repository_dispatch run the displayTitle IS the event type — unless
-  # run-name overrides it. Set one and every backend deploy over there reds as `unverified`.
-  repository_dispatch:
-    types: [pacms-backend-deployed]
+  # Nightly smoke against the live backend — the drift window between our pushes and pa-cms's
+  # deploys (a data-dependent break, an API-path infra change). A red run mails THIS repo's
+  # maintainers, the right recipient by construction. The old repository_dispatch listener is
+  # gone (2026-08-05): pa-cms's deploy now checks this repo out at main and runs the integration
+  # suite ITSELF, synchronously, against its pre-promote candidate — a backend that breaks these
+  # calls never serves, and no cross-repo run-polling (or its run-name prohibition) exists
+  # anymore. 04:00 UTC, after pa-cms's nightly syncs settle.
+  schedule:
+    - cron: '0 4 * * *'
 
 jobs:
   # Why lint is gated here and not only in the pre-push hook: CLAUDE.md → Preflight. Parallel to
@@ -52,12 +49,13 @@ jobs:
   integration:
     name: Integration tests
     needs: unit
-    # Runs on a push to main (our change) and on a pa-cms deploy (their change). Skipped on PRs:
+    # Runs on a push to main (our change) and on the nightly schedule (drift). Skipped on PRs:
     # it writes real warranty registrations against a live backend, so it must not run on
-    # fork-originated code, and PR runs would not have the secrets anyway.
+    # fork-originated code, and PR runs would not have the secrets anyway. pa-cms's deploy runs
+    # this same suite itself against its candidate — see the trigger comment above.
     if: >-
       (github.event_name == 'push' && github.ref == 'refs/heads/main')
-      || github.event_name == 'repository_dispatch'
+      || github.event_name == 'schedule'
     runs-on: ubuntu-latest
     env:
       API_URL: ${{ secrets.API_URL }}
