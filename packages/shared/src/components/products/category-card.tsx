@@ -1,4 +1,5 @@
 import type { Category } from "@brand/shared/types/categories";
+import { ImagePlaceholder } from "@brand/ui/image-placeholder";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -14,9 +15,9 @@ const CategoryCard = ({ category }: CategoryCardProps) => {
       className="flex flex-col bg-foreground/5 border border-border/20 hover:border-border transition-colors rounded-lg lg:rounded-xl overflow-hidden h-full"
     >
       <div className="aspect-square shrink-0 relative">
-        {/* Guarded like product-card and tag-card: PACMS sends null for a
-            category with no image instead of a placeholder URL. */}
-        {category.imageUrl && (
+        {/* PACMS sends null for a category with no image instead of a
+            placeholder URL, so the absent branch renders one locally. */}
+        {category.imageUrl ? (
           <Image
             src={category.imageUrl}
             alt={category.name}
@@ -24,6 +25,8 @@ const CategoryCard = ({ category }: CategoryCardProps) => {
             sizes="(max-width: 640px) 33vw, (max-width: 768px) 25vw, (max-width: 1024px) 20vw, 220px"
             className="object-contain p-1 sm:p-2"
           />
+        ) : (
+          <ImagePlaceholder fill />
         )}
       </div>
       <div className="border-t border-border/50 px-1 py-1 sm:px-2 sm:py-2 flex-1 flex items-center">

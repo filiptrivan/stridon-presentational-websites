@@ -81,10 +81,14 @@ const ProductGallery = ({ media, fallbackUrl, title }: ProductGalleryProps) => {
   }, [emblaApi, selectedIndex]);
   //#endregion
 
+  // The one image-absence surface that keeps a visible label instead of the
+  // silent ImagePlaceholder: a gallery has no adjacent link text naming the
+  // product, so an unlabelled grey frame reads as a failed load. Same exception
+  // pa-storefront's PDP gallery makes, for the same reason.
   if (allMedia.length === 0) {
     return (
       <div className="aspect-square w-full rounded-lg bg-foreground/5 flex items-center justify-center">
-        <span className="text-muted-foreground text-sm">No image</span>
+        <span className="text-muted-foreground text-sm">Nema slike</span>
       </div>
     );
   }

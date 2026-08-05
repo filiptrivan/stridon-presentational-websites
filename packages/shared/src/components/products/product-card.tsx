@@ -1,4 +1,5 @@
 import type { ProductCardData } from "@brand/shared/types/products";
+import { ImagePlaceholder } from "@brand/ui/image-placeholder";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -20,7 +21,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           container's aspect-ratio in a flex column, making it impossible
           to control the image container height via CSS. */}
       <div className="relative aspect-square w-full bg-card">
-        {product.imageUrl && (
+        {product.imageUrl ? (
           <Image
             src={product.imageUrl}
             alt={product.title}
@@ -28,6 +29,8 @@ const ProductCard = ({ product }: ProductCardProps) => {
             className="object-contain p-2 sm:p-3"
             sizes="(max-width: 640px) 50vw, 25vw"
           />
+        ) : (
+          <ImagePlaceholder fill />
         )}
       </div>
 

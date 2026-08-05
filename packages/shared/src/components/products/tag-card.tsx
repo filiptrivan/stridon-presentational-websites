@@ -22,6 +22,10 @@ const TagCard = ({ tag }: TagCardProps) => {
           className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
       ) : (
+        // Not ImagePlaceholder, deliberately: `color` is non-nullable on
+        // StorefrontTagDTO, so this is a designed campaign tile using data the
+        // tag carries — with the gradient and name on top it reads as intended,
+        // not as missing photography.
         <div className="absolute inset-0" style={{ backgroundColor: tag.color }} />
       )}
 
