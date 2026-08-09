@@ -22,12 +22,21 @@ export const PREVIOUS_PUBLIC_IMAGE_HOST =
 // R2 — at which point the allowlist is R2-only.
 export const LEGACY_IMAGE_HOST = "media.prodavnicaalata.rs";
 
+// TEMPORARY until the PACMS cutover (2026-08-14). The R2 custom domain fronting
+// the media bucket while `media.` still points at the old shop's origin: the CMS
+// writes admin uploads under this host for the final week so they are reviewable
+// before the swap, which means warranty images uploaded this week arrive here
+// with this hostname. Their rows are rewritten to `media.` in the cutover batch,
+// after which nothing emits it and this entry goes.
+export const STAGING_IMAGE_HOST = "media-test.prodavnicaalata.rs";
+
 // Exact hosts (no wildcard) trusted for image fetch/optimization. Exact-match so a
 // future subdomain on a now-ours domain isn't implicitly trusted.
 export const TRUSTED_IMAGE_HOSTS: readonly string[] = [
   PUBLIC_IMAGE_HOST,
   PREVIOUS_PUBLIC_IMAGE_HOST,
   LEGACY_IMAGE_HOST,
+  STAGING_IMAGE_HOST,
 ];
 
 // True for image URLs safe to fetch server-side and render into an OG card. In
