@@ -1,9 +1,16 @@
 import { describe, expect, it } from "vitest";
 import { PNG_1X1 } from "./fixtures/png";
+import { TEST_SERIAL_PREFIX } from "./fixtures/warranty";
 
 const API_URL = process.env.API_URL || "http://localhost:5000";
 const API_KEY = process.env.PACMS_API_KEY;
 const ENDPOINT = `${API_URL}/api/Storefront/SubmitWarrantyRegistration`;
+
+// A real inbox: each successful run sends an actual DCK confirmation e-mail with the receipt
+// attached, and that delivery is itself part of what the suite proves. It is deliberately NOT the
+// address that receives the alerts (Sentry, red deploy gates) — those must stay readable, and this
+// suite runs 5-6 times a day.
+const SUBMITTER_EMAIL = "filiptrivan1@gmail.com";
 
 function buildWarrantyFormData(
   overrides: { companyPib?: string } = {},
@@ -11,13 +18,15 @@ function buildWarrantyFormData(
   const formData = new FormData();
   formData.append("firstName", "Test");
   formData.append("lastName", "User");
-  formData.append("email", "filiptrivan5@gmail.com");
+  formData.append("email", SUBMITTER_EMAIL);
   formData.append("phoneNumber", "0601234567");
   formData.append(
     "productSlug",
     "dck-krh20v-28r2k-akumulatorska-busilica-za-beton-sds-plus-sa-2x80ah-baterije-i-punjacem-20v",
   );
-  formData.append("serialNumber", `SN-TEST-${Date.now()}`);
+  // Never submit a serial without the prefix: it is what lets pa-cms reap these rows back out of
+  // the production database.
+  formData.append("serialNumber", `${TEST_SERIAL_PREFIX}${Date.now()}`);
   formData.append("purchaseDate", "2026-01-15T00:00:00.000Z");
   formData.append("brandSlug", "dck");
   if (overrides.companyPib !== undefined) {
