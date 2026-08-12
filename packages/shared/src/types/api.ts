@@ -6306,7 +6306,6 @@ export interface components {
              *     ShippingService.QualifiesForFreeDelivery / docs/free-delivery-indicators.md.
              */
             hasFreeDelivery: boolean;
-            tags: components["schemas"]["StorefrontTagOnProductDTO"][];
             /** Format: double */
             averageRating?: number | null;
             /** Format: int32 */
@@ -6403,7 +6402,6 @@ export interface components {
              *     docs/free-delivery-indicators.md.
              */
             hasFreeDelivery: boolean;
-            tags: components["schemas"]["StorefrontTagOnProductDTO"][];
             categoryName: string;
             categorySlug: string;
             categoryBreadcrumbs: components["schemas"]["CategoryBreadcrumbDTO"][];
