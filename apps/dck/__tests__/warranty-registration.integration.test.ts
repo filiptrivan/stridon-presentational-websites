@@ -12,6 +12,17 @@ const ENDPOINT = `${API_URL}/api/Storefront/SubmitWarrantyRegistration`;
 // suite runs 5-6 times a day.
 const SUBMITTER_EMAIL = "filiptrivan1@gmail.com";
 
+// The two tests that actually upload a receipt get headroom over vitest's 5s default, because this
+// suite is also pa-cms's consumer gate ("Run both consumer suites against the candidate"), where the
+// target is a container booted seconds earlier and reached through an SSH loopback tunnel. The first
+// submission of a run pays AWS SDK init + the TLS handshake to S3 on top of the request itself.
+// Measured 2026-08-12 on pa-cms 196911db: the first submission blew past 5000ms and reded the deploy,
+// while the identical POST later in the same file took 1018ms once the process was warm — so this is
+// a budget that was too tight for a cold path, not a slow endpoint. Only the uploading tests need it;
+// the 401 and the malformed-PIB rejection short-circuit before S3 (200ms / 226ms in that same run).
+// Keep it on BOTH: whichever runs first is the one that eats the cold start.
+const RECEIPT_UPLOAD_TIMEOUT_MS = 20_000;
+
 function buildWarrantyFormData(
   overrides: { companyPib?: string } = {},
 ): FormData {
@@ -55,7 +66,7 @@ describe("Warranty Registration Integration", () => {
     });
 
     expect(response.status).toBe(200);
-  });
+  }, RECEIPT_UPLOAD_TIMEOUT_MS);
 
   it("should return 401 without API key", async () => {
     const response = await fetch(ENDPOINT, {
@@ -80,7 +91,7 @@ describe("Warranty Registration Integration", () => {
     });
 
     expect(response.status).toBe(200);
-  });
+  }, RECEIPT_UPLOAD_TIMEOUT_MS);
 
   it("should reject a malformed companyPib", async () => {
     if (!API_KEY) {
