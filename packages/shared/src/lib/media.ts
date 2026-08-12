@@ -19,4 +19,3 @@ export function isRenderableMedia(item: ProductMedia): boolean {
     item.mediaType === MEDIA_TYPE.IMAGE || item.mediaType === MEDIA_TYPE.VIDEO
   );
 }
-
