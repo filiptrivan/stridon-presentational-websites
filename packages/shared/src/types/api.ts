@@ -6676,13 +6676,6 @@ export interface components {
             brandImageUrl?: string | null;
             brandSlug?: string | null;
         };
-        StorefrontTagOnProductDTO: {
-            name: string;
-            slug: string;
-            color: string;
-            /** Format: int32 */
-            orderNumber?: number | null;
-        };
         StorefrontTagWithCountDTO: {
             /** Format: int64 */
             id: number;
