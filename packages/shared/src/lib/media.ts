@@ -20,6 +20,3 @@ export function isRenderableMedia(item: ProductMedia): boolean {
   );
 }
 
-export function isVideoUrl(url: string): boolean {
-  return /\.mp4(?:[?#]|$)/i.test(url);
-}

@@ -17,7 +17,6 @@ import {
   TAG_BASE_BREADCRUMBS,
   buildTagBreadcrumbJsonLd,
 } from "@brand/shared/lib/categories";
-import { isVideoUrl } from "@brand/shared/lib/media";
 import { createTagMetadata } from "@brand/shared/lib/metadata";
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -111,20 +110,9 @@ export default async function TagPage({ params, searchParams }: Props) {
 
       {tag.bannerMediaUrl && (
         <div className="w-full max-w-7xl mx-auto px-4 lg:px-10 -mt-4 mb-8">
-          {isVideoUrl(tag.bannerMediaUrl) ? (
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              poster={tag.bannerVideoThumbnailUrl ?? undefined}
-              aria-label={tag.name}
-              className="w-full h-auto rounded-lg lg:rounded-xl"
-            >
-              <source src={tag.bannerMediaUrl} type="video/mp4" />
-            </video>
-          ) : tag.bannerImageWidth && tag.bannerImageHeight ? (
+          {/* Image-only since 2026-08-12 — the five DCK .mp4 banners were replaced with
+              the stills ReadyCMS already held, and pa-cms no longer accepts video here. */}
+          {tag.bannerImageWidth && tag.bannerImageHeight ? (
             <Image
               src={tag.bannerMediaUrl}
               alt={tag.name}
