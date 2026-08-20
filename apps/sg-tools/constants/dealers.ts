@@ -1,5 +1,12 @@
 import type { Dealer } from "@brand/shared/types/dealers";
 
+// `*-neutral` logos are SG-only recolors (dark ink -> #98999D) so the wordmark
+// clears the dark card; dck keeps the full-color original under the plain
+// basename. Never sync the two companies/svgs dirs blind.
+//
+// Array order IS display order: /gde-kupiti lists it as-is, and product pages show
+// only the first 6 non-service entries (product-detail-page.tsx filters, then
+// product-detail.tsx slices). Ours first, then online shops by reach, then dealers.
 export const DEALERS: Dealer[] = [
   {
     id: "prodavnica-alata",
@@ -14,6 +21,32 @@ export const DEALERS: Dealer[] = [
     coordinates: { lat: 44.785937879592375, lng: 20.500689934951087 },
   },
   {
+    // Carries SG Tools at /proizvodjaci/sg-tools/
+    id: "od-igle-do-lokomotive",
+    name: "Od Igle Do Lokomotive",
+    address: "Radoja Dakića 18",
+    city: "Niš",
+    phone: "018/575-773",
+    email: "office@odigledolokomotive.rs",
+    website: "https://www.odigledolokomotive.rs/",
+    logoSrc: "/companies/svgs/odigledolokomotive.webp",
+    category: "online",
+    coordinates: { lat: 43.3200296, lng: 21.9270237 },
+  },
+  {
+    // Carries SG Tools at /sg-tools
+    id: "kliklak",
+    name: "Kliklak",
+    address: "Matejevački put 36",
+    city: "Niš",
+    phone: "018/3230-264",
+    email: "info@kliklak.rs",
+    website: "https://www.kliklak.rs/",
+    logoSrc: "/companies/svgs/kliklak-neutral.webp",
+    category: "online",
+    coordinates: { lat: 43.331145, lng: 21.937353 },
+  },
+  {
     id: "sualati-024",
     name: "Sualati 024",
     address: "Segedinski put 86",
@@ -21,7 +54,6 @@ export const DEALERS: Dealer[] = [
     phone: "024/525-091",
     email: "sualati@gmail.com",
     website: "https://www.sualati.com/",
-    // SG-only variant: dark text neutralized to #98999D for the dark theme (DCK keeps the full-color original)
     logoSrc: "/companies/svgs/sualati-neutral.png",
     category: "online",
     coordinates: { lat: 46.099807, lng: 19.6966443 },
