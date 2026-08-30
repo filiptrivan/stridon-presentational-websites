@@ -31,7 +31,12 @@ import { describe, expect, it } from "vitest";
  * the obvious extension, left out to keep the first version readable.
  */
 
-const API_URL = process.env.API_URL || "https://api.pacms.in.rs";
+// Default is the LIVE API host. It was api.pacms.in.rs until 2026-08-30; that host is a
+// retiring alias of this same backend (PACMS zone-move Phase 4B) and this fallback was one
+// of only two consumers keeping it alive. This repo is outside pa-cms's CI, so nothing here
+// would have failed when it goes away -- the suite would just have kept passing against a
+// dead-in-waiting hostname.
+const API_URL = process.env.API_URL || "https://api.prodavnicaalata.rs";
 const BRAND = "dck";
 const SCHEMA_FILE = resolve(__dirname, "../../../packages/shared/src/types/api.ts");
 
