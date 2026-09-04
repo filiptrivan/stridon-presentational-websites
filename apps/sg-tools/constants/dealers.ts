@@ -152,4 +152,15 @@ export const DEALERS: Dealer[] = [
     category: "dealer",
     coordinates: { lat: 44.7593747, lng: 20.4365874 },
   },
+  {
+    id: "elektro-025",
+    name: "Elektro 025",
+    address: "Dimitrija Tucovića 105",
+    city: "Apatin",
+    phone: "069/250-4456",
+    email: "elektro025apatin@gmail.com",
+    website: "https://www.elektro025.com/",
+    category: "dealer",
+    coordinates: { lat: 45.67155, lng: 18.986675 },
+  },
 ];
