@@ -13,6 +13,7 @@ export const config: BrandConfig = {
   logoSrc: "/sg-tools-logo.svg",
   logoAlt: "SG TOOLS Logo",
   navbarLogoHeight: "h-3",
+  footerLogoClassName: "w-24 h-8",
   headerCta: {
     label: "Postani distributer",
     href: "/kontakt",

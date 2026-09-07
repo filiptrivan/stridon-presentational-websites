@@ -12,11 +12,12 @@ export const config: BrandConfig = {
 
   logoSrc: "/stridon-logo.webp",
   logoAlt: "Stridon Group logo",
-  navbarLogoHeight: "h-8",
+  navbarLogoHeight: "h-7 md:h-8",
+  footerLogoClassName: "h-8 w-auto",
   headerCta: {
-    label: "Online prodavnica",
-    href: "https://www.prodavnicaalata.rs",
-    external: true,
+    label: "Postani distributer",
+    href: "/kontakt",
+    external: false,
   },
 
   defaultTitle: "Stridon Group - vodeći distributer alata u Srbiji",

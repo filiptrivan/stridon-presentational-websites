@@ -14,6 +14,24 @@ import { Suspense, type ReactNode } from "react";
 
 const brand = getBrandConfig();
 
+const PARENT_ORGANIZATION = {
+  "@type": "Organization",
+  name: "Stridon Group DOO",
+  url: "https://www.stridon.rs",
+} as const;
+
+const organizationJsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: brand.brandName,
+  url: brand.siteUrl,
+  logo: `${brand.siteUrl}${brand.logoSrc}`,
+  // The parent company's own site must not be listed as its own parent.
+  ...(brand.siteUrl === PARENT_ORGANIZATION.url
+    ? {}
+    : { parentOrganization: PARENT_ORGANIZATION }),
+});
+
 export const metadata = createRootMetadata();
 
 export const viewport: Viewport = {
@@ -32,6 +50,8 @@ type RootLayoutProps = {
   /** When false, render the plain Navbar without fetching product categories
       (for brands like Stridon that don't expose a product category catalog). */
   showCategoryMenu?: boolean;
+  /** When true, the navbar shows an EN language switch next to the header CTA. */
+  showLanguageSwitch?: boolean;
 };
 
 export default function RootLayout({
@@ -43,6 +63,7 @@ export default function RootLayout({
   legalLinks,
   socialLinks,
   showCategoryMenu = true,
+  showLanguageSwitch = false,
 }: RootLayoutProps) {
   return (
     <html lang="sr">
@@ -55,27 +76,29 @@ export default function RootLayout({
       >
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              name: brand.brandName,
-              url: brand.siteUrl,
-              logo: `${brand.siteUrl}${brand.logoSrc}`,
-              parentOrganization: {
-                "@type": "Organization",
-                name: "Stridon Group DOO",
-                url: "https://www.stridon.rs",
-              },
-            }),
-          }}
+          dangerouslySetInnerHTML={{ __html: organizationJsonLd }}
         />
         {showCategoryMenu ? (
-          <Suspense fallback={<Navbar categories={[]} navLinks={navLinks} />}>
-            <NavbarWithCategories navLinks={navLinks} />
+          <Suspense
+            fallback={
+              <Navbar
+                categories={[]}
+                navLinks={navLinks}
+                showLanguageSwitch={showLanguageSwitch}
+              />
+            }
+          >
+            <NavbarWithCategories
+              navLinks={navLinks}
+              showLanguageSwitch={showLanguageSwitch}
+            />
           </Suspense>
         ) : (
-          <Navbar categories={[]} navLinks={navLinks} />
+          <Navbar
+            categories={[]}
+            navLinks={navLinks}
+            showLanguageSwitch={showLanguageSwitch}
+          />
         )}
         <main className="pt-16">{children}</main>
         <Footer

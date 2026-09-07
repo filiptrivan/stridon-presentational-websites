@@ -1,6 +1,7 @@
 "use server";
 
 import { getBrandConfig } from "@brand/config";
+import { escapeHtml } from "@brand/shared/lib/escape-html";
 import { reportError } from "@brand/shared/lib/report-error";
 import { THIRD_PARTY_BUDGET_MS } from "@brand/shared/lib/request-budget";
 import {
@@ -50,9 +51,9 @@ export async function sendContactEmail(
         subject: emailSubject,
         htmlContent: `
           <h2>${emailHeading}</h2>
-          <p><strong>E-mail:</strong> ${parsed.data.email}</p>
+          <p><strong>E-mail:</strong> ${escapeHtml(parsed.data.email)}</p>
           <p><strong>Poruka:</strong></p>
-          <p>${parsed.data.message.replace(/\n/g, "<br>")}</p>
+          <p>${escapeHtml(parsed.data.message).replace(/\n/g, "<br>")}</p>
         `,
       }),
     });

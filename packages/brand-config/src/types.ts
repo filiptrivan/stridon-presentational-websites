@@ -14,6 +14,7 @@ export interface BrandConfig {
   logoSrc: string;
   logoAlt: string;
   navbarLogoHeight: string;
+  footerLogoClassName: string;
 
   // Metadata
   defaultTitle: string;

@@ -82,8 +82,14 @@ const Footer = ({
   legalLinks,
   socialLinks,
 }: FooterProps) => {
-  const { logoSrc, logoAlt, siteName, footerTagline, footerGradientEdge } =
-    getBrandConfig();
+  const {
+    logoSrc,
+    logoAlt,
+    siteName,
+    footerLogoClassName,
+    footerTagline,
+    footerGradientEdge,
+  } = getBrandConfig();
   const year = process.env.BUILD_YEAR;
 
   return (
@@ -124,9 +130,9 @@ const Footer = ({
                 <Image
                   src={logoSrc}
                   alt={logoAlt}
-                  width={32}
+                  width={96}
                   height={32}
-                  className="w-24 h-8"
+                  className={footerLogoClassName}
                 />
               </div>
               <p className="text-muted-foreground mt-4 text-sm">

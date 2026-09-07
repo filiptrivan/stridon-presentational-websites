@@ -42,3 +42,6 @@ pnpm-debug.log*
 
 # local dev server logs
 *.log
+
+# vercel link / CLI state
+.vercel

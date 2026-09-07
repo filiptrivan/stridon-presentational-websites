@@ -9,12 +9,13 @@
 
 **Company**: Stridon Group DOO (stridon.rs) - a tool company with an online shop at prodavnicaalata.rs.
 
-**This repo**: Turborepo monorepo with two brand websites sharing components and utilities (Next.js 16, TypeScript, Tailwind CSS v4, Vercel):
+**This repo**: Turborepo monorepo with three websites sharing components and utilities (Next.js 16, TypeScript, Tailwind CSS v4, Vercel):
 
 | Project  | Directory        | Domain       | Theme      | Brand slug |
 | -------- | ---------------- | ------------ | ---------- | ---------- |
 | SG TOOLS | `apps/sg-tools/` | sgtools.rs   | Dark only  | `sg-tools` |
 | DCK      | `apps/dck/`      | dcksrbija.rs | Light only | `dck`      |
+| Stridon  | `apps/stridon/`  | stridon.rs   | Light only | `stridon`  |
 
 **Purpose**: Display brand products (fetched server-side from the main platform's REST API), these sites are display-only - no cart or checkout, the core of the websites is to interest and enable dealers to sell our brands, not to push buying from prodavnicaalata.rs.
 
@@ -25,7 +26,7 @@
 - **Serbian tone**: Always use informal "ti" form in Serbian copy - never formal "Vi". Keep it casual and friendly.
 - **Serbian URLs**: All routes use Serbian path names (e.g., `/o-nama`, `/kontakt`, `/proizvodi/kategorije`).
 - For minor straightforward changes, we don't need to build at all.
-- **Type-check command**: `pnpm -C apps/dck exec tsc --noEmit` (or `apps/sg-tools`). Do NOT use `npx tsc` - it won't resolve workspace dependencies.
+- **Type-check command**: `pnpm -C apps/dck exec tsc --noEmit` (or `apps/sg-tools`, `apps/stridon`). Do NOT use `npx tsc` - it won't resolve workspace dependencies.
 
 ## Environment Variables
 
@@ -72,7 +73,8 @@ The hook must never run `test:integration` (see above — it writes to productio
 │
 └── apps/
     ├── sg-tools/                 # Thin app shell (dark theme)
-    └── dck/                      # Thin app shell (light theme)
+    ├── dck/                      # Thin app shell (light theme)
+    └── stridon/                  # Parent-company site (light theme, no product catalog)
 ```
 
 ### Package Responsibilities
@@ -187,5 +189,5 @@ Every read is bounded by `packages/shared/src/lib/request-budget.ts`, and `apiFe
 
 - `sgtools.rs` - SG TOOLS brand site (`apps/sg-tools/`)
 - `dcksrbija.rs` - DCK brand site (`apps/dck/`)
-- `stridon.rs` - Parent company (Stridon Group DOO)
+- `stridon.rs` - Parent company site (`apps/stridon/`) - Stridon Group DOO
 - `prodavnicaalata.rs` - Online shop (where users buy products)

@@ -13,6 +13,7 @@ export const config: BrandConfig = {
   logoSrc: "/dck-logo.svg",
   logoAlt: "DCK Logo",
   navbarLogoHeight: "h-5",
+  footerLogoClassName: "w-24 h-8",
   headerCta: {
     label: "Postani distributer",
     href: "/kontakt",
