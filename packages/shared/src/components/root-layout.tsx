@@ -14,24 +14,6 @@ import { Suspense, type ReactNode } from "react";
 
 const brand = getBrandConfig();
 
-const PARENT_ORGANIZATION = {
-  "@type": "Organization",
-  name: "Stridon Group DOO",
-  url: "https://www.stridon.rs",
-} as const;
-
-const organizationJsonLd = JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: brand.brandName,
-  url: brand.siteUrl,
-  logo: `${brand.siteUrl}${brand.logoSrc}`,
-  // The parent company's own site must not be listed as its own parent.
-  ...(brand.siteUrl === PARENT_ORGANIZATION.url
-    ? {}
-    : { parentOrganization: PARENT_ORGANIZATION }),
-});
-
 export const metadata = createRootMetadata();
 
 export const viewport: Viewport = {
@@ -76,7 +58,20 @@ export default function RootLayout({
       >
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: organizationJsonLd }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: brand.brandName,
+              url: brand.siteUrl,
+              logo: `${brand.siteUrl}${brand.logoSrc}`,
+              parentOrganization: {
+                "@type": "Organization",
+                name: "Stridon Group DOO",
+                url: "https://www.stridon.rs",
+              },
+            }),
+          }}
         />
         {showCategoryMenu ? (
           <Suspense
