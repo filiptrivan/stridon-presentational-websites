@@ -2,14 +2,14 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "DCK - Profesionalni električni alati",
-    short_name: "DCK",
+    name: "Stridon Group - distributer alata",
+    short_name: "Stridon",
     description:
-      "DCK profesionalni električni alati. Zvanični distributer za Srbiju.",
+      "Stridon Group - zvanični uvoznik i distributer profesionalnog alata u Srbiji.",
     start_url: "/",
     display: "standalone",
     background_color: "#FFFFFF",
-    theme_color: "#D6001C",
+    theme_color: "#E50113",
     icons: [
       {
         src: "/favicon.ico",

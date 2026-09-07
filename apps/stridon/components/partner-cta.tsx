@@ -22,29 +22,19 @@ const PartnerCta = () => {
       <Wrapper className="relative py-20 lg:py-28">
         <div className="max-w-2xl">
           <Container>
-            <p className="inline-flex items-center gap-3 text-[13px] font-medium uppercase tracking-[0.18em] text-background/60">
-              <span
-                aria-hidden
-                className="inline-block h-3.5 w-6 -skew-x-[14deg] bg-primary"
-              />
-              Za dilere i firme
-            </p>
-          </Container>
-
-          <Container delay={0.5}>
-            <h2 className="mt-5 text-4xl font-semibold leading-[1.02] tracking-tight lg:text-6xl">
+            <h2 className="text-4xl font-semibold leading-[1.02] tracking-tight lg:text-6xl">
               Postani deo Stridon mreže.
             </h2>
           </Container>
 
-          <Container delay={1}>
+          <Container delay={0.5}>
             <p className="mt-6 max-w-xl text-lg text-background/70">
               Veleprodajni uslovi, podrška i preko 30 brendova na jednom mestu.
               Više od 120 dilera širom Srbije već sarađuje sa nama.
             </p>
           </Container>
 
-          <Container delay={1.5}>
+          <Container delay={1}>
             <div className="mt-9 flex flex-wrap items-center gap-3">
               <Button asChild size="lg">
                 <Link href="/kontakt">
@@ -55,8 +45,8 @@ const PartnerCta = () => {
             </div>
           </Container>
 
-          <Container delay={2}>
-            <div className="mt-12 flex flex-wrap divide-x divide-background/20">
+          <Container delay={1.5}>
+            <div className="mt-12 flex flex-wrap gap-y-3 divide-x divide-background/20">
               {CTA_TRUST_BADGES.map((badge, i) => (
                 <div
                   key={badge.text}

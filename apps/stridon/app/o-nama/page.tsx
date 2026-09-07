@@ -1,43 +1,33 @@
-import SharedCTA from "@brand/shared/components/cta";
-import {
-  ABOUT_MILESTONES,
-  ABOUT_PARAGRAPHS,
-  COMPANY_BENEFITS,
-  CTA_TRUST_BADGES,
-  STATS,
-} from "@/constants/content";
-import AboutStory from "@brand/shared/components/about-story";
-import CompanyBenefits from "@brand/shared/components/company-benefits";
-import CompanyStats from "@brand/shared/components/company-stats";
-import CompanyValues from "@brand/shared/components/company-values";
-import HeroHeader from "@brand/shared/components/hero-header";
+import AboutTimeline from "@/components/about-timeline";
+import Clients from "@/components/clients";
+import OwnBrand from "@/components/own-brand";
+import PageHeader from "@/components/page-header";
+import PartnerQuotes from "@/components/partner-quotes";
+import { OWN_BRANDS } from "@/constants/about";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
 
 export const metadata = createPageMetadata({
   title: "O nama",
   description:
-    "DCK je profesionalni brend kompanije Dongcheng sa sopstvenom proizvodnjom, brushless aku programom i 3 godine garancije - zvanično dostupan u Srbiji.",
+    "Stridon Group je zvanični uvoznik i distributer profesionalnog alata u Srbiji, sa sopstvenim brendovima SG TOOLS i DCK, servisom i mrežom od preko 120 dilera.",
   canonicalUrl: "/o-nama",
 });
 
-const AboutPage = () => {
+const ONamaPage = () => {
   return (
     <div>
-      <HeroHeader
-        title="Vrhunski kvalitet bez preterane cene"
-        description="DCK je profesionalni brend koji dokazuje da kvalitet alata ne mora da košta bogatstvo. Sa skoro tri decenije iskustva, sopstvenom proizvodnjom i distribucijom u preko 100 zemalja, DCK je stigao i u Srbiju - sa punom podrškom, garancijom i servisom."
+      <PageHeader
+        title="Uvoz, distribucija i servis alata od 30 godina"
+        lede="Stridon Group je porodična firma iz Beograda. Uvozimo i distribuiramo profesionalni alat, stojimo iza sopstvenih brendova i držimo servis u svojim rukama."
       />
-      <CompanyStats stats={STATS} layout="four-up-no-three" />
-      <AboutStory title="Priča iza brenda" paragraphs={ABOUT_PARAGRAPHS} />
-      <CompanyValues
-        milestones={ABOUT_MILESTONES}
-        title="Kako je nastao DCK"
-      />
-      <CompanyBenefits benefits={COMPANY_BENEFITS} />
 
-      <SharedCTA trustBadges={CTA_TRUST_BADGES} />
+      <AboutTimeline />
+      <OwnBrand brand={OWN_BRANDS[0]} />
+      <OwnBrand brand={OWN_BRANDS[1]} />
+      <PartnerQuotes />
+      <Clients />
     </div>
   );
 };
 
-export default AboutPage;
+export default ONamaPage;

@@ -1,0 +1,843 @@
+export interface BrandSection {
+  title: string;
+  paragraphs: string[];
+}
+
+export interface Brand {
+  slug: string;
+  name: string;
+  /** 2400x1200 logo tile in public/brands, or null when we have no artwork yet. */
+  logo: string | null;
+  tagline: string;
+  /** Short lead for the /brendovi grid, cut from the first paragraph. */
+  blurb: string;
+  /** Manufacturer page on the webshop, where the actual products live. */
+  shopUrl: string;
+  /** Shown in the homepage brand wall. */
+  featured: boolean;
+  sections: BrandSection[];
+}
+
+// Seeded from the old stridon.rs brand pages. Once PACMS exposes a manufacturer
+// endpoint this list is what the API replaces - the page components read Brand[].
+export const BRANDS: Brand[] = [
+  {
+    slug: "dewalt",
+    name: "DeWalt",
+    logo: "/brands/dewalt.svg",
+    tagline: "DeWALT alati - Uvoznik za Srbiju",
+    blurb: "Kompaniju DeWalt je 1924. godine osnovao Raymond E. DeWalt u Leoli, Pensilvanija, poznat kao izumitelj radijalne testere.",
+    shopUrl: "https://www.prodavnicaalata.rs/proizvodjaci/dewalt/",
+    featured: true,
+    sections: [
+      {
+        title: "Istorijat",
+        paragraphs: [
+          "Kompaniju DeWalt je 1924. godine osnovao Raymond E. DeWalt u Leoli, Pensilvanija, poznat kao izumitelj radijalne testere. Njegov pronalazak imao je veliki uticaj na dalji razvoj električnih alata za obradu drveta.",
+          "Poslovanje se brzo širilo, a kompanija je reorganizovana i ponovo registrovana 1947. kao DeWalt Inc. Godine 1949. preuzeo ju je American Machine & Foundry Co, koja ju je potom prodala kompaniji Black & Decker 1960. godine.",
+          "Black & Decker je 1989. godine prodao deo koji se bavio proizvodnjom radijalnih testera dvojici rukovodilaca, zadržavajući fokus na drugim vrstama alata za profesionalce.",
+          "U 1992. godini, Black & Decker je pokrenuo proces rebrendiranja svojih profesionalnih i naprednih alata pod imenom DeWalt alati. Ovaj potez je značajno uticao na tržište, jer je stvorio snažan brend fokusiran isključivo na alat za profesionalnu upotrebu.",
+          "DeWalt je 1994. godine preuzeo nemačkog proizvođača ELU i integrisao njegovu tehnologiju u svoj asortiman. Do 2001. godine, DeWalt je proizvodio i prodavao više od 200 modela stručnih alata i 800 dodataka.",
+          "DeWalt je ubrzo postao prepoznatljiv među komercijalnim izvođačima radova, naročito u građevinskoj industriji. Godine 2004, Black & Decker je kupio konkurentskog proizvođača alata Porter-Cable i spojio ga sa DeWalt-om u Džeksonu, Tenesi.",
+          "U 2011. godini DeWalt je započeo proizvodnju ručnih alata za izvođače, kao što su skalpeli, klešta, podesivi ključevi, metarski alati, testere i čekići, koji su danas deo standardne opreme svakog majstora.",
+          "Dve godine kasnije, dodali su i alate za mehaničare, uključujući ključeve, čegrtaljke i nastavke.",
+          "U decembru 2013, DeWalt je najavio da će određeni deo proizvoda sastavljati u Sjedinjenim Američkim Državama, koristeći komponente iz Brazila, Kine, Češke, Italije, Meksika, Velike Britanije i SAD.",
+          "Do 2015. godine, kompanija je imala sedam proizvodnih pogona u SAD-u, što je ojačalo poziciju DeWalt brenda kao američkog proizvođača alata.",
+        ],
+      },
+      {
+        title: "Tehnologije i inovacije",
+        paragraphs: [
+          "U aprilu 2016. godine, DeWalt je predstavio pametni telefon zasnovan na Android sistemu, razvijen posebno za radnike u građevinskoj industriji. Ovaj uređaj je otporan na udarce i ekstremne uslove, što ga čini savršenim za rad na gradilištima.",
+          "Septembra 2016. predstavljen je hibridni akumulator FlexVolt, koji može raditi na 60 V (54 V nominalno) i 2 Ah, ili na 20 V (18 V nominalno) i 6 Ah, u zavisnosti od vrste baterijskog alata.",
+          "Oko maja 2017. godine, DeWalt je počeo da uključuje Bluetooth tehnologiju ToolConnect u svoje bušilice i odvijače. ToolConnect omogućava korisnicima da preko mobilne aplikacije upravljaju svojim električnim alatima, prate njihov status i podešavaju funkcije.",
+          "Neki modeli imaju ugrađenu podršku za ToolConnect, dok se kod drugih funkcionalnost može dodati naknadno pomoću dodatnog čipa.",
+          "U maju 2018. lansirana je linija bežičnih kosilica na 20 V i 40 V, koja se brzo pozicionirala kao deo DeWalt linije alata za održavanje dvorišta.",
+          "U septembru 2022. godine, DeWalt je predstavio POWERSTACK tehnologiju baterija, postavši prvi proizvođač koji koristi litijum-jonske ćelije u obliku vrećice za bolje performanse i kompaktniji dizajn.",
+        ],
+      },
+      {
+        title: "Asortiman proizvoda",
+        paragraphs: [
+          "Ova kompanija je poznata po širokom asortimanu električnih i ručnih alata, namenjenih građevinskom, proizvodnom i stolarskom sektoru, kao i korisnicima koji se bave radovima u kućnim uslovima.",
+          "DeWalt alati za profesionalce uključuju bušilice, testere, brusilice, aku alate, kosilice, kao i bogat izbor dodatne opreme. Takođe, tu su i precizni ručni alati DeWalt poput klešta, skalpela i čekića.",
+          "Black & Decker je ranije bio poznat po lakšim alatima i kućnim uređajima, što nije odgovaralo zahtevima profesionalaca u građevinarstvu. Pred kraj 1980-ih, Michael Hammes je predložio strategiju nalik onoj koju je Honda koristila za ulazak na tržište luksuznih automobila.",
+          "Kao rezultat toga, Black & Decker je odlučio da iskoristi manje poznato ime DeWalt za povratak na tržište profesionalnih alata.",
+          "Nakon akvizicije 1960. godine, DeWalt je proizvodio različite stacionarne električne alate. U 1992. godini lansirani su i ručni alati pod brendom DeWalt, koji su ranije bili deo linija Black & Decker Professional i Kodiak.",
+          "Te linije su uskoro ugašene, a DeWalt je postao primarni brend profesionalnih alata. Istraživanja su pokazala da je čak 70% korisnika u industriji prepoznalo naziv DeWalt kao sinonim za pouzdanost i kvalitet.",
+        ],
+      },
+      {
+        title: "Sponzorstva",
+        paragraphs: [
+          "Od jula 2021. godine, DeWalt je zvanični dobavljač alata i opreme za McLaren Formula 1 tim, što dodatno potvrđuje njihovu posvećenost preciznosti i vrhunskim performansama.",
+          "Takođe, DeWalt je 2022. godine potpisao ugovor o sponzorstvu sa fudbalskim klubom AFC Bournemouth, čime je još jednom demonstrirao svoju prisutnost i van industrije alata, u svetu profesionalnog sporta.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "stanley",
+    name: "Stanley",
+    logo: "/brands/stanley.svg",
+    tagline: "Stanley alati - Uvoznik za Srbiju",
+    blurb: "Brend Stanley Tools ima duboko ukorenjenu tradiciju u industriji ručnih alata.",
+    shopUrl: "https://www.prodavnicaalata.rs/proizvodjaci/stanley/",
+    featured: true,
+    sections: [
+      {
+        title: "Istorijat",
+        paragraphs: [
+          "Brend Stanley Tools ima duboko ukorenjenu tradiciju u industriji ručnih alata.",
+          "Kompaniju The Stanley Works osnovao je Frederik Trent Stenli 1843. godine u Nju Britenu, Konektikat, kao proizvođača vijaka i okova za vrata.",
+          "Drugu kompaniju, The Stanley Rule and Level, osnovao je 1857. godine njegov rođak Henri Stenli, takođe u Nju Britenu.",
+          "Godine 1920, ove dve firme su se spojile, a sektor za ručne alate nastavio je da posluje pod okriljem The Stanley Works.",
+          "Ovaj spoj bio je ključan za razvoj Stanley ručnih alata, koji su kasnije postali sinonim za pouzdanost i preciznost u zanatskoj i građevinskoj industriji.",
+          "Oko 1937. godine, Stanley je napravio strateški korak ka evropskom tržištu preuzimanjem britanske kompanije J. A. Chapman, renomiranog proizvođača stolarskih alata iz Šefilda.",
+          "Ovo preuzimanje proširilo je globalno prisustvo brenda Stanley i dodatno učvrstilo njegovu reputaciju.",
+          "U martu 2010. godine, Stanley Works se spojio sa Black & Decker, čime je nastala globalna korporacija Stanley Black & Decker.",
+          "Danas, Stanley Hand Tools funkcioniše kao važan deo ove grupacije, ostajući veran svojim korenima dok se razvija u skladu sa savremenim zahtevima korisnika alata.",
+        ],
+      },
+      {
+        title: "Tehnologije i inovacije",
+        paragraphs: [
+          "Stanley je poznat po brojnim inovacijama koje su unapredile kvalitet i efikasnost alata.",
+          "Među najpoznatijim inovacijama nalaze se Bailey blanja, Surform alat, PowerLock metar, skalpel i višenamenski alat Stanley #1 Odd Jobs.",
+          "Posebno se ističe serija Stanley FatMax, koja je poznata po robusnim i izdržljivim alatima dizajniranim za teške radne uslove.",
+          "Ovi alati su omiljeni među profesionalnim korisnicima zbog svoje pouzdanosti i snage.",
+        ],
+      },
+      {
+        title: "Asortiman proizvoda",
+        paragraphs: [
+          "Stanley nudi širok asortiman ručnih alata za različite primene, od stolarije do obrade metala i merenja.",
+          "Među najpoznatijim proizvodima nalaze se blanjalice, testere, lenjiri, ugaonici, dleta, odvijači, kao i razni drugi alati za ličnu i profesionalnu upotrebu.",
+          "Za obradu drveta, Stanley nudi precizne testere, dleta i metre koji omogućavaju kontrolisano sečenje i oblikovanje materijala.",
+          "Njihovi metri i libele, kao što su modeli iz FatMax serije, omogućavaju tačna merenja u zahtevnim uslovima rada.",
+          "U oblasti obrade metala, Stanley proizvodi efikasne makaze, turpije i druge alate koji osiguravaju preciznu završnu obradu.",
+          "Stanley alati su prepoznati kao kvalitetno rešenje za profesionalce i hobiste širom sveta.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "bosch",
+    name: "Bosch",
+    logo: "/brands/bosch.svg",
+    tagline: "Bosch alati - Uvoznik za Srbiju",
+    blurb: "Kompanija Bosch započela je svoje poslovanje 15. novembra 1886. godine, kao radionica za preciznu mehaniku i elektroinženjering u Štutgartu-Zapad.",
+    shopUrl: "https://www.prodavnicaalata.rs/proizvodjaci/bosch/",
+    featured: true,
+    sections: [
+      {
+        title: "Istorijat",
+        paragraphs: [
+          "Kompanija Bosch započela je svoje poslovanje 15. novembra 1886. godine, kao radionica za preciznu mehaniku i elektroinženjering u Štutgartu-Zapad. Već naredne godine, Bosch je razvio niskonaponski magneto za gasne motore, čime je započeo svoj put inovacija u auto-industriji.",
+          "Od 1897. godine, Bosch ugrađuje magneto sisteme paljenja u motorna vozila, postajući vodeći dobavljač sistema za paljenje. Godine 1902, glavni inženjer Gotlob Honold je predstavio visokovoltni magneto sistem paljenja sa svećicom, ključni izum za razvoj automobilske industrije.",
+          "Godine 1901. otvara se prvi proizvodni pogon u Štutgartu. Kompanija Bosch ubrzano raste: do 1906. proizvedeno je 100.000 magneto sistema, a uvedeno je i osmočasovno radno vreme. Već 1910. godine otvara se novi pogon u Feuerbach-u, gde se 1914. pokreće proizvodnja čuvenog “Bosch svetla” – generatora i farova.",
+          "Širenje upotrebe motornih vozila nakon 1900. uzrokuje brzi rast – sa 45 zaposlenih 1901. do preko 1.000 do 1908. godine. Globalna ekspanzija Bosch brenda počinje 1898. u Londonu, a ubrzo se širi i na Pariz, Beč, Budimpeštu i sve kontinente.",
+          "U 1920-im, Bosch proširuje svoju ponudu: električne sirene (1921), brisače vetrobrana (1926) i pokazivače pravca (1927). Te godine uvodi i sisteme ubrizgavanja goriva za dizel motore. Kao deo diverzifikacije, 1932. kupuje sektor gasne opreme kompanije Junkers & Co. Te iste godine razvija svoju prvu električnu bušilicu i prvi auto-radio. Godine 1933. Bosch predstavlja prvi električni kućni frižider.",
+          "Tokom 2000-ih, Bosch lansira elektro-hidraulične kočnice, piezo-ubrizgavanje, digitalni auto-radio sa CD-om i litijum-jonski akumulatorski odvijač (2003).",
+          "Kompanija je 2005. i 2008. dobila Nemačku nagradu za budućnost. Najveća pojedinačna investicija stigla je 2021. otvaranjem fabrike poluprovodnika u vrednosti od 1,2 milijarde dolara.",
+        ],
+      },
+      {
+        title: "Tehnologije i inovacije",
+        paragraphs: [
+          "Bosch tehnologije su sinonim za inovaciju. Godine 2009. izdvojeno je 3,6 milijardi evra za istraživanje i razvoj, a kompanija prijavljuje oko 3.900 patenata godišnje. Fokus je na unapređenju energetske efikasnosti, obnovljivim izvorima energije i biomedicinskoj tehnologiji.",
+          "Podružnica Bosch Healthcare Solutions GmbH nudi medicinske uređaje i usluge. Tokom 2020. lansiran je brzi test na COVID-19.",
+          "Bosch je između 2022. i 2026. uložio čak 3 milijarde evra u razvoj čipova, s naglaskom na 40 i 200-nanometarske čipove za automobilske aplikacije. Time dodatno učvršćuje poziciju lidera u automobilskoj i elektronskoj industriji.",
+        ],
+      },
+      {
+        title: "Asortiman proizvoda",
+        paragraphs: [
+          "Bosch proizvodi pokrivaju više industrija. U automobilskoj industriji, Bosch nudi sisteme za ubrizgavanje goriva, kočione sisteme i naprednu auto-elektroniku. U sektoru potrošačkih proizvoda, poznat je po Bosch električnim alatima, kućnim aparatima i e-bicikl motorima.",
+          "U industrijskoj tehnologiji, Bosch razvija sisteme za automatizaciju i pakovanje, dok u sektoru energetike i infrastrukture nudi rešenja za grejanje, toplu vodu, sigurnosne sisteme i komunikacione uređaje.",
+          "Takođe, kompanija proizvodi senzore, uređaje za pametne kuće i medicinske instrumente. Bosch je aktivan i u oblasti softverskih rešenja, posebno za autonomnu vožnju i pametne automobile.",
+          "Po prihodima, Bosch je vodeći svetski proizvođač automobilskih komponenti.",
+        ],
+      },
+      {
+        title: "Globalno prisustvo",
+        paragraphs: [
+          "Bosch grupa ima više od 468 filijala i regionalnih predstavništava u preko 60 zemalja. Njene aktivnosti u oblasti proizvodnje, razvoja i prodaje pokrivaju čitav svet. Više od 90.000 istraživača i inženjera radi na 125 lokacija širom sveta, što Bosch čini jednim od najinovativnijih brendova današnjice.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "rems",
+    name: "REMS",
+    logo: "/brands/rems.svg",
+    tagline: "REMS - Uvoznik za Srbiju",
+    blurb: "Kompanija REMS je osnovana 1909. godine sa jasnim ciljem, razvijati vrhunske alate za rad sa cevima, prvenstveno za potrebe instalatera u sektorima sanitarije i grejanja.",
+    shopUrl: "https://www.prodavnicaalata.rs/proizvodjaci/rems/",
+    featured: true,
+    sections: [
+      {
+        title: "Istorijat",
+        paragraphs: [
+          "Kompanija REMS je osnovana 1909. godine sa jasnim ciljem, razvijati vrhunske alate za rad sa cevima, prvenstveno za potrebe instalatera u sektorima sanitarije i grejanja. Na početku su to bili ručni alati za cevi, dok je kasnije REMS proširio ponudu na mašine i električne alate za cevarske radove. Zahtev osnivača Christiana Fölla da REMS alati uvek moraju biti superiorni postao je temelj poslovanja firme. Više od jednog veka kasnije, REMS je prepoznat kao vodeći proizvođač profesionalnih alata i mašina za rad sa cevima, kako na domaćem, tako i na svetskom tržištu.",
+        ],
+      },
+      {
+        title: "Tehnologije i inovacije",
+        paragraphs: [
+          "REMS se ističe svojim inovativnim pristupom razvoju alata. Njihovi inženjeri osmišljavaju rešenja koja instalaterima olakšavaju svakodnevni rad - bilo da se radi o ručnim alatima, elektro-mašinama ili naprednim rešenjima za savijanje i spajanje cevi. U REMS-u se svakom izazovu pristupa kroz prizmu praktičnog iskustva, uz stalnu saradnju sa stručnjacima iz različitih oblasti industrije.",
+          "REMS alati su poznati po inovacijama, kvalitetu izrade i tehničkom savršenstvu. Njihova tehnologija odgovara najvišim standardima, što potvrđuju brojni nacionalni i međunarodni patenti. Zahvaljujući tome, REMS zadržava vodeću poziciju na tržištu cevarskih alata i nastavlja da bude sinonim za kvalitet i pouzdanost.",
+        ],
+      },
+      {
+        title: "Asortiman proizvoda",
+        paragraphs: [
+          "REMS nudi kompletan asortiman alata i mašina za obradu cevi, namenjenih profesionalcima u instalaterskoj industriji. Njihovi proizvodi obuhvataju mašine za navojno rezanje i valjanje, kao i elektro-hidraulične alate za obradu navoja. Tu su i različiti alati za sečenje cevi, od ručnih rezača, preko električnih i pneumatskih testera, pa sve do baterijskih uređaja za kružno sečenje.",
+          "Za dodatnu obradu cevi, REMS nudi rešenja za fazetiranje i uklanjanje ivica, kao i širok spektar alata za montažu, uključujući švedske i pumpne ključeve, akumulatorske bušilice, kao i uređaje za ispitivanje pritiska, kako električne tako i ručne.",
+          "U oblasti zavarivanja i lemljenja, REMS je razvio efikasna rešenja kao što su električne klešta za lemljenje, turbo plamenici i kvalitetni materijali za lemljenje. Za potrebe savijanja cevi, dostupni su kako ručni tako i hidraulični savijači, koji omogućavaju precizan i lak rad na terenu.",
+          "Pored toga, REMS se ističe i alatima za rad sa radijalnim i aksijalnim spajanjima, uključujući akumulatorske i elektro-hidraulične prese, kao i ekspanzione alate. Za potrebe održavanja, REMS nudi opremu za inspekciju i čišćenje cevi, poput inspekcijskih kamera, mašina za čišćenje i alata za zavarivanje plastičnih cevi.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "wiha",
+    name: "Wiha",
+    logo: "/brands/wiha.svg",
+    tagline: "Wiha alati - Uvoznik za Srbiju",
+    blurb: "Kompanija Wiha osnovana je 1939. godine u Vupertalu, od strane Vilija Hana. Ova oblast, Bergišes Land, bila je poznata kao centar industrije alata, jer je obuhvatala značajne rudarske resurse i brojnu industrijsku proizvodnju alata, kao što su kovačnice duž reka.",
+    shopUrl: "https://www.prodavnicaalata.rs/proizvodjaci/wiha/",
+    featured: true,
+    sections: [
+      {
+        title: "Istorijat",
+        paragraphs: [
+          "Kompanija Wiha osnovana je 1939. godine u Vupertalu, od strane Vilija Hana. Ova oblast, Bergišes Land, bila je poznata kao centar industrije alata, jer je obuhvatala značajne rudarske resurse i brojnu industrijsku proizvodnju alata, kao što su kovačnice duž reka. Sam naziv kompanije potiče od prvih slova imena njenog osnivača, Vilija Hana.",
+          "Nakon četiri godine, sedište kompanije je premešteno u Šonah, gde se i danas nalazi.",
+          "Početno su proizvodili samo pričvršćivače, ali je 1947. godine započeta proizvodnja šrafcigera. U narednim decenijama, Wiha je nastavila širenje svog asortimana, uvodeći nove proizvode, uključujući imbus ključeve i sečiva.",
+          "Godine 1966. kupili su pogon u Menšvajleru/Švarcvald, gde se danas proizvode sečiva i imbus ključevi. Wiha je takođe nastavila širenje i otvaranjem filijala u Sjedinjenim Američkim Državama (1985), kao i u Francuskoj, Španiji, Velikoj Britaniji, Danskoj, Poljskoj, Kini, Vijetnamu, Tajlandu, Kanadi i azijsko-pacifičkom regionu.",
+        ],
+      },
+      {
+        title: "Tehnologije i inovacije",
+        paragraphs: [
+          "Wiha stalno investira u inovativne tehnologije koje unapređuju funkcionalnost i kvalitet alata. Kroz razvoj proizvoda kao što su ručke sa višekomponentnim slojevima i precizno kalibrisani moment ključevi, Wiha alati pružaju vrhunske performanse.",
+          "Kompanija se oslanja na iskustva i povratne informacije stručnjaka kako bi stalno unapređivala svoje proizvode. Kao jedan od lidera na tržištu alata, Wiha je prepoznata po svom posvećenju kvalitetu, inovacijama i korisničkom iskustvu.",
+          "Wiha alati, zahvaljujući svojoj visokoj pouzdanosti i tehnologiji, postali su ključni u industrijama širom sveta, osiguravajući svojim korisnicima dugoročnu vrednost i efikasnost.",
+        ],
+      },
+      {
+        title: "Asortiman proizvoda",
+        paragraphs: [
+          "Wiha nudi širok asortiman alata, sa više od 3.500 različitih proizvoda, uključujući šrafcigere, alate za merenje obrtnog momenta, imbus ključeve, bitove, klešta, čekiće i merni alat. Sa globalnom prisutnošću i visokom kvalitetom, Wiha alati su prepoznati u industriji.",
+          "Ova porodična kompanija zapošljava oko 750 ljudi širom sveta, a proizvodi Wiha su sinonim za inovativnu proizvodnju i dugoročne standarde u alatnoj industriji.",
+        ],
+      },
+      {
+        title: "Priznanja i sponzorstva",
+        paragraphs: [
+          "Wiha je više puta nagrađena za dizajn svojih proizvoda, tehničke inovacije i društvenu odgovornost. Kompanija je osvojila brojne prestižne nagrade, uključujući oko 20 iF nagrada, od kojih je jedna zlatna nagrada za Wiha držač bitova sa magazinom, kao i desetine Red Dot nagrada, uključujući prestižnu Red Dot Best of the Best nagradu.",
+          "Pored toga, Wiha je od 2010. godine glavni sponzor regionalnog košarkaškog tima Wiha Panthers Schwenningen, čime pokazuje svoju posvećenost društvenoj odgovornosti i promociji sportskih aktivnosti.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "gtv",
+    name: "GTV",
+    logo: "/brands/gtv.svg",
+    tagline: "GTV alati - Uvoznik za Srbiju",
+    blurb: "Od male poljske firme, GTV je izrastao u međunarodno prepoznatog proizvođača nameštajske galanterije i LED rasvete.",
+    shopUrl: "https://www.prodavnicaalata.rs/proizvodjaci/gtv/",
+    featured: true,
+    sections: [
+      {
+        title: "Istorijat",
+        paragraphs: [
+          "Od male poljske firme, GTV je izrastao u međunarodno prepoznatog proizvođača nameštajske galanterije i LED rasvete. Kompanija je poznata po brzoj operativnosti, inovativnosti i prilagodljivosti potrebama tržišta. GTV već decenijama uspešno odgovara na dinamično promenljive zahteve kupaca i pažljivo prati globalne trendove u oblasti enterijera, okova i LED osvetljenja.",
+          "Tokom 2022. godine, GTV je proširio svoje poslovanje kupovinom pogona specijalizovanog za proizvodnju ramova za krevete, okvira, dovratnika, mehanizama i dodataka za tapacirani nameštaj. Ovaj proizvodni centar u Ščitnu predstavlja strateški korak ka jačanju prisustva u komplementarnim segmentima tržišta nameštaja. Ovim potezom GTV dodatno diversifikuje svoju ponudu i omogućava kupcima širi izbor proizvoda za savremeno opremanje prostora.",
+          "Vrednosti kao što su poštenje, otvorenost, profesionalizam i podrška čine temelj organizacione kulture kompanije GTV, što dodatno učvršćuje poverenje kupaca i partnera širom Evrope i sveta.",
+        ],
+      },
+      {
+        title: "Tehnologije i inovacije",
+        paragraphs: [
+          "GTV konstantno ulaže u savremene tehnologije i vrhunske materijale, kako bi njihovi okovi za nameštaj i LED rasveta zadovoljili najviše standarde kvaliteta i estetike. Njihovi proizvodi se oslanjaju na inovacije koje prate najnovije trendove u dizajnu enterijera i pametnim rešenjima za uređenje doma i poslovnog prostora.",
+          "Kao istinski preduzetnici, stručnjaci u GTV-u neprestano uče i razvijaju nove veštine, a svoju stručnost primenjuju kroz stvaranje proizvoda koji zadovoljavaju i trenutne i buduće potrebe tržišta. Zahvaljujući naprednim rešenjima kao što su cloud computing, veštačka inteligencija i automatizovani alati, GTV razvija pametne sisteme koji unapređuju korisničko iskustvo.",
+          "Kroz optimizaciju logističkih procesa, GTV osigurava visoku dostupnost celokupnog asortimana, od LED traka do okova za ormare, kliznih sistema i dodataka za kuhinje i dnevne sobe.",
+        ],
+      },
+      {
+        title: "Asortiman proizvoda",
+        paragraphs: [
+          "GTV nudi jedan od najkompletnijih asortimana nameštajske galanterije i LED rasvete na tržištu. Njihova ponuda uključuje okove za nameštaj, klizače, šarke, podizne mehanizme, ručke, dugmad, LED trake, aluminijumske profile i dodatke za osvetljenje. Ovi proizvodi omogućavaju savršenu završnu obradu, tihi rad fioka i vrata, kao i maksimalnu funkcionalnost u ograničenom prostoru.",
+          "Inovativna rešenja za uštedu prostora i ergonomiju doprinose modernom dizajnu enterijera, a brojni GTV proizvodi zadovoljavaju potrebe kako profesionalnih stolara, tako i hobista koji žele kvalitetne i estetski privlačne elemente za svoj nameštaj.",
+          "Portfelj kompanije broji više od 12.000 proizvoda, uključujući LED rasvetu, fitinge, dodatke za kuhinje, okove za garderobere i još mnogo toga. Ova raznovrsnost omogućava kupcima da pronađu sve potrebne komponente za projekat na jednom mestu, štedeći vreme, trud i novac.",
+          "Slogan „Kreiramo bolji svakodnevni život za ljude“ oslikava njihovu posvećenost stvaranju proizvoda koji ne samo da izgledaju moderno, već i čine život lakšim i funkcionalnijim.",
+        ],
+      },
+      {
+        title: "Podrška",
+        paragraphs: [
+          "Zadovoljan kupac je glavni prioritet kompanije GTV. Zato nude sveobuhvatnu korisničku podršku tokom cele saradnje, od izbora nameštajskih okova do instalacije LED rasvete. Tim stručnjaka pruža pomoć u odabiru optimalnog rešenja, brzo procesira porudžbine i organizuje efikasnu isporuku.",
+          "GTV podržava svoje B2B partnere kroz pouzdanu platformu, tehničku dokumentaciju, vizualizacije i marketinške materijale. Njihovi savetnici su eksperti u oblasti nameštajske galanterije i LED osvetljenja, a govore više jezika, kako bi komunikacija sa kupcima iz različitih zemalja bila što jednostavnija.",
+          "Poslovni partneri mogu računati na personalizovanu marketinšku podršku, savete o asortimanu i znanje o tržišnim trendovima. GTV ne samo da prodaje proizvode, oni grade dugoročne odnose sa svojim klijentima i doprinose uspehu svakog projekta.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "knipex",
+    name: "Knipex",
+    logo: "/brands/knipex.svg",
+    tagline: "Knipex alati - Uvoznik za Srbiju",
+    blurb: "Knipex je već četiri generacije nezavisno, porodično preduzeće sa sedištem u Kronenbergu, Vupertal, u srcu nemačke industrije alata.",
+    shopUrl: "https://www.prodavnicaalata.rs/proizvodjaci/knipex/",
+    featured: true,
+    sections: [
+      {
+        title: "Istorijat",
+        paragraphs: [
+          "Knipex je već četiri generacije nezavisno, porodično preduzeće sa sedištem u Kronenbergu, Vupertal, u srcu nemačke industrije alata. Poznat po vrhunskim kleštima i specijalizovanim ručnim alatima, Knipex proizvodi sve osnovne artikle, uključujući kvalitetna klešta i profesionalne alate, isključivo u Nemačkoj. Pojedini dodatni alati, poput pinceta i kožnih torbi za alat sa Knipex brendom, dolaze od pažljivo odabranih eksternih dobavljača.",
+          "Kompanija je osnovana 1882. godine kao mala kovačnica koju je pokrenuo Karl Gustav Puč u podrumu svoje porodične kuće. Počeli su sa samo jednim radnikom i dva pripravnika, a već tada se fokusirali na proizvodnju klešta za tesare i potkivače. Ta klešta su se u početku izrađivala ručno, ali je ubrzo usledila modernizacija uz upotrebu čekića za kovanje. Na vrhuncu pod vođstvom Karla Puča, proizvodilo se čak 7.000 pari klešta nedeljno.",
+          "Knipex je 1942. zvanično zaštitio svoj brend, a nova generacija porodice Puč nastavila je razvoj. Godine 1954, treća generacija, Karl Puč, preuzima vođenje firme i uvodi automatizaciju, inovacije i patente u proizvodni proces. Od 1996. godine, firmu vodi Ralf Puč, praunuk osnivača, koji je proširio prisustvo Knipex alata na više od deset zemalja širom sveta. Danas se više od 60% proizvodnje izvozi, što govori o globalnom ugledu koji Knipex uživa kao lider u proizvodnji klešta i alata za električare, vodoinstalatere i druge zanatlije.",
+        ],
+      },
+      {
+        title: "Tehnologije i inovacije",
+        paragraphs: [
+          "Knipex se izdvaja kao brend koji neprekidno pomera granice u razvoju ručnih alata. Njihovi alati, posebno Cobra klešta sa sistemom za brzo podešavanje jednom rukom, predstavljaju spoj funkcionalnosti i preciznosti. Cobolt sekači su još jedan primer inovacije, kompaktni, ali izuzetno moćni alati za sečenje zavrtnjeva i tvrdih materijala. Klešta-ključevi kombinuju funkcije viljuškastog ključa i standardnih klešta, nudeći korisnicima alat visoke preciznosti i izdržljivosti.",
+          "Ova tehnološka rešenja čine Knipex alatima sinonimom za profesionalne performanse u svim granama industrije, naročito u elektroinstalacijama, održavanju, montaži solarnih sistema i drugim specijalizovanim poslovima.",
+        ],
+      },
+      {
+        title: "Asortiman proizvoda",
+        paragraphs: [
+          "Knipex katalog sadrži oko 100 različitih modela klešta, sa više od 900 varijacija u dužini, obliku drške i završnoj obradi. U ponudi su bočni sekači, klešta za električare, vodoinstalaterska klešta, kao i visoko specijalizovani alati za elektroniku i precizne poslove. Alati za električare uključuju rešenja za sečenje kablova, skidanje izolacije i krimpovanje žica, sve uz maksimalnu ergonomiju i sigurnost.",
+          "Većina modela dostupna je i u varijantama sa izolovanim drškama, koje štite od električnog napona do 1.000 V, što ih čini neophodnim izborom za sve profesionalce u elektroindustriji. Sistem označavanja alata koristi decimalnu šifru koja sadrži informacije o tipu klešta, obliku vilica i veličini alata, što korisnicima olakšava izbor pravog modela.",
+          "Knipex se oslanja na sopstvenu proizvodnju, sa internim procesima koji obuhvataju sve faze, od kovanja, bušenja, glodanja i brušenja do laserske obrade, čime se osigurava vrhunski kvalitet svakog komada.",
+        ],
+      },
+      {
+        title: "Knipex muzej",
+        paragraphs: [
+          "U sedištu firme u Vupertalu nalazi se Knipex muzej, posvećen istoriji ručnih alata i razvoja alata kroz vreme. Na dva sprata, posetioci mogu videti alate, mašine, rekonstruisana radna mesta i predmete iz svakodnevnog života koji oslikavaju bogatu tradiciju nemačke alatničarske industrije.",
+          "Muzej je otvoren za javnost jednom godišnje tokom manifestacije Wuppertal-24h-live, dok su grupne posete moguće uz prethodnu najavu tokom cele godine.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "hogert",
+    name: "Högert",
+    logo: "/brands/hogert.svg",
+    tagline: "Högert alati - Uvoznik za Srbiju",
+    blurb: "Högert je noviji, ali ambiciozan brend ručnih alata i zaštitne opreme, sa jasnom vizijom da zauzme značajno mesto u sektoru profesionalnog alata.",
+    shopUrl: "https://www.prodavnicaalata.rs/proizvodjaci/hogert-technik/",
+    featured: true,
+    sections: [
+      {
+        title: "Istorijat",
+        paragraphs: [
+          "Högert je noviji, ali ambiciozan brend ručnih alata i zaštitne opreme, sa jasnom vizijom da zauzme značajno mesto u sektoru profesionalnog alata.",
+          "Od samog osnivanja, Högert Technik usmerava razvoj svojih proizvoda ka savremenim tehničkim rešenjima i visokim standardima izrade, oslanjajući se na proveren kvalitet, pouzdanost i dugotrajnost.",
+          "Ovaj savremeni brend prisutan je na međunarodnim tržištima, a njegovi ručni alati i oprema dostupni su širom Evrope, Azije i Južne Amerike od 2015. godine.",
+          "Ključne vrednosti Högert-a, iskrenost, stručnost, podrška korisnicima i spremnost za nove izazove, deo su njegovog identiteta i organizacione kulture.",
+          "Högert Technik funkcioniše kroz efikasne organizacione strukture koje omogućavaju brzo donošenje odluka, uz jasnu i otvorenu komunikaciju sa partnerima i korisnicima.",
+          "Kompanija je usmerena na stalna unapređenja, otvorena je za promene i fokusirana na razvoj brenda i jačanje prisustva na tržištu alata i opreme za profesionalce.",
+        ],
+      },
+      {
+        title: "Tehnologije i inovacije",
+        paragraphs: [
+          "Kvalitet i inovacija su temeljne vrednosti brenda Högert Technik.",
+          "U okviru svojih laboratorija, kompanija sprovodi precizna ispitivanja i merenja alata, sa ciljem kontrole kvaliteta, optimalne raspodele resursa i stalnog unapređenja proizvoda.",
+          "Fokus je na kreiranju alata koji olakšavaju svakodnevni rad profesionalcima u industriji i građevinarstvu.",
+          "Razvojem inovativnih rešenja i pažljivim pristupom dizajnu, Högert podiže standarde ne samo unutar svoje kompanije, već i u čitavoj industriji.",
+          "Brend je poznat po težnji ka jednostavnosti, korisnosti i pouzdanosti, uz posebnu pažnju na dugotrajnu i intenzivnu upotrebu alata u zahtevnim uslovima rada.",
+        ],
+      },
+      {
+        title: "Asortiman proizvoda",
+        paragraphs: [
+          "Högert Technik nudi širok spektar proizvoda koji obuhvataju ručne alate, kao što su odvijači, ključevi, klešta i merni instrumenti, dizajnirani za precizan, dugotrajan i profesionalan rad.",
+          "U ponudi su i električni alati koji omogućavaju efikasno izvođenje zadataka u različitim radnim uslovima.",
+          "Pored alata, Högert razvija i visokokvalitetnu zaštitnu opremu, radne rukavice, zaštitne naočare, šlemove i radnu obuću.",
+          "Ova oprema je dizajnirana da pruži maksimalnu sigurnost i udobnost korisnicima u industrijskim i građevinskim okruženjima.",
+          "Poseban akcenat stavljen je na izbor sirovina: ugljenični čelik koji se koristi u proizvodnji ručnih alata osigurava otpornost, čvrstoću i dug vek trajanja.",
+          "Högert Technik sarađuje isključivo sa renomiranim industrijskim partnerima, proveravajući svaki korak u lancu snabdevanja kako bi garantovao alat visokog kvaliteta i pouzdanog porekla.",
+          "Svi Högert alati i proizvodi poseduju relevantne sertifikate kvaliteta, uključujući TÜV Rheinland i VDE, kao i usklađenost sa zahtevima DIN standarda Nemačkog instituta za standardizaciju.",
+          "Ovi sertifikati potvrđuju da su Högert proizvodi u skladu sa najvišim standardima sigurnosti i performansi.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "senco",
+    name: "Senco",
+    logo: "/brands/senco.svg",
+    tagline: "SENCO alati - Uvoznik za Srbiju",
+    blurb: "U 1930-im godinama, osnivač kompanije, Albert Juilfs, radio je iz svog podruma i proizveo Springtramp Eliminator, alat koji je rešavao problem vibracija u automobilima tog vremena.",
+    shopUrl: "https://www.prodavnicaalata.rs/proizvodjaci/senco/",
+    featured: true,
+    sections: [
+      {
+        title: "Istorijat",
+        paragraphs: [
+          "U 1930-im godinama, osnivač kompanije, Albert Juilfs, radio je iz svog podruma i proizveo Springtramp Eliminator, alat koji je rešavao problem vibracija u automobilima tog vremena.",
+          "Taj pionirski duh postavio je temelje za buduće uspehe brenda SENCO.",
+          "Već tokom 1940-ih godina, SENCO uvodi revoluciju u industriji alatki, pravi prvi pneumatski alat za spajanje: spajalicu za industrijsku ambalažu i tapaciranje.",
+          "Ovaj SENCO alat postavlja nove standarde brzine i efikasnosti na proizvodnoj traci i pozicionira brend kao lidera u industriji pričvršćivača i pneumatskih alata.",
+          "Tokom 1960-ih godina, kompanija otvara prvu fabriku u Sinsinatiju, Ohio.",
+          "U toj fabrici proizvodi se nova linija pričvršćivača i pneumatskih alata: ekseri sa papirnom trakom i spiralni ekseri.",
+          "Zbog rasta potražnje, fabrika se proširuje već nakon pet godina.",
+          "Devedesetih godina, SENCO lansira ikonične modele kao što su SN325 framerski ekser, SFN40 i SN60 ekserke, kao i SLP20 brad ekser i M2+/M3+ spajalice.",
+          "FramePro serija eksera postaje standard za graditelje, stolare i profesionalce koji traže pouzdanost i brzinu u radu.",
+          "Početkom 2000-ih, SENCO dodatno modernizuje industriju sa DURASPIN® bežičnim auto-hranivim odvijačem, idealnim za brzo i precizno pričvršćivanje.",
+          "Ova tehnologija integriše sistem za automatsko hranjenje vijaka, što čini rad još efikasnijim.",
+          "Ubrzo stižu i verzije sa kablom i dodatna oprema.",
+          "Tokom 2010-ih, SENCO uvodi FUSION® tehnologiju, inovaciju u bežičnim 15-Gauge završnim ekserkama koje eliminišu potrebu za gorivnim ćelijama.",
+          "Alati postaju još praktičniji, ekonomičniji i jednostavniji za održavanje.",
+          "U 2021. godini, nakon akvizicije od strane KYOCERA korporacije (2017), SENCO ulaže u proširenje fabrike u Sinsinatiju.",
+          "Novi globalni centar konsoliduje sve SENCO resurse, unapređujući inovacije, komunikaciju i razvoj alata za pričvršćivanje.",
+        ],
+      },
+      {
+        title: "Tehnologije i inovacije",
+        paragraphs: [
+          "SENCO alati prednjače u inovacijama zahvaljujući patentiranoj FUSION™ tehnologiji.",
+          "Ova tehnologija koristi zatvorenu komoru sa komprimovanim vazduhom i baterijski motor koji pruža performanse poput klasičnih pneumatskih alata, bez potrebe za gasnim patronama ili održavanjem.",
+          "DURASPIN™ sistemi sa automatskim hranjenjem vijaka omogućavaju korisnicima da rade u tesnim prostorima gde konvencionalni alati ne mogu da dopru.",
+          "Povratni mehanizam dodatno poboljšava preciznost i povećava produktivnost do 30%, što čini DURASPIN savršenim izborom za profesionalce.",
+          "NEVERLUBE® tehnologija eliminiše potrebu za podmazivanjem SENCO alata.",
+          "Suvi podmazivači i O-prstenovi otporni na isušivanje garantuju minimalno održavanje, dug vek trajanja i visok učinak bez dodatnih troškova.",
+          "SENCOTE, specijalni premaz za SENCO ekseri, smanjuje trenje i poboljšava prodor u materijale.",
+          "Nakon hlađenja, premaz deluje kao vezivni agent, povećavajući snagu držanja eksera.",
+          "DA stil završnih eksera razvijen od strane SENCO-a idealan je za ugaone ekserke, koje su naročito korisne za rad u ograničenim prostorima.",
+          "Automatizacija je takođe ključni deo SENCO strategije, alati i pričvršćivači lako se integrišu u industrijske sisteme za serijsku proizvodnju.",
+        ],
+      },
+      {
+        title: "Asortiman proizvoda",
+        paragraphs: [
+          "SENCO nudi širok spektar alata za pričvršćivanje, uključujući pneumatske alate, pištolje za ekserke, klamerice, spajalice i kompresore.",
+          "Njihov asortiman zadovoljava potrebe stolara, građevinara i profesionalaca iz svih oblasti.",
+          "SENCO pneumatski alati i pričvršćivači omogućavaju precizno i čvrsto povezivanje materijala, čak i u najzahtevnijim uslovima rada.",
+          "Brzo punjenje i ergonomski dizajn omogućavaju dugotrajan rad bez umora.",
+          "Njihovi kompaktni i pouzdani kompresori olakšavaju svakodnevne zadatke, dok su SENCO ekseri i spajalice savršeno usklađeni sa alatima, za maksimalnu pouzdanost i vrhunske rezultate.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "wera",
+    name: "Wera",
+    logo: "/brands/wera.svg",
+    tagline: "Wera alati - Uvoznik za Srbiju",
+    blurb: "Godine 1936, preduzetnik Hermann Werner osnovao je Hermann Werner GmbH & Co. KG kao trgovinsku firmu specijalizovanu za prodaju alata.",
+    shopUrl: "https://www.prodavnicaalata.rs/proizvodjaci/wera/",
+    featured: true,
+    sections: [
+      {
+        title: "Istorijat",
+        paragraphs: [
+          "Godine 1936, preduzetnik Hermann Werner osnovao je Hermann Werner GmbH & Co. KG kao trgovinsku firmu specijalizovanu za prodaju alata. Ova osnova postavila je temelje za ono što će kasnije postati globalno prepoznat brend, Wera alati.",
+          "Desetak godina kasnije, firma je rekonstruisana pod vođstvom Heinza Amtenbrinka, zeta porodice Werner. Tada se započinje proizvodnja odvijača, što je označilo početak razvoja ručnih alata pod sopstvenim brendom. Od 1951. godine, kompanija koristi naziv Wera, kombinacijom imena Werner i Amtenbrink, čime je postavljen identitet koji se održava i danas.",
+          "Proizvodnja bitova započela je 1963. godine, a samo pet godina kasnije, u saradnji sa Fraunhofer institutom, razvijena je poznata Kraftform ručka, jedna od najprepoznatljivijih inovacija u svetu odvijača. Ova ručka ostala je deo Wera logotipa, simbola kvaliteta i pouzdanosti nemačkih alata.",
+          "Tokom 1990-ih, Wera Tools uvodi bitove presvučene dijamantom i širi se preuzimanjem Drehmax W. Holland i osnivanjem prodajne podružnice u Velikoj Britaniji. Godine 1995, deo proizvodnje se seli u Češku Republiku, u grad Bystřice.",
+          "Nakon što se osnivač povukao iz posla, Wera je 2016. godine prodata Bitburger Holdingu. Te iste godine otvoren je moderan logistički centar u Wuppertalu, površine 20.000 m². Kompanija je tada zapošljavala više od 750 ljudi globalno, uključujući više od 400 u Češkoj. Ekspanzija je nastavljena 2018. godine otvaranjem filijale u Třebíču.",
+          "Od 2019. godine, brend je prisutan i na promotivnim događajima sa svojim balonom u obliku odvijača, ističući jedinstven pristup komunikaciji sa korisnicima. Wera alati su postali sinonim za preciznost, pouzdanost i inovacije u alatima.",
+        ],
+      },
+      {
+        title: "Tehnologije i inovacije",
+        paragraphs: [
+          "Wera konstantno unapređuje dizajn i funkcionalnost svojih profesionalnih alata za ručnu i električnu upotrebu. Joker račni ključevi omogućavaju lako zatezanje i otpuštanje navrtki zahvaljujući inovativnoj funkciji držanja. Impaktor bit sistem je optimizovan za bežične udarne odvijače, koristeći TriTorsion i Diamond tehnologiju za izdržljivost i efikasnost.",
+          "Wera nudi i BiTorsion bitove koji podnose velika opterećenja, dok Rapidaptor držači omogućavaju brzu i sigurnu zamenu bitova – čak i jednom rukom. Tehnologija Hex-Plus sprečava oštećenje šrafova sa šesterougaonim glavama, dok Zyklop račne kombinuju više funkcija i kompatibilne su sa različitim čaurama.",
+          "Među najinovativnijim rešenjima ističu se Koloss račna, koja služi i kao čekić, kao i Chiseldriver odvijač koji podnosi udarce bez gubitka preciznosti. Kraftform Kompakt setovi dolaze sa futrolama i selekcijom bitova, idealni za prenos. Posebnu pažnju zaslužuju Wera Stainless alati – izrađeni od nerđajućeg čelika, savršeni za zaštitu od korozije.",
+        ],
+      },
+      {
+        title: "Asortiman proizvoda",
+        paragraphs: [
+          "Wera projektuje i proizvodi više od 3.000 različitih alata, uključujući imbus ključeve, račne, čaure, odvijače, bitove i kompletne setove alata. Sedište kompanije je u Nemačkoj, dok se proizvodnja odvija i u fabrici u Češkoj Republici.",
+          "Kroz svoju prodajnu platformu Wera Tool Rebels GmbH, brend nudi direktnu kupovinu alata za zavrtanje širom sveta. Kompanija je poznata po integraciji više funkcionalnosti u jedan alat, što korisnicima štedi vreme i povećava efikasnost. Na primer, računasti ključevi sa dodatnim funkcijama omogućavaju rad u teškim uslovima bez dodatnih alata.",
+          "Wera je prepoznatljiva po svojim odvijačima sa Kraftform ručkom, dizajniranom za optimalno prianjanje i ergonomiju. Prepoznatljive “krune” na ručki deo su vizuelnog identiteta brenda, simbolizujući preciznost i inovaciju.",
+        ],
+      },
+      {
+        title: "Nagrade",
+        paragraphs: [
+          "Kao dokaz kvaliteta i inovacija, Wera Tools je dobitnik brojnih nagrada u oblasti dizajna i upravljanja brendom. Među najvažnijima su iF Product Design Award (1997, 2009, 2012, 2013, 2015. uključujući Zlatnu nagradu), Red Dot Design Award („Best of the Best“ u 2014. i nagrada 2015), i German Design Award 2015. godine.",
+          "U oblasti komunikacije, Wera je takođe nagrađena Red Dot Design Award 2014. godine, a u upravljanju brendom, German Brand Award tri godine zaredom (2015–2017). Kompanija je 2007. godine proglašena za Top Innovator-a, dok je 2016. i 2021. godine osvojila prvo mesto u industrijskoj kategoriji Partner des Fachhandels.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "rubi",
+    name: "Rubi",
+    logo: "/brands/rubi.svg",
+    tagline: "RUBI alati - Uvoznik za Srbiju",
+    blurb: "Desetog aprila 1951. godine, mladi inovator Joan Boada podneo je u Kancelariji za registraciju i patente u Barseloni zahtev za zaštitu pronalaska novog alata, ručnog rezača za mozaik i pločice.",
+    shopUrl: "https://www.prodavnicaalata.rs/proizvodjaci/rubi/",
+    featured: true,
+    sections: [
+      {
+        title: "Istorijat",
+        paragraphs: [
+          "Desetog aprila 1951. godine, mladi inovator Joan Boada podneo je u Kancelariji za registraciju i patente u Barseloni zahtev za zaštitu pronalaska novog alata, ručnog rezača za mozaik i pločice. Ovaj alat će kasnije postati poznat širom sveta kao čuveni RUBI rezač za pločice, jedan od najpoznatijih alata za sečenje keramike.",
+          "RUBI rezač za pločice dobio je zlatnu medalju na Prvoj nacionalnoj izložbi pronalazaka održanoj 1953. godine u Barseloni. Nakon toga, braća Joan i Antoni Boada usmeravaju sve resurse na razvoj i proizvodnju ovog alata. Tokom šezdesetih godina, RUBI uvodi i udarni razbijač, dodatak koji je takođe patentiran i značajno unapređuje funkcionalnost ručnih alata za sečenje.",
+          "Zbog sve veće potražnje, 1969. godine braći Boada se pridružuje Miquel Escayol, a time je zvanično osnovana kompanija GERMANS BOADA, S.A. Ova kompanija postaje ključni nosilac brenda RUBI.",
+          "Sedamdesetih godina RUBI ručni rezači za pločice postaju još sofisticiraniji. Kompanija ulaže u širenje izvoza i razvija mehanički razbijač koji postaje model TS, referenca u svetu profesionalnih alata za pločice.",
+          "Krajem osamdesetih, sa pojavom porcelanskog granita, RUBI odgovara novim zahtevima tržišta lansiranjem nove serije rezača za pločice, posebno dizajniranih za tvrđe materijale.",
+          "Tokom devedesetih godina RUBI doživljava pravi procvat. GERMANS BOADA, S.A. proširuje svoje poslovanje otvaranjem filijala u Portugalu, Italiji, Francuskoj i drugim evropskim zemljama, što dodatno jača prisustvo RUBI alata na međunarodnom tržištu.",
+          "Ulaskom u novo milenijum, RUBI nastavlja sa konstantnim rastom. Razvoj rezača za pločice prati modernizaciju i primenu najnovijih tehnologija, prilagođavajući se savremenim izazovima u industriji.",
+        ],
+      },
+      {
+        title: "Tehnologije i inovacije",
+        paragraphs: [
+          "RUBI se ističe po konstantnoj inovaciji i razvoju tehnologija koje profesionalcima olakšavaju rad. RUBI alati su dizajnirani sa posebnim fokusom na ergonomiju, izdržljivost i jednostavnost korišćenja.",
+          "Od 2013. godine, RUBI uvodi na tržište revolucionarne proizvode kao što su SLIM SYSTEM, TZ serija i električni rezači ZERO DUST, vrhunska rešenja za profesionalce koji rade sa keramičkim pločicama i prirodnim kamenom.",
+          "Poseban akcenat stavlja se na lagane, ali robusne konstrukcije i udobne ručke koje omogućavaju komforan rad tokom celog dana. RUBI alati su sinonim za pouzdanost u građevinskoj i keramičarskoj industriji.",
+        ],
+      },
+      {
+        title: "Asortiman proizvoda",
+        paragraphs: [
+          "RUBI nudi širok spektar alata i mašina, od osnovnih ručnih rezača za pločice do specijalizovanih električnih uređaja za sečenje keramike i kamena.",
+          "Njihovi ručni rezači predstavljaju siguran i precizan alat za profesionalce, bez oštrih delova koji bi mogli ugroziti bezbednost korisnika. RUBI električni rezači omogućavaju efikasno i precizno sečenje različitih materijala, uključujući granit i mermer.",
+          "Dodatno, RUBI asortiman obuhvata dijamantske sečice za mokro i suvo sečenje. Ove sečice su dostupne u prečnicima od 115 mm do 350 mm i kompatibilne su sa gotovo svim vrstama materijala, što ih čini idealnim izborom za razne tipove keramičarskih radova.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "max",
+    name: "MAX",
+    logo: "/brands/max.svg",
+    tagline: "MAX vezivači armature i žica - Uvoznik za Srbiju",
+    blurb: "Kompanija MAX je osnovana 1942. godine pod nazivom Yamada Air Industry Co., Ltd., a 1945. godine je započela proizvodnju poslovne i kancelarijske opreme.",
+    shopUrl: "https://www.prodavnicaalata.rs/proizvodjaci/max/",
+    featured: false,
+    sections: [
+      {
+        title: "Istorijat",
+        paragraphs: [
+          "Kompanija MAX je osnovana 1942. godine pod nazivom Yamada Air Industry Co., Ltd., a 1945. godine je započela proizvodnju poslovne i kancelarijske opreme.",
+          "Tokom 1964. godine, spajanjem proizvodnog i prodajnog sektora, formirana je kompanija MAX CO., LTD.",
+          "Od tada, MAX se razvijao u prepoznatljivog proizvođača industrijske opreme i alata za građevinsku industriju.",
+          "Kompanija se kotirala na Tokijskoj berzi 1970. godine, a glavno sedište je 1981. premešteno u Tokio.",
+          "Tokom 1990-ih i 2000-ih godina, MAX je otvorio nove proizvodne pogone u Japanu, Kini, Tajlandu i Maleziji.",
+          "Paralelno sa širenjem, kompanija je uvela međunarodno priznate ISO sertifikate za upravljanje kvalitetom (ISO9001) i zaštitom životne sredine (ISO14001), čime je dodatno učvrstila svoj status lidera u industriji alata.",
+          "Godine 2010. i 2014. MAX je izvršio strateške akvizicije i osnovao nova predstavništva u Aziji i Evropi, proširujući prisustvo na globalnom tržištu.",
+          "Kroz decenije rada, MAX konstantno jača istraživačke kapacitete i razvija proizvode koji zadovoljavaju visoke standarde profesionalaca širom sveta.",
+          "MAX je danas međunarodno prepoznat kao pouzdan proizvođač industrijskih alata, kancelarijske opreme i električnih alata.",
+          "Njihovi razvojni timovi kreiraju proizvode sa originalnim i izdržljivim karakteristikama, koji odgovaraju na potrebe profesionalnih korisnika u različitim industrijama.",
+        ],
+      },
+      {
+        title: "Tehnologije i inovacije",
+        paragraphs: [
+          "Inovacije u kompaniji MAX započinju u istraživačkim, dizajnerskim i proizvodnim odeljenjima, a završavaju se kod krajnjih korisnika koji koriste MAX alate u svakodnevnom radu.",
+          "Na osnovu povratnih informacija sa tržišta, proizvodi se neprekidno prilagođavaju stvarnim uslovima rada.",
+          "Bliska saradnja sa korisnicima omogućava kompaniji da prati tehnološke trendove i predvidi buduće potrebe u građevinskoj i industrijskoj proizvodnji.",
+          "MAX alati se razvijaju u Japanu i proizvode u pogonima sa ISO sertifikatima, garantujući visoku pouzdanost i kvalitet.",
+          "Svaki proizvod prolazi rigorozne testove kako bi zadovoljio interne standarde kvaliteta i izdržljivosti.",
+          "Stalnim ulaganjem u istraživanje i razvoj, MAX doprinosi stvaranju pametnih alata i rešenja koja značajno olakšavaju rad na gradilištu, u proizvodnim halama i kancelarijskom okruženju.",
+        ],
+      },
+      {
+        title: "Asortiman proizvoda",
+        paragraphs: [
+          "MAX je postao sinonim za inovacije u oblasti alata, bio je prvi na svetu koji je razvio eksericu za krovove (1982), baterijski alat za vezivanje armature (1993), kao i kompresore i pneumatske ekserice visokog pritiska (1994).",
+          "Ovi alati su prepoznati među profesionalcima zbog svoje pouzdanosti, dugotrajnosti i ergonomije.",
+          "Industrijski alati MAX uključuju čvrste, ali lagane uređaje specijalno razvijene za primenu u građevinskoj industriji.",
+          "Asortiman obuhvata pneumatske ekserice, kompresore visokog pritiska (do 20 bara), alate za metal i beton, kao i dodatke za efikasno izvođenje radova na terenu.",
+          "Kancelarijska divizija kompanije MAX nudi širok spektar uređaja, među kojima su poznate heftalice „Flat Clinch“ i „Integral“ koje se koriste širom sveta u štamparijama i kancelarijama.",
+          "MAX je poznat i po uređajima za obradu čekova namenjenim finansijskom sektoru, kao i sistemima za štampanje i rezanje etiketa, oznaka i kablova, koji nalaze primenu u industrijskim i obrazovnim okruženjima.",
+          "MAX alati, kancelarijska oprema i uređaji za specijalizovanu upotrebu nude kompletna rešenja za profesionalce iz različitih sektora.",
+          "Njihov širok asortiman čini ih pouzdanim partnerom za sve koji traže kvalitet, preciznost i inovaciju.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "black-and-decker",
+    name: "Black+Decker",
+    logo: "/brands/black-and-decker.svg",
+    tagline: "Black+Decker alati - Uvoznik za Srbiju",
+    blurb: "Black & Decker, poznat svetski proizvođač električnih alata i opreme za domaćinstvo, osnovan je 1910. godine od strane S. Duncana Blacka i Alonza G. Deckera.",
+    shopUrl: "https://www.prodavnicaalata.rs/proizvodjaci/black-decker/",
+    featured: false,
+    sections: [
+      {
+        title: "Istorijat",
+        paragraphs: [
+          "Black & Decker, poznat svetski proizvođač električnih alata i opreme za domaćinstvo, osnovan je 1910. godine od strane S. Duncana Blacka i Alonza G. Deckera. Kompanija je započela kao mala mašinska radionica u Baltimoru, ali se brzo istakla na tržištu zahvaljujući inovacijama. Već 1917. godine patentirana je prva ručna električna bušilica sa okidačem, alat koji je postavio temelj za modernu proizvodnju električnih alata. Te iste godine otvorena je i prva fabrika u Towsonu, Maryland.",
+          "Tokom narednih decenija, Black & Decker konstantno širi svoje poslovanje. Kupovinom Van Dorn Electric Tool Company 1928. godine i izlaskom na Njujoršku berzu 1936. godine, kompanija učvršćuje svoju poziciju lidera u industriji alata. Nakon Drugog svetskog rata, nagrađena je Army-Navy E nagradom za izuzetnu proizvodnju. Do 1960. godine, Black & Decker preuzima DeWalt, čime dodatno širi svoj portfolio električnih i industrijskih alata.",
+          "U periodu od 1975. godine, Black & Decker je nastavio sa akvizicijama, uključujući General Electric (1984) i Emhart Corporation (1989), čime je ojačao ponudu malih aparata i ručnih alata. Kompanija je uvrštena u Space Foundation’s Space Technology Hall of Fame zahvaljujući razvoju bežičnih alata koji su korišćeni u svemirskim misijama. Godine 2010. dolazi do spajanja sa Stanley Works, čime nastaje Stanley Black & Decker, globalni gigant u oblasti proizvodnje alata.",
+          "Nakon tog spajanja, kompanija se i dalje razvija. Godine 2012. prodaje sektor za hardver i poboljšanje domaćinstava, a 2014. se rebrendira u Black+Decker. Kupovina brenda Craftsman od Sears-a 2017. dodatno proširuje asortiman. Iste godine, sklapa se i licencni ugovor sa Stovekraft-om za distribuciju proizvoda u Indiji. Do 2025. godine, Indkal Technologies započinje proizvodnju Black+Decker pametnih televizora za indijsko tržište.",
+        ],
+      },
+      {
+        title: "Tehnologije i inovacije",
+        paragraphs: [
+          "Black+Decker alati poznati su po tehnološkim inovacijama koje su promenile industriju električnih alata. Još 1917. godine razvijen je prvi ručni električni čekić sa pištoljskom drškom, alat koji je postao industrijski standard. Godine 1961. uvode se bežični alati koji koriste litijum-jonske baterije, čime je Black+Decker postao pionir u oblasti akumulatorskih alata.",
+          "Kasnije inovacije uključuju naprednu Li-ion tehnologiju za duže trajanje baterija, kao i AutoSense, pametnu tehnologiju koja automatski podešava snagu odvijača. Kompanija je takođe razvila sofisticirane sisteme za čišćenje doma, kao i efikasne uređaje za baštenske radove.",
+        ],
+      },
+      {
+        title: "Asortiman proizvoda",
+        paragraphs: [
+          "Black+Decker nudi izuzetno širok asortiman proizvoda, uključujući električne alate, akumulatorske alate, opremu za baštu i uređaje za čišćenje. Njihovi alati su dizajnirani za profesionalce, hobiste, ali i za svakodnevnu upotrebu u domaćinstvu.",
+          "Električni alati kao što su bušilice, testerice, brusilice i odvijači poznati su po pouzdanosti i ergonomiji. Akumulatorski alati, koji koriste naprednu litijum-jonsku tehnologiju, pružaju visoke performanse bez potrebe za kablovima. Alati su laki za upotrebu i brzo se pune, što ih čini idealnim za rad na terenu i kod kuće.",
+          "U segmentu alata za baštu, Black+Decker nudi kosilice, trimere, duvače lišća i testere za grane, sve dizajnirano da olakša održavanje dvorišta. Pored toga, kompanija nudi i kućne uređaje za čišćenje poput usisivača i paročistača, koji garantuju visok nivo higijene u domu.",
+          "Black+Decker alati kombinuju funkcionalnost, izdržljivost i modernu tehnologiju, čime zadovoljavaju širok spektar potreba potrošača širom sveta.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "mtx",
+    name: "MTX",
+    logo: "/brands/mtx.svg",
+    tagline: "MTX alati - Uvoznik za Srbiju",
+    blurb: "Veleprodajna kompanija MATRIZE osnovana je 1995. godine i od tada se bavi snabdevanjem i prodajom alata na veliko.",
+    shopUrl: "https://www.prodavnicaalata.rs/proizvodjaci/mtx/",
+    featured: false,
+    sections: [
+      {
+        title: "Istorijat",
+        paragraphs: [
+          "Veleprodajna kompanija MATRIZE osnovana je 1995. godine i od tada se bavi snabdevanjem i prodajom alata na veliko. Glavne aktivnosti obuhvataju distribuciju ručnog alata, kao i razvoj široke distributivne mreže za alat. Na početku rada, kompanija je bila fokusirana na klasične ručne alate za obradu metala, stolarske radove, merenje i farbanje. Vremenom, ponuda je proširena na baštenske alate, električne alate, građevinske alate i garažnu opremu, čime je ojačana pozicija na tržištu veleprodaje alata.",
+          "Brend MTX uveden je na tržište 2001. godine. U kratkom roku, MTX alati su postali prepoznatljivi u Evropi, a zatim i u Južnoj Americi. Do 2005. godine, MATRIZE je potpisala prvi međunarodni ugovor, što je otvorilo vrata ka tržištima Kazahstana, Ukrajine, Bugarske, Poljske, Rumunije i Brazila. Kompanija takođe sarađuje sa klijentima u Grčkoj i na Kipru, dodatno šireći prisustvo MTX alata.",
+        ],
+      },
+      {
+        title: "Tehnologije i inovacije",
+        paragraphs: [
+          "Sa više od 20 godina prisustva u industriji alata, MTX se razvila u jedan od najpoznatijih brendova ručnog alata u Rusiji i zemljama Zajednice nezavisnih država (ZND). MTX alati se izrađuju od kvalitetnih materijala i u skladu sa savremenim tehnologijama proizvodnje, što obezbeđuje dug vek trajanja i pouzdanost u svakodnevnoj upotrebi.",
+          "Neprestana primena inovativnih rešenja doprinosi stabilnosti performansi MTX alata, što ih čini izuzetno traženim kako među profesionalcima, tako i među kućnim majstorima.",
+        ],
+      },
+      {
+        title: "Asortiman proizvoda",
+        paragraphs: [
+          "Asortiman MTX alata obuhvata veliki broj proizvoda, uključujući osnovne ručne alate, profesionalne alate, kao i alate za specijalizovanu upotrebu. Zahvaljujući konkurentnim cenama i kvalitetnoj izradi, MTX alati su idealni za veleprodajne kupce i krajnje korisnike. U ponudi se nalaze alati za domaćinstvo, građevinske radove, baštovanstvo i profesionalne primene, što ih čini jednim od najtraženijih brendova u kategoriji alata na tržištu.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "sparta",
+    name: "Sparta",
+    logo: "/brands/sparta.svg",
+    tagline: "Sparta alati - Uvoznik za Srbiju",
+    blurb: "Naziv brenda Sparta simbolizuje duh spartanskog obrazovanja. Sparta je brend koji se tokom godina razvio sa ciljem da ponudi kvalitetan alat po pristupačnim cenama.",
+    shopUrl: "https://www.prodavnicaalata.rs/proizvodjaci/sparta/",
+    featured: false,
+    sections: [
+      {
+        title: "Istorijat",
+        paragraphs: [
+          "Naziv brenda Sparta simbolizuje duh spartanskog obrazovanja. Sparta je brend koji se tokom godina razvio sa ciljem da ponudi kvalitetan alat po pristupačnim cenama. Njihova osnovna filozofija je da svaki korisnik, bez obzira na nivo znanja ili iskustva, može lako i sigurno da koristi njihove alate.",
+          "Brend Sparta je u vlasništvu kompanije Mir Instrumenta. Kompanija takođe poseduje brendove Denzel, Kronverk, Sibirtech, Stern, GROSS, Matrik, STELS, Palisad i druge. Ovaj brend je pozicioniran u pristupačnom segmentu cena sa prilično visokim standardima kvaliteta proizvoda.",
+        ],
+      },
+      {
+        title: "Tehnologije i inovacije",
+        paragraphs: [
+          "Zahvaljujući pametnom pristupu implementaciji sekundarnih karakteristika, alat Sparta održava potreban nivo funkcionalnosti uz minimalne troškove. Sparta se neprestano usmerava ka poboljšanju kvaliteta i upotrebljivosti svojih proizvoda.",
+          "Kontinuirano prateći savremene trendove u industriji alata, ulažu u razvoj ergonomskih rešenja i funkcionalnosti koje olakšavaju svakodnevne zadatke u domaćinstvu. Njihovi alati su posebno prilagođeni za osnovne kućne popravke, montaže i radove u radionici, čineći ih pouzdanim saputnicima u svakom projektu.",
+        ],
+      },
+      {
+        title: "Asortiman proizvoda",
+        paragraphs: [
+          "U širokom asortimanu Sparta alata nalaze se raznovrsni ručni alati poput ključeva, odvijača, klešta, skalpela, turpija i uglomera, kao i alati za obradu drveta i stolarski pribor. Takođe nude i pištolje za silikon koji se često koriste u montažama i završnim radovima. Pored toga, Sparta u svojoj ponudi ima i baštenski alat i osnovne mašine za rad u kućnim uslovima i oko dvorišta.",
+          "Proizvodi brenda Sparta razvijeni su posebno da zadovolje zahteve masovnog potrošača i dizajnirani su za obavljanje jednostavnih popravki kod kuće, na selu iu automobilu. Sparta alati su dostupni svima i biće korisni u svakom domaćinstvu.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "sg-tools",
+    name: "SG Tools",
+    logo: "/brands/sg-tools.svg",
+    tagline: "SG Tools alati - Uvoznik za Srbiju",
+    blurb: "SG Tools je specijalizovan brend koji se fokusira na proizvodnju dijamantskih ploča i burgija za keramiku. Cilj je pružiti kvalitetne alate koji omogućavaju precizno sečenje, bušenje i obradu keramike po povoljnim cenama.",
+    shopUrl: "https://www.prodavnicaalata.rs/proizvodjaci/sg-tools/",
+    featured: false,
+    sections: [
+      {
+        title: "Istorijat",
+        paragraphs: [
+          "SG Tools je specijalizovan brend koji se fokusira na proizvodnju dijamantskih ploča i burgija za keramiku. Cilj je pružiti kvalitetne alate koji omogućavaju precizno sečenje, bušenje i obradu keramike po povoljnim cenama. SG Tools je postao prepoznatljiv među korisnicima koji traže pouzdane proizvode koji kombinuju efikasnost i dugotrajnost, a sve to po konkurentnim cenama.",
+        ],
+      },
+      {
+        title: "Tehnologije i inovacije",
+        paragraphs: [
+          "SG Tools se ponosi primenom savremenih tehnologija u proizvodnji svojih dijamantskih ploča i burgija. Svi proizvodi brenda izrađeni su od visokokvalitetnih materijala, što im omogućava dugotrajan rad, čak i pri intenzivnoj upotrebi.",
+          "Dijamantske ploče SG Tools su dizajnirane za precizno sečenje keramike, betona, drvenih i aluminijumskih materijala, dok burgije omogućavaju sigurno i precizno bušenje keramike bez potrebe za dodatnim priborom. SG Tools redovno unapređuje svoje proizvode kako bi zadovoljio potrebe tržišta i obezbedio vrhunske performanse po pristupačnim cenama.",
+        ],
+      },
+      {
+        title: "Asortiman proizvoda",
+        paragraphs: [
+          "Asortiman proizvoda SG Tools uključuje dijamantske ploče i burgije koje su savršene za sve vrste radova na keramici. Dijamantske ploče su dostupne u različitim veličinama, od 115 do 400 mm, i pružaju precizno, brzo i čisto sečenje. Takođe, ploče su kompatibilne sa većinom standardnih mašina za sečenje, što ih čini praktičnim za širok spektar korisnika.",
+          "Burgije za keramiku SG Tools su dizajnirane za suvo bušenje i idealne su za rad sa keramičkim pločicama, porcelanom i drugim tvrdim materijalima.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "karcher",
+    name: "Kärcher",
+    logo: "/brands/karcher.svg",
+    tagline: "Kärcher alati - Uvoznik za Srbiju",
+    blurb: "Nakon što je diplomirao na Tehničkom univerzitetu u Štutgartu 1924. godine, Alfred Kärcher (1901–1959) pridružio se porodičnom biznisu koji se bavio prodajom industrijske opreme za kuvanje i pranje u delu Štutgarta zvanom Bad Kanštat.",
+    shopUrl: "https://www.prodavnicaalata.rs/proizvodjaci/karcher/",
+    featured: false,
+    sections: [
+      {
+        title: "Istorijat",
+        paragraphs: [
+          "Nakon što je diplomirao na Tehničkom univerzitetu u Štutgartu 1924. godine, Alfred Kärcher (1901–1959) pridružio se porodičnom biznisu koji se bavio prodajom industrijske opreme za kuvanje i pranje u delu Štutgarta zvanom Bad Kanštat.",
+          "Tokom narednih godina, Alfred Kärcher je razvio niz tehničkih rešenja, uključujući električne uranjajuće grejače i industrijske peći za sagorevanje, čime je postavio temelje za osnivanje sopstvene kompanije.",
+          "Godine 1935. osnovao je Alfred Kärcher Komanditno društvo, a već 1939. kompanija, tada sa 120 zaposlenih, preselila se u Vinneneden, gde se i danas nalazi sedište.",
+          "U tom periodu, firma je proizvodila proizvode kao što su šporeti, kolica i grejači, dok su se tokom obnove posleratnih gradova pojavili i prvi Kärcher grejači za betonske oplate i svež vazduh.",
+          "Od 1950-ih do 1970-ih, fokus je bio na proizvodnji industrijskih parnih generatora i grejalica, dok su tehnologije za čišćenje tek kasnije postale glavni izvor prihoda.",
+          "Nakon smrti Alfreda Kärchera 1959. godine, njegovu ulogu preuzima supruga Irene Kärcher, koja je u prvoj godini upravljanja povećala prihode za 70%.",
+          "Kompanija se brzo internacionalizuje 1962. osniva prodajnu firmu u Francuskoj, a ubrzo zatim i u Austriji i Švajcarskoj.",
+          "Tokom 1970-ih, Kärcher menja korporativnu boju iz plave u žutu i u potpunosti se fokusira na visokotlačne čistače, započevši globalnu proizvodnju otvaranjem fabrike u Brazilu.",
+          "Godine 1984. na tržište je lansiran prvi visokotlačni čistač za kućnu upotrebu, što označava početak nove ere za Kärcher, razvoj profesionalne opreme za čišćenje i širenje portfolija.",
+          "Do kraja 1980-ih, kompanija je uključena u projekte čišćenja istorijskih zgrada širom sveta.",
+          "U 1990-im godinama, Kärcher se proširio na komercijalno čišćenje podova i razvio brojne aparate za kućnu i profesionalnu upotrebu, uključujući usisivače i paročistače.",
+          "Godine 2003. predstavljen je prvi autonomni čistač za potrošače, dok su u narednim godinama razvijani roboti i baštenska oprema kao što su pumpe i prskalice.",
+          "Na kraju 2011. godine, kupljena je bivša Pfleiderer fabrika, čime je gotovo udvostručena operativna površina.",
+          "U 2022. godini, Kärcher lansira Kira prvi autonomni usisivač i brisač za profesionalnu upotrebu.",
+        ],
+      },
+      {
+        title: "Tehnologije i inovacije",
+        paragraphs: [
+          "Kärcher konstantno ulaže u razvoj naprednih tehnologija za čišćenje.",
+          "Automatizovani sistemi i digitalni alati omogućavaju preciznu kontrolu proizvodnje i efikasno otkrivanje problema.",
+          "Kompanija razvija pametne uređaje povezive sa internetom, sa naprednim senzorima i softverskim rešenjima za optimizaciju rada.",
+          "Inovacije poput smanjenja potrošnje energije, upotrebe naprednih litijum-jonskih baterija i bežične tehnologije doprinele su efikasnosti njihovih uređaja.",
+          "Kärcher čistači pod pritiskom, profesionalni usisivači i uređaji za parno čišćenje sve više koriste automatizaciju i IoT tehnologiju.",
+          "Jedan od ranih uspeha bio je energetski efikasni uređaj za industrijsko kupanje u slanoj vodi.",
+          "Patent za ovu tehnologiju prodat je Siebert GmbH, a do kraja rata prodat je u više od 1.200 primeraka.",
+          "U 2024. godini, prema izveštaju WIPO, Kärcher je bio među top 10 kompanija u svetu po broju registrovanih industrijskih dizajna, sa ukupno 189 dizajna prijavljenih tokom 2023. godine.",
+        ],
+      },
+      {
+        title: "Asortiman proizvoda",
+        paragraphs: [
+          "Kärcher nudi bogat izbor opreme za čišćenje, uključujući čistače pod pritiskom, industrijske usisivače, parne čistače i uređaje za održavanje podova i fasada.",
+          "Njihovi visokotlačni čistači su ključni proizvodi, idealni za uklanjanje tvrdokornih prljavština sa betona, pločica, kamena i drugih površina.",
+          "Asortiman obuhvata profesionalne usisivače za suvo i mokro čišćenje, kao i komercijalne modele za fabrike, skladišta i kancelarije.",
+          "Kärcher paročistači koriste paru za dezinfekciju, uklanjajući nečistoće bez hemikalija, što ih čini idealnim za domaćinstva i zdravstvene ustanove.",
+          "U ponudi su i sistemi za čišćenje podova velikih površina, kao i specijalizovani uređaji za pranje prozora i fasada.",
+          "Kompanija je poznata po kvalitetu i pouzdanosti, čineći Kärcher idealnim izborom kako za profesionalce, tako i za privatne korisnike koji traže vrhunske aparate za čišćenje.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "wolfcraft",
+    name: "Wolfcraft",
+    logo: "/brands/wolfcraft.svg",
+    tagline: "Wolfcraft alati - Uvoznik za Srbiju",
+    blurb: "Kompaniju Wolfcraft osnovao je 1949. godine u Remšajdu proizvođač alata i tehnički crtač Robert Wolff.",
+    shopUrl: "https://www.prodavnicaalata.rs/proizvodjaci/wolfcraft/",
+    featured: false,
+    sections: [
+      {
+        title: "Istorijat",
+        paragraphs: [
+          "Kompaniju Wolfcraft osnovao je 1949. godine u Remšajdu proizvođač alata i tehnički crtač Robert Wolff.",
+          "Prvobitno se bavila proizvodnjom ručnih bušilica, datoteka i pila, namenjenih specijalizovanoj trgovini sa alatom.",
+          "Godine 1961. Wolfcraft je počeo da nudi alate za DIY segment.",
+          "Prvi alati za uradi sam korisnike predstavljeni su pod brendom Wolfcraft.",
+          "Sedište kompanije premešteno je 1965. iz Remšajda u Vajbern, u regionu Ajfel.",
+          "U 1969. godini počela je proizvodnja ručnih glodalica, čime je započet razvoj uređaja i alata u toj kategoriji.",
+          "Centralni skladišni objekat u Kempenihu počeo je sa radom 1976. godine.",
+          "Ova logistička tačka imala je važnu ulogu u distribuciji alata.",
+          "Godine 1977. Wolfcraft ulazi na američko tržište otvaranjem prodajnog ureda u Čikagu.",
+          "Te godine Robert Wolff dobija Rudolf Diesel Srebrnu medalju.",
+          "Tokom narednih godina otvaraju se filijale u Francuskoj, Velikoj Britaniji, Italiji i Slovačkoj.",
+          "Novi logistički centar za Evropu otvoren je u Kempenihu dve godine kasnije.",
+          "Sedište kompanije sa novom administrativnom zgradom premešteno je u Kempenih 1995. godine.",
+          "U 2008. godini predstavljene su kompletne DIY linije proizvoda sa grupama za laminat i suvu gradnju.",
+          "Godine 2017. Wolfcraft je dobio „Nemačku nagradu za brend 2017“ od Nemačkog savetodavnog tela za dizajn.",
+          "Robert Wolff sala u Vajbernu nosi ime po osnivaču, koji je proglašen i počasnim građaninom opštine Kempenih.",
+        ],
+      },
+      {
+        title: "Tehnologije i inovacije",
+        paragraphs: [
+          "Inovacija je deo svakog Wolfcraft proizvoda.",
+          "Kompanija ulaže u istraživanje i razvoj, sa ciljem da alati koje nudi unaprede radne procese.",
+          "Svaki alat prolazi kroz proces inženjeringa i testiranja.",
+          "Alati su prilagođeni zahtevima korisnika i projektovani da zadovolje funkcionalnost.",
+          "Wolfcraft alati izrađuju se od materijala koji su u skladu sa industrijskim standardima.",
+          "Proizvodni procesi omogućavaju da alati budu pogodni za čestu upotrebu i primenu u različitim uslovima.",
+        ],
+      },
+      {
+        title: "Asortiman proizvoda",
+        paragraphs: [
+          "Od 2023. godine, Wolfcraft u svojoj ponudi ima oko 3.000 proizvoda.",
+          "Asortiman obuhvata alate i dodatke koji se koriste u radionici, na gradilištu i u kućnim uslovima.",
+          "U ponudi su ručni alati i dodaci za električne alate.",
+          "Wolfcraft radionički alati uključuju stege, šablone, uglomere i vinkel.",
+          "Ovi alati su prisutni u stolarskim radionicama i deo su redovne upotrebe.",
+          "Alati su razvijeni za različite namene u okviru tehničkih i praktičnih poslova.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "kwb",
+    name: "KWB",
+    logo: "/brands/kwb.svg",
+    tagline: "KWB alati - Uvoznik za Srbiju",
+    blurb: "KWB Germany GmbH je međunarodno prisutan brend koji se ističe kao nezavisan sistemski stručnjak za pribor za električne alate i ručne alate.",
+    shopUrl: "https://www.prodavnicaalata.rs/proizvodjaci/kwb-germany/",
+    featured: false,
+    sections: [
+      {
+        title: "Istorijat",
+        paragraphs: [
+          "KWB Germany GmbH je međunarodno prisutan brend koji se ističe kao nezavisan sistemski stručnjak za pribor za električne alate i ručne alate. Kompanija sa sedištem u Nemačkoj razvija i distribuira širok spektar KWB alata i pribora za profesionalnu i hobi upotrebu.",
+          "Sa više od 90 godina iskustva u industriji alata, KWB Germany GmbH se ističe po doslednim standardima kvaliteta i inovativnom pristupu. Više od 200 zaposlenih doprinosi razvoju KWB proizvoda koji se plasiraju u 90 zemalja širom sveta. Brend KWB predstavlja pouzdanog partnera za prodavnice alata, specijalizovane trgovce i online prodavce.",
+        ],
+      },
+      {
+        title: "Tehnologije i inovacije",
+        paragraphs: [
+          "Kompanija KWB neprekidno ulaže u istraživanje i razvoj, sa ciljem da unapredi postojeći asortiman alata i uvede nove tehnologije koje olakšavaju upotrebu i unapređuju rezultate rada. Inovacije su prisutne u svakom KWB alatu i priboru, omogućavajući korisnicima moderna rešenja za najrazličitije zadatke.",
+          "KWB alati i pribor dizajnirani su sa fokusom na praktičnost i efikasnost. Svaki proizvod je razvijen tako da unapredi radne procese, smanji fizički napor i poboljša produktivnost. Ergonomski dizajn, jednostavnost korišćenja i dug vek trajanja izdvajaju KWB proizvode na tržištu alata i pribora za električne alate i radioničke alate.",
+        ],
+      },
+      {
+        title: "Asortiman proizvoda",
+        paragraphs: [
+          "KWB nudi širok i raznovrstan asortiman proizvoda koji obuhvata sve što je potrebno za sečenje, bušenje, brušenje, kao i veliki izbor radioničkih alata koji olakšavaju svakodnevne zadatke u radionici, na gradilištu ili kod kuće.",
+          "Njihova ponuda uključuje pribor za električne alate, kao i ručne alate, razvijene s ciljem da optimizuju rad i unaprede krajnji rezultat. Više od 5.500 proizvoda u KWB katalogu uključuje i patentirane proizvode, čime se dodatno potvrđuje fokus na inovacije i razvoj proizvoda.",
+          "Kontinuirano unapređenje ponude omogućava KWB Germany GmbH da bude konkurentna na dinamičnom tržištu alata i pribora za električne alate, uz stalno osvežavanje programa i razvoj novih rešenja.",
+        ],
+      },
+    ],
+  },
+];
+
+export const FEATURED_BRANDS = BRANDS.filter((brand) => brand.featured);
+
+export function getBrandBySlug(slug: string): Brand | undefined {
+  return BRANDS.find((brand) => brand.slug === slug);
+}

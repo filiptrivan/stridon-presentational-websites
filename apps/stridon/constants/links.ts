@@ -1,5 +1,8 @@
 export const SITE_URL = "https://www.stridon.rs";
 
+/** Wings B2B portal the old site linked to from /b2b. */
+export const B2B_PORTAL_URL = "https://b2b.wings.rs/stridon";
+
 export interface NavLink {
   label: string;
   href: string;
@@ -11,6 +14,7 @@ export const NAV_LINKS: readonly NavLink[] = [
   { label: "Katalozi", href: "/katalozi" },
   { label: "Servis", href: "/servis" },
   { label: "O nama", href: "/o-nama" },
+  { label: "B2B", href: "/b2b" },
   { label: "Kontakt", href: "/kontakt" },
 ];
 

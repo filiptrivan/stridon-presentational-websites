@@ -9,7 +9,7 @@ import Link from "next/link";
 export const metadata = createPageMetadata({
   title: "Uslovi korišćenja",
   description:
-    "Uslovi korišćenja sajta DCK - pravila i uslovi za korišćenje sajta dcksrbija.rs.",
+    "Uslovi korišćenja sajta Stridon Group - pravila i uslovi za korišćenje sajta stridon.rs.",
   canonicalUrl: "/uslovi-koriscenja",
 });
 
@@ -27,7 +27,7 @@ const TermsPage = () => {
               <h2>Opšte odredbe</h2>
               <p>
                 Ovi uslovi korišćenja regulišu upotrebu internet sajta{" "}
-                <strong>dcksrbija.rs</strong>, čiji je vlasnik i operater
+                <strong>stridon.rs</strong>, čiji je vlasnik i operater
                 kompanija <strong>STRIDON GROUP DOO</strong>, sa sedištem u
                 Republici Srbiji. Pristupanjem i korišćenjem ovog sajta
                 prihvataš ove uslove u celosti. Ukoliko se ne slažeš sa bilo
@@ -36,9 +36,10 @@ const TermsPage = () => {
 
               <h2>Korišćenje sajta</h2>
               <p>
-                Sajt dcksrbija.rs je informativnog i marketinškog karaktera.
-                Služi za prikaz proizvoda brenda DCK, uključujući opise,
-                specifikacije i fotografije. Na ovom sajtu{" "}
+                Sajt stridon.rs je informativnog i marketinškog karaktera.
+                Predstavlja Stridon Group i brendove koje zvanično uvozimo i
+                distribuiramo, zajedno sa katalozima, servisom i uslovima
+                saradnje. Na ovom sajtu{" "}
                 <strong>nije moguća kupovina</strong> - svi proizvodi se kupuju
                 isključivo putem sajta{" "}
                 <a
@@ -58,7 +59,7 @@ const TermsPage = () => {
 
               <h2>Intelektualna svojina</h2>
               <p>
-                Sav sadržaj na sajtu dcksrbija.rs - uključujući ali ne
+                Sav sadržaj na sajtu stridon.rs - uključujući ali ne
                 ograničavajući se na tekstove, fotografije, grafiku, logotipe,
                 ikone, audio i video materijale, kao i dizajn i strukturu sajta
                 - zaštićen je autorskim pravima i predstavlja intelektualnu
@@ -88,7 +89,7 @@ const TermsPage = () => {
 
               <h2>Ograničenje odgovornosti</h2>
               <p>
-                Informacije na sajtu dcksrbija.rs su pružene &quot;takve kakve
+                Informacije na sajtu stridon.rs su pružene &quot;takve kakve
                 jesu&quot;, bez bilo kakvih garancija, izričitih ili
                 podrazumevanih. Trudimo se da sve informacije budu tačne i
                 ažurne, ali ne garantujemo potpunost, tačnost ili pouzdanost
@@ -137,14 +138,14 @@ const TermsPage = () => {
               <p>
                 Na ove uslove korišćenja primenjuje se pravo Republike Srbije.
                 Za sve sporove koji mogu nastati u vezi sa korišćenjem sajta
-                dcksrbija.rs nadležan je sud u Republici Srbiji.
+                stridon.rs nadležan je sud u Republici Srbiji.
               </p>
 
               <h2>Kontakt</h2>
               <p>
                 Za sva pitanja u vezi sa ovim uslovima korišćenja, možeš nas
                 kontaktirati putem e-maila na{" "}
-                <a href="mailto:contact@dcksrbija.rs">contact@dcksrbija.rs</a>{" "}
+                <a href="mailto:office@stridon.rs">office@stridon.rs</a>{" "}
                 ili putem naše <Link href="/kontakt">stranice za kontakt</Link>.
               </p>
             </Prose>

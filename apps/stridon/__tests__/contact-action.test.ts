@@ -18,7 +18,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   vi.stubGlobal("fetch", mockFetch);
   vi.stubEnv("BREVO_API_KEY", "test-api-key");
-  vi.stubEnv("NEXT_PUBLIC_BRAND_SLUG", "dck");
+  vi.stubEnv("NEXT_PUBLIC_BRAND_SLUG", "stridon");
 
   mockFetch.mockResolvedValue({
     ok: true,
@@ -27,7 +27,7 @@ beforeEach(() => {
   });
 });
 
-describe("sendContactEmail - DCK", () => {
+describe("sendContactEmail - Stridon", () => {
   it("returns success on happy path", async () => {
     const result = await sendContactEmail(validData);
     expect(result).toEqual({ success: true });
@@ -91,15 +91,15 @@ describe("sendContactEmail - DCK", () => {
 
     const body = JSON.parse(options.body);
     expect(body.sender).toEqual({
-      name: "DCK Srbija",
-      email: "noreply@dcksrbija.rs",
+      name: "Stridon Group",
+      email: "noreply@stridon.rs",
     });
     expect(body.to).toEqual([
-      { email: "aleksa.trivan@stridon.rs", name: "DCK Srbija" },
+      { email: "office@stridon.rs", name: "Stridon Group" },
     ]);
     expect(body.replyTo).toEqual({ email: validData.email });
-    expect(body.subject).toBe("DCK Srbija - Kontakt forma");
-    expect(body.htmlContent).toContain("Nova poruka sa dcksrbija.rs");
+    expect(body.subject).toBe("Stridon Group - kontakt forma");
+    expect(body.htmlContent).toContain("Nova poruka sa stridon.rs");
     expect(body.htmlContent).toContain(validData.email);
     expect(body.htmlContent).toContain(validData.message);
   });

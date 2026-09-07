@@ -8,7 +8,7 @@ import { Prose } from "@brand/ui/prose";
 export const metadata = createPageMetadata({
   title: "Politika privatnosti",
   description:
-    "Politika privatnosti DCK - kako prikupljamo, koristimo i štitimo tvoje podatke na sajtu dcksrbija.rs.",
+    "Politika privatnosti Stridon Group - kako prikupljamo, koristimo i štitimo tvoje podatke na sajtu stridon.rs.",
   canonicalUrl: "/politika-privatnosti",
 });
 
@@ -25,7 +25,7 @@ const PrivacyPolicyPage = () => {
             <Prose>
               <h2>Podaci o rukovaocu</h2>
               <p>
-                Sajt <strong>dcksrbija.rs</strong> je u vlasništvu kompanije{" "}
+                Sajt <strong>stridon.rs</strong> je u vlasništvu kompanije{" "}
                 <strong>STRIDON GROUP DOO</strong>, sa sedištem u Republici
                 Srbiji. Kao rukovalac podataka, odgovorni smo za zaštitu tvojih
                 ličnih podataka u skladu sa Zakonom o zaštiti podataka o
@@ -36,10 +36,10 @@ const PrivacyPolicyPage = () => {
                   <strong>Naziv firme:</strong> STRIDON GROUP DOO
                 </li>
                 <li>
-                  <strong>Sajt:</strong> dcksrbija.rs
+                  <strong>Sajt:</strong> stridon.rs
                 </li>
                 <li>
-                  <strong>E-mail:</strong> contact@dcksrbija.rs
+                  <strong>E-mail:</strong> office@stridon.rs
                 </li>
               </ul>
 
@@ -48,9 +48,9 @@ const PrivacyPolicyPage = () => {
                 Posvećeni smo zaštiti privatnosti svakog posetioca našeg sajta.
                 Ovom politikom privatnosti objašnjavamo koje podatke
                 prikupljamo, u koje svrhe ih koristimo i kako ih štitimo. Sajt
-                dcksrbija.rs je informativnog karaktera - služi za prikaz
-                proizvoda brenda DCK, bez mogućnosti kupovine. Kupovina se
-                obavlja isključivo na sajtu{" "}
+                stridon.rs je informativnog karaktera - predstavlja Stridon
+                Group i brendove koje zvanično uvozimo i distribuiramo, bez
+                mogućnosti kupovine. Kupovina se obavlja isključivo na sajtu{" "}
                 <a
                   href="https://www.prodavnicaalata.rs"
                   target="_blank"
@@ -65,19 +65,32 @@ const PrivacyPolicyPage = () => {
               <p>
                 Na ovom sajtu ne prikupljamo podatke kroz proces kupovine jer se
                 ovde ne obavljaju transakcije. Podatke prikupljamo isključivo
-                ukoliko nas kontaktiraš putem kontakt forme ili e-maila.
+                ukoliko nas kontaktiraš putem kontakt forme, e-maila ili
+                zahteva za pristup B2B platformi.
               </p>
-              <p>Podaci koje možemo prikupiti uključuju:</p>
+              <p>Kroz kontakt formu prikupljamo:</p>
               <ul>
-                <li>Ime i prezime</li>
                 <li>E-mail adresu</li>
-                <li>Broj telefona (ukoliko ga ostaviš)</li>
                 <li>Sadržaj poruke</li>
+              </ul>
+              <p>
+                Kroz zahtev za pristup B2B platformi prikupljamo i podatke
+                neophodne za proveru firme:
+              </p>
+              <ul>
+                <li>Ime i prezime kontakt osobe</li>
+                <li>E-mail adresu i broj telefona</li>
+                <li>Naziv i adresu firme</li>
+                <li>PIB i matični broj</li>
               </ul>
               <p>Ove podatke koristimo isključivo za:</p>
               <ul>
                 <li>Odgovaranje na tvoj upit ili poruku</li>
-                <li>Pružanje traženih informacija o našim proizvodima</li>
+                <li>
+                  Pružanje traženih informacija o brendovima, katalozima i
+                  uslovima saradnje
+                </li>
+                <li>Otvaranje i proveru naloga na B2B platformi</li>
               </ul>
 
               <h2>Korisnici podataka</h2>
@@ -113,7 +126,7 @@ const PrivacyPolicyPage = () => {
               </ul>
               <p>
                 Za ostvarivanje bilo kog od navedenih prava, obrati nam se na{" "}
-                <a href="mailto:contact@dcksrbija.rs">contact@dcksrbija.rs</a>.
+                <a href="mailto:office@stridon.rs">office@stridon.rs</a>.
               </p>
 
               <h2>Nadležni organ</h2>
@@ -134,7 +147,7 @@ const PrivacyPolicyPage = () => {
 
               <h2>Politika kolačića</h2>
               <p>
-                Sajt dcksrbija.rs koristi kolačiće (cookies) kako bi obezbedio
+                Sajt stridon.rs koristi kolačiće (cookies) kako bi obezbedio
                 pravilno funkcionisanje i poboljšao korisničko iskustvo.
                 Kolačići koje koristimo spadaju u sledeće kategorije:
               </p>
@@ -160,7 +173,7 @@ const PrivacyPolicyPage = () => {
 
               <h2>Autorska prava</h2>
               <p>
-                Sav sadržaj objavljen na sajtu dcksrbija.rs, uključujući
+                Sav sadržaj objavljen na sajtu stridon.rs, uključujući
                 tekstove, fotografije, grafiku, logotipe i dizajn, zaštićen je
                 autorskim pravima i u vlasništvu je kompanije STRIDON GROUP DOO.
                 Reprodukcija, distribucija ili bilo koji oblik korišćenja

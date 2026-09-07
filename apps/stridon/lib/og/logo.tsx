@@ -1,7 +1,8 @@
 import { colors, fontFamilies } from "./constants";
 
 export function Logo({ width = 200 }: { width?: number }) {
-  // Placeholder until real DCK logo SVG is added
+  // Wordmark rather than the raster logo: satori would have to fetch
+  // stridon-logo.webp per render, and webp isn't among the formats it decodes.
   const height = Math.round(width * 0.35);
 
   return (
@@ -15,7 +16,7 @@ export function Logo({ width = 200 }: { width?: number }) {
         letterSpacing: 2,
       }}
     >
-      DCK
+      STRIDON
     </span>
   );
 }

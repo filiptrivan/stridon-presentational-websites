@@ -6,10 +6,6 @@ const nextConfig: NextConfig = {
   transpilePackages: ["@brand/config", "@brand/ui", "@brand/shared"],
   cacheComponents: true,
   experimental: {
-    serverActions: {
-      // MAX_FILE_SIZE (4MB) + 1MB headroom for multipart envelope and form fields.
-      bodySizeLimit: "5mb",
-    },
     // Retry a transient page-prerender failure (e.g. a backend blip) instead of
     // aborting the whole build on the first ETIMEDOUT.
     staticGenerationRetryCount: 2,

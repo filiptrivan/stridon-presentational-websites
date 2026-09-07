@@ -1,90 +1,45 @@
 import type { MetadataRoute } from "next";
 
+import { BRANDS } from "@/constants/brands";
 import { SITE_URL } from "@/constants/links";
-import {
-  getAllCategoriesFlat,
-  getSitemapProducts,
-  getSitemapTags,
-} from "@brand/shared/lib/api";
 
+// Stridon has no product routes (it is the distributor site, purchases happen
+// on prodavnicaalata.rs), so this is a static list - no API reads at build.
 const staticPages = [
   { path: "/", changeFrequency: "weekly" as const, priority: 1.0 },
+  { path: "/brendovi", changeFrequency: "monthly" as const, priority: 0.9 },
+  { path: "/katalozi", changeFrequency: "monthly" as const, priority: 0.8 },
+  { path: "/servis", changeFrequency: "monthly" as const, priority: 0.7 },
   { path: "/o-nama", changeFrequency: "monthly" as const, priority: 0.7 },
+  { path: "/b2b", changeFrequency: "monthly" as const, priority: 0.7 },
   { path: "/kontakt", changeFrequency: "monthly" as const, priority: 0.6 },
-  { path: "/gde-kupiti", changeFrequency: "monthly" as const, priority: 0.7 },
-  { path: "/katalozi", changeFrequency: "monthly" as const, priority: 0.6 },
-  { path: "/produzetak-garancije", changeFrequency: "monthly" as const, priority: 0.6 },
-  { path: "/servis", changeFrequency: "monthly" as const, priority: 0.6 },
   {
-    path: "/proizvodi",
-    changeFrequency: "weekly" as const,
-    priority: 0.9,
+    path: "/politika-privatnosti",
+    changeFrequency: "yearly" as const,
+    priority: 0.3,
   },
   {
-    path: "/proizvodi/kategorije",
-    changeFrequency: "weekly" as const,
-    priority: 0.9,
-  },
-  {
-    path: "/proizvodi/tagovi",
-    changeFrequency: "weekly" as const,
-    priority: 0.8,
+    path: "/uslovi-koriscenja",
+    changeFrequency: "yearly" as const,
+    priority: 0.3,
   },
 ];
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const entries: MetadataRoute.Sitemap = [];
+export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
 
-  // Static pages
-  for (const page of staticPages) {
-    entries.push({
+  return [
+    ...staticPages.map((page) => ({
       url: `${SITE_URL}${page.path}`,
       lastModified,
       changeFrequency: page.changeFrequency,
       priority: page.priority,
-    });
-  }
-
-  const [categoriesResult, productsResult, tagsResult] =
-    await Promise.allSettled([
-      getAllCategoriesFlat(),
-      getSitemapProducts(),
-      getSitemapTags(),
-    ]);
-
-  if (categoriesResult.status === "fulfilled") {
-    for (const category of categoriesResult.value) {
-      entries.push({
-        url: `${SITE_URL}/proizvodi/kategorije/${category.slug}`,
-        lastModified,
-        changeFrequency: "weekly",
-        priority: 0.8,
-      });
-    }
-  }
-
-  if (productsResult.status === "fulfilled") {
-    for (const entry of productsResult.value) {
-      entries.push({
-        url: `${SITE_URL}/proizvodi/${entry.slug}`,
-        lastModified: new Date(entry.modifiedAt),
-        changeFrequency: "weekly",
-        priority: 0.7,
-      });
-    }
-  }
-
-  if (tagsResult.status === "fulfilled") {
-    for (const entry of tagsResult.value) {
-      entries.push({
-        url: `${SITE_URL}/proizvodi/tagovi/${entry.slug}`,
-        lastModified: new Date(entry.modifiedAt),
-        changeFrequency: "weekly",
-        priority: 0.7,
-      });
-    }
-  }
-
-  return entries;
+    })),
+    ...BRANDS.map((brand) => ({
+      url: `${SITE_URL}/brendovi/${brand.slug}`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
+  ];
 }

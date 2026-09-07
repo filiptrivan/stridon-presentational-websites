@@ -1,68 +1,54 @@
 import Container from "@brand/shared/components/container";
 import Wrapper from "@brand/shared/components/wrapper";
 import { Button } from "@brand/ui/button";
-import { BRANDS } from "@/constants/content";
-import { ArrowRight, ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
-const TRUST = [
-  { value: "30+", label: "brendova" },
-  { value: "120+", label: "dilera" },
-  { value: "10.630+", label: "kupaca" },
-];
-
+// Full-bleed photo under an ink veil, centered type on top, and the red
+// diagonal from the logo running down the right edge - the same beam that
+// closes the page in PartnerCta.
 const Hero = () => {
   return (
-    <div className="relative overflow-hidden border-b border-border">
-      {/* Background ornament: the logo's diagonal beam geometry, as hairlines. */}
+    <section className="relative isolate overflow-hidden border-b border-border">
+      <Image
+        src="/about/sgtools-dck-tim.webp"
+        alt=""
+        aria-hidden
+        fill
+        priority
+        sizes="100vw"
+        className="-z-20 object-cover"
+      />
+      <div aria-hidden className="absolute inset-0 -z-10 bg-foreground/85" />
+
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-24 top-16 hidden h-[26rem] w-[34rem] -skew-x-[14deg] border border-border lg:block"
+        className="pointer-events-none absolute -right-10 top-[-20%] hidden h-[140%] w-36 -skew-x-[14deg] bg-primary lg:block"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute right-40 top-40 hidden h-[26rem] w-24 -skew-x-[14deg] bg-muted lg:block"
+        className="pointer-events-none absolute right-36 top-[-20%] hidden h-[140%] w-10 -skew-x-[14deg] bg-background/10 lg:block"
       />
 
-      <Wrapper className="relative py-20 sm:py-24 lg:py-28">
-        <div className="max-w-4xl">
+      <Wrapper className="relative py-24 sm:py-28 lg:py-32">
+        <div className="mx-auto max-w-4xl text-center text-background">
           <Container>
-            <p className="inline-flex items-center gap-3 text-[13px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-              <span
-                aria-hidden
-                className="inline-block h-3.5 w-6 -skew-x-[14deg] bg-primary"
-              />
-              Zvanični uvoznik i distributer alata
-            </p>
-          </Container>
-
-          <Container delay={0.5}>
-            <h1 className="mt-8 text-[clamp(2.75rem,7.5vw,5.5rem)] font-semibold leading-[0.98] tracking-tight">
-              <span className="relative inline-block px-3 sm:px-4">
-                <span
-                  aria-hidden
-                  className="absolute inset-0 -skew-x-[10deg] bg-primary"
-                />
-                <span className="relative text-primary-foreground">
-                  Najbolja
-                </span>
-              </span>{" "}
-              prodavnica
-              <br />
-              alata u Srbiji.
+            <h1 className="text-balance text-[clamp(2.25rem,5.2vw,4rem)] font-semibold leading-[1.04] tracking-tight">
+              Uvoz, distribucija i prodaja profesionalnog alata u Srbiji.
             </h1>
           </Container>
 
-          <Container delay={1}>
-            <p className="mt-7 max-w-xl text-lg text-muted-foreground">
-              Uvoz, veleprodaja i maloprodaja profesionalnog alata. Preko 30
-              svetskih brendova, uz tehničku podršku, garanciju i brzu isporuku
-              širom Srbije.
+          <Container delay={0.5}>
+            <p className="mx-auto mt-7 max-w-2xl text-lg text-background/70">
+              Stridon Group stoji iza najuspešnije prodavnice alata u Srbiji.
+              Preko 120 dilera, više od 30 svetskih brendova i sopstveni
+              servis, uz isporuku širom zemlje.
             </p>
           </Container>
 
-          <Container delay={1.5}>
-            <div className="mt-9 flex flex-wrap items-center gap-3">
+          <Container delay={1}>
+            <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
               <Button asChild size="lg">
                 <a
                   href="https://www.prodavnicaalata.rs"
@@ -73,51 +59,19 @@ const Hero = () => {
                   <ExternalLink className="size-4" />
                 </a>
               </Button>
-              <Button asChild size="lg" variant="outline">
-                <Link href="/kontakt">
-                  Postani partner
-                  <ArrowRight className="size-4" />
-                </Link>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="border-background/30 bg-transparent text-background hover:bg-background hover:text-foreground"
+              >
+                <Link href="/katalozi">Pogledaj katalog</Link>
               </Button>
             </div>
           </Container>
-
-          <Container delay={2}>
-            <dl className="mt-14 flex flex-wrap divide-x divide-border">
-              {TRUST.map((t, i) => (
-                <div
-                  key={t.label}
-                  className={`flex items-baseline gap-2 pr-8 ${i > 0 ? "pl-8" : ""}`}
-                >
-                  <dt className="font-heading text-3xl font-bold tracking-tight">
-                    {t.value}
-                  </dt>
-                  <dd className="text-sm text-muted-foreground">{t.label}</dd>
-                </div>
-              ))}
-            </dl>
-          </Container>
         </div>
       </Wrapper>
-
-      {/* Brand marquee: full-bleed, seamless loop (track holds two copies). */}
-      <div className="overflow-hidden border-t border-border bg-muted/30 py-4">
-        <div className="flex w-max animate-[stridon-marquee_45s_linear_infinite]">
-          {[...BRANDS, ...BRANDS].map((brand, i) => (
-            <span
-              key={`${brand}-${i}`}
-              className="flex items-center text-sm font-medium uppercase tracking-[0.16em] text-muted-foreground"
-            >
-              <span className="px-7">{brand}</span>
-              <span
-                aria-hidden
-                className="inline-block h-3.5 w-[2px] -skew-x-[20deg] bg-border"
-              />
-            </span>
-          ))}
-        </div>
-      </div>
-    </div>
+    </section>
   );
 };
 

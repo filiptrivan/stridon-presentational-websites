@@ -1,24 +1,40 @@
-import type { ContactLocation } from "@brand/shared/types/contact";
+import type { StridonLocation } from "@/constants/contact";
 
-export interface ServiceCenter extends ContactLocation {
-  id: string;
-}
+export type ServiceCenter = StridonLocation;
 
+/** An array because `LocationCards` takes a list; there is only one centre today. */
 export const SERVICE_CENTERS: ServiceCenter[] = [
   {
-    id: "pro-servis-ns",
-    name: "Pro Servis NS d.o.o.",
-    address: "Temerinski put 17, 21000 Novi Sad",
-    coords: { lat: 45.286782, lng: 19.832287 },
-    phone: "+381-21-410000",
-    email: "office@proservis.rs",
-    badge: "Glavni servis",
-  },
-  {
-    id: "elektroservis-sg",
-    name: "Elektroservis SG",
-    address: "Vojislava Ilića 141b, 11050 Beograd",
+    id: "sg-servis",
+    name: "SG Servis",
+    role: "Naš servisni partner",
+    address: "Vojislava Ilića 141b",
+    city: "11000 Beograd",
+    phone: "065/337-8812",
+    phoneHref: "+381653378812",
+    email: "sgservis22@gmail.com",
     coords: { lat: 44.785937, lng: 20.500664 },
-    phone: "+381-65-3378812",
   },
+];
+
+export const SERVICE_CENTER = SERVICE_CENTERS[0];
+
+export interface ServicedBrand {
+  name: string;
+  /** Our own brand page, where the brand is one we distribute. */
+  slug: string | null;
+  /** Tile in `public/brands/`; null falls back to the wordmark cell. */
+  logo: string | null;
+}
+
+/** The brands the old stridon.rs service page lists, plus Stanley. */
+export const SERVICED_BRANDS: ServicedBrand[] = [
+  { name: "DeWalt", slug: "dewalt", logo: "/brands/dewalt.svg" },
+  { name: "Stanley", slug: "stanley", logo: "/brands/stanley.svg" },
+  { name: "Bosch", slug: "bosch", logo: "/brands/bosch.svg" },
+  { name: "Makita", slug: null, logo: "/brands/makita.svg" },
+  { name: "Metabo", slug: null, logo: "/brands/metabo.svg" },
+  { name: "Festool", slug: null, logo: "/brands/festool.svg" },
+  { name: "Senco", slug: "senco", logo: "/brands/senco.svg" },
+  { name: "Rubi", slug: "rubi", logo: "/brands/rubi.svg" },
 ];
