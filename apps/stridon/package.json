@@ -6,10 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "test": "vitest run",
-    "test:unit": "vitest run --exclude \"**/*.integration.test.ts\"",
-    "test:watch": "vitest"
+    "lint": "eslint --max-warnings=0",
+    "test": "vitest run --exclude \"**/*.integration.test.ts\"",
+    "test:watch": "vitest --exclude \"**/*.integration.test.ts\""
   },
   "dependencies": {
     "@brand/config": "workspace:*",
