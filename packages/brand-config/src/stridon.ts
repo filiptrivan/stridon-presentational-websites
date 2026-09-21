@@ -12,6 +12,11 @@ export const config: BrandConfig = {
 
   logoSrc: "/stridon-logo.svg",
   logoAlt: "Stridon Group logo",
+  // The wordmark's own viewBox, 456 x 185.71, rounded to the integers an
+  // `<img>` width/height attribute takes. Roughly 2.46:1, against the 3:1 the
+  // footer assumed and the 5:1 the navbar assumed.
+  logoWidth: 456,
+  logoHeight: 186,
   navbarLogoHeight: "h-7 md:h-8",
   footerLogoClassName: "h-8 w-auto",
   headerCta: {

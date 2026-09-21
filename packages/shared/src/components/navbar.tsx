@@ -25,7 +25,14 @@ import MobileMenu, {
 } from "./mobile-menu";
 import Wrapper from "./wrapper";
 
-const { logoSrc, logoAlt, navbarLogoHeight, headerCta } = getBrandConfig();
+const {
+  logoSrc,
+  logoAlt,
+  logoWidth,
+  logoHeight,
+  navbarLogoHeight,
+  headerCta,
+} = getBrandConfig();
 
 const DEFAULT_LABELS = {
   allCategories: "Sve kategorije",
@@ -80,8 +87,10 @@ const Navbar = ({
               src={logoSrc}
               className={cn("w-auto", navbarLogoHeight)}
               alt={logoAlt}
-              width={100}
-              height={20}
+              // Falls back to the pair this was hardcoded to, so a brand that
+              // declares no logo dimensions renders exactly as before.
+              width={logoWidth ?? 100}
+              height={logoHeight ?? 20}
             />
           </Link>
         </motion.div>

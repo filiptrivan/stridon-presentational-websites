@@ -104,6 +104,8 @@ const Footer = ({
   const {
     logoSrc,
     logoAlt,
+    logoWidth,
+    logoHeight,
     siteName,
     footerLogoClassName,
     footerTagline,
@@ -149,8 +151,10 @@ const Footer = ({
                 <Image
                   src={logoSrc}
                   alt={logoAlt}
-                  width={96}
-                  height={32}
+                  // Falls back to the pair this was hardcoded to, so a brand
+                  // that declares no logo dimensions renders exactly as before.
+                  width={logoWidth ?? 96}
+                  height={logoHeight ?? 32}
                   className={footerLogoClassName}
                 />
               </div>
