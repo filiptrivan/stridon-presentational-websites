@@ -1,4 +1,7 @@
-import { type ContactFormData } from "@brand/shared/lib/schemas/contact";
+import {
+  type ContactFormData,
+  type ContactErrorMessages,
+} from "@brand/shared/lib/schemas/contact";
 import type { ActionResult } from "@brand/shared/types/actions";
 import Container from "../container";
 import HeroHeader from "../hero-header";
@@ -18,6 +21,7 @@ interface ContactHeroProps {
   submitContact: (data: ContactFormData) => Promise<ActionResult>;
   labels?: ContactHeroLabels;
   formLabels?: ContactFormLabels;
+  formErrors?: ContactErrorMessages;
 }
 
 function ContactHero({
@@ -25,6 +29,7 @@ function ContactHero({
   submitContact,
   labels,
   formLabels,
+  formErrors,
 }: ContactHeroProps) {
   const t = { ...DEFAULT_LABELS, ...labels };
 
@@ -32,7 +37,11 @@ function ContactHero({
     <HeroHeader title={t.title} description={t.description}>
       <div className="w-full mt-12 max-w-3xl mx-auto">
         <Container delay={0.3}>
-          <ContactForm submitContact={submitContact} labels={formLabels} />
+          <ContactForm
+            submitContact={submitContact}
+            labels={formLabels}
+            errorMessages={formErrors}
+          />
         </Container>
         <Container delay={0.4} className="mt-6 text-center">
           <p className="text-sm text-muted-foreground">

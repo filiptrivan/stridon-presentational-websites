@@ -258,7 +258,17 @@
       "messagePlaceholder": "Reci nam šta ti treba...",
       "submit": "Pošalji poruku",
       "submitting": "Šalje se...",
-      "success": "Poruka je uspešno poslata!"
+      "success": "Poruka je uspešno poslata!",
+      "errors": {
+        "emailRequired": "Unesi svoju e-mail adresu",
+        "emailInvalid": "Unesi ispravnu e-mail adresu",
+        "messageRequired": "Unesi svoju poruku",
+        "messageMin": "Poruka mora imati bar 10 karaktera",
+        "messageMax": "Poruka može imati najviše 2000 karaktera",
+        "invalid": "Podaci nisu ispravni. Proveri unos.",
+        "unavailable": "Slanje poruke trenutno nije moguće. Pokušaj ponovo kasnije.",
+        "send": "Slanje poruke nije uspelo. Pokušaj ponovo kasnije."
+      }
     }
   },
   "B2b": {

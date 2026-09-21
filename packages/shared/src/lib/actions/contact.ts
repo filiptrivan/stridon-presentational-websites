@@ -9,12 +9,27 @@ import {
 } from "@brand/shared/lib/schemas/contact";
 import type { ActionResult } from "@brand/shared/types/actions";
 
+/** What the visitor is shown when something goes wrong. Serbian by default,
+    which is what dck and sg-tools have always rendered. */
+export type ContactActionErrors = {
+  invalid: string;
+  unavailable: string;
+  send: string;
+};
+
+const DEFAULT_ERRORS: ContactActionErrors = {
+  invalid: "Podaci nisu ispravni. Proveri unos.",
+  unavailable: "Slanje poruke trenutno nije moguće. Pokušaj ponovo kasnije.",
+  send: "Slanje poruke nije uspelo. Pokušaj ponovo kasnije.",
+};
+
 export async function sendContactEmail(
   data: ContactFormData,
+  errors: ContactActionErrors = DEFAULT_ERRORS,
 ): Promise<ActionResult> {
   const parsed = contactSchema.safeParse(data);
   if (!parsed.success) {
-    return { success: false, error: "Podaci nisu ispravni. Proveri unos." };
+    return { success: false, error: errors.invalid };
   }
 
   const apiKey = process.env.BREVO_API_KEY;
@@ -22,10 +37,7 @@ export async function sendContactEmail(
     reportError(new Error("BREVO_API_KEY is not set"), {
       source: "sendContactEmail",
     });
-    return {
-      success: false,
-      error: "Slanje poruke trenutno nije moguće. Pokušaj ponovo kasnije.",
-    };
+    return { success: false, error: errors.unavailable };
   }
 
   // Sender / recipient / subject / heading are the only per-brand bits; they live
@@ -63,18 +75,12 @@ export async function sendContactEmail(
         source: "sendContactEmail",
         details: body,
       });
-      return {
-        success: false,
-        error: "Slanje poruke nije uspelo. Pokušaj ponovo kasnije.",
-      };
+      return { success: false, error: errors.send };
     }
 
     return { success: true };
   } catch (error) {
     reportError(error, { source: "sendContactEmail" });
-    return {
-      success: false,
-      error: "Slanje poruke nije uspelo. Pokušaj ponovo kasnije.",
-    };
+    return { success: false, error: errors.send };
   }
 }

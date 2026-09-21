@@ -258,7 +258,17 @@
       "messagePlaceholder": "Tell us what you need...",
       "submit": "Send message",
       "submitting": "Sending...",
-      "success": "Your message has been sent."
+      "success": "Your message has been sent.",
+      "errors": {
+        "emailRequired": "Enter your email address",
+        "emailInvalid": "Enter a valid email address",
+        "messageRequired": "Enter your message",
+        "messageMin": "The message must be at least 10 characters",
+        "messageMax": "The message can be at most 2000 characters",
+        "invalid": "Some details are not valid. Please check the form.",
+        "unavailable": "Messages cannot be sent right now. Please try again later.",
+        "send": "The message could not be sent. Please try again later."
+      }
     }
   },
   "B2b": {
