@@ -7,6 +7,7 @@ import {
 import { getBrandConfig } from "@brand/config";
 import { isLocale, type Locale } from "@brand/i18n/config";
 import { reportError } from "@brand/shared/lib/report-error";
+import { THIRD_PARTY_BUDGET_MS } from "@brand/shared/lib/request-budget";
 import type { ActionResult } from "@brand/shared/types/actions";
 import { getTranslations } from "next-intl/server";
 
@@ -67,6 +68,12 @@ export async function sendB2bRequest(
   try {
     const response = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
+      // Same budget the shared contact action uses for the same endpoint:
+      // request-budget.ts names "the Brevo calls" as covered, and this one was
+      // added after it, so it was the only unbounded outbound call left here.
+      // Without it a stalled Brevo holds the lambda until the platform kills
+      // it; the duplicate-send trade-off is the one already accepted there.
+      signal: AbortSignal.timeout(THIRD_PARTY_BUDGET_MS),
       headers: {
         accept: "application/json",
         "api-key": apiKey,
