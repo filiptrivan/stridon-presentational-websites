@@ -139,6 +139,65 @@ Locale detection and the locale cookie are both **off**. With detection on, `/` 
 - **Server Actions.** An action is not tied to a route, so `sendB2bRequest` takes the locale as an argument and validates it against the locale list before using it. The B2B zod schema is a factory for the same reason - every message in it is shown to the visitor.
 - **Route Handlers** ("planned" upstream). `app/api/og` sits outside `[locale]` and reads query params, so it is unaffected.
 
+### Known: five failing prefetches per Serbian page, left in place deliberately
+
+Load a Serbian page, scroll it, and the console shows a handful of 404s on
+`?_rsc=` requests. Nothing is broken - every link navigates, and the pages
+themselves are all 200 and prerendered. What fails is one of the two background
+requests Next fires to warm a link up before it is clicked.
+
+**What is actually requested vs what exists.** For `/o-nama` the router asks for
+the segment
+
+```
+wants:   /$d$locale/__PAGE__
+on disk: /$d$locale/o-nama/__PAGE__
+```
+
+`$d$locale` is our `[locale]` segment, and the router has consumed `o-nama` as
+the locale's *value*. That key only exists for the homepage, hence the 404.
+
+**Why it did not exist before, and does not exist on dck or sg-tools.** Those two
+have no `[locale]` segment and no proxy, so `/o-nama` is one URL segment and one
+route segment and the two always agree. Here `/o-nama` is internally
+`/sr/o-nama`, two segments, while the URL still shows one, because the `sr`
+prefix is deliberately hidden to keep every indexed URL byte-identical. The
+proxy bridges that per request; the client router computes the segment key from
+what is in the address bar, so it is short by exactly that segment.
+
+**This is why the English side is clean**: `/en/about` carries the prefix, so URL
+and tree have the same depth. Measured on a full scroll: Serbian homepage 37 ok
+/ 5 failed, English homepage 42 ok / 0 failed. The five are `/o-nama`, `/b2b`,
+`/servis` and the two legal pages.
+
+**It is the price of `localePrefix: "as-needed"`**, and the alternative was worse:
+`always` would turn every Serbian URL into `/sr/...` and send everything Google
+has indexed through a redirect.
+
+**Two fixes were measured and neither was taken.** Numbers are the same full-scroll
+test on the Serbian homepage:
+
+| | ok | failed | note |
+|---|---|---|---|
+| as shipped | 37 | 5 | the five routes linked only from the navbar and footer |
+| `prefetch={false}` on navbar + footer | 28 | 3 | **worse**: the failures move to `/brendovi`, `/katalozi` and `/kontakt`, which had working prefetch, and those are the three most used links on the site |
+| `prefetch={true}` on navbar + footer | 102-170 | 0 | forces full-route prefetch, which is the request that succeeds. Clean console, every chrome link instant, but roughly double the requests on a realistic load-and-scroll (35 -> 65) |
+
+`prefetch={true}` is the one that works if the console matters more than the
+bandwidth; it is a single optional prop threaded from `RootLayout` through
+`Navbar`, `MobileMenu` and `Footer`, defaulting to today's behaviour so dck and
+sg-tools are untouched. The owner chose to leave it as is on 2026-09-21.
+
+**What is not understood**, and should not be guessed at in a future pass: why
+five of the ten routes fail rather than all ten. It tracks with whether the link
+is rendered in the layout or in the page body - the failing set moved when
+prefetch was disabled on the chrome - but that is Next's internal key
+computation and the behaviour above is all that was actually verified. Next's
+own answer for links behind a proxy rewrite is to pass `as` and `href`
+separately (see the "Prefetching links in Proxy" section of the `<Link>` docs),
+which would mean changing how `@brand/shared` renders every link on all three
+sites.
+
 **Gotchas found doing this:**
 
 - The **language switch lives in the navbar**, which `@brand/shared` renders outside the page's `NextIntlClientProvider`, and next-intl's `usePathname` needs a locale in context. It gets its own provider with an empty catalog (`messages={{}}`); its one string arrives as a prop. Without it, every English page fails to prerender.
