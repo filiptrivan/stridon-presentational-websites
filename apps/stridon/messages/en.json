@@ -1,1 +1,377 @@
-{}
+{
+  "Site": {
+    "defaultTitle": "Stridon Group - the leading tool distributor in Serbia",
+    "description": "Stridon Group is the official importer and distributor of professional tools in Serbia. Over 30 international brands, wholesale pricing, technical support and fast delivery."
+  },
+  "Common": {
+    "switchLanguage": "View the site in Serbian",
+    "home": "Home",
+    "retry": "Try again",
+    "goToBrand": "Go to brand"
+  },
+  "Nav": {
+    "brands": "Brands",
+    "catalogs": "Catalogs",
+    "service": "Service",
+    "about": "About us",
+    "b2b": "B2B",
+    "contact": "Contact",
+    "headerCta": "Become a distributor",
+    "menu": "Menu",
+    "menuDescription": "Navigate through the pages."
+  },
+  "Footer": {
+    "tagline": "The leading distributor of professional tools in Serbia.",
+    "newsletterTitle": "Newsletter",
+    "newsletterDescription": "Keep up with news and special offers.",
+    "products": "Products",
+    "company": "Company",
+    "newsletter": {
+      "placeholder": "your@email.com",
+      "submit": "Subscribe",
+      "submitting": "Subscribing...",
+      "success": "You have been subscribed to the newsletter."
+    },
+    "links": {
+      "allBrands": "All brands",
+      "catalogs": "Catalogs",
+      "onlineStore": "Online store",
+      "becomePartner": "Become a partner",
+      "about": "About us",
+      "service": "Service",
+      "contact": "Contact",
+      "toolShop": "Prodavnica alata",
+      "privacy": "Privacy policy",
+      "terms": "Terms of use"
+    }
+  },
+  "Home": {
+    "hero": {
+      "title": "Import, distribution and sale of professional tools in Serbia.",
+      "description": "Stridon Group is the company behind the most successful tool shop in Serbia. Over 120 dealers, more than 30 international brands and our own service centre, with delivery across the country.",
+      "shop": "Online store",
+      "catalog": "Browse the catalog"
+    },
+    "brands": {
+      "title": "Brands we officially represent",
+      "description": "For every brand in our portfolio we guarantee genuine products, technical support and service in Serbia.",
+      "all": "All brands"
+    },
+    "featuresTitle": "Why Stridon?",
+    "features": {
+      "import": {
+        "title": "Official import",
+        "description": "Genuine products with a full warranty and technical support, straight from the manufacturer."
+      },
+      "brands": {
+        "title": "Over 30 brands",
+        "description": "DeWalt, Bosch, Stanley, Knipex, Wera and dozens more international brands in one place."
+      },
+      "wholesale": {
+        "title": "Wholesale and B2B",
+        "description": "Wholesale pricing, dedicated terms and support for dealers across Serbia."
+      },
+      "delivery": {
+        "title": "Fast delivery",
+        "description": "Delivered in 1 to 5 working days, free of charge on orders over 15,000 RSD."
+      }
+    },
+    "stats": {
+      "customers": {
+        "value": "10,630+",
+        "label": "Wholesale customers"
+      },
+      "dealers": {
+        "value": "120+",
+        "label": "Dealers in Serbia"
+      },
+      "brands": {
+        "value": "30+",
+        "label": "Brands represented"
+      },
+      "locations": {
+        "value": "2",
+        "label": "Locations in Belgrade"
+      }
+    },
+    "cta": {
+      "heading": "Join the \n Stridon distributor network",
+      "action": "Become a distributor",
+      "badges": {
+        "portal": "B2B portal",
+        "ownBrands": "Our own brands",
+        "catalogs": "Catalogs",
+        "service": "Service in Belgrade"
+      }
+    }
+  },
+  "OwnBrands": {
+    "sgTools": {
+      "heading": "SG Tools - our own brand",
+      "paragraphs": [
+        "Alongside the international manufacturers we import and distribute, Stridon Group also stands behind a tool line of its own. SG TOOLS grew out of a family tool business 30 years in the making.",
+        "Every SG TOOLS product carries the same warranty, technical support and service as the brands we import, only with nobody standing between the factory and the shelf."
+      ],
+      "linkLabel": "Visit sgtools.rs",
+      "imageAlt": "The Altina shop"
+    },
+    "dck": {
+      "heading": "DCK tools",
+      "paragraphs": [
+        "DCK is the professional brand of Dongcheng, with almost three decades of experience, its own manufacturing and distribution in over a hundred countries.",
+        "Here DCK comes with full support: a brushless cordless range, a three-year warranty and service in Serbia. The complete range and the technical detail live on the brand's own site."
+      ],
+      "linkLabel": "Visit dcksrbija.rs",
+      "imageAlt": "The DCK stand at a tool fair"
+    }
+  },
+  "Brands": {
+    "meta": {
+      "title": "Brands",
+      "description": "Brands of machines, accessories, power, hand and cordless tools for which Stridon Group is the official importer and distributor in Serbia."
+    },
+    "hero": {
+      "title": "Importer and distributor of the best brands",
+      "description": "Brands of machines, accessories, power, hand and cordless tools that we import and for which our company is the importer and distributor in Serbia."
+    },
+    "goToBrand": "Go to brand"
+  },
+  "Brand": {
+    "notFound": "Brand not found",
+    "back": "Brands",
+    "viewCatalogs": "View catalogs",
+    "allProducts": "All {brand} products",
+    "shopLead": "See the complete {brand} range and current availability in our official online store.",
+    "openShop": "Open the store"
+  },
+  "Catalogs": {
+    "meta": {
+      "title": "Catalogs",
+      "description": "PDF catalogs and price lists for machines, power tools and hand tools from the brands Stridon Group officially imports and distributes in Serbia."
+    },
+    "hero": {
+      "title": "Catalogs",
+      "description": "Browse a wide range of products and our best offers on machines, power tools and hand tools for professional and home use in our promotional catalogs."
+    },
+    "empty": {
+      "title": "There are no catalogs available right now.",
+      "description": "Check back soon."
+    },
+    "untagged": "Other catalogs",
+    "goToBrand": "Go to brand"
+  },
+  "About": {
+    "meta": {
+      "title": "About us",
+      "description": "Stridon Group is the official importer and distributor of professional tools in Serbia, with its own SG TOOLS and DCK brands, a service centre and a network of over 120 dealers."
+    },
+    "hero": {
+      "title": "Thirty years of importing, distributing and servicing tools",
+      "description": "Stridon Group is a family business from Belgrade. We import and distribute professional tools, stand behind our own brands and keep service in our own hands."
+    },
+    "timelineTitle": "How Stridon Group came about",
+    "testimonialsTitle": "What our partners say about us",
+    "clientsTitle": "Who our clients are",
+    "milestones": {
+      "flea": {
+        "title": "The first stall at the Novi Beograd flea market",
+        "description": "Our story starts at a single stall at the Novi Beograd flea market, where the first tools were sold and the first lasting relationships with customers were built.",
+        "imageAlt": "A tool stall at the Novi Beograd flea market"
+      },
+      "store": {
+        "title": "Opening the shop on Vojislava Ilića",
+        "description": "Opening our first shop, we learned from dealing with customers face to face and from what they needed day to day.",
+        "imageAlt": "The shop on Vojislava Ilića street"
+      },
+      "online": {
+        "title": "Launching prodavnicaalata.rs",
+        "description": "Moving into online sales connected what we had learned in the shop with a wider market and put us in touch with customers all over Serbia.",
+        "imageAlt": "The prodavnicaalata.rs logo"
+      },
+      "altina": {
+        "title": "Opening the Altina location",
+        "description": "As the business grew we kept learning from practice and came to understand even better what the market really asks of a tool.",
+        "imageAlt": "The Altina shop"
+      },
+      "sgTools": {
+        "title": "Launching the SG TOOLS brand",
+        "description": "SG TOOLS was the natural next step on that road: tools that are dependable, practical and affordable.",
+        "imageAlt": "The DCK stand at a tool fair"
+      }
+    },
+    "quotes": {
+      "inGradnja": "Real professionals and good people, always ready to meet both the specification and the deadline. We recommend them for any kind of work.",
+      "enterijerJankovic": "A very good experience working with Stridon Group. Great communication, they keep to deadlines, and they always have sound professional advice and the tool in stock.",
+      "hidroIna": "A company that always knows what our business needs. Invaluable, friendly advice and solutions only true professionals come up with. We recommend Stridon without reservation.",
+      "termoTim": "Straightforward, quick, day-to-day cooperation. People who are always willing to accommodate what a customer needs.",
+      "silmax": "Excellent stock and a real understanding of what customers need. On top of that, the sheer number of brands Stridon imports makes them an everyday supplier we could not do without.",
+      "mbmRad": "Advice from Stridon's professional sales staff cut the time our company spends on parts of a project by as much as 50%.",
+      "galens": "However big the project you are starting, Stridon always has enough tools for it. Next-day delivery, quality tools, and a genuine willingness to help the customer that is hard to measure.",
+      "colligoArs": "A loyal partner on every one of our projects. In all the years we have worked together they have never once let us down. We recommend Stridon."
+    }
+  },
+  "Service": {
+    "meta": {
+      "title": "Service",
+      "description": "Out-of-warranty service for power, cordless and hand tools in Belgrade. SG Servis, Vojislava Ilića 141b."
+    },
+    "hero": {
+      "title": "Out-of-warranty tool service in Belgrade",
+      "description": "We service and maintain power, cordless and hand tools, for professional and for home use."
+    },
+    "brandsTitle": "Just some of the brands we service",
+    "warrantyTitle": "Servicing tools under warranty",
+    "inWarranty": {
+      "title": "The tool is under warranty",
+      "description": "If your tool is still within its warranty period and covered by the manufacturer, we will point you to the brand's authorised service centre. Get in touch and we will find the nearest one for you."
+    },
+    "outOfWarranty": {
+      "title": "The tool is out of warranty",
+      "description": "Everything else is handled by SG Servis: routine maintenance, repairs and fault diagnosis. Bring the tool to the service address, or call first to check what you need."
+    },
+    "partner": {
+      "title": "SG Servis - our trusted partner",
+      "paragraphs": [
+        "SG Servis has been our partner for power tool repairs for many years. Their team specialises in maintaining and repairing a wide range of brands, from routine servicing and repairs to fault diagnosis.",
+        "The technicians have extensive experience with the best-known power tool manufacturers, so neither the model nor the complexity of the fault is an obstacle. Only quality replacement parts go in, so the tool stays dependable after the repair.",
+        "Opening hours are 8:00 to 16:00 on weekdays and 9:00 to 15:00 on Saturdays; they are closed on Sundays. Drop by during those hours or call ahead, and the SG Servis team will be glad to help with any question or problem you have with your tool."
+      ]
+    },
+    "center": {
+      "badge": "Our service partner"
+    }
+  },
+  "Contact": {
+    "meta": {
+      "title": "Contact",
+      "description": "Get in touch with the Stridon team about wholesale, technical support, service or working together. We are here to help."
+    },
+    "hero": {
+      "title": "Get in touch",
+      "description": "Have a question about our tools, need help finding the right product, or want to become a dealer? We will gladly help."
+    },
+    "directMail": "Or write to us directly at",
+    "form": {
+      "emailLabel": "Email",
+      "emailPlaceholder": "peter@example.com",
+      "messageLabel": "How can we help you?",
+      "messagePlaceholder": "Tell us what you need...",
+      "submit": "Send message",
+      "submitting": "Sending...",
+      "success": "Your message has been sent."
+    }
+  },
+  "B2b": {
+    "meta": {
+      "title": "B2B",
+      "description": "Request access to the Stridon B2B platform: wholesale prices, live stock levels and online ordering, for companies that sell tools."
+    },
+    "hero": {
+      "title": "B2B platform",
+      "description": "Sign in to the portal if you already have an account with us, or request access if you are just joining."
+    },
+    "existing": {
+      "title": "Already have a B2B account?",
+      "description": "The portal is for companies that already have an account with us.",
+      "action": "Sign in to the portal"
+    },
+    "request": {
+      "title": "Request access to the B2B platform",
+      "description": "Fill in the form and our team will get back to you as soon as possible."
+    },
+    "form": {
+      "fields": {
+        "firstName": {
+          "label": "First name",
+          "placeholder": "Peter"
+        },
+        "lastName": {
+          "label": "Last name",
+          "placeholder": "Petrović"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "peter@example.com"
+        },
+        "contactPhone": {
+          "label": "Contact phone",
+          "placeholder": "060 123 4567"
+        },
+        "companyName": {
+          "label": "Company name",
+          "placeholder": "Example d.o.o."
+        },
+        "companyAddress": {
+          "label": "Company address",
+          "placeholder": "Vojislava Ilića 141g, Belgrade"
+        },
+        "pib": {
+          "label": "Company Tax ID (PIB)",
+          "placeholder": "123456789"
+        },
+        "companyRegistrationNumber": {
+          "label": "Company registration number",
+          "placeholder": "12345678"
+        }
+      },
+      "submit": "Send request",
+      "submitting": "Sending...",
+      "success": "Your request has been sent. Our team will be in touch shortly.",
+      "errors": {
+        "firstNameMin": "First name must be at least 2 characters",
+        "firstNameMax": "First name can be at most 100 characters",
+        "lastNameMin": "Last name must be at least 2 characters",
+        "lastNameMax": "Last name can be at most 100 characters",
+        "emailRequired": "Enter your email address",
+        "emailInvalid": "Enter a valid email address",
+        "phoneMin": "Contact phone must be at least 6 characters",
+        "phoneMax": "Contact phone can be at most 36 characters",
+        "companyNameRequired": "Enter the company name",
+        "companyNameMax": "Company name can be at most 100 characters",
+        "companyAddressRequired": "Enter the company address",
+        "companyAddressMax": "Company address can be at most 100 characters",
+        "pib": "The Tax ID must be exactly 9 digits",
+        "registrationNumber": "The registration number must be exactly 8 digits",
+        "invalid": "Some details are not valid. Please check the form.",
+        "unavailable": "Requests cannot be sent right now. Please try again later.",
+        "send": "The request could not be sent. Please try again later."
+      }
+    }
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "description": "The page you are looking for does not exist or has moved. Check the address or go back to the homepage.",
+    "home": "Home",
+    "brands": "All brands"
+  },
+  "Error": {
+    "title": "Something went wrong",
+    "description": "There was a problem loading this page. Try again, or go back to the homepage.",
+    "retry": "Try again",
+    "home": "Home"
+  },
+  "Legal": {
+    "privacy": {
+      "meta": {
+        "title": "Privacy policy",
+        "description": "The Stridon Group privacy policy - how we collect, use and protect your data on stridon.rs."
+      },
+      "hero": {
+        "title": "Privacy policy",
+        "description": "Your data matters to us. Here you can read how we collect it, use it and protect it."
+      },
+      "body": "<h2>The data controller</h2>\n<p>The site <strong>stridon.rs</strong> is owned by <strong>STRIDON GROUP DOO</strong>, registered in the Republic of Serbia. As the data controller, we are responsible for protecting your personal data under the Serbian Personal Data Protection Act.</p>\n<ul><li><strong>Company:</strong> STRIDON GROUP DOO</li><li><strong>Website:</strong> stridon.rs</li><li><strong>Email:</strong> office@stridon.rs</li></ul>\n<h2>Data protection notice</h2>\n<p>We are committed to protecting the privacy of everyone who visits our site. This privacy policy explains what data we collect, what we use it for and how we protect it. stridon.rs is an informational site: it presents Stridon Group and the brands we officially import and distribute, and nothing can be bought here. Purchases are made only on <a href=\"https://www.prodavnicaalata.rs\" target=\"_blank\" rel=\"noopener noreferrer\">prodavnicaalata.rs</a>.</p>\n<h2>What we collect and why</h2>\n<p>We do not collect data through a purchase process on this site, because no transactions take place here. We collect data only if you contact us through the contact form, by email, or by requesting access to the B2B platform.</p>\n<p>Through the contact form we collect:</p>\n<ul><li>Your email address</li><li>The content of your message</li></ul>\n<p>Through a B2B access request we also collect the details needed to verify the company:</p>\n<ul><li>The first and last name of the contact person</li><li>Email address and phone number</li><li>Company name and address</li><li>Tax ID (PIB) and company registration number</li></ul>\n<p>We use this data only to:</p>\n<ul><li>Answer your enquiry or message</li><li>Provide the information you asked for about brands, catalogs and terms of cooperation</li><li>Open and verify an account on the B2B platform</li></ul>\n<h2>Who has access</h2>\n<p>Your data is accessed only by authorised employees of STRIDON GROUP DOO, for the purpose of handling your enquiry. We do not share your data with third parties unless it is necessary to meet a legal obligation.</p>\n<h2>How we protect it</h2>\n<p>We apply appropriate technical and organisational safeguards, including:</p>\n<ul><li>Server protection using current security protocols</li><li>Antivirus protection and regular security checks</li><li>Access limited to authorised employees only</li></ul>\n<h2>Your rights</h2>\n<p>Under the Personal Data Protection Act you have the right to:</p>\n<ul><li>Request access to the data we hold about you</li><li>Request the correction of inaccurate data</li><li>Request the deletion of your data</li><li>Restrict the processing of your data</li><li>Object to the processing of your data</li></ul>\n<p>To exercise any of these rights, write to us at <a href=\"mailto:office@stridon.rs\">office@stridon.rs</a>.</p>\n<h2>Supervisory authority</h2>\n<p>If you believe your data has been processed contrary to the Act, you have the right to lodge a complaint with the Commissioner for Information of Public Importance and Personal Data Protection of the Republic of Serbia (<a href=\"https://www.poverenik.rs\" target=\"_blank\" rel=\"noopener noreferrer\">www.poverenik.rs</a>).</p>\n<h2>Cookie policy</h2>\n<p>stridon.rs uses cookies so that the site works correctly and to improve your experience. The cookies we use fall into the following categories:</p>\n<ul><li><strong>Essential cookies</strong> - they make the basic functions of the site work and cannot be turned off.</li><li><strong>Analytics cookies</strong> - they help us understand how visitors use the site so we can improve the content and the experience.</li><li><strong>Marketing cookies</strong> - they are used to show relevant content and advertising.</li></ul>\n<p>By using the site you consent to the use of cookies in line with this policy.</p>\n<h2>Copyright</h2>\n<p>All content published on stridon.rs, including text, photographs, graphics, logos and design, is protected by copyright and owned by STRIDON GROUP DOO. Reproducing, distributing or otherwise using the content without prior written consent is prohibited.</p>\n<h2>Changes to this policy</h2>\n<p>We reserve the right to update this privacy policy at any time. Any change takes effect when it is published on this page. We recommend you read this page again from time to time so you are aware of any changes.</p>"
+    },
+    "terms": {
+      "meta": {
+        "title": "Terms of use",
+        "description": "The Stridon Group terms of use - the rules and conditions for using stridon.rs."
+      },
+      "hero": {
+        "title": "Terms of use",
+        "description": "Read the terms under which you use our site."
+      },
+      "body": "<h2>General terms</h2>\n<p>These terms of use govern the use of the website <strong>stridon.rs</strong>, owned and operated by <strong>STRIDON GROUP DOO</strong>, registered in the Republic of Serbia. By accessing and using this site you accept these terms in full. If you do not agree with any part of them, please do not use the site.</p>\n<h2>Using the site</h2>\n<p>stridon.rs is an informational and marketing site. It presents Stridon Group and the brands we officially import and distribute, together with catalogs, service and terms of cooperation. <strong>Nothing can be bought on this site</strong> - all products are purchased only through <a href=\"https://www.prodavnicaalata.rs\" target=\"_blank\" rel=\"noopener noreferrer\">prodavnicaalata.rs</a>.</p>\n<p>You use the site at your own risk. You undertake to use it only for lawful purposes and in a way that does not infringe the rights of other users.</p>\n<h2>Intellectual property</h2>\n<p>All content on stridon.rs - including but not limited to text, photographs, graphics, logos, icons, audio and video material, as well as the design and structure of the site - is protected by copyright and is the intellectual property of STRIDON GROUP DOO.</p>\n<p>Copying, reproducing, distributing, publicly displaying or otherwise using content from this site is not permitted without prior written consent.</p>\n<h2>Links to external sites</h2>\n<p>This site may contain links to other sites, including <a href=\"https://www.prodavnicaalata.rs\" target=\"_blank\" rel=\"noopener noreferrer\">prodavnicaalata.rs</a> (for buying products) and other external resources. These links are provided for your convenience. STRIDON GROUP DOO is not responsible for the content, privacy policy or practices of other sites.</p>\n<h2>Limitation of liability</h2>\n<p>The information on stridon.rs is provided &quot;as is&quot;, without warranties of any kind, express or implied. We do our best to keep all information accurate and current, but we do not guarantee that the content is complete, accurate or reliable.</p>\n<p>Product specifications, descriptions and prices shown on the site are indicative and may differ from the actual state. For accurate and current product information, including prices and availability, check <a href=\"https://www.prodavnicaalata.rs\" target=\"_blank\" rel=\"noopener noreferrer\">prodavnicaalata.rs</a>.</p>\n<p>STRIDON GROUP DOO is not liable for any damage that may arise from using, or being unable to use, this site.</p>\n<h2>Privacy</h2>\n<p>Your privacy matters to us. You can find everything about how personal data is collected and processed in our <a href=\"__PRIVACY__\">Privacy policy</a>.</p>\n<h2>Changes to these terms</h2>\n<p>STRIDON GROUP DOO reserves the right to change these terms of use at any time, without prior notice. Amended terms take effect when they are published on this page. By continuing to use the site after a change is published, you accept the new terms.</p>\n<p>We recommend you read this page again from time to time so you are aware of any changes.</p>\n<h2>Governing law</h2>\n<p>These terms of use are governed by the law of the Republic of Serbia. Any dispute arising in connection with the use of stridon.rs falls under the jurisdiction of the courts of the Republic of Serbia.</p>\n<h2>Contact</h2>\n<p>For any question about these terms of use you can contact us by email at <a href=\"mailto:office@stridon.rs\">office@stridon.rs</a> or through our <a href=\"__CONTACT__\">contact page</a>.</p>"
+    }
+  }
+}

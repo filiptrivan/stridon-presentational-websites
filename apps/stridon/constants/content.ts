@@ -9,41 +9,36 @@ import {
   Truck,
   Wrench,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
-export const FEATURES = [
-  {
-    title: "Zvanični uvoz",
-    desc: "Originalni proizvodi sa punom garancijom i tehničkom podrškom, direktno od proizvođača.",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Preko 30 brendova",
-    desc: "DeWalt, Bosch, Stanley, Knipex, Wera i još desetine svetskih brendova na jednom mestu.",
-    icon: Layers,
-  },
-  {
-    title: "Veleprodaja i B2B",
-    desc: "Veleprodajne cene, posebni uslovi i podrška za dilere širom Srbije.",
-    icon: BadgePercent,
-  },
-  {
-    title: "Brza isporuka",
-    desc: "Isporuka za 1 do 5 radnih dana, uz besplatnu dostavu preko 15.000 RSD.",
-    icon: Truck,
-  },
+/**
+ * Icons and figures only: the copy that goes with each of these lives under
+ * `Home` in `messages/`, keyed by the `key` below.
+ *
+ * These are module constants, evaluated once when the module loads, so there is
+ * no request and no locale here to read a translation with. The page that
+ * renders them has both, and pairs the two up.
+ */
+export const FEATURES: readonly { key: string; icon: LucideIcon }[] = [
+  { key: "import", icon: ShieldCheck },
+  { key: "brands", icon: Layers },
+  { key: "wholesale", icon: BadgePercent },
+  { key: "delivery", icon: Truck },
 ];
 
 // Dealer-facing, deliberately different from the FEATURES row above them.
-export const CTA_TRUST_BADGES: TrustBadge[] = [
-  { icon: Globe, text: "B2B portal" },
-  { icon: Factory, text: "Sopstveni brendovi" },
-  { icon: BookOpen, text: "Katalozi" },
-  { icon: Wrench, text: "Servis u Beogradu" },
+export const CTA_TRUST_BADGES: readonly { key: string; icon: LucideIcon }[] = [
+  { key: "portal", icon: Globe },
+  { key: "ownBrands", icon: Factory },
+  { key: "catalogs", icon: BookOpen },
+  { key: "service", icon: Wrench },
 ];
 
-export const STATS = [
-  { value: "10.630+", label: "Veleprodajnih kupaca" },
-  { value: "120+", label: "Dilera u Srbiji" },
-  { value: "30+", label: "Zastupanih brendova" },
-  { value: "2", label: "Lokacije u Beogradu" },
-];
+/**
+ * Order only. Both the figure and its label are translated: Serbian groups
+ * thousands with a dot ("10.630+") and English with a comma, so the number is
+ * not the locale-independent half it looks like.
+ */
+export const STAT_KEYS = ["customers", "dealers", "brands", "locations"] as const;
+
+export type { TrustBadge };

@@ -65,7 +65,11 @@ describe("groupCatalogsByBrand", () => {
           brand("hogert-technik", "HÖGERT Technik", 6),
         ]),
       ]),
-      new Map([["hogert-technik", "https://media.example.com/hogert.png"]]),
+      {
+        logoBySlug: new Map([
+          ["hogert-technik", "https://media.example.com/hogert.png"],
+        ]),
+      },
     );
 
     expect(groups).toHaveLength(1);
@@ -140,5 +144,26 @@ describe("groupCatalogsByBrand", () => {
     const groups = groupCatalogsByBrand(result([first, second]));
 
     expect(groups[0].catalogs).toEqual([first, second]);
+  });
+  it("takes the brand route and the untagged heading from the caller", () => {
+    // Both are locale-dependent, so neither can be decided in here: /brendovi
+    // is /en/brands in English, and the heading is a translated string.
+    const groups = groupCatalogsByBrand(
+      result([
+        catalog("Wera katalog", [brand("wera", "Wera", 11)]),
+        catalog("REMS akcija", []),
+      ]),
+      {
+        brandHref: (slug) => `/en/brands/${slug}`,
+        untaggedName: "Other catalogs",
+      },
+    );
+
+    expect(groups[0].href).toBe("/en/brands/wera");
+    expect(groups.at(-1)).toMatchObject({
+      slug: UNTAGGED_GROUP_SLUG,
+      name: "Other catalogs",
+      href: null,
+    });
   });
 });

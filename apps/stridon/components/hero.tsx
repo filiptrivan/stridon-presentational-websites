@@ -1,14 +1,20 @@
+import { SHOP_URL } from "@/constants/links";
+import { pathFor } from "@/lib/nav";
+import type { Locale } from "@brand/i18n/config";
 import Container from "@brand/shared/components/container";
 import Wrapper from "@brand/shared/components/wrapper";
 import { Button } from "@brand/ui/button";
 import { ExternalLink } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
 
 // Full-bleed photo under an ink veil, centered type on top, and the red
 // diagonal from the logo running down the right edge - the same beam that
 // closes the page in the shared CTA band.
-const Hero = () => {
+const Hero = async ({ locale }: { locale: Locale }) => {
+  const t = await getTranslations({ locale, namespace: "Home.hero" });
+
   return (
     <section className="relative isolate overflow-hidden">
       <Image
@@ -35,27 +41,21 @@ const Hero = () => {
         <div className="mx-auto max-w-4xl text-center text-background">
           <Container>
             <h1 className="text-balance text-[clamp(2.25rem,5.2vw,4rem)] font-semibold leading-[1.04] tracking-tight">
-              Uvoz, distribucija i prodaja profesionalnog alata u Srbiji.
+              {t("title")}
             </h1>
           </Container>
 
           <Container delay={0.5}>
             <p className="mx-auto mt-7 max-w-2xl text-lg text-background/70">
-              Stridon Group stoji iza najuspešnije prodavnice alata u Srbiji.
-              Preko 120 dilera, više od 30 svetskih brendova i sopstveni
-              servis, uz isporuku širom zemlje.
+              {t("description")}
             </p>
           </Container>
 
           <Container delay={1}>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
               <Button asChild size="lg">
-                <a
-                  href="https://www.prodavnicaalata.rs"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Online prodavnica
+                <a href={SHOP_URL} target="_blank" rel="noopener noreferrer">
+                  {t("shop")}
                   <ExternalLink className="size-4" />
                 </a>
               </Button>
@@ -65,7 +65,7 @@ const Hero = () => {
                 variant="outline"
                 className="border-background/30 bg-transparent text-background hover:bg-background hover:text-foreground"
               >
-                <Link href="/katalozi">Pogledaj katalog</Link>
+                <Link href={pathFor("/katalozi", locale)}>{t("catalog")}</Link>
               </Button>
             </div>
           </Container>

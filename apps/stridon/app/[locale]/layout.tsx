@@ -1,4 +1,4 @@
-import RootLayout from "@brand/shared/components/root-layout";
+import LanguageSwitch from "@/components/language-switch";
 import {
   COMPANY_FOOTER_LINKS,
   LEGAL_LINKS,
@@ -6,15 +6,23 @@ import {
   PRODUCTS_FOOTER_LINKS,
   SOCIAL_LINKS,
 } from "@/constants/links";
+import { pathFor, resolveLinks } from "@/lib/nav";
 import { routing } from "@/i18n/routing";
 import { HREFLANG, type Locale } from "@brand/i18n/config";
-import { hasLocale } from "next-intl";
-import { NextIntlClientProvider } from "next-intl";
+import { getBrandConfig } from "@brand/config";
+import RootLayout from "@brand/shared/components/root-layout";
+import { createRootMetadata } from "@brand/shared/lib/metadata";
+import { getPathname } from "@/i18n/navigation";
+import type { Metadata } from "next";
+import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import "../globals.css";
 
-export { metadata, viewport } from "@brand/shared/components/root-layout";
+export { viewport } from "@brand/shared/components/root-layout";
+
+const { siteName } = getBrandConfig();
 
 // Both locales are prerendered at build time. This is the whole point of
 // reading the locale from a root param instead of a cookie or a header: the
@@ -22,6 +30,40 @@ export { metadata, viewport } from "@brand/shared/components/root-layout";
 // resolved per request.
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) notFound();
+  const t = await getTranslations({ locale, namespace: "Site" });
+
+  // The shared builder is static and hardcodes `canonical: "/"`, which would
+  // make the English homepage declare the Serbian one as its canonical. Take
+  // its icons, OG image and title template, then say where this locale lives.
+  const base = createRootMetadata();
+
+  return {
+    ...base,
+    title: { default: t("defaultTitle"), template: `%s | ${siteName}` },
+    description: t("description"),
+    alternates: {
+      canonical: getPathname({ href: "/", locale }),
+      languages: Object.fromEntries(
+        routing.locales.map((other) => [
+          HREFLANG[other],
+          getPathname({ href: "/", locale: other }),
+        ]),
+      ),
+    },
+    openGraph: {
+      ...base.openGraph,
+      locale: locale === "sr" ? "sr_RS" : "en_US",
+    },
+  };
 }
 
 // Both subsets of both families, because Serbian copy mixes plain latin with
@@ -45,19 +87,69 @@ export default async function Layout({
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
 
+  const [nav, footer, common] = await Promise.all([
+    getTranslations({ locale, namespace: "Nav" }),
+    getTranslations({ locale, namespace: "Footer" }),
+    getTranslations({ locale, namespace: "Common" }),
+  ]);
+
+  const footerLinkLabel = (key: string) => footer(`links.${key}`);
+
   // Fonts are self-hosted via @font-face in globals.css (no next/font), so no
   // font className is injected here.
   return (
     <RootLayout
       lang={HREFLANG[locale as Locale]}
       fontClassNames=""
-      navLinks={NAV_LINKS}
-      productLinks={PRODUCTS_FOOTER_LINKS}
-      companyLinks={COMPANY_FOOTER_LINKS}
-      legalLinks={LEGAL_LINKS}
+      navLinks={resolveLinks(NAV_LINKS, locale as Locale, nav)}
+      productLinks={resolveLinks(
+        PRODUCTS_FOOTER_LINKS,
+        locale as Locale,
+        footerLinkLabel,
+      )}
+      companyLinks={resolveLinks(
+        COMPANY_FOOTER_LINKS,
+        locale as Locale,
+        footerLinkLabel,
+      )}
+      legalLinks={resolveLinks(LEGAL_LINKS, locale as Locale, footerLinkLabel)}
       socialLinks={SOCIAL_LINKS}
       showCategoryMenu={false}
-      showLanguageSwitch
+      languageSwitch={
+        // The switch sits in the navbar, which @brand/shared renders outside
+        // the provider below, and next-intl's `usePathname` needs a locale in
+        // context to map the rendered URL back to the internal route. Its own
+        // provider, with an empty catalog, gives it exactly that and nothing
+        // else - its one string arrives as a prop.
+        <NextIntlClientProvider locale={locale} messages={{}}>
+          <LanguageSwitch
+            locale={locale as Locale}
+            label={common("switchLanguage")}
+          />
+        </NextIntlClientProvider>
+      }
+      navbarLabels={{ headerCta: nav("headerCta") }}
+      mobileLabels={{
+        menu: nav("menu"),
+        menuDescription: nav("menuDescription"),
+        headerCta: nav("headerCta"),
+      }}
+      footerLabels={{
+        newsletterTitle: footer("newsletterTitle"),
+        newsletterDescription: footer("newsletterDescription"),
+        products: footer("products"),
+        company: footer("company"),
+      }}
+      newsletterLabels={{
+        placeholder: footer("newsletter.placeholder"),
+        submit: footer("newsletter.submit"),
+        submitting: footer("newsletter.submitting"),
+        success: footer("newsletter.success"),
+      }}
+      footerTagline={footer("tagline")}
+      // brand-config spells both of these in Serbian and cannot vary by locale.
+      headerCtaHref={pathFor("/kontakt", locale as Locale)}
+      homeHref={pathFor("/", locale as Locale)}
     >
       {FONT_FILES.map((href) => (
         <link

@@ -1,64 +1,38 @@
 "use client";
 
 import { sendB2bRequest } from "@/lib/actions/b2b";
-import { b2bRequestSchema, type B2bRequestData } from "@/lib/schemas/b2b";
+import {
+  B2B_FIELDS,
+  createB2bRequestSchema,
+  type B2bRequestData,
+} from "@/lib/schemas/b2b";
+import type { Locale } from "@brand/i18n/config";
 import { Button } from "@brand/ui/button";
 import { Input } from "@brand/ui/input";
 import { Label } from "@brand/ui/label";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Send } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-const FIELDS = [
-  { name: "firstName", label: "Ime", placeholder: "Petar" },
-  { name: "lastName", label: "Prezime", placeholder: "Petrović" },
-  {
-    name: "email",
-    label: "E-mail",
-    placeholder: "petar@primer.rs",
-    type: "email",
-  },
-  {
-    name: "contactPhone",
-    label: "Kontakt telefon",
-    placeholder: "060 123 4567",
-    type: "tel",
-  },
-  { name: "companyName", label: "Naziv firme", placeholder: "Primer d.o.o." },
-  {
-    name: "companyAddress",
-    label: "Adresa firme",
-    placeholder: "Vojislava Ilića 141g, Beograd",
-  },
-  {
-    name: "pib",
-    label: "PIB firme",
-    placeholder: "123456789",
-    inputMode: "numeric" as const,
-  },
-  {
-    name: "companyRegistrationNumber",
-    label: "Matični broj firme",
-    placeholder: "12345678",
-    inputMode: "numeric" as const,
-  },
-] satisfies {
-  name: keyof B2bRequestData;
-  label: string;
-  placeholder: string;
-  type?: string;
-  inputMode?: "numeric";
-}[];
+const B2bForm = ({ locale }: { locale: Locale }) => {
+  const t = useTranslations("B2b.form");
+  // Rebuilt only when the language changes; a new schema object on every render
+  // would reset the resolver and with it the validation state.
+  const schema = useMemo(
+    () => createB2bRequestSchema((key) => t(`errors.${key}`)),
+    [t],
+  );
 
-const B2bForm = () => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
   } = useForm<B2bRequestData>({
-    resolver: zodResolver(b2bRequestSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -72,12 +46,13 @@ const B2bForm = () => {
   });
 
   const onSubmit = async (data: B2bRequestData) => {
-    const result = await sendB2bRequest(data);
+    // The action revalidates server-side and needs the locale explicitly:
+    // `next/root-params` does not work inside a Server Action, permanently, so
+    // it has no way of knowing which language to answer in.
+    const result = await sendB2bRequest(data, locale);
 
     if (result.success) {
-      toast.success(
-        "Zahtev je poslat. Naša podrška će te kontaktirati u najkraćem roku.",
-      );
+      toast.success(t("success"));
       reset();
       return;
     }
@@ -90,14 +65,16 @@ const B2bForm = () => {
       onSubmit={handleSubmit(onSubmit)}
       className="max-w-3xl w-full space-y-6"
     >
-      {FIELDS.map((field) => (
+      {B2B_FIELDS.map((field) => (
         <div key={field.name} className="space-y-3">
-          <Label htmlFor={field.name}>{field.label}</Label>
+          <Label htmlFor={field.name}>
+            {t(`fields.${field.name}.label`)}
+          </Label>
           <Input
             id={field.name}
-            type={field.type ?? "text"}
-            inputMode={field.inputMode}
-            placeholder={field.placeholder}
+            type={"type" in field ? field.type : "text"}
+            inputMode={"inputMode" in field ? field.inputMode : undefined}
+            placeholder={t(`fields.${field.name}.placeholder`)}
             className="border-border/50"
             aria-invalid={!!errors[field.name]}
             {...register(field.name)}
@@ -114,12 +91,12 @@ const B2bForm = () => {
         {isSubmitting ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Šalje se...
+            {t("submitting")}
           </>
         ) : (
           <>
             <Send className="mr-2 h-4 w-4" />
-            Pošalji zahtev
+            {t("submit")}
           </>
         )}
       </Button>

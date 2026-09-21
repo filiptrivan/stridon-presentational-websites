@@ -34,11 +34,31 @@ export const UNTAGGED_GROUP_SLUG = "ostali-katalozi";
  * `orderNumber` looks like the obvious sort key and is not one, since PACMS hands
  * out duplicates (stanley, bosch and dewalt are all `3`), which would leave the
  * tail order up to however the backend returned the rows.
+ *
+ * The two locale-dependent bits are passed in rather than decided here: the
+ * label for the untagged group, and how a brand slug becomes a URL. Defaults
+ * are the Serbian ones, which is what the tests assert.
  */
+export interface GroupOptions {
+  logoBySlug?: ReadonlyMap<string, string | null>;
+  /** Heading for catalogs PACMS has not tagged with a manufacturer. */
+  untaggedName?: string;
+  /** Route for a brand we list. Localized, so it cannot be built from the slug here. */
+  brandHref?: (slug: string) => string;
+  /** Collation for the tail of the list; `sr` orders č/ć/š/ž where a reader expects. */
+  sortLocale?: string;
+}
+
 export function groupCatalogsByBrand(
   result: CatalogsResult,
-  logoBySlug: ReadonlyMap<string, string | null> = new Map(),
+  options: GroupOptions = {},
 ): CatalogGroup[] {
+  const {
+    logoBySlug = new Map<string, string | null>(),
+    untaggedName = "Ostali katalozi",
+    brandHref = (slug: string) => `/brendovi/${slug}`,
+    sortLocale = "sr",
+  } = options;
   const byBrandSlug = new Map<string, Catalog[]>();
   const untagged: Catalog[] = [];
   const nameBySlug = new Map(
@@ -66,7 +86,7 @@ export function groupCatalogsByBrand(
     slug,
     name: nameBySlug.get(slug) ?? slug,
     imageUrl: logoBySlug.get(slug) ?? null,
-    href: shown.has(slug) ? `/brendovi/${slug}` : null,
+    href: shown.has(slug) ? brandHref(slug) : null,
     catalogs,
   });
 
@@ -81,13 +101,13 @@ export function groupCatalogsByBrand(
     ...[...byBrandSlug.entries()]
       .filter(([slug]) => !shown.has(slug))
       .map(([slug, catalogs]) => toGroup(slug, catalogs))
-      .sort((a, b) => a.name.localeCompare(b.name, "sr")),
+      .sort((a, b) => a.name.localeCompare(b.name, sortLocale)),
   );
 
   if (untagged.length > 0) {
     groups.push({
       slug: UNTAGGED_GROUP_SLUG,
-      name: "Ostali katalozi",
+      name: untaggedName,
       imageUrl: null,
       href: null,
       catalogs: untagged,

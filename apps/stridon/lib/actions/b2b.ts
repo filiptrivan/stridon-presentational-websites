@@ -1,12 +1,14 @@
 "use server";
 
-import { b2bRequestSchema, type B2bRequestData } from "@/lib/schemas/b2b";
+import {
+  createB2bRequestSchema,
+  type B2bRequestData,
+} from "@/lib/schemas/b2b";
 import { getBrandConfig } from "@brand/config";
+import { isLocale, type Locale } from "@brand/i18n/config";
 import { reportError } from "@brand/shared/lib/report-error";
 import type { ActionResult } from "@brand/shared/types/actions";
-
-const SEND_FAILED_ERROR =
-  "Slanje zahteva nije uspelo. Pokušaj ponovo kasnije.";
+import { getTranslations } from "next-intl/server";
 
 const escapeHtml = (value: string) =>
   value
@@ -18,12 +20,25 @@ const escapeHtml = (value: string) =>
 // Kept app-local rather than folded into the shared contact action: this one
 // mails a structured company record with its own subject, and no other brand
 // has a B2B form. There is no PACMS endpoint for dealer applications yet.
+//
+// The locale is an argument rather than something this function reads, because
+// `next/root-params` does not work inside a Server Action and is not planned to:
+// an action is not tied to a route, so it has no root params to read. Anything
+// the caller sends is untrusted, so it is checked against the locale list and
+// falls back rather than being passed through.
 export async function sendB2bRequest(
   data: B2bRequestData,
+  locale: Locale,
 ): Promise<ActionResult> {
-  const parsed = b2bRequestSchema.safeParse(data);
+  const safeLocale = isLocale(locale) ? locale : "sr";
+  const t = await getTranslations({
+    locale: safeLocale,
+    namespace: "B2b.form.errors",
+  });
+
+  const parsed = createB2bRequestSchema((key) => t(key)).safeParse(data);
   if (!parsed.success) {
-    return { success: false, error: "Podaci nisu ispravni. Proveri unos." };
+    return { success: false, error: t("invalid") };
   }
 
   const apiKey = process.env.BREVO_API_KEY;
@@ -31,15 +46,14 @@ export async function sendB2bRequest(
     reportError(new Error("BREVO_API_KEY is not set"), {
       source: "sendB2bRequest",
     });
-    return {
-      success: false,
-      error: "Slanje zahteva trenutno nije moguće. Pokušaj ponovo kasnije.",
-    };
+    return { success: false, error: t("unavailable") };
   }
 
   const { emailSender, emailRecipient } = getBrandConfig();
   const request = parsed.data;
 
+  // The email goes to office@stridon.rs, so it stays Serbian whichever language
+  // the visitor filled the form in.
   const rows: [string, string][] = [
     ["Ime i prezime", `${request.firstName} ${request.lastName}`],
     ["E-mail", request.email],
@@ -81,12 +95,12 @@ export async function sendB2bRequest(
         source: "sendB2bRequest",
         details: body,
       });
-      return { success: false, error: SEND_FAILED_ERROR };
+      return { success: false, error: t("send") };
     }
 
     return { success: true };
   } catch (error) {
     reportError(error, { source: "sendB2bRequest" });
-    return { success: false, error: SEND_FAILED_ERROR };
+    return { success: false, error: t("send") };
   }
 }

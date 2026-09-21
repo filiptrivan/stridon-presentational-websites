@@ -1,1 +1,377 @@
-{}
+{
+  "Site": {
+    "defaultTitle": "Stridon Group - vodeći distributer alata u Srbiji",
+    "description": "Stridon Group je zvanični uvoznik i distributer profesionalnog alata u Srbiji. Preko 30 svetskih brendova, veleprodaja, tehnička podrška i brza isporuka."
+  },
+  "Common": {
+    "switchLanguage": "Prikaži sajt na engleskom",
+    "home": "Početna",
+    "retry": "Probaj ponovo",
+    "goToBrand": "Idi na brend"
+  },
+  "Nav": {
+    "brands": "Brendovi",
+    "catalogs": "Katalozi",
+    "service": "Servis",
+    "about": "O nama",
+    "b2b": "B2B",
+    "contact": "Kontakt",
+    "headerCta": "Postani distributer",
+    "menu": "Meni",
+    "menuDescription": "Navigacija kroz stranice."
+  },
+  "Footer": {
+    "tagline": "Vodeći distributer profesionalnog alata u Srbiji.",
+    "newsletterTitle": "Newsletter",
+    "newsletterDescription": "Budi u toku sa novostima i akcijama.",
+    "products": "Proizvodi",
+    "company": "Kompanija",
+    "newsletter": {
+      "placeholder": "tvoj@email.com",
+      "submit": "Prijavi se",
+      "submitting": "Prijavljuje se...",
+      "success": "Uspešno si se prijavio/la na newsletter!"
+    },
+    "links": {
+      "allBrands": "Svi brendovi",
+      "catalogs": "Katalozi",
+      "onlineStore": "Online prodavnica",
+      "becomePartner": "Postani partner",
+      "about": "O nama",
+      "service": "Servis",
+      "contact": "Kontakt",
+      "toolShop": "Prodavnica alata",
+      "privacy": "Politika privatnosti",
+      "terms": "Uslovi korišćenja"
+    }
+  },
+  "Home": {
+    "hero": {
+      "title": "Uvoz, distribucija i prodaja profesionalnog alata u Srbiji.",
+      "description": "Stridon Group stoji iza najuspešnije prodavnice alata u Srbiji. Preko 120 dilera, više od 30 svetskih brendova i sopstveni servis, uz isporuku širom zemlje.",
+      "shop": "Online prodavnica",
+      "catalog": "Pogledaj katalog"
+    },
+    "brands": {
+      "title": "Brendovi koje zvanično zastupamo",
+      "description": "Za svaki brend iz našeg portfolija garantujemo originalnu robu, tehničku podršku i servis u Srbiji.",
+      "all": "Svi brendovi"
+    },
+    "featuresTitle": "Zašto Stridon?",
+    "features": {
+      "import": {
+        "title": "Zvanični uvoz",
+        "description": "Originalni proizvodi sa punom garancijom i tehničkom podrškom, direktno od proizvođača."
+      },
+      "brands": {
+        "title": "Preko 30 brendova",
+        "description": "DeWalt, Bosch, Stanley, Knipex, Wera i još desetine svetskih brendova na jednom mestu."
+      },
+      "wholesale": {
+        "title": "Veleprodaja i B2B",
+        "description": "Veleprodajne cene, posebni uslovi i podrška za dilere širom Srbije."
+      },
+      "delivery": {
+        "title": "Brza isporuka",
+        "description": "Isporuka za 1 do 5 radnih dana, uz besplatnu dostavu preko 15.000 RSD."
+      }
+    },
+    "stats": {
+      "customers": {
+        "value": "10.630+",
+        "label": "Veleprodajnih kupaca"
+      },
+      "dealers": {
+        "value": "120+",
+        "label": "Dilera u Srbiji"
+      },
+      "brands": {
+        "value": "30+",
+        "label": "Zastupanih brendova"
+      },
+      "locations": {
+        "value": "2",
+        "label": "Lokacije u Beogradu"
+      }
+    },
+    "cta": {
+      "heading": "Postani deo \n Stridon mreže distributera",
+      "action": "Postani distributer",
+      "badges": {
+        "portal": "B2B portal",
+        "ownBrands": "Sopstveni brendovi",
+        "catalogs": "Katalozi",
+        "service": "Servis u Beogradu"
+      }
+    }
+  },
+  "OwnBrands": {
+    "sgTools": {
+      "heading": "SG Tools - naš sopstveni brend",
+      "paragraphs": [
+        "Pored svetskih proizvođača koje uvozimo i distribuiramo, Stridon Group stoji i iza sopstvene linije alata. SG TOOLS je nastao iz porodičnog posla sa alatom dugog 30 godina.",
+        "Iza svakog SG TOOLS proizvoda stoji ista garancija, tehnička podrška i servis kao i kod uvoznih brendova, samo bez posrednika između proizvodnje i police."
+      ],
+      "linkLabel": "Poseti sgtools.rs",
+      "imageAlt": "Radnja na Altini"
+    },
+    "dck": {
+      "heading": "DCK alati",
+      "paragraphs": [
+        "DCK je profesionalni brend kompanije Dongcheng, sa skoro tri decenije iskustva, sopstvenom proizvodnjom i distribucijom u preko sto zemalja sveta.",
+        "Kod nas je DCK dostupan sa punom podrškom: brushless akumulatorski program, tri godine garancije i servis u Srbiji. Ceo asortiman i tehnički detalji su na posebnom sajtu brenda."
+      ],
+      "linkLabel": "Poseti dcksrbija.rs",
+      "imageAlt": "DCK štand na sajmu alata"
+    }
+  },
+  "Brands": {
+    "meta": {
+      "title": "Brendovi",
+      "description": "Brendovi mašina, pribora, električnog, ručnog i akumulatorskog alata za koje je Stridon Group zvanični uvoznik i distributer u Srbiji."
+    },
+    "hero": {
+      "title": "Uvoznik i distributer najboljih brendova",
+      "description": "Brendovi mašina, pribora, električnog, ručnog i akumulatorskog alata koje uvozimo i za koje je naša firma uvoznik i distributer na teritoriji Srbije."
+    },
+    "goToBrand": "Idi na brend"
+  },
+  "Brand": {
+    "notFound": "Brend nije pronađen",
+    "back": "Brendovi",
+    "viewCatalogs": "Pogledaj kataloge",
+    "allProducts": "Svi {brand} proizvodi",
+    "shopLead": "Kompletan asortiman i dostupnost proizvoda brenda {brand} pogledaj u našoj zvaničnoj internet prodavnici.",
+    "openShop": "Otvori prodavnicu"
+  },
+  "Catalogs": {
+    "meta": {
+      "title": "Katalozi",
+      "description": "PDF katalozi i cenovnici mašina, električnog i ručnog alata brendova koje Stridon Group zvanično uvozi i distribuira u Srbiji."
+    },
+    "hero": {
+      "title": "Katalozi",
+      "description": "Pregledaj širok izbor proizvoda i najbolje ponude mašina, električnog i ručnog alata za profesionalnu i kućnu upotrebu u našim akcijskim katalozima."
+    },
+    "empty": {
+      "title": "Trenutno nema dostupnih kataloga.",
+      "description": "Proveri ponovo uskoro."
+    },
+    "untagged": "Ostali katalozi",
+    "goToBrand": "Idi na brend"
+  },
+  "About": {
+    "meta": {
+      "title": "O nama",
+      "description": "Stridon Group je zvanični uvoznik i distributer profesionalnog alata u Srbiji, sa sopstvenim brendovima SG TOOLS i DCK, servisom i mrežom od preko 120 dilera."
+    },
+    "hero": {
+      "title": "Uvoz, distribucija i servis alata od 30 godina",
+      "description": "Stridon Group je porodična firma iz Beograda. Uvozimo i distribuiramo profesionalni alat, stojimo iza sopstvenih brendova i držimo servis u svojim rukama."
+    },
+    "timelineTitle": "Kako je nastao Stridon Group",
+    "testimonialsTitle": "Šta naši saradnici kažu o nama",
+    "clientsTitle": "Ko su naši klijenti",
+    "milestones": {
+      "flea": {
+        "title": "Prva tezga na Novobeogradskom buvljaku",
+        "description": "Naša priča počinje na jednoj tezgi Novobeogradskog buvljaka, gde su prodati prvi komadi alata i napravljene prve neraskidive veze sa kupcima.",
+        "imageAlt": "Tezga sa alatima na Novobeogradskom buvljaku"
+      },
+      "store": {
+        "title": "Otvaranje radnje u Vojislava Ilića",
+        "description": "Otvaranjem prve radnje gradili smo iskustvo iz neposrednog kontakta sa kupcima i njihovim svakodnevnim potrebama.",
+        "imageAlt": "Radnja u ulici Vojislava Ilića"
+      },
+      "online": {
+        "title": "Pokretanje prodavnicaalata.rs",
+        "description": "Ulaskom u online prodaju povezali smo iskustvo iz radnje sa širim tržištem i dodatno proširili kontakt sa kupcima širom Srbije.",
+        "imageAlt": "Logo prodavnicaalata.rs"
+      },
+      "altina": {
+        "title": "Otvaranje lokacije na Altini",
+        "description": "Širenjem poslovanja nastavili smo da učimo iz prakse i da još bolje razumemo šta tržište zaista traži od alata.",
+        "imageAlt": "Radnja na Altini"
+      },
+      "sgTools": {
+        "title": "Pokretanje brenda SG TOOLS",
+        "description": "SG TOOLS je nastao kao prirodan nastavak tog puta, sa ciljem da ponudi alat koji je pouzdan, funkcionalan i cenovno pristupačan.",
+        "imageAlt": "DCK štand na sajmu alata"
+      }
+    },
+    "quotes": {
+      "inGradnja": "Veliki profesionalci i dobri ljudi, uvek spremni da ispune zahteve i rokove. Sve preporuke za bilo koju vrstu saradnje.",
+      "enterijerJankovic": "Vrlo dobro iskustvo u radu sa firmom Stridon Group. Odlični u komunikaciji, drže se rokova, uvek imaju dobar profesionalni savet i alat na lageru!",
+      "hidroIna": "Firma koja uvek zna šta našoj firmi treba. Neprocenjivi prijateljski saveti i rešenja koja samo veliki profesionalci u svom poslu znaju. Sve preporuke za Stridon!",
+      "termoTim": "Jednostavna i brza svakodnevna saradnja. Ljudi koji su uvek spremni da izađu u susret potrebama kupaca.",
+      "silmax": "Odličan lager alata i poznavanje potreba kupaca. Takođe, veliki broj brendova koje Stridon uvozi, čini ih nezaobilaznim svakodnevnim dobavljačem!",
+      "mbmRad": "Saveti profesionalnih prodavaca Stridona doveli su do skraćenja rada naše firme na pojedinim delovima projekata i do 50%!",
+      "galens": "Koliki god da projekat počinjete, Stridon uvek ima dovoljno alata za vas. Isporuka sutradan, alati kvalitetni, a želja da se kupcu istinski pomogne je nemerljiva!",
+      "colligoArs": "Verni saradnik na svim našim projektima. U dugogodišnjoj saradnji nas ni jednom nisu izneverili. Preporuke za firmu Stridon!"
+    }
+  },
+  "Service": {
+    "meta": {
+      "title": "Servis",
+      "description": "Servis električnih, akumulatorskih i ručnih alata van garantnog roka u Beogradu. SG Servis, Vojislava Ilića 141b."
+    },
+    "hero": {
+      "title": "Servis alata van garancije u Beogradu",
+      "description": "Servisiramo i održavamo električne, akumulatorske i ručne alate, za profesionalnu i za kućnu upotrebu."
+    },
+    "brandsTitle": "Samo neki od brendova koje servisiramo",
+    "warrantyTitle": "Servis alata pod garancijom",
+    "inWarranty": {
+      "title": "Alat je u garantnom roku",
+      "description": "Ako je tvoj alat u garantnom roku i pokriva ga garancija proizvođača, uputićemo te na ovlašćeni servis brenda kome mašina pripada. Javi nam se, naći ćemo ti najbliži."
+    },
+    "outOfWarranty": {
+      "title": "Alat je van garantnog roka",
+      "description": "Sve ostalo preuzima SG Servis: redovno održavanje, popravka i dijagnostika kvara. Donesi alat na adresu servisa ili se prvo javi telefonom da proveriš šta ti treba."
+    },
+    "partner": {
+      "title": "SG Servis - naš pouzdani partner",
+      "paragraphs": [
+        "SG Servis je naš dugogodišnji saradnik za servisiranje električnih alata. Ekipa stručnjaka je specijalizovana za održavanje i popravku širokog spektra brendova, od redovnog servisa i popravke do dijagnostike kvara.",
+        "Serviseri imaju bogato iskustvo sa najpoznatijim proizvođačima električnog alata, pa model i složenost kvara nisu prepreka. U ugradnju idu isključivo kvalitetni zamenski delovi, da bi alat ostao pouzdan i posle popravke.",
+        "Radno vreme je od 8:00 do 16:00 svakog radnog dana, subotom od 9:00 do 15:00, nedeljom je neradan dan. Svrati u to vreme ili se javi telefonom, tim SG Servisa će te rado dočekati i pomoći oko svakog pitanja ili problema sa tvojim alatom."
+      ]
+    },
+    "center": {
+      "badge": "Naš servisni partner"
+    }
+  },
+  "Contact": {
+    "meta": {
+      "title": "Kontakt",
+      "description": "Kontaktiraj Stridon tim za veleprodaju, tehničku podršku, servis ili saradnju. Tu smo da pomognemo."
+    },
+    "hero": {
+      "title": "Javi nam se",
+      "description": "Imaš pitanje o našim alatima, treba ti pomoć da nađeš pravi proizvod, ili želiš da postaneš diler? Rado ćemo ti pomoći."
+    },
+    "directMail": "Ili nam piši direktno na",
+    "form": {
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "petar@primer.rs",
+      "messageLabel": "Kako možemo da ti pomognemo?",
+      "messagePlaceholder": "Reci nam šta ti treba...",
+      "submit": "Pošalji poruku",
+      "submitting": "Šalje se...",
+      "success": "Poruka je uspešno poslata!"
+    }
+  },
+  "B2b": {
+    "meta": {
+      "title": "B2B",
+      "description": "Zatraži pristup Stridon B2B platformi: veleprodajne cene, stanje lagera i poručivanje online, za firme koje prodaju alat."
+    },
+    "hero": {
+      "title": "B2B platforma",
+      "description": "Prijavi se na portal ako već imaš nalog kod nas, ili zatraži pristup ako nam se tek pridružuješ."
+    },
+    "existing": {
+      "title": "Već imaš B2B nalog?",
+      "description": "Portal koriste firme koje već imaju otvoren nalog kod nas.",
+      "action": "Prijavi se na portal"
+    },
+    "request": {
+      "title": "Zatraži pristup B2B platformi",
+      "description": "Popuni formular i naš tim će te kontaktirati u najkraćem mogućem roku."
+    },
+    "form": {
+      "fields": {
+        "firstName": {
+          "label": "Ime",
+          "placeholder": "Petar"
+        },
+        "lastName": {
+          "label": "Prezime",
+          "placeholder": "Petrović"
+        },
+        "email": {
+          "label": "E-mail",
+          "placeholder": "petar@primer.rs"
+        },
+        "contactPhone": {
+          "label": "Kontakt telefon",
+          "placeholder": "060 123 4567"
+        },
+        "companyName": {
+          "label": "Naziv firme",
+          "placeholder": "Primer d.o.o."
+        },
+        "companyAddress": {
+          "label": "Adresa firme",
+          "placeholder": "Vojislava Ilića 141g, Beograd"
+        },
+        "pib": {
+          "label": "PIB firme",
+          "placeholder": "123456789"
+        },
+        "companyRegistrationNumber": {
+          "label": "Matični broj firme",
+          "placeholder": "12345678"
+        }
+      },
+      "submit": "Pošalji zahtev",
+      "submitting": "Šalje se...",
+      "success": "Zahtev je poslat. Naša podrška će te kontaktirati u najkraćem roku.",
+      "errors": {
+        "firstNameMin": "Ime mora imati bar 2 karaktera",
+        "firstNameMax": "Ime može imati najviše 100 karaktera",
+        "lastNameMin": "Prezime mora imati bar 2 karaktera",
+        "lastNameMax": "Prezime može imati najviše 100 karaktera",
+        "emailRequired": "Unesi svoju e-mail adresu",
+        "emailInvalid": "Unesi ispravnu e-mail adresu",
+        "phoneMin": "Kontakt telefon mora imati bar 6 karaktera",
+        "phoneMax": "Kontakt telefon može imati najviše 36 karaktera",
+        "companyNameRequired": "Unesi naziv firme",
+        "companyNameMax": "Naziv firme može imati najviše 100 karaktera",
+        "companyAddressRequired": "Unesi adresu firme",
+        "companyAddressMax": "Adresa firme može imati najviše 100 karaktera",
+        "pib": "PIB mora imati tačno 9 cifara",
+        "registrationNumber": "Matični broj mora imati tačno 8 cifara",
+        "invalid": "Podaci nisu ispravni. Proveri unos.",
+        "unavailable": "Slanje zahteva trenutno nije moguće. Pokušaj ponovo kasnije.",
+        "send": "Slanje zahteva nije uspelo. Pokušaj ponovo kasnije."
+      }
+    }
+  },
+  "NotFound": {
+    "title": "Stranica nije pronađena",
+    "description": "Stranica koju tražiš ne postoji ili je premeštena. Proveri adresu ili se vrati na početnu.",
+    "home": "Početna",
+    "brands": "Svi brendovi"
+  },
+  "Error": {
+    "title": "Ups, nešto nije u redu",
+    "description": "Došlo je do greške prilikom učitavanja podataka. Probaj ponovo ili se vrati na početnu stranu.",
+    "retry": "Probaj ponovo",
+    "home": "Početna"
+  },
+  "Legal": {
+    "privacy": {
+      "meta": {
+        "title": "Politika privatnosti",
+        "description": "Politika privatnosti Stridon Group - kako prikupljamo, koristimo i štitimo tvoje podatke na sajtu stridon.rs."
+      },
+      "hero": {
+        "title": "Politika privatnosti",
+        "description": "Tvoji podaci su nam važni. Ovde možeš pročitati kako ih prikupljamo, koristimo i štitimo."
+      },
+      "body": "<h2>Podaci o rukovaocu</h2>\n<p>Sajt <strong>stridon.rs</strong> je u vlasništvu kompanije <strong>STRIDON GROUP DOO</strong>, sa sedištem u Republici Srbiji. Kao rukovalac podataka, odgovorni smo za zaštitu tvojih ličnih podataka u skladu sa Zakonom o zaštiti podataka o ličnosti Republike Srbije.</p>\n<ul><li><strong>Naziv firme:</strong> STRIDON GROUP DOO</li><li><strong>Sajt:</strong> stridon.rs</li><li><strong>E-mail:</strong> office@stridon.rs</li></ul>\n<h2>Obaveštenje o zaštiti podataka</h2>\n<p>Posvećeni smo zaštiti privatnosti svakog posetioca našeg sajta. Ovom politikom privatnosti objašnjavamo koje podatke prikupljamo, u koje svrhe ih koristimo i kako ih štitimo. Sajt stridon.rs je informativnog karaktera - predstavlja Stridon Group i brendove koje zvanično uvozimo i distribuiramo, bez mogućnosti kupovine. Kupovina se obavlja isključivo na sajtu <a href=\"https://www.prodavnicaalata.rs\" target=\"_blank\" rel=\"noopener noreferrer\">prodavnicaalata.rs</a>.</p>\n<h2>Vrsta podataka i svrha prikupljanja</h2>\n<p>Na ovom sajtu ne prikupljamo podatke kroz proces kupovine jer se ovde ne obavljaju transakcije. Podatke prikupljamo isključivo ukoliko nas kontaktiraš putem kontakt forme, e-maila ili zahteva za pristup B2B platformi.</p>\n<p>Kroz kontakt formu prikupljamo:</p>\n<ul><li>E-mail adresu</li><li>Sadržaj poruke</li></ul>\n<p>Kroz zahtev za pristup B2B platformi prikupljamo i podatke neophodne za proveru firme:</p>\n<ul><li>Ime i prezime kontakt osobe</li><li>E-mail adresu i broj telefona</li><li>Naziv i adresu firme</li><li>PIB i matični broj</li></ul>\n<p>Ove podatke koristimo isključivo za:</p>\n<ul><li>Odgovaranje na tvoj upit ili poruku</li><li>Pružanje traženih informacija o brendovima, katalozima i uslovima saradnje</li><li>Otvaranje i proveru naloga na B2B platformi</li></ul>\n<h2>Korisnici podataka</h2>\n<p>Tvojim podacima pristupaju isključivo ovlašćeni zaposleni kompanije STRIDON GROUP DOO, u cilju obrade tvog upita. Tvoje podatke ne delimo sa trećim licima, osim ukoliko je to neophodno za ispunjenje zakonskih obaveza.</p>\n<h2>Zaštita podataka</h2>\n<p>Primenjujemo odgovarajuće tehničke i organizacione mere zaštite podataka, uključujući:</p>\n<ul><li>Zaštitu servera savremenim sigurnosnim protokolima</li><li>Antivirusnu zaštitu i redovne bezbednosne provere</li><li>Ograničen pristup podacima samo ovlašćenim zaposlenima</li></ul>\n<h2>Tvoja prava</h2>\n<p>U skladu sa Zakonom o zaštiti podataka o ličnosti, imaš pravo da:</p>\n<ul><li>Zatražiš uvid u podatke koje imamo o tebi</li><li>Zatražiš ispravku netačnih podataka</li><li>Zatražiš brisanje tvojih podataka</li><li>Ograničiš obradu tvojih podataka</li><li>Podneseš prigovor na obradu podataka</li></ul>\n<p>Za ostvarivanje bilo kog od navedenih prava, obrati nam se na <a href=\"mailto:office@stridon.rs\">office@stridon.rs</a>.</p>\n<h2>Nadležni organ</h2>\n<p>Ukoliko smatraš da je obrada tvojih podataka izvršena suprotno odredbama Zakona, imaš pravo da podneseš pritužbu Povereniku za informacije od javnog značaja i zaštitu podataka o ličnosti Republike Srbije (<a href=\"https://www.poverenik.rs\" target=\"_blank\" rel=\"noopener noreferrer\">www.poverenik.rs</a>).</p>\n<h2>Politika kolačića</h2>\n<p>Sajt stridon.rs koristi kolačiće (cookies) kako bi obezbedio pravilno funkcionisanje i poboljšao korisničko iskustvo. Kolačići koje koristimo spadaju u sledeće kategorije:</p>\n<ul><li><strong>Neophodni kolačići</strong> - omogućavaju osnovne funkcionalnosti sajta i ne mogu se isključiti.</li><li><strong>Analitički kolačići</strong> - pomažu nam da razumemo kako posetioci koriste sajt, kako bismo poboljšali sadržaj i korisničko iskustvo.</li><li><strong>Marketing kolačići</strong> - koriste se za prikazivanje relevantnog sadržaja i oglasa.</li></ul>\n<p>Korišćenjem sajta pristaneš na upotrebu kolačića u skladu sa ovom politikom.</p>\n<h2>Autorska prava</h2>\n<p>Sav sadržaj objavljen na sajtu stridon.rs, uključujući tekstove, fotografije, grafiku, logotipe i dizajn, zaštićen je autorskim pravima i u vlasništvu je kompanije STRIDON GROUP DOO. Reprodukcija, distribucija ili bilo koji oblik korišćenja sadržaja bez prethodne pisane saglasnosti je zabranjena.</p>\n<h2>Izmene politike privatnosti</h2>\n<p>Zadržavamo pravo da ažuriramo ovu politiku privatnosti u bilo kom trenutku. Sve izmene stupaju na snagu momentom objavljivanja na ovoj stranici. Preporučujemo ti da povremeno ponovo pročitaš ovu stranicu kako bi bio/bila u toku sa eventualnim promenama.</p>"
+    },
+    "terms": {
+      "meta": {
+        "title": "Uslovi korišćenja",
+        "description": "Uslovi korišćenja sajta Stridon Group - pravila i uslovi za korišćenje sajta stridon.rs."
+      },
+      "hero": {
+        "title": "Uslovi korišćenja",
+        "description": "Pročitaj uslove pod kojima koristiš naš sajt."
+      },
+      "body": "<h2>Opšte odredbe</h2>\n<p>Ovi uslovi korišćenja regulišu upotrebu internet sajta <strong>stridon.rs</strong>, čiji je vlasnik i operater kompanija <strong>STRIDON GROUP DOO</strong>, sa sedištem u Republici Srbiji. Pristupanjem i korišćenjem ovog sajta prihvataš ove uslove u celosti. Ukoliko se ne slažeš sa bilo kojim delom uslova, molimo te da ne koristiš sajt.</p>\n<h2>Korišćenje sajta</h2>\n<p>Sajt stridon.rs je informativnog i marketinškog karaktera. Predstavlja Stridon Group i brendove koje zvanično uvozimo i distribuiramo, zajedno sa katalozima, servisom i uslovima saradnje. Na ovom sajtu <strong>nije moguća kupovina</strong> - svi proizvodi se kupuju isključivo putem sajta <a href=\"https://www.prodavnicaalata.rs\" target=\"_blank\" rel=\"noopener noreferrer\">prodavnicaalata.rs</a>.</p>\n<p>Sajt koristiš na sopstvenu odgovornost. Obavezuješ se da ćeš ga koristiti isključivo u zakonite svrhe i na način koji ne narušava prava drugih korisnika.</p>\n<h2>Intelektualna svojina</h2>\n<p>Sav sadržaj na sajtu stridon.rs - uključujući ali ne ograničavajući se na tekstove, fotografije, grafiku, logotipe, ikone, audio i video materijale, kao i dizajn i strukturu sajta - zaštićen je autorskim pravima i predstavlja intelektualnu svojinu kompanije STRIDON GROUP DOO.</p>\n<p>Bez prethodne pisane saglasnosti nije dozvoljeno kopiranje, reprodukcija, distribucija, javno prikazivanje niti bilo koji drugi oblik korišćenja sadržaja sa ovog sajta.</p>\n<h2>Linkovi ka spoljnim sajtovima</h2>\n<p>Ovaj sajt može sadržati linkove ka drugim sajtovima, uključujući <a href=\"https://www.prodavnicaalata.rs\" target=\"_blank\" rel=\"noopener noreferrer\">prodavnicaalata.rs</a> (za kupovinu proizvoda) i drugim spoljnim resursima. Ovi linkovi su obezbeđeni radi tvoje pogodnosti. STRIDON GROUP DOO ne snosi odgovornost za sadržaj, politiku privatnosti ili prakse drugih sajtova.</p>\n<h2>Ograničenje odgovornosti</h2>\n<p>Informacije na sajtu stridon.rs su pružene &quot;takve kakve jesu&quot;, bez bilo kakvih garancija, izričitih ili podrazumevanih. Trudimo se da sve informacije budu tačne i ažurne, ali ne garantujemo potpunost, tačnost ili pouzdanost sadržaja.</p>\n<p>Specifikacije, opisi i cene proizvoda prikazanih na sajtu su informativnog karaktera i mogu se razlikovati od stvarnog stanja. Za tačne i ažurne informacije o proizvodima, uključujući cene i dostupnost, proveri sajt <a href=\"https://www.prodavnicaalata.rs\" target=\"_blank\" rel=\"noopener noreferrer\">prodavnicaalata.rs</a>.</p>\n<p>STRIDON GROUP DOO ne snosi odgovornost za bilo kakvu štetu koja može nastati korišćenjem ili nemogućnošću korišćenja ovog sajta.</p>\n<h2>Privatnost</h2>\n<p>Tvoja privatnost nam je važna. Sve informacije o prikupljanju i obradi ličnih podataka možeš pronaći u našoj <a href=\"__PRIVACY__\">Politici privatnosti</a>.</p>\n<h2>Izmene uslova</h2>\n<p>STRIDON GROUP DOO zadržava pravo da izmeni ove uslove korišćenja u bilo kom trenutku, bez prethodnog obaveštenja. Izmenjeni uslovi stupaju na snagu momentom objavljivanja na ovoj stranici. Nastavkom korišćenja sajta nakon objave izmena prihvataš nove uslove.</p>\n<p>Preporučujemo ti da povremeno ponovo pročitaš ovu stranicu kako bi bio/bila u toku sa eventualnim promenama.</p>\n<h2>Merodavno pravo</h2>\n<p>Na ove uslove korišćenja primenjuje se pravo Republike Srbije. Za sve sporove koji mogu nastati u vezi sa korišćenjem sajta stridon.rs nadležan je sud u Republici Srbiji.</p>\n<h2>Kontakt</h2>\n<p>Za sva pitanja u vezi sa ovim uslovima korišćenja, možeš nas kontaktirati putem e-maila na <a href=\"mailto:office@stridon.rs\">office@stridon.rs</a> ili putem naše <a href=\"__CONTACT__\">stranice za kontakt</a>.</p>"
+    }
+  }
+}

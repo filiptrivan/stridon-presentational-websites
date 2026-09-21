@@ -5,38 +5,56 @@ import {
   OWN_BRANDS,
   PARTNER_QUOTES,
 } from "@/constants/about";
+import { createLocalizedMetadata } from "@/lib/metadata";
+import type { Locale } from "@brand/i18n/config";
 import Companies from "@brand/shared/components/companies";
 import CompanyValues from "@brand/shared/components/company-values";
 import HeroHeader from "@brand/shared/components/hero-header";
 import Testimonials from "@brand/shared/components/testimonials";
-import { createPageMetadata } from "@brand/shared/lib/metadata";
+import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
-export const metadata = createPageMetadata({
-  title: "O nama",
-  description:
-    "Stridon Group je zvanični uvoznik i distributer profesionalnog alata u Srbiji, sa sopstvenim brendovima SG TOOLS i DCK, servisom i mrežom od preko 120 dilera.",
-  canonicalUrl: "/o-nama",
-});
+type Props = { params: Promise<{ locale: string }> };
 
-const ONamaPage = () => {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "About.meta" });
+
+  return createLocalizedMetadata({
+    locale: locale as Locale,
+    href: "/o-nama",
+    title: t("title"),
+    description: t("description"),
+  });
+}
+
+const ONamaPage = async ({ params }: Props) => {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "About" });
+
   return (
     <div>
-      <HeroHeader
-        title="Uvoz, distribucija i servis alata od 30 godina"
-        description="Stridon Group je porodična firma iz Beograda. Uvozimo i distribuiramo profesionalni alat, stojimo iza sopstvenih brendova i držimo servis u svojim rukama."
-      />
+      <HeroHeader title={t("hero.title")} description={t("hero.description")} />
 
       <CompanyValues
-        milestones={ABOUT_MILESTONES}
-        title="Kako je nastao Stridon Group"
+        milestones={ABOUT_MILESTONES.map(({ key, image, ...rest }) => ({
+          ...rest,
+          title: t(`milestones.${key}.title`),
+          description: t(`milestones.${key}.description`),
+          image: { ...image, alt: t(`milestones.${key}.imageAlt`) },
+        }))}
+        title={t("timelineTitle")}
       />
-      <OwnBrand brand={OWN_BRANDS[0]} />
-      <OwnBrand brand={OWN_BRANDS[1]} />
+      <OwnBrand brand={OWN_BRANDS[0]} locale={locale as Locale} />
+      <OwnBrand brand={OWN_BRANDS[1]} locale={locale as Locale} />
       <Testimonials
-        items={PARTNER_QUOTES}
-        title="Šta naši saradnici kažu o nama"
+        items={PARTNER_QUOTES.map(({ key, personName }) => ({
+          personName,
+          quote: t(`quotes.${key}`),
+        }))}
+        title={t("testimonialsTitle")}
       />
-      <Companies companies={CLIENT_LOGOS} title="Ko su naši klijenti" />
+      <Companies companies={CLIENT_LOGOS} title={t("clientsTitle")} />
     </div>
   );
 };

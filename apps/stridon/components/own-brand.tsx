@@ -1,18 +1,31 @@
-import type { OwnBrand as OwnBrandData } from "@/constants/about";
+import type { OwnBrandDef } from "@/constants/about";
+import type { Locale } from "@brand/i18n/config";
 import Container from "@brand/shared/components/container";
 import Section from "@brand/shared/components/section";
 import Wrapper from "@brand/shared/components/wrapper";
 import { Button } from "@brand/ui/button";
 import { ExternalLink } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 
 interface OwnBrandProps {
-  brand: OwnBrandData;
+  brand: OwnBrandDef;
+  locale: Locale;
 }
 
 // Stridon is not only a distributor: SG TOOLS and DCK are the group's own
 // lines. One section per brand, both reading copy left / photo right.
-const OwnBrand = ({ brand }: OwnBrandProps) => {
+//
+// The heading and the blurb come from `OwnBrands.<key>` rather than from the
+// page, so the homepage and /o-nama cannot drift apart - they render this same
+// component and therefore the same copy.
+const OwnBrand = async ({ brand, locale }: OwnBrandProps) => {
+  const t = await getTranslations({
+    locale,
+    namespace: `OwnBrands.${brand.key}`,
+  });
+  const paragraphs = t.raw("paragraphs") as string[];
+
   return (
     <Section className="py-20 lg:py-28">
       <Wrapper>
@@ -20,10 +33,10 @@ const OwnBrand = ({ brand }: OwnBrandProps) => {
           <Container>
             <div>
               <h2 className="text-3xl font-semibold tracking-tight lg:text-4xl">
-                {brand.heading}
+                {t("heading")}
               </h2>
 
-              {brand.paragraphs.map((paragraph, index) => (
+              {paragraphs.map((paragraph, index) => (
                 <p
                   key={paragraph.slice(0, 48)}
                   className={`max-w-lg text-muted-foreground ${
@@ -41,7 +54,7 @@ const OwnBrand = ({ brand }: OwnBrandProps) => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    {brand.linkLabel}
+                    {t("linkLabel")}
                     <ExternalLink className="size-4" />
                   </a>
                 </Button>
@@ -59,7 +72,7 @@ const OwnBrand = ({ brand }: OwnBrandProps) => {
                 <div className="relative aspect-[4/3] w-full">
                   <Image
                     src={brand.image.src}
-                    alt={brand.image.alt}
+                    alt={t("imageAlt")}
                     fill
                     sizes="(min-width: 1024px) 50vw, 100vw"
                     className="object-cover"

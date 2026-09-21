@@ -1,4 +1,7 @@
 import { groupCatalogsByBrand } from "@/lib/catalog-groups";
+import { createLocalizedMetadata } from "@/lib/metadata";
+import { brandPath } from "@/lib/nav";
+import type { Locale } from "@brand/i18n/config";
 import CatalogCardsGrid from "@brand/shared/components/catalog-cards-grid";
 import HeroHeader from "@brand/shared/components/hero-header";
 import Section from "@brand/shared/components/section";
@@ -6,16 +9,24 @@ import SectionHeader from "@brand/shared/components/section-header";
 import StatusMessage from "@brand/shared/components/status-message";
 import Wrapper from "@brand/shared/components/wrapper";
 import { getAllCatalogs, getBrandCards } from "@brand/shared/lib/api";
-import { createPageMetadata } from "@brand/shared/lib/metadata";
 import { BookOpen } from "lucide-react";
+import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 
-export const metadata = createPageMetadata({
-  title: "Katalozi",
-  description:
-    "PDF katalozi i cenovnici mašina, električnog i ručnog alata brendova koje Stridon Group zvanično uvozi i distribuira u Srbiji.",
-  canonicalUrl: "/katalozi",
-});
+type Props = { params: Promise<{ locale: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Catalogs.meta" });
+
+  return createLocalizedMetadata({
+    locale: locale as Locale,
+    href: "/katalozi",
+    title: t("title"),
+    description: t("description"),
+  });
+}
 
 // Same cards dck and sg-tools get from the shared `catalogs-page`, but grouped by
 // manufacturer, which those two have no use for: each of them sells one brand,
@@ -24,32 +35,37 @@ export const metadata = createPageMetadata({
 //
 // The page reads the unscoped endpoint: `getCatalogs()` filters by BRAND_SLUG,
 // and "stridon" is not a manufacturer in the CMS, so for this app it is empty.
-const KataloziPage = async () => {
+const KataloziPage = async ({ params }: Props) => {
+  const { locale } = await params;
+
   // Both are cached reads the site already makes - `getBrandCards()` is the same
   // entry the homepage brand wall fills, so the logos here are free.
-  const [catalogs, cards] = await Promise.all([
+  const [catalogs, cards, t] = await Promise.all([
     getAllCatalogs(),
     getBrandCards(),
+    getTranslations({ locale, namespace: "Catalogs" }),
   ]);
-  const groups = groupCatalogsByBrand(
-    catalogs,
-    new Map(cards.map((card) => [card.slug, card.imageUrl ?? null])),
-  );
+
+  const groups = groupCatalogsByBrand(catalogs, {
+    logoBySlug: new Map(cards.map((card) => [card.slug, card.imageUrl ?? null])),
+    // Catalog titles come from PACMS and are translated there; these two are
+    // ours, and the route has to be the one this locale is served at.
+    untaggedName: t("untagged"),
+    brandHref: (slug) => brandPath(slug, locale as Locale),
+    sortLocale: locale,
+  });
 
   return (
     <div>
-      <HeroHeader
-        title="Katalozi"
-        description="Pregledaj širok izbor proizvoda i najbolje ponude mašina, električnog i ručnog alata za profesionalnu i kućnu upotrebu u našim akcijskim katalozima."
-      />
+      <HeroHeader title={t("hero.title")} description={t("hero.description")} />
 
       {groups.length === 0 ? (
         <Section>
           <Wrapper>
             <StatusMessage
               icon={BookOpen}
-              title="Trenutno nema dostupnih kataloga."
-              description="Proveri ponovo uskoro."
+              title={t("empty.title")}
+              description={t("empty.description")}
             />
           </Wrapper>
         </Section>
@@ -91,7 +107,7 @@ const KataloziPage = async () => {
                   // for manufacturers stridon.rs does not show.
                   action={
                     group.href
-                      ? { label: "Idi na brend", href: group.href }
+                      ? { label: t("goToBrand"), href: group.href }
                       : undefined
                   }
                 />

@@ -1,56 +1,69 @@
 import { BRAND_SLUGS, shopUrlFor } from "@/constants/brands";
+import { createLocalizedMetadata } from "@/lib/metadata";
+import { pathFor } from "@/lib/nav";
+import { routing } from "@/i18n/routing";
+import type { Locale } from "@brand/i18n/config";
 import Container from "@brand/shared/components/container";
 import HeroHeader from "@brand/shared/components/hero-header";
 import Section from "@brand/shared/components/section";
 import Wrapper from "@brand/shared/components/wrapper";
 import { getAllCatalogs, getBrandBySlug } from "@brand/shared/lib/api";
-import { createPageMetadata } from "@brand/shared/lib/metadata";
 import { Button } from "@brand/ui/button";
 import { Prose } from "@brand/ui/prose";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 type Props = {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: string; slug: string }>;
 };
 
 // From the curated list, not from the API: these routes are fixed by what
 // Stridon shows, so a build should not fan out 234 brand reads to discover the
-// paths it already knows.
+// paths it already knows. Both locales, since each is its own prerendered page.
 export function generateStaticParams() {
-  return BRAND_SLUGS.map((slug) => ({ slug }));
+  return routing.locales.flatMap((locale) =>
+    BRAND_SLUGS.map((slug) => ({ locale, slug })),
+  );
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
+  const { locale, slug } = await params;
   const brand = await getBrandBySlug(slug);
-  if (!brand) return { title: "Brend nije pronađen" };
+  if (!brand) {
+    const t = await getTranslations({ locale, namespace: "Brand" });
+    return { title: t("notFound") };
+  }
 
-  return createPageMetadata({
+  return createLocalizedMetadata({
+    locale: locale as Locale,
+    href: { pathname: "/brendovi/[slug]", params: { slug: brand.slug } },
     // The CMS writes these for the webshop, where the same brand ranks on the
-    // same queries, so they are the tested copy rather than a guess.
+    // same queries, so they are the tested copy rather than a guess - and the
+    // CMS is also where they get translated.
     title: brand.metaTitle,
     description: brand.metaDescription,
-    canonicalUrl: `/brendovi/${brand.slug}`,
   });
 }
 
 const BrandPage = async ({ params }: Props) => {
-  const { slug } = await params;
+  const { locale, slug } = await params;
   // Everything on this page is generated: a brand added to BRAND_SLUGS and
   // written in the CMS renders here with no further code.
-  const [brand, { catalogs }] = await Promise.all([
+  const [brand, { catalogs }, t] = await Promise.all([
     getBrandBySlug(slug),
     getAllCatalogs(),
+    getTranslations({ locale, namespace: "Brand" }),
   ]);
   if (!brand) notFound();
 
   const brandHasCatalogs = catalogs.some((catalog) =>
     catalog.brands.some((catalogBrand) => catalogBrand.slug === brand.slug),
   );
+  const catalogsPath = pathFor("/katalozi", locale as Locale);
 
   return (
     <div>
@@ -58,11 +71,11 @@ const BrandPage = async ({ params }: Props) => {
         pretitle={
           <Container>
             <Link
-              href="/brendovi"
+              href={pathFor("/brendovi", locale as Locale)}
               className="group mb-6 inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors duration-300 hover:text-foreground"
             >
               <ArrowLeft className="size-4 transition-transform duration-300 group-hover:-translate-x-1" />
-              Brendovi
+              {t("back")}
             </Link>
           </Container>
         }
@@ -96,7 +109,9 @@ const BrandPage = async ({ params }: Props) => {
             {brandHasCatalogs ? (
               <Button asChild size="lg">
                 {/* Straight to this brand's group on /katalozi. */}
-                <Link href={`/katalozi#${brand.slug}`}>Pogledaj kataloge</Link>
+                <Link href={`${catalogsPath}#${brand.slug}`}>
+                  {t("viewCatalogs")}
+                </Link>
               </Button>
             ) : null}
             {/* Without a catalog button the shop link carries the header on its own. */}
@@ -110,7 +125,7 @@ const BrandPage = async ({ params }: Props) => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Svi {brand.name} proizvodi
+                {t("allProducts", { brand: brand.name })}
                 <ExternalLink className="size-4" />
               </a>
             </Button>
@@ -138,8 +153,7 @@ const BrandPage = async ({ params }: Props) => {
           <Container>
             <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
               <p className="max-w-2xl text-lg">
-                Kompletan asortiman i dostupnost proizvoda brenda {brand.name}{" "}
-                pogledaj u našoj zvaničnoj internet prodavnici.
+                {t("shopLead", { brand: brand.name })}
               </p>
               <Button asChild size="lg" className="w-fit">
                 <a
@@ -147,7 +161,7 @@ const BrandPage = async ({ params }: Props) => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Otvori prodavnicu
+                  {t("openShop")}
                   <ExternalLink className="size-4" />
                 </a>
               </Button>

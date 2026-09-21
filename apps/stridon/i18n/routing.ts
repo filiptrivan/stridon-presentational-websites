@@ -29,3 +29,12 @@ export const routing = defineRouting({
 });
 
 export type AppPathname = keyof typeof routing.pathnames;
+
+/**
+ * The routes that are a complete URL on their own.
+ *
+ * `/brendovi/[slug]` is not one: next-intl will only accept it as
+ * `{ pathname, params }`, so letting it through as a bare string would turn a
+ * missing slug into a literal "[slug]" in a URL rather than a type error.
+ */
+export type StaticPathname = Exclude<AppPathname, `${string}[${string}`>;
