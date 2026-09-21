@@ -1,10 +1,13 @@
 import { LEGACY_BRAND_SLUGS } from "./constants/brands";
 import { TRUSTED_IMAGE_HOSTS } from "@brand/config/public-assets";
 import { withSentryConfig } from "@sentry/nextjs";
+import createNextIntlPlugin from "next-intl/plugin";
 import type { NextConfig } from "next";
 
+const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
+
 const nextConfig: NextConfig = {
-  transpilePackages: ["@brand/config", "@brand/ui", "@brand/shared"],
+  transpilePackages: ["@brand/config", "@brand/ui", "@brand/shared", "@brand/i18n"],
   cacheComponents: true,
   experimental: {
     // Retry a transient page-prerender failure (e.g. a backend blip) instead of
@@ -38,7 +41,11 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withSentryConfig(nextConfig, {
+// Sentry has to wrap the outermost config, not the inner one: next-intl's
+// plugin resolves `./i18n/request.ts` relative to the config it is given, and
+// composing these the other way round produces "Couldn't find next-intl config
+// file" at build time.
+export default withSentryConfig(withNextIntl(nextConfig), {
   org: process.env.SENTRY_ORG,
   project: process.env.SENTRY_PROJECT,
   silent: !process.env.CI,

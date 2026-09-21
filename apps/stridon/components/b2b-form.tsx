@@ -1,6 +1,6 @@
 "use client";
 
-import { sendB2bRequest } from "@/app/b2b/actions";
+import { sendB2bRequest } from "@/lib/actions/b2b";
 import { b2bRequestSchema, type B2bRequestData } from "@/lib/schemas/b2b";
 import { Button } from "@brand/ui/button";
 import { Input } from "@brand/ui/input";

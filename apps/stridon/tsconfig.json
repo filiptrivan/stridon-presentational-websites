@@ -9,6 +9,7 @@
     "paths": {
       "@/*": ["./*"],
       "@brand/config": ["../../packages/brand-config/src"],
+      "@brand/i18n/*": ["../../packages/i18n/src/*"],
       "@brand/config/*": ["../../packages/brand-config/src/*"],
       "@brand/ui/*": ["../../packages/ui/src/*"],
       "@brand/shared/*": ["../../packages/shared/src/*"]

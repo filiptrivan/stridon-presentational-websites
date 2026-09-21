@@ -34,6 +34,10 @@ type RootLayoutProps = {
   showCategoryMenu?: boolean;
   /** When true, the navbar shows an EN language switch next to the header CTA. */
   showLanguageSwitch?: boolean;
+  /** BCP 47 tag for `<html lang>`. Only a translated site passes it. The
+      default is what dck and sg-tools have always rendered, so their output is
+      unchanged; Stridon passes `sr-Latn` or `en`. */
+  lang?: string;
 };
 
 export default function RootLayout({
@@ -46,9 +50,10 @@ export default function RootLayout({
   socialLinks,
   showCategoryMenu = true,
   showLanguageSwitch = false,
+  lang = "sr",
 }: RootLayoutProps) {
   return (
-    <html lang="sr">
+    <html lang={lang}>
       <body
         className={cn(
           "min-h-screen text-foreground font-base antialiased",
