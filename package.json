@@ -19,7 +19,10 @@
       "@sentry/cli",
       "sharp",
       "unrs-resolver"
-    ]
+    ],
+    "overrides": {
+      "next": "16.3.5"
+    }
   },
   "devDependencies": {
     "openapi-typescript": "^7.13.0",
