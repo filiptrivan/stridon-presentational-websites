@@ -1,11 +1,16 @@
 import { getBrandConfig } from "@brand/config";
 import Footer, {
+  type FooterLabels,
   type FooterNavLink,
   type FooterSocialLink,
 } from "@brand/shared/components/footer";
-import Navbar from "@brand/shared/components/navbar";
+import Navbar, { type NavbarLabels } from "@brand/shared/components/navbar";
 import NavbarWithCategories from "@brand/shared/components/navbar-with-categories";
-import { type NavbarLink } from "@brand/shared/components/mobile-menu";
+import type { NewsletterFormLabels } from "@brand/shared/components/newsletter/newsletter-form";
+import {
+  type MobileMenuLabels,
+  type NavbarLink,
+} from "@brand/shared/components/mobile-menu";
 import { Toaster } from "@brand/ui/sonner";
 import { createRootMetadata } from "@brand/shared/lib/metadata";
 import { cn } from "@brand/shared/lib/utils";
@@ -32,8 +37,18 @@ type RootLayoutProps = {
   /** When false, render the plain Navbar without fetching product categories
       (for brands like Stridon that don't expose a product category catalog). */
   showCategoryMenu?: boolean;
-  /** When true, the navbar shows an EN language switch next to the header CTA. */
-  showLanguageSwitch?: boolean;
+  /** Rendered in the navbar next to the header CTA. Only a translated site
+      passes one, which keeps this package free of a routing library it would
+      otherwise need just to build the other locale's URL. */
+  languageSwitch?: ReactNode;
+  navbarLabels?: NavbarLabels;
+  mobileLabels?: MobileMenuLabels;
+  footerLabels?: FooterLabels;
+  newsletterLabels?: NewsletterFormLabels;
+  /** Localized paths for the two links brand-config hardcodes. */
+  headerCtaHref?: string;
+  homeHref?: string;
+  footerTagline?: string;
   /** BCP 47 tag for `<html lang>`. Only a translated site passes it. The
       default is what dck and sg-tools have always rendered, so their output is
       unchanged; Stridon passes `sr-Latn` or `en`. */
@@ -49,7 +64,14 @@ export default function RootLayout({
   legalLinks,
   socialLinks,
   showCategoryMenu = true,
-  showLanguageSwitch = false,
+  languageSwitch,
+  navbarLabels,
+  mobileLabels,
+  footerLabels,
+  newsletterLabels,
+  headerCtaHref,
+  homeHref,
+  footerTagline,
   lang = "sr",
 }: RootLayoutProps) {
   return (
@@ -84,20 +106,32 @@ export default function RootLayout({
               <Navbar
                 categories={[]}
                 navLinks={navLinks}
-                showLanguageSwitch={showLanguageSwitch}
+                languageSwitch={languageSwitch}
+                labels={navbarLabels}
+                mobileLabels={mobileLabels}
+                headerCtaHref={headerCtaHref}
+                homeHref={homeHref}
               />
             }
           >
             <NavbarWithCategories
               navLinks={navLinks}
-              showLanguageSwitch={showLanguageSwitch}
+              languageSwitch={languageSwitch}
+              labels={navbarLabels}
+              mobileLabels={mobileLabels}
+              headerCtaHref={headerCtaHref}
+              homeHref={homeHref}
             />
           </Suspense>
         ) : (
           <Navbar
             categories={[]}
             navLinks={navLinks}
-            showLanguageSwitch={showLanguageSwitch}
+            languageSwitch={languageSwitch}
+            labels={navbarLabels}
+            mobileLabels={mobileLabels}
+            headerCtaHref={headerCtaHref}
+            homeHref={homeHref}
           />
         )}
         <main className="pt-16">{children}</main>
@@ -106,6 +140,9 @@ export default function RootLayout({
           companyLinks={companyLinks}
           legalLinks={legalLinks}
           socialLinks={socialLinks}
+          labels={footerLabels}
+          newsletterLabels={newsletterLabels}
+          tagline={footerTagline}
         />
         <Toaster />
       </body>

@@ -1,18 +1,27 @@
 import { getFlatCategories } from "../lib/api";
 import type { Category } from "../types/categories";
-import Navbar from "./navbar";
-import type { NavbarLink } from "./mobile-menu";
+import Navbar, { type NavbarLabels } from "./navbar";
+import type { MobileMenuLabels, NavbarLink } from "./mobile-menu";
+import type { ReactNode } from "react";
 
 const HEADER_CATEGORY_COUNT = 4;
 
 interface NavbarWithCategoriesProps {
   navLinks: readonly NavbarLink[];
-  showLanguageSwitch?: boolean;
+  languageSwitch?: ReactNode;
+  labels?: NavbarLabels;
+  mobileLabels?: MobileMenuLabels;
+  headerCtaHref?: string;
+  homeHref?: string;
 }
 
 const NavbarWithCategories = async ({
   navLinks,
-  showLanguageSwitch,
+  languageSwitch,
+  labels,
+  mobileLabels,
+  headerCtaHref,
+  homeHref,
 }: NavbarWithCategoriesProps) => {
   let categories: Category[] = [];
   try {
@@ -25,7 +34,11 @@ const NavbarWithCategories = async ({
     <Navbar
       categories={categories}
       navLinks={navLinks}
-      showLanguageSwitch={showLanguageSwitch}
+      languageSwitch={languageSwitch}
+      labels={labels}
+      mobileLabels={mobileLabels}
+      headerCtaHref={headerCtaHref}
+      homeHref={homeHref}
     />
   );
 };

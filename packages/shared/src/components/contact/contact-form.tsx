@@ -12,11 +12,25 @@ import { Input } from "@brand/ui/input";
 import { Label } from "@brand/ui/label";
 import { Textarea } from "@brand/ui/textarea";
 
+const DEFAULT_LABELS = {
+  emailLabel: "E-mail",
+  emailPlaceholder: "petar@primer.rs",
+  messageLabel: "Kako možemo da ti pomognemo?",
+  messagePlaceholder: "Reci nam šta ti treba...",
+  submit: "Pošalji poruku",
+  submitting: "Šalje se...",
+  success: "Poruka je uspešno poslata!",
+};
+
+export type ContactFormLabels = Partial<typeof DEFAULT_LABELS>;
+
 interface ContactFormProps {
   submitContact: (data: ContactFormData) => Promise<ActionResult>;
+  labels?: ContactFormLabels;
 }
 
-const ContactForm = ({ submitContact }: ContactFormProps) => {
+const ContactForm = ({ submitContact, labels }: ContactFormProps) => {
+  const t = { ...DEFAULT_LABELS, ...labels };
   const {
     register,
     handleSubmit,
@@ -31,7 +45,7 @@ const ContactForm = ({ submitContact }: ContactFormProps) => {
     const result = await submitContact(data);
 
     if (result.success) {
-      toast.success("Poruka je uspešno poslata!");
+      toast.success(t.success);
       reset();
     } else {
       toast.error(result.error);
@@ -44,11 +58,11 @@ const ContactForm = ({ submitContact }: ContactFormProps) => {
       className="max-w-3xl mx-auto w-full space-y-6"
     >
       <div className="space-y-3">
-        <Label htmlFor="email">E-mail</Label>
+        <Label htmlFor="email">{t.emailLabel}</Label>
         <Input
           id="email"
           type="email"
-          placeholder="petar@primer.rs"
+          placeholder={t.emailPlaceholder}
           className="border-border/50"
           aria-invalid={!!errors.email}
           {...register("email")}
@@ -59,10 +73,10 @@ const ContactForm = ({ submitContact }: ContactFormProps) => {
       </div>
 
       <div className="space-y-3">
-        <Label htmlFor="message">Kako možemo da ti pomognemo?</Label>
+        <Label htmlFor="message">{t.messageLabel}</Label>
         <Textarea
           id="message"
-          placeholder="Reci nam šta ti treba..."
+          placeholder={t.messagePlaceholder}
           className="min-h-[150px] border-border/50 resize-none"
           aria-invalid={!!errors.message}
           {...register("message")}
@@ -76,12 +90,12 @@ const ContactForm = ({ submitContact }: ContactFormProps) => {
         {isSubmitting ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Šalje se...
+            {t.submitting}
           </>
         ) : (
           <>
             <Send className="mr-2 h-4 w-4" />
-            Pošalji poruku
+            {t.submit}
           </>
         )}
       </Button>

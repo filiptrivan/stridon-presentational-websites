@@ -27,14 +27,34 @@ export interface NavbarLink {
   external?: boolean;
 }
 
+const DEFAULT_LABELS = {
+  menu: "Meni",
+  menuDescription: "Navigacija kroz kategorije i stranice.",
+  allCategories: "Sve kategorije",
+  headerCta: undefined as string | undefined,
+};
+
+export type MobileMenuLabels = Partial<typeof DEFAULT_LABELS>;
+
 interface MobileMenuProps {
   categories: Category[];
   navLinks: readonly NavbarLink[];
+  labels?: MobileMenuLabels;
+  /** A localized site passes the localized path; brand-config cannot. */
+  headerCtaHref?: string;
 }
 
 const { headerCta } = getBrandConfig();
 
-const MobileMenu = ({ categories, navLinks }: MobileMenuProps) => {
+const MobileMenu = ({
+  categories,
+  navLinks,
+  labels,
+  headerCtaHref,
+}: MobileMenuProps) => {
+  const t = { ...DEFAULT_LABELS, ...labels };
+  const ctaHref = headerCtaHref ?? headerCta.href;
+  const ctaLabel = t.headerCta ?? headerCta.label;
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -44,10 +64,8 @@ const MobileMenu = ({ categories, navLinks }: MobileMenuProps) => {
       </SheetTrigger>
       <SheetContent side="right" className="p-4">
         <SheetHeader className="sr-only">
-          <SheetTitle>Meni</SheetTitle>
-          <SheetDescription>
-            Navigacija kroz kategorije i stranice.
-          </SheetDescription>
+          <SheetTitle>{t.menu}</SheetTitle>
+          <SheetDescription>{t.menuDescription}</SheetDescription>
         </SheetHeader>
         <div className="flex flex-col gap-2 mt-8">
           {navLinks.map((link, index) =>
@@ -64,7 +82,7 @@ const MobileMenu = ({ categories, navLinks }: MobileMenuProps) => {
                           href="/proizvodi/kategorije"
                           className="py-2 text-base text-muted-foreground hover:text-foreground transition-colors"
                         >
-                          Sve kategorije
+                          {t.allCategories}
                         </Link>
                       </SheetClose>
                       {categories.slice(0, 4).map((cat) => (
@@ -95,12 +113,12 @@ const MobileMenu = ({ categories, navLinks }: MobileMenuProps) => {
           <SheetClose asChild>
             <Button asChild variant="outline" className="mt-4">
               {headerCta.external ? (
-                <a href={headerCta.href} target="_blank" rel="noopener noreferrer">
-                  {headerCta.label}
+                <a href={ctaHref} target="_blank" rel="noopener noreferrer">
+                  {ctaLabel}
                   <ExternalLinkIcon className="size-3.5" />
                 </a>
               ) : (
-                <Link href={headerCta.href}>{headerCta.label}</Link>
+                <Link href={ctaHref}>{ctaLabel}</Link>
               )}
             </Button>
           </SheetClose>

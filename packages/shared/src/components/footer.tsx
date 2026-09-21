@@ -4,7 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import Container from "./container";
 import Glow from "./glow";
-import NewsletterForm from "./newsletter/newsletter-form";
+import NewsletterForm, {
+  type NewsletterFormLabels,
+} from "./newsletter/newsletter-form";
 import Wrapper from "./wrapper";
 
 const socialIcons = {
@@ -69,11 +71,24 @@ function FooterLinkColumn({
   );
 }
 
+const DEFAULT_LABELS = {
+  newsletterTitle: "Newsletter",
+  newsletterDescription: "Budi u toku sa novostima i akcijama.",
+  products: "Proizvodi",
+  company: "Kompanija",
+};
+
+export type FooterLabels = Partial<typeof DEFAULT_LABELS>;
+
 interface FooterProps {
   productLinks: readonly FooterNavLink[];
   companyLinks: readonly FooterNavLink[];
   legalLinks: readonly FooterNavLink[];
   socialLinks: readonly FooterSocialLink[];
+  labels?: FooterLabels;
+  newsletterLabels?: NewsletterFormLabels;
+  /** Overrides `footerTagline` from brand-config, which cannot vary by locale. */
+  tagline?: string;
 }
 
 const Footer = ({
@@ -81,7 +96,11 @@ const Footer = ({
   companyLinks,
   legalLinks,
   socialLinks,
+  labels,
+  newsletterLabels,
+  tagline,
 }: FooterProps) => {
+  const t = { ...DEFAULT_LABELS, ...labels };
   const {
     logoSrc,
     logoAlt,
@@ -108,12 +127,12 @@ const Footer = ({
         {/* Newsletter */}
         <Container animation="fadeUp" delay={0.4}>
           <div>
-            <h3 className="text-base font-medium">Newsletter</h3>
+            <h3 className="text-base font-medium">{t.newsletterTitle}</h3>
             <p className="mt-2 mb-4 text-sm text-muted-foreground">
-              Budi u toku sa novostima i akcijama.
+              {t.newsletterDescription}
             </p>
             <div className="max-w-md">
-              <NewsletterForm />
+              <NewsletterForm labels={newsletterLabels} />
             </div>
           </div>
         </Container>
@@ -136,7 +155,7 @@ const Footer = ({
                 />
               </div>
               <p className="text-muted-foreground mt-4 text-sm">
-                {footerTagline}
+                {tagline ?? footerTagline}
               </p>
               <div className="mt-4 text-sm text-muted-foreground px-4 py-2 cursor-pointer rounded-full border border-border/40 bg-foreground/5 hover:bg-foreground/10 transition-colors duration-300">
                 <a
@@ -169,13 +188,13 @@ const Footer = ({
 
           {/* Link columns */}
           <FooterLinkColumn
-            title="Proizvodi"
+            title={t.products}
             links={productLinks}
             animation="fadeUp"
             delay={0.6}
           />
           <FooterLinkColumn
-            title="Kompanija"
+            title={t.company}
             links={companyLinks}
             animation="fadeUp"
             delay={0.7}

@@ -10,12 +10,33 @@ import Wrapper from "./wrapper";
 
 export type TrustBadge = { icon: LucideIcon; text: string };
 
+// The Serbian this component has always rendered. A translated site passes its
+// own; the single-language sites pass nothing and are unchanged.
+const DEFAULT_LABELS = {
+  action: "Postani distributer",
+};
+
+export type CtaLabels = Partial<typeof DEFAULT_LABELS>;
+
 interface CTAProps {
   trustBadges: TrustBadge[];
+  labels?: CtaLabels;
+  /** Where the button goes. A localized site has to pass the localized path. */
+  actionHref?: string;
+  /** Overrides `ctaHeading` from brand-config, which cannot vary by locale.
+      A newline still breaks the line, same as the config value. */
+  heading?: string;
 }
 
-const CTA = ({ trustBadges }: CTAProps) => {
+const CTA = ({
+  trustBadges,
+  labels,
+  actionHref = "/kontakt",
+  heading,
+}: CTAProps) => {
+  const t = { ...DEFAULT_LABELS, ...labels };
   const { ctaHeading, ctaGradientClasses } = getBrandConfig();
+  const text = heading ?? ctaHeading;
 
   return (
     <Section className="relative overflow-hidden">
@@ -27,7 +48,7 @@ const CTA = ({ trustBadges }: CTAProps) => {
               ctaGradientClasses,
             )}
           >
-            {ctaHeading.split("\n").map((line, i, arr) => (
+            {text.split("\n").map((line, i, arr) => (
               <span key={i}>
                 {line}
                 {i < arr.length - 1 && <br />}
@@ -35,8 +56,8 @@ const CTA = ({ trustBadges }: CTAProps) => {
             ))}
           </h2>
           <Button size="lg" asChild>
-            <Link href="/kontakt">
-              Postani distributer
+            <Link href={actionHref}>
+              {t.action}
               <ArrowRight className="size-4" />
             </Link>
           </Button>

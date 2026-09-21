@@ -17,25 +17,51 @@ import { ExternalLinkIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import type { ReactNode } from "react";
 import Container from "./container";
-import MobileMenu, { type NavbarLink } from "./mobile-menu";
+import MobileMenu, {
+  type MobileMenuLabels,
+  type NavbarLink,
+} from "./mobile-menu";
 import Wrapper from "./wrapper";
 
 const { logoSrc, logoAlt, navbarLogoHeight, headerCta } = getBrandConfig();
 
+const DEFAULT_LABELS = {
+  allCategories: "Sve kategorije",
+  headerCta: undefined as string | undefined,
+};
+
+export type NavbarLabels = Partial<typeof DEFAULT_LABELS>;
+
 interface NavbarProps {
   categories: Category[];
   navLinks: readonly NavbarLink[];
-  /** Opt-in language switch (SR is the default locale, the link points at /en). */
-  showLanguageSwitch?: boolean;
+  /** Rendered next to the header CTA. A translated site passes its own switch
+      so this package needs no routing library of its own; the two
+      single-language sites pass nothing and the slot disappears. */
+  languageSwitch?: ReactNode;
+  labels?: NavbarLabels;
+  mobileLabels?: MobileMenuLabels;
+  /** A localized site passes the localized path; brand-config cannot. */
+  headerCtaHref?: string;
+  /** Where the logo links. Localized sites pass their own home path. */
+  homeHref?: string;
 }
 
 const Navbar = ({
   categories,
   navLinks,
-  showLanguageSwitch = false,
+  languageSwitch,
+  labels,
+  mobileLabels,
+  headerCtaHref,
+  homeHref = "/",
 }: NavbarProps) => {
   const router = useRouter();
+  const t = { ...DEFAULT_LABELS, ...labels };
+  const ctaHref = headerCtaHref ?? headerCta.href;
+  const ctaLabel = t.headerCta ?? headerCta.label;
 
   return (
     <header
@@ -49,7 +75,7 @@ const Navbar = ({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.2 }}
         >
-          <Link href="/" className="inline-flex items-center gap-2">
+          <Link href={homeHref} className="inline-flex items-center gap-2">
             <Image
               src={logoSrc}
               className={cn("w-auto", navbarLogoHeight)}
@@ -102,7 +128,7 @@ const Navbar = ({
                                   href="/proizvodi/kategorije"
                                   className="flex select-none rounded-sm px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
                                 >
-                                  Sve kategorije
+                                  {t.allCategories}
                                 </Link>
                               </NavigationMenuLink>
                             </div>
@@ -130,32 +156,28 @@ const Navbar = ({
           <Container animation="fadeLeft" delay={0.1}>
             <Button asChild size="sm" variant="outline" className="hidden md:inline-flex">
               {headerCta.external ? (
-                <a href={headerCta.href} target="_blank" rel="noopener noreferrer">
-                  {headerCta.label}
+                <a href={ctaHref} target="_blank" rel="noopener noreferrer">
+                  {ctaLabel}
                   <ExternalLinkIcon className="size-3.5" />
                 </a>
               ) : (
-                <Link href={headerCta.href}>{headerCta.label}</Link>
+                <Link href={ctaHref}>{ctaLabel}</Link>
               )}
             </Button>
           </Container>
-          {showLanguageSwitch && (
+          {languageSwitch ? (
             <Container animation="fadeLeft" delay={0.15}>
-              <Link
-                href="/en"
-                hrefLang="en"
-                aria-label="Switch to English"
-                className="flex items-center justify-center rounded-md p-1 transition-colors hover:bg-accent"
-              >
-                <span className="flex h-6 w-7 items-center justify-center">
-                  <UnionJack />
-                </span>
-              </Link>
+              {languageSwitch}
             </Container>
-          )}
+          ) : null}
           <div className="-mr-1.5 md:mr-0 md:hidden">
             <Container animation="fadeLeft" delay={0.1}>
-              <MobileMenu categories={categories} navLinks={navLinks} />
+              <MobileMenu
+                categories={categories}
+                navLinks={navLinks}
+                labels={mobileLabels}
+                headerCtaHref={headerCtaHref}
+              />
             </Container>
           </div>
         </div>
@@ -163,27 +185,5 @@ const Navbar = ({
     </header>
   );
 };
-
-const UnionJack = () => (
-  <svg
-    viewBox="0 0 60 30"
-    aria-hidden
-    className="h-3.5 w-7 shrink-0"
-  >
-    <clipPath id="union-jack-clip">
-      <path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z" />
-    </clipPath>
-    <path d="M0,0 v30 h60 v-30 z" fill="#00247d" />
-    <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" strokeWidth="6" />
-    <path
-      d="M0,0 L60,30 M60,0 L0,30"
-      clipPath="url(#union-jack-clip)"
-      stroke="#cf142b"
-      strokeWidth="4"
-    />
-    <path d="M30,0 v30 M0,15 h60" stroke="#fff" strokeWidth="10" />
-    <path d="M30,0 v30 M0,15 h60" stroke="#cf142b" strokeWidth="6" />
-  </svg>
-);
 
 export default Navbar;

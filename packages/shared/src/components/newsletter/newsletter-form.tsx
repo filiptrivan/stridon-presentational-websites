@@ -13,7 +13,17 @@ import {
 import { Button } from "@brand/ui/button";
 import { Input } from "@brand/ui/input";
 
-const NewsletterForm = () => {
+const DEFAULT_LABELS = {
+  placeholder: "tvoj@email.com",
+  submit: "Prijavi se",
+  submitting: "Prijavljuje se...",
+  success: "Uspešno si se prijavio/la na newsletter!",
+};
+
+export type NewsletterFormLabels = Partial<typeof DEFAULT_LABELS>;
+
+const NewsletterForm = ({ labels }: { labels?: NewsletterFormLabels }) => {
+  const t = { ...DEFAULT_LABELS, ...labels };
   const {
     register,
     handleSubmit,
@@ -28,7 +38,7 @@ const NewsletterForm = () => {
     const result = await subscribeNewsletter(data);
 
     if (result.success) {
-      toast.success("Uspešno si se prijavio/la na newsletter!");
+      toast.success(t.success);
       reset();
     } else {
       toast.error(result.error);
@@ -44,7 +54,7 @@ const NewsletterForm = () => {
         <Input
           id="newsletter-email"
           type="email"
-          placeholder="tvoj@email.com"
+          placeholder={t.placeholder}
           className="border-border/50"
           aria-invalid={!!errors.email}
           aria-describedby={errors.email ? "newsletter-email-error" : undefined}
@@ -54,12 +64,12 @@ const NewsletterForm = () => {
           {isSubmitting ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Prijavljuje se...
+              {t.submitting}
             </>
           ) : (
             <>
               <Mail className="mr-2 h-4 w-4" />
-              Prijavi se
+              {t.submit}
             </>
           )}
         </Button>

@@ -1,5 +1,8 @@
 import { getBrandConfig } from "@brand/config";
-import ContactHero from "@brand/shared/components/contact/contact-hero";
+import ContactHero, {
+  type ContactHeroLabels,
+} from "@brand/shared/components/contact/contact-hero";
+import type { ContactFormLabels } from "@brand/shared/components/contact/contact-form";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
 import type { ContactFormData } from "@brand/shared/lib/schemas/contact";
 import type { ActionResult } from "@brand/shared/types/actions";
@@ -15,12 +18,24 @@ export const metadata = createPageMetadata({
 type ContactPageProps = {
   email: string;
   submitContact: (data: ContactFormData) => Promise<ActionResult>;
+  labels?: ContactHeroLabels;
+  formLabels?: ContactFormLabels;
 };
 
-const ContactPage = ({ email, submitContact }: ContactPageProps) => {
+const ContactPage = ({
+  email,
+  submitContact,
+  labels,
+  formLabels,
+}: ContactPageProps) => {
   return (
     <div>
-      <ContactHero email={email} submitContact={submitContact} />
+      <ContactHero
+        email={email}
+        submitContact={submitContact}
+        labels={labels}
+        formLabels={formLabels}
+      />
     </div>
   );
 };
