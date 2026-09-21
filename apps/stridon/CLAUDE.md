@@ -105,13 +105,47 @@ Each group passes `className="py-10 lg:py-12"` to `Section` rather than taking i
 - `/politika-privatnosti` and `/uslovi-koriscenja` were rewritten off the dck originals: stridon.rs, office@stridon.rs, distributor framing, and the privacy policy now lists the B2B form's company fields (PIB, matični broj) alongside the contact form's. They use the shared `HeroHeader`, which every other page now does too - the header treatment is consistent across the site as of 2026-09-19.
 - Done (API pass, 2026-09-19, made fully dynamic 2026-09-21): `/brendovi`, `/brendovi/[slug]`, `/katalozi` and the homepage brand wall all read PACMS, and no brand copy is hand-written any more. Added to `packages/shared/src/lib/api.ts`: `getAllCatalogs`, `getBrands`, `getBrandCards`, `getBrandBySlug`, plus `TAGS.brands` and `src/types/brands.ts`. All four are covered by new cases in `apps/dck/__tests__/dto-shape.integration.test.ts` rather than parked in that suite's debt ledger - they are anonymous reads, so they need no key.
 - **The backend moved, it is not gone**: `api.pacms.in.rs` no longer resolves, but the same backend answers on `https://api.prodavnicaalata.rs` (the fallback in `dto-shape.integration.test.ts` has said so since 2026-08-30). Set `API_URL` to it in `.env.local`; it is not in `.env.production`, which reads `API_URL` from Vercel. The `/proizvodi/*` pages, `/gde-kupiti` with `constants/dealers.ts` and `app/api/products/search` are still deleted, and now for a different reason: product and category reads are brand-scoped, so they would render empty for `brandSlug=stridon`. Restoring them needs a product story, not just an API. `app/sitemap.ts` is a static list of the real pages plus the 19 brands.
-- **EN is the only thing left**, and its architecture is already decided - do not re-research it. `next-intl@^4.14.5`, but Next **16.1.6 → 16.3.5 first**, because `next/root-params` is the only way to read the locale inside a `'use cache'` scope and it does not exist on our version. `localePrefix: "as-needed"` with a `pathnames` map keeps every Serbian URL byte-identical with no redirects. **Brand and catalog copy does NOT go into `messages/*.json`** - it lives in PACMS and Filip returns the right language per translation header, so only the copy written in this repo gets translated. Ready-made catalogs sit in `.agents/i18n-pr4/` (gitignored): `sr.json` and `en.json` from PR #4, 160 strings across 14 namespaces with identical key sets.
-- **The navbar's EN flag links to `/en`, which does not exist**, so both the click and the router prefetch 404. It is the only console error on the site, and it is the entry point the i18n work switches on. `showLanguageSwitch` is an opt-in prop on the shared `RootLayout` and only this app passes it.
-- Pending: the EN version (no i18n in the monorepo), and the production `NEXT_PUBLIC_SENTRY_DSN`, which is empty in `.env.production` so Sentry is silently off. Turnstile is not missing - Filip removed it from the whole monorepo in `bda05b5`, env kept for rollback, so no form here has bot protection by decision.
+- Done (English, 2026-09-21): the site is bilingual, both locales prerendered, every Serbian URL unchanged. See **Internationalisation** below.
+- Pending: the production `NEXT_PUBLIC_SENTRY_DSN`, which is empty in `.env.production` so Sentry is silently off. Turnstile is not missing - Filip removed it from the whole monorepo in `bda05b5`, env kept for rollback, so no form here has bot protection by decision.
 
 ## Seeded content
 
 `ABOUT_MILESTONES`, and previously `constants/brands.ts` and `constants/catalogs.ts`, were scraped out of the old sites (`__NEXT_DATA__` i18n JSON on www.stridon.rs, plus `apps/sg-tools/constants/content.ts`). The scrape/generator scripts were throwaway - edit what is left by hand. **No brand or catalog copy is seeded content any more**: all of it lives in the CMS as of 2026-09-21, and what remains here is the About page, the service centres and the B2B form.
+
+## Internationalisation
+
+Serbian and English, `next-intl@^4.14.5` on Next 16.3.5, both locales statically prerendered (84 pages, was 40).
+
+**The Next upgrade was a prerequisite, not a preference.** The locale is read with `next/root-params`, which is the only way to get it inside a `'use cache'` scope: `cookies()` and `headers()` both drop static prerendering under `cacheComponents`, and passing the locale by hand would mean threading it through every cached function in `@brand/shared`. That API is stable from 16.3.0, so 16.1.6 could not have it. All three apps moved together, and a `pnpm overrides` entry in the root `package.json` pins one version for every workspace package and every transitive peer - with only the apps bumped, `@brand/shared` resolved its `next` peer from the root install and the build type-checked against two different `NextRequest` types.
+
+**Routing.** `localePrefix: "as-needed"` with a `pathnames` map in `i18n/routing.ts`. The key of each entry is the internal route - the folder under `app/[locale]/` - and the value only names the locales that spell it differently, so **no folder was renamed** and `/o-nama`, `/brendovi/dewalt` and the rest are byte-identical to what Google has indexed. English is an alias on top: `/en/about`, `/en/brands/dewalt`. `/sr/*` 307s to the bare path so the two spellings never both rank, and the three legacy brand slugs still 308 through `redirects()` in `next.config.ts` (those run before the proxy).
+
+Locale detection and the locale cookie are both **off**. With detection on, `/` becomes a per-visitor redirect and stops being one cacheable document; with the cookie on, which URL a redirect lands on depends on invisible state (next-intl#1845). The prefix is the whole story.
+
+`proxy.ts` (Next 16's name for `middleware.ts`; the export may be default or named `proxy`) does the rewrite. **Its matcher is a string literal and the escaped dot in it matters:** written with a single backslash the escape collapses, the pattern becomes `.*.*`, the negative lookahead then rejects every path of at least one character, and the proxy runs on `/` and nowhere else while every other URL 404s - with the build still reporting a proxy. Next only static-analyses a literal there, so it cannot be built from a variable, a RegExp or `String.raw`.
+
+**What is translated.** Only copy written in this repo: `messages/{sr,en}.json`, ~250 strings in 16 namespaces. **Brand and catalog copy is not here** - it lives in PACMS, which returns the right language per request, so `/en/brands` shows whatever the CMS holds. A brand page's `<title>` is therefore still Serbian until the CMS has an English `metaTitle`; that is the CMS's job, not this repo's. The B2B email body also stays Serbian whichever language the form was filled in, because it goes to office@stridon.rs.
+
+**`@brand/shared` has no i18n dependency and must not grow one.** dck and sg-tools have no i18n config, so a `useTranslations` call anywhere in the shared tree throws for them. Every shared component keeps its Serbian as `DEFAULT_LABELS` and takes an optional `labels` object plus, where it links, an optional href; pass nothing and the output is byte-identical to before. `app/[locale]/layout.tsx` is where this app fills them in.
+
+**Paths into shared components go through `lib/nav.ts`.** Shared components link with plain `next/link`, which knows nothing about locales, so an unconverted `/brendovi` inside the English site sends the reader back to Serbian. `pathFor()` for a static route, `brandPath()` for `/brendovi/[slug]`.
+
+**Metadata** is built by `lib/metadata.ts`, not the shared `createPageMetadata` directly: that one takes a single `canonicalUrl`, which would have the English page declare the Serbian URL as its canonical. Each page gets its own canonical plus an `alternates.languages` set; `sitemap.ts` lists both locales with the same alternates. hreflang uses **`sr-Latn`** (Serbian is digraphic and this site is Latin-only) even though the URL segment stays `sr`.
+
+**The legal pages** are one HTML document per locale in the catalog, rendered through `Prose`, not forty ICU keys each - statutory prose that has to stay diffable against what a lawyer approved. Only the two internal links are tokens (`__PRIVACY__`, `__CONTACT__`), filled in by `lib/legal.ts`.
+
+**Two places root params do not reach**, both permanent or long-term:
+
+- **Server Actions.** An action is not tied to a route, so `sendB2bRequest` takes the locale as an argument and validates it against the locale list before using it. The B2B zod schema is a factory for the same reason - every message in it is shown to the visitor.
+- **Route Handlers** ("planned" upstream). `app/api/og` sits outside `[locale]` and reads query params, so it is unaffected.
+
+**Gotchas found doing this:**
+
+- The **language switch lives in the navbar**, which `@brand/shared` renders outside the page's `NextIntlClientProvider`, and next-intl's `usePathname` needs a locale in context. It gets its own provider with an empty catalog (`messages={{}}`); its one string arrives as a prop. Without it, every English page fails to prerender.
+- The switch uses `getPathname` with a plain `next/link`, **not** next-intl's `Link` with a `locale` prop: that prop always emits a prefix, so switching back to Serbian would link to `/sr/brendovi/dewalt` and rely on a redirect. The prefix exists to update a locale cookie, and this site sets none.
+- `constants/*.ts` are module constants, evaluated at import with no request and no locale in scope. They keep the structure - route, icon, accent colour, photo, year, company name - and the page pairs each `key` with its translation.
+- A **stale `next start` on port 3100 will happily answer while a new one fails with EADDRINUSE**, which reads exactly like a translation bug: correct `<html lang>`, Serbian text. Check the log before debugging the catalog.
+- `dck/__tests__/api-contract-coverage.test.ts` reads files through `git ls-files`, so deleting a tracked file without staging the deletion fails `pnpm preflight` with an ENOENT on a path that is already gone.
 
 ## Commands
 
