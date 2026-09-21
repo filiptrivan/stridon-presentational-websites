@@ -22,7 +22,9 @@ const Hero = async ({ locale }: { locale: Locale }) => {
         alt=""
         aria-hidden
         fill
-        priority
+        // `priority` is deprecated in Next 16 in favour of `preload`, which is
+        // the same behaviour under the name that says what it does.
+        preload
         sizes="100vw"
         className="-z-20 object-cover"
       />

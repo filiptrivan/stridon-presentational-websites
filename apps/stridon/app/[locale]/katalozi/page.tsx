@@ -89,10 +89,15 @@ const KataloziPage = async ({ params }: Props) => {
                             alt=""
                             fill
                             sizes="64px"
-                            // Same call BrandLogo makes: PACMS serves some of
-                            // these as SVG, which the optimizer rejects unless
-                            // dangerouslyAllowSVG is on.
-                            unoptimized
+                            // Same rule BrandLogo applies: the optimizer
+                            // rejects SVG unless dangerouslyAllowSVG is on, and
+                            // a few PACMS logos are SVG. Only those bypass it -
+                            // unconditionally it sent 19 raw CMS logos, 173 kB,
+                            // into a 64x32 box, and exactly one of them was
+                            // actually an SVG.
+                            unoptimized={group.imageUrl
+                              .toLowerCase()
+                              .endsWith(".svg")}
                             className="object-contain object-left"
                           />
                         </span>

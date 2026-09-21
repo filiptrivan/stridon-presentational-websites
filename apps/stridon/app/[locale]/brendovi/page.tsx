@@ -63,7 +63,11 @@ const BrendoviPage = async ({ params }: Props) => {
                     name={brand.name}
                     logo={brand.imageUrl ?? null}
                     className="border-b border-border/60"
-                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    // This grid is two columns until lg, not three, so there is
+                    // no 768px step to declare: below 1024px the slot is always
+                    // ~50vw. Saying 100vw there made a phone pick the w=828
+                    // candidate for a ~173px slot, on all 24 logos.
+                    sizes="(min-width: 1024px) 33vw, 50vw"
                   />
 
                   <div className="flex flex-1 flex-col p-6 lg:p-7">
