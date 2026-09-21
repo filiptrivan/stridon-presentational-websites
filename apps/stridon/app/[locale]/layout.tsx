@@ -15,7 +15,7 @@ import { createRootMetadata } from "@brand/shared/lib/metadata";
 import { getPathname } from "@/i18n/navigation";
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { getTranslations } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import "../globals.css";
@@ -87,11 +87,25 @@ export default async function Layout({
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
 
-  const [nav, footer, common] = await Promise.all([
+  const [nav, footer, common, messages] = await Promise.all([
     getTranslations({ locale, namespace: "Nav" }),
     getTranslations({ locale, namespace: "Footer" }),
     getTranslations({ locale, namespace: "Common" }),
+    getMessages({ locale }),
   ]);
+
+  // Only the namespaces a client component reads. Left alone the provider
+  // inherits the whole catalog and serialises it into the flight payload of
+  // every page: on /servis that is both legal documents, ~9.9 kB of text that
+  // page never renders. Exactly two client components call `useTranslations` -
+  // `error.tsx` ("Error") and `b2b-form.tsx` ("B2b.form") - and @brand/shared
+  // has no next-intl import at all, so nothing else can need a namespace.
+  // Whole namespaces rather than "B2b.form" keeps the rule simple: a new
+  // client `useTranslations("X")` means adding X here, or it throws.
+  const clientMessages = {
+    Error: messages.Error,
+    B2b: messages.B2b,
+  };
 
   const footerLinkLabel = (key: string) => footer(`links.${key}`);
 
@@ -165,7 +179,9 @@ export default async function Layout({
           (navbar, footer, toaster) takes its text as props from this app, which
           is how @brand/shared stays free of an i18n dependency the other two
           sites do not have. */}
-      <NextIntlClientProvider>{children}</NextIntlClientProvider>
+      <NextIntlClientProvider messages={clientMessages}>
+        {children}
+      </NextIntlClientProvider>
     </RootLayout>
   );
 }
