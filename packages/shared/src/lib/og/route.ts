@@ -42,7 +42,13 @@ export function createOgImageRoute(templates: OgTemplateMap, fonts: OgFontSpec[]
       return new Response("Missing required param: title", { status: 400 });
     }
 
-    const render = templates[type] ?? templates.default;
+    // `templates` is an object literal, so a prototype key ("valueOf",
+    // "constructor", "__proto__") is truthy and wins the `??`, and the route
+    // then hands ImageResponse something that is not an element - a 500 and a
+    // Sentry event that any unauthenticated request can produce at will.
+    const render = Object.hasOwn(templates, type)
+      ? templates[type]!
+      : templates.default;
     const fonts = await fontsPromise;
 
     return new ImageResponse(render({ title, description, image }), {
