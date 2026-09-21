@@ -4,10 +4,7 @@
     "description": "Stridon Group je zvanični uvoznik i distributer profesionalnog alata u Srbiji. Preko 30 svetskih brendova, veleprodaja, tehnička podrška i brza isporuka."
   },
   "Common": {
-    "switchLanguage": "Prikaži sajt na engleskom",
-    "home": "Početna",
-    "retry": "Probaj ponovo",
-    "goToBrand": "Idi na brend"
+    "switchLanguage": "Prikaži sajt na engleskom"
   },
   "Nav": {
     "brands": "Brendovi",
@@ -238,7 +235,8 @@
       ]
     },
     "center": {
-      "badge": "Naš servisni partner"
+      "badge": "Naš servisni partner",
+      "openInMaps": "Otvori u Google Maps"
     }
   },
   "Contact": {

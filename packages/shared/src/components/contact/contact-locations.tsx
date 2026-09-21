@@ -7,9 +7,16 @@ import IconBox from "../icon-box";
 import SectionHeader from "../section-header";
 import Section from "../section";
 import Wrapper from "../wrapper";
+import { formatTelHref } from "@brand/shared/lib/utils";
 import type { ContactLocation } from "@brand/shared/types/contact";
 
 const LocationMap = dynamic(() => import("./location-map"), { ssr: false });
+
+const DEFAULT_LABELS = {
+  openInMaps: "Otvori u Google Maps",
+};
+
+export type ContactLocationsLabels = Partial<typeof DEFAULT_LABELS>;
 
 interface ContactLocationsProps {
   title?: string;
@@ -17,6 +24,8 @@ interface ContactLocationsProps {
   locations: ContactLocation[];
   sectionClassName?: string;
   showDivider?: boolean;
+  /** Serbian when not supplied, so the other two sites are unchanged. */
+  labels?: ContactLocationsLabels;
 }
 
 function ContactLocations({
@@ -25,7 +34,9 @@ function ContactLocations({
   locations,
   sectionClassName,
   showDivider,
+  labels,
 }: ContactLocationsProps) {
+  const t = { ...DEFAULT_LABELS, ...labels };
   return (
     <Section className={sectionClassName} showDivider={showDivider}>
       <Wrapper>
@@ -74,7 +85,12 @@ function ContactLocations({
                     </p>
                     {location.phone && (
                       <a
-                        href={`tel:${location.phone.replace(/-/g, "")}`}
+                        // Was `phone.replace(/-/g, "")`, which left the slash
+                        // in a Serbian local number: stridon's service centre
+                        // rendered `tel:065/3378812` and would not dial. The
+                        // shared helper handles both that shape and the
+                        // international one dck writes.
+                        href={formatTelHref(location.phone)}
                         className="text-sm text-muted-foreground hover:text-primary transition-colors mt-1 flex items-center gap-1.5"
                       >
                         <Phone className="size-3.5 shrink-0" />
@@ -97,7 +113,7 @@ function ContactLocations({
                       className="text-xs text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 mt-1"
                     >
                       <ExternalLink className="size-3 shrink-0" />
-                      Otvori u Google Maps
+                      {t.openInMaps}
                     </a>
                   </div>
                 </div>

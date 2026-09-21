@@ -4,10 +4,7 @@
     "description": "Stridon Group is the official importer and distributor of professional tools in Serbia. Over 30 international brands, wholesale pricing, technical support and fast delivery."
   },
   "Common": {
-    "switchLanguage": "View the site in Serbian",
-    "home": "Home",
-    "retry": "Try again",
-    "goToBrand": "Go to brand"
+    "switchLanguage": "View the site in Serbian"
   },
   "Nav": {
     "brands": "Brands",
@@ -238,7 +235,8 @@
       ]
     },
     "center": {
-      "badge": "Our service partner"
+      "badge": "Our service partner",
+      "openInMaps": "Open in Google Maps"
     }
   },
   "Contact": {

@@ -153,6 +153,7 @@ const ServisPage = async ({ params }: Props) => {
           ...center,
           badge: t("center.badge"),
         }))}
+        labels={{ openInMaps: t("center.openInMaps") }}
       />
     </div>
   );

@@ -1,11 +1,23 @@
 export { cn } from "@brand/ui/lib/utils";
 
 /**
- * Converts a Serbian local phone number (e.g. "011/4520-171") to a tel: URI.
- * Strips the leading 0 and any separators (/ and -), then prepends +381.
+ * Converts a phone number as written for a human into a dialable tel: URI.
+ *
+ * Two shapes actually reach this, and the earlier version handled only one:
+ * the Serbian local form ("011/4520-171", "065/337-8812") and an already
+ * international one ("+381-21-410000", which is how dck spells its service
+ * centres). Prepending +381 to the latter produced "tel:+381+38121410000",
+ * which does not dial - visible today in the dealer list, where the service
+ * centres are mapped into DEALERS.
+ *
+ * Separators are never dialable in either shape, so they go first; a number
+ * that already carries a country code is then left alone.
  */
 export function formatTelHref(number: string): string {
-  return `tel:+381${number.replace(/^0/, "").replace(/[\/-]/g, "")}`;
+  const compact = number.replace(/[\s/-]/g, "");
+  return compact.startsWith("+")
+    ? `tel:${compact}`
+    : `tel:+381${compact.replace(/^0/, "")}`;
 }
 
 export function parsePageParam(strana: string | undefined): number {
