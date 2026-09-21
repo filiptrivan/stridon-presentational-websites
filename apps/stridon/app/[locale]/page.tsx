@@ -35,6 +35,9 @@ const HomePage = async ({
           label: t(`stats.${key}.label`),
         }))}
         layout="four-up-no-three"
+        // The figures are written per language ("10.630+" / "10,630+"), so the
+        // count-up has to read them back with the same separator.
+        locale={locale}
       />
       <OwnBrand brand={SG_TOOLS} locale={locale as Locale} />
       <OwnBrand brand={DCK} locale={locale as Locale} />
