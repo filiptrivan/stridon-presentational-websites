@@ -1,5 +1,6 @@
 import type { OwnBrand as OwnBrandData } from "@/constants/about";
 import Container from "@brand/shared/components/container";
+import Section from "@brand/shared/components/section";
 import Wrapper from "@brand/shared/components/wrapper";
 import { Button } from "@brand/ui/button";
 import { ExternalLink } from "lucide-react";
@@ -13,8 +14,8 @@ interface OwnBrandProps {
 // lines. One section per brand, both reading copy left / photo right.
 const OwnBrand = ({ brand }: OwnBrandProps) => {
   return (
-    <section className="border-b border-border">
-      <Wrapper className="py-20 lg:py-28">
+    <Section className="py-20 lg:py-28">
+      <Wrapper>
         <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <Container>
             <div>
@@ -49,19 +50,27 @@ const OwnBrand = ({ brand }: OwnBrandProps) => {
           </Container>
 
           <Container delay={0.5}>
-            <div className="relative aspect-[4/3] w-full overflow-hidden border border-border bg-muted/40">
-              <Image
-                src={brand.image.src}
-                alt={brand.image.alt}
-                fill
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-cover"
-              />
+            {/* The matted frame dck uses for its homepage hero image: a soft grey
+                outer plate, a hairline inner box, and the photo rounded inside
+                it. Tokens rather than dck's raw `neutral-*`, so it picks up this
+                app's palette instead of hardcoding the sibling site's. */}
+            <div className="rounded-2xl border border-border/50 bg-foreground/5 p-2 md:rounded-[32px] md:p-3">
+              <div className="overflow-hidden rounded-xl border border-border/60 bg-background md:rounded-[24px]">
+                <div className="relative aspect-[4/3] w-full">
+                  <Image
+                    src={brand.image.src}
+                    alt={brand.image.alt}
+                    fill
+                    sizes="(min-width: 1024px) 50vw, 100vw"
+                    className="object-cover"
+                  />
+                </div>
+              </div>
             </div>
           </Container>
         </div>
       </Wrapper>
-    </section>
+    </Section>
   );
 };
 

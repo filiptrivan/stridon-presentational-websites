@@ -1,3 +1,4 @@
+import { LEGACY_BRAND_SLUGS } from "./constants/brands";
 import { TRUSTED_IMAGE_HOSTS } from "@brand/config/public-assets";
 import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
@@ -17,6 +18,16 @@ const nextConfig: NextConfig = {
   },
   env: {
     BUILD_YEAR: String(new Date().getFullYear()),
+  },
+  // Three brands are spelled differently on the live stridon.rs than in the CMS,
+  // and the CMS slug is canonical in the app. A permanent redirect keeps those
+  // indexed URLs working instead of trading their ranking for a tidier route.
+  async redirects() {
+    return Object.entries(LEGACY_BRAND_SLUGS).map(([from, to]) => ({
+      source: `/brendovi/${from}`,
+      destination: `/brendovi/${to}`,
+      permanent: true,
+    }));
   },
   images: {
     formats: ["image/avif", "image/webp"],

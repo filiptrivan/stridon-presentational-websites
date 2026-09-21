@@ -16,12 +16,7 @@ const HomePage = () => {
     <div>
       <Hero />
       <Brands />
-      {/* Shared Section draws its hairline at the top, while the app-local
-          sections around it close with a bottom border, so the stats band had
-          no line under it. */}
-      <div className="border-b border-border">
-        <CompanyStats stats={STATS} layout="four-up-no-three" />
-      </div>
+      <CompanyStats stats={STATS} layout="four-up-no-three" />
       <OwnBrand brand={SG_TOOLS} />
       <OwnBrand brand={DCK} />
       <Features items={FEATURES} title="Zašto Stridon?" />

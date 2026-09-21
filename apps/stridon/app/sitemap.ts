@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-import { BRANDS } from "@/constants/brands";
+import { BRAND_SLUGS } from "@/constants/brands";
 import { SITE_URL } from "@/constants/links";
 
 // Stridon has no product routes (it is the distributor site, purchases happen
@@ -35,8 +35,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: page.changeFrequency,
       priority: page.priority,
     })),
-    ...BRANDS.map((brand) => ({
-      url: `${SITE_URL}/brendovi/${brand.slug}`,
+    ...BRAND_SLUGS.map((slug) => ({
+      url: `${SITE_URL}/brendovi/${slug}`,
       lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.6,

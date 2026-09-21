@@ -1,16 +1,28 @@
-import Container from "@brand/shared/components/container";
-import Wrapper from "@brand/shared/components/wrapper";
 import BrandLogo from "@/components/brand-logo";
-import { FEATURED_BRANDS } from "@/constants/brands";
+import { FEATURED_BRAND_SLUGS } from "@/constants/brands";
+import Container from "@brand/shared/components/container";
+import Section from "@brand/shared/components/section";
+import Wrapper from "@brand/shared/components/wrapper";
+import { getBrandCards } from "@brand/shared/lib/api";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
-// Brand wall: hairline grid of full-bleed 2:1 brand tiles.
+// Brand wall: separated 2:1 logo cards. Same card treatment as `catalog-card`
+// in `@brand/shared` (rounded-lg lg:rounded-xl, hairline border that firms up on
+// hover), so the homepage and /katalozi read as one language instead of two.
 // The last cell is the "all brands" link so the grid stays complete.
-const Brands = () => {
+const Brands = async () => {
+  // Cards rather than full brands: the wall shows artwork and a name, and the
+  // full list is a megabyte of htmlDescription this section never reads.
+  const cards = await getBrandCards();
+  const bySlug = new Map(cards.map((card) => [card.slug, card]));
+  const featured = FEATURED_BRAND_SLUGS.map((slug) => bySlug.get(slug)).filter(
+    (card) => card !== undefined,
+  );
+
   return (
-    <section className="border-b border-border">
-      <Wrapper className="py-20 lg:py-28">
+    <Section className="py-20 lg:py-28">
+      <Wrapper>
         <Container>
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
@@ -26,19 +38,19 @@ const Brands = () => {
         </Container>
 
         <Container delay={0.5}>
-          <div className="mt-12 grid grid-cols-2 border-l border-t border-border md:grid-cols-3 lg:grid-cols-4">
-            {FEATURED_BRANDS.map((brand) => (
+          <div className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 lg:gap-4">
+            {featured.map((card) => (
               <Link
-                key={brand.slug}
-                href={`/brendovi/${brand.slug}`}
-                className="border-b border-r border-border transition-opacity duration-300 hover:opacity-85"
+                key={card.slug}
+                href={`/brendovi/${card.slug}`}
+                className="overflow-hidden rounded-lg border border-border/60 bg-background transition-colors duration-300 hover:border-primary lg:rounded-xl"
               >
-                <BrandLogo brand={brand} />
+                <BrandLogo name={card.name} logo={card.imageUrl ?? null} />
               </Link>
             ))}
             <Link
               href="/brendovi"
-              className="group flex aspect-[2/1] items-center justify-between border-b border-r border-border bg-muted/40 px-5 transition-colors duration-300 hover:bg-primary lg:px-6"
+              className="group flex aspect-[2/1] items-center justify-between rounded-lg border border-border/60 bg-foreground/[0.03] px-5 transition-colors duration-300 hover:border-primary hover:bg-primary lg:rounded-xl lg:px-6"
             >
               <span className="font-heading text-lg font-semibold tracking-tight text-primary transition-colors duration-300 group-hover:text-primary-foreground lg:text-xl">
                 Svi brendovi
@@ -48,7 +60,7 @@ const Brands = () => {
           </div>
         </Container>
       </Wrapper>
-    </section>
+    </Section>
   );
 };
 

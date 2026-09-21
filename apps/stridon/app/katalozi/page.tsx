@@ -1,11 +1,14 @@
-import BrandLogo from "@/components/brand-logo";
-import { getCatalogsByBrand } from "@/constants/catalogs";
-import Container from "@brand/shared/components/container";
+import { groupCatalogsByBrand } from "@/lib/catalog-groups";
+import CatalogCardsGrid from "@brand/shared/components/catalog-cards-grid";
 import HeroHeader from "@brand/shared/components/hero-header";
+import Section from "@brand/shared/components/section";
+import SectionHeader from "@brand/shared/components/section-header";
+import StatusMessage from "@brand/shared/components/status-message";
 import Wrapper from "@brand/shared/components/wrapper";
+import { getAllCatalogs, getBrandCards } from "@brand/shared/lib/api";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
-import { ArrowRight, ExternalLink } from "lucide-react";
-import Link from "next/link";
+import { BookOpen } from "lucide-react";
+import Image from "next/image";
 
 export const metadata = createPageMetadata({
   title: "Katalozi",
@@ -14,8 +17,24 @@ export const metadata = createPageMetadata({
   canonicalUrl: "/katalozi",
 });
 
-const KataloziPage = () => {
-  const groups = getCatalogsByBrand();
+// Same cards dck and sg-tools get from the shared `catalogs-page`, but grouped by
+// manufacturer, which those two have no use for: each of them sells one brand,
+// so their whole page is one group. Stridon shows 22, and the groups are what
+// `/brendovi/[slug]` deep-links into.
+//
+// The page reads the unscoped endpoint: `getCatalogs()` filters by BRAND_SLUG,
+// and "stridon" is not a manufacturer in the CMS, so for this app it is empty.
+const KataloziPage = async () => {
+  // Both are cached reads the site already makes - `getBrandCards()` is the same
+  // entry the homepage brand wall fills, so the logos here are free.
+  const [catalogs, cards] = await Promise.all([
+    getAllCatalogs(),
+    getBrandCards(),
+  ]);
+  const groups = groupCatalogsByBrand(
+    catalogs,
+    new Map(cards.map((card) => [card.slug, card.imageUrl ?? null])),
+  );
 
   return (
     <div>
@@ -24,73 +43,64 @@ const KataloziPage = () => {
         description="Pregledaj širok izbor proizvoda i najbolje ponude mašina, električnog i ručnog alata za profesionalnu i kućnu upotrebu u našim akcijskim katalozima."
       />
 
-      {groups.map((group) => (
-        <section
-          key={group.brand.slug}
-          id={group.brand.slug}
-          className="scroll-mt-20 border-b border-border"
-        >
-          <Wrapper className="py-12 lg:py-16">
-            <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16">
-              <Container>
-                <div className="lg:sticky lg:top-24">
-                  <BrandLogo
-                    brand={group.brand}
-                    className="w-48 border border-border"
-                    sizes="192px"
-                  />
-                  <h2 className="mt-5 text-2xl font-semibold tracking-tight">
-                    {group.brand.name}
-                  </h2>
-                  <Link
-                    href={`/brendovi/${group.brand.slug}`}
-                    className="group mt-3 inline-flex items-center gap-2 text-sm font-medium text-primary"
-                  >
-                    Idi na brend
-                    <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
-                  </Link>
-                </div>
-              </Container>
-
-              <Container delay={0.5}>
-                <div className="border-b border-border">
-                  {group.catalogs.map((catalog) => (
-                    <a
-                      key={catalog.slug}
-                      href={catalog.fileUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group grid gap-3 border-t border-border py-6 sm:grid-cols-[minmax(0,16rem)_1fr] sm:gap-8 lg:py-7"
-                    >
-                      <div className="flex items-start gap-0 self-start sm:gap-3">
-                        {/* The marker only animates on hover, so on touch it
-                            would just indent the title for nothing. */}
-                        <span
-                          aria-hidden
-                          className="mt-2 hidden h-2.5 w-5 shrink-0 origin-left -skew-x-[14deg] scale-x-0 bg-primary transition-transform duration-300 group-hover:scale-x-100 sm:block"
-                        />
-                        <h3 className="font-heading text-lg font-semibold tracking-tight transition-transform duration-300 group-hover:translate-x-1">
-                          {catalog.name}
-                        </h3>
-                      </div>
-
-                      <div>
-                        <p className="text-[15px] leading-relaxed text-muted-foreground">
-                          {catalog.description}
-                        </p>
-                        <span className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-primary">
-                          Pogledaj PDF katalog
-                          <ExternalLink className="size-4" />
-                        </span>
-                      </div>
-                    </a>
-                  ))}
-                </div>
-              </Container>
-            </div>
+      {groups.length === 0 ? (
+        <Section>
+          <Wrapper>
+            <StatusMessage
+              icon={BookOpen}
+              title="Trenutno nema dostupnih kataloga."
+              description="Proveri ponovo uskoro."
+            />
           </Wrapper>
-        </section>
-      ))}
+        </Section>
+      ) : (
+        groups.map((group) => (
+          // The anchor sits on the wrapper rather than on Section, which draws
+          // its own dashed divider at the top and takes no id.
+          <div key={group.slug} id={group.slug} className="scroll-mt-20">
+            {/* Tighter than Section's own py-16 lg:py-24: that spacing is sized
+                for a handful of full sections on a page, and twenty of them
+                turned a 3,000px page into a 12,500px one. */}
+            <Section className="py-10 lg:py-12">
+              <Wrapper>
+                <SectionHeader
+                  title={
+                    <span className="flex items-center gap-3">
+                      {group.imageUrl ? (
+                        <span className="relative h-8 w-16 shrink-0">
+                          <Image
+                            src={group.imageUrl}
+                            alt=""
+                            fill
+                            sizes="64px"
+                            // Same call BrandLogo makes: PACMS serves some of
+                            // these as SVG, which the optimizer rejects unless
+                            // dangerouslyAllowSVG is on.
+                            unoptimized
+                            className="object-contain object-left"
+                          />
+                        </span>
+                      ) : null}
+                      {group.name}
+                    </span>
+                  }
+                  size="sm"
+                  align="left"
+                  className="mb-6"
+                  // Only for a brand we actually list; the CMS carries catalogs
+                  // for manufacturers stridon.rs does not show.
+                  action={
+                    group.href
+                      ? { label: "Idi na brend", href: group.href }
+                      : undefined
+                  }
+                />
+                <CatalogCardsGrid catalogs={group.catalogs} />
+              </Wrapper>
+            </Section>
+          </div>
+        ))
+      )}
     </div>
   );
 };

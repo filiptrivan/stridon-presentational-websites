@@ -14,22 +14,21 @@ export const SERVICE_CENTERS: ServiceCenter[] = [
   },
 ];
 
-export interface ServicedBrand {
-  name: string;
-  /** Our own brand page, where the brand is one we distribute. */
-  slug: string | null;
-  /** Tile in `public/brands/`; null falls back to the wordmark cell. */
-  logo: string | null;
-}
-
-/** The brands the old stridon.rs service page lists, plus Stanley. */
-export const SERVICED_BRANDS: ServicedBrand[] = [
-  { name: "DeWalt", slug: "dewalt", logo: "/brands/dewalt.svg" },
-  { name: "Stanley", slug: "stanley", logo: "/brands/stanley.svg" },
-  { name: "Bosch", slug: "bosch", logo: "/brands/bosch.svg" },
-  { name: "Makita", slug: null, logo: "/brands/makita.svg" },
-  { name: "Metabo", slug: null, logo: "/brands/metabo.svg" },
-  { name: "Festool", slug: null, logo: "/brands/festool.svg" },
-  { name: "Senco", slug: "senco", logo: "/brands/senco.svg" },
-  { name: "Rubi", slug: "rubi", logo: "/brands/rubi.svg" },
+/**
+ * The brands the old stridon.rs service page lists, plus Stanley, by PACMS slug.
+ * Name and logo are read from the CMS like everywhere else. A row links to our
+ * brand page only when the slug is also in `BRAND_SLUGS`; Festool is the one
+ * here that is serviced without being listed, so it is the one card with no
+ * link. Nothing needs editing here to change that - add a slug there and the
+ * link appears.
+ */
+export const SERVICED_BRAND_SLUGS: readonly string[] = [
+  "dewalt",
+  "stanley",
+  "bosch",
+  "makita",
+  "metabo",
+  "festool",
+  "senco",
+  "rubi",
 ];

@@ -1,13 +1,15 @@
-import BrandLogo from "@/components/brand-logo";
-import { BRANDS, getBrandBySlug } from "@/constants/brands";
-import { hasCatalogs } from "@/constants/catalogs";
+import { BRAND_SLUGS, shopUrlFor } from "@/constants/brands";
 import Container from "@brand/shared/components/container";
 import HeroHeader from "@brand/shared/components/hero-header";
+import Section from "@brand/shared/components/section";
 import Wrapper from "@brand/shared/components/wrapper";
+import { getAllCatalogs, getBrandBySlug } from "@brand/shared/lib/api";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
 import { Button } from "@brand/ui/button";
+import { Prose } from "@brand/ui/prose";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -15,28 +17,40 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
+// From the curated list, not from the API: these routes are fixed by what
+// Stridon shows, so a build should not fan out 234 brand reads to discover the
+// paths it already knows.
 export function generateStaticParams() {
-  return BRANDS.map((brand) => ({ slug: brand.slug }));
+  return BRAND_SLUGS.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const brand = getBrandBySlug(slug);
+  const brand = await getBrandBySlug(slug);
   if (!brand) return { title: "Brend nije pronađen" };
 
   return createPageMetadata({
-    title: `${brand.name} alati`,
-    description: `Sve o brendu ${brand.name}: istorijat, tehnologije i asortiman proizvoda. Stridon Group je zvanični uvoznik i distributer za Srbiju.`,
+    // The CMS writes these for the webshop, where the same brand ranks on the
+    // same queries, so they are the tested copy rather than a guess.
+    title: brand.metaTitle,
+    description: brand.metaDescription,
     canonicalUrl: `/brendovi/${brand.slug}`,
   });
 }
 
 const BrandPage = async ({ params }: Props) => {
   const { slug } = await params;
-  const brand = getBrandBySlug(slug);
+  // Everything on this page is generated: a brand added to BRAND_SLUGS and
+  // written in the CMS renders here with no further code.
+  const [brand, { catalogs }] = await Promise.all([
+    getBrandBySlug(slug),
+    getAllCatalogs(),
+  ]);
   if (!brand) notFound();
 
-  const brandHasCatalogs = hasCatalogs(brand.slug);
+  const brandHasCatalogs = catalogs.some((catalog) =>
+    catalog.brands.some((catalogBrand) => catalogBrand.slug === brand.slug),
+  );
 
   return (
     <div>
@@ -52,21 +66,36 @@ const BrandPage = async ({ params }: Props) => {
             </Link>
           </Container>
         }
-        title={brand.name}
-        description={brand.tagline}
+        title={
+          // Logo beside the name rather than a framed plate under it. It wraps
+          // on purpose: at phone width a long name like "HÖGERT Technik" next to
+          // a mark does not fit, and wrapping drops the logo onto its own line
+          // above instead of squeezing both.
+          <span className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3 sm:gap-x-7">
+            {brand.imageUrl ? (
+              <span className="relative h-12 w-28 shrink-0 sm:h-16 sm:w-40">
+                <Image
+                  src={brand.imageUrl}
+                  alt=""
+                  fill
+                  sizes="160px"
+                  // The optimizer rejects SVG unless dangerouslyAllowSVG is on,
+                  // and a few PACMS logos are SVG.
+                  unoptimized={brand.imageUrl.toLowerCase().endsWith(".svg")}
+                  className="object-contain"
+                />
+              </span>
+            ) : null}
+            {brand.name}
+          </span>
+        }
+        description={brand.metaDescription}
       >
         <Container delay={0.3}>
-          <BrandLogo
-            brand={brand}
-            className="mt-10 w-64 border border-border bg-background sm:w-80"
-            sizes="(min-width: 640px) 320px, 256px"
-          />
-        </Container>
-
-        <Container delay={0.4}>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             {brandHasCatalogs ? (
               <Button asChild size="lg">
+                {/* Straight to this brand's group on /katalozi. */}
                 <Link href={`/katalozi#${brand.slug}`}>Pogledaj kataloge</Link>
               </Button>
             ) : null}
@@ -76,7 +105,11 @@ const BrandPage = async ({ params }: Props) => {
               size="lg"
               variant={brandHasCatalogs ? "outline" : "default"}
             >
-              <a href={brand.shopUrl} target="_blank" rel="noopener noreferrer">
+              <a
+                href={shopUrlFor(brand.slug)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Svi {brand.name} proizvodi
                 <ExternalLink className="size-4" />
               </a>
@@ -85,35 +118,23 @@ const BrandPage = async ({ params }: Props) => {
         </Container>
       </HeroHeader>
 
-      <section className="border-b border-border">
-        <Wrapper className="py-16 lg:py-24">
-          {brand.sections.map((section, index) => (
-            <Container key={section.title} delay={index === 0 ? 0 : 0.2}>
-              <div className="grid gap-6 border-t border-border py-10 first:border-t-0 first:pt-0 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16 lg:py-14">
-                <div>
-                  <h2 className="text-2xl font-semibold tracking-tight lg:sticky lg:top-24 lg:text-3xl">
-                    {section.title}
-                  </h2>
-                </div>
-
-                <div className="space-y-4">
-                  {section.paragraphs.map((paragraph) => (
-                    <p
-                      key={paragraph.slice(0, 48)}
-                      className="text-[15px] leading-relaxed text-muted-foreground lg:text-base"
-                    >
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              </div>
+      {brand.htmlDescription ? (
+        <Section className="py-16 lg:py-24">
+          <Wrapper>
+            <Container>
+              {/* The CMS ships one blob, so there is no column to break it into -
+                  cap the measure instead, or body copy runs the full 1280px. */}
+              <Prose
+                className="max-w-3xl"
+                dangerouslySetInnerHTML={{ __html: brand.htmlDescription }}
+              />
             </Container>
-          ))}
-        </Wrapper>
-      </section>
+          </Wrapper>
+        </Section>
+      ) : null}
 
-      <section className="border-b border-border">
-        <Wrapper className="py-14 lg:py-16">
+      <Section className="py-14 lg:py-16">
+        <Wrapper>
           <Container>
             <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
               <p className="max-w-2xl text-lg">
@@ -121,7 +142,11 @@ const BrandPage = async ({ params }: Props) => {
                 pogledaj u našoj zvaničnoj internet prodavnici.
               </p>
               <Button asChild size="lg" className="w-fit">
-                <a href={brand.shopUrl} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={shopUrlFor(brand.slug)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Otvori prodavnicu
                   <ExternalLink className="size-4" />
                 </a>
@@ -129,7 +154,7 @@ const BrandPage = async ({ params }: Props) => {
             </div>
           </Container>
         </Wrapper>
-      </section>
+      </Section>
     </div>
   );
 };

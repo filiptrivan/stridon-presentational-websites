@@ -1,18 +1,24 @@
-import type { Brand } from "@/constants/brands";
 import { cn } from "@brand/shared/lib/utils";
 import Image from "next/image";
 
 interface BrandLogoProps {
-  // Anything with a name and a tile - a full Brand, or a serviced brand.
-  brand: Pick<Brand, "name" | "logo">;
+  name: string;
+  /** `imageUrl` straight off the PACMS brand; null renders the wordmark cell. */
+  logo: string | null;
   className?: string;
   sizes?: string;
 }
 
-// 2:1 logo tile. Brands we have no artwork for fall back to a wordmark cell
-// carrying the diagonal motif, so the grid keeps its rhythm.
-const BrandLogo = ({ brand, className, sizes }: BrandLogoProps) => {
-  if (!brand.logo) {
+// 2:1 logo cell for the hairline grids on the homepage, /brendovi and /servis.
+//
+// The artwork is the CMS one, so a brand added to BRAND_SLUGS shows its real
+// logo with nothing drawn by hand. It is `object-contain` with padding, not
+// `object-cover`: PACMS stores a tight-cropped vendor logo of whatever shape and
+// format, so cropping it to 2:1 would cut letters off. A brand PACMS has no
+// image for falls back to a plain wordmark cell, so the grid keeps its rhythm
+// either way.
+const BrandLogo = ({ name, logo, className, sizes }: BrandLogoProps) => {
+  if (!logo) {
     return (
       <div
         className={cn(
@@ -20,29 +26,33 @@ const BrandLogo = ({ brand, className, sizes }: BrandLogoProps) => {
           className,
         )}
       >
-        <span className="flex items-center gap-3">
-          <span
-            aria-hidden
-            className="h-5 w-2.5 -skew-x-[14deg] bg-primary"
-          />
-          <span className="font-heading text-xl font-semibold uppercase tracking-[0.18em]">
-            {brand.name}
-          </span>
+        <span className="font-heading text-xl font-semibold uppercase tracking-[0.18em]">
+          {name}
         </span>
       </div>
     );
   }
 
   return (
-    <div className={cn("relative aspect-[2/1] overflow-hidden", className)}>
+    <div
+      className={cn(
+        // White, not the grey the catalog cards use: eight of the PACMS logos
+        // are JPG with a baked white background and would sit on grey as a
+        // visible white box.
+        "relative aspect-[2/1] overflow-hidden bg-background",
+        className,
+      )}
+    >
       <Image
-        src={brand.logo}
-        alt={`${brand.name} logo`}
+        src={logo}
+        alt={`${name} logo`}
         fill
         sizes={sizes ?? "(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"}
-        // The image optimizer rejects SVG unless dangerouslyAllowSVG is on.
-        unoptimized
-        className="object-cover"
+        // The optimizer rejects SVG unless dangerouslyAllowSVG is on, and a few
+        // PACMS logos are SVG. Only those bypass it; the rest are resized and
+        // served as AVIF/WebP like any other remote image.
+        unoptimized={logo.toLowerCase().endsWith(".svg")}
+        className="object-contain p-4 lg:p-6"
       />
     </div>
   );

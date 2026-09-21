@@ -10,7 +10,7 @@ import Link from "next/link";
 // closes the page in the shared CTA band.
 const Hero = () => {
   return (
-    <section className="relative isolate overflow-hidden border-b border-border">
+    <section className="relative isolate overflow-hidden">
       <Image
         src="/about/sgtools-dck-tim.webp"
         alt=""

@@ -2,6 +2,7 @@ import B2bForm from "@/components/b2b-form";
 import { B2B_PORTAL_URL } from "@/constants/links";
 import Container from "@brand/shared/components/container";
 import HeroHeader from "@brand/shared/components/hero-header";
+import Section from "@brand/shared/components/section";
 import Wrapper from "@brand/shared/components/wrapper";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
 import { Button } from "@brand/ui/button";
@@ -15,7 +16,9 @@ export const metadata = createPageMetadata({
 });
 
 // Shared page header like the rest of the monorepo, portal login for existing
-// partners, then the access request form.
+// partners, then the access request form. Both sections are centred to match
+// /kontakt, which is the other "fill this in and we get back to you" page on
+// the site - same shape, same axis.
 const B2bPage = () => {
   return (
     <div>
@@ -24,9 +27,9 @@ const B2bPage = () => {
         description="Prijavi se na portal ako već imaš nalog kod nas, ili zatraži pristup ako nam se tek pridružuješ."
       />
 
-      <section className="border-b border-border">
-        <Wrapper className="py-12 lg:py-16">
-          <Container>
+      <Section className="py-12 lg:py-16">
+        <Wrapper>
+          <Container className="flex flex-col items-center text-center">
             <h2 className="text-2xl font-semibold tracking-tight lg:text-3xl">
               Već imaš B2B nalog?
             </h2>
@@ -46,11 +49,11 @@ const B2bPage = () => {
             </Button>
           </Container>
         </Wrapper>
-      </section>
+      </Section>
 
-      <section className="border-b border-border">
-        <Wrapper className="py-14 lg:py-20">
-          <Container>
+      <Section className="py-14 lg:py-20">
+        <Wrapper>
+          <Container className="flex flex-col items-center text-center">
             <h2 className="text-2xl font-semibold tracking-tight lg:text-3xl">
               Zatraži pristup B2B platformi
             </h2>
@@ -60,11 +63,13 @@ const B2bPage = () => {
             </p>
           </Container>
 
-          <Container delay={0.3} className="mt-8">
+          {/* The form is already `max-w-3xl w-full`, same as the shared contact
+              page; it only needed a parent that centres it. */}
+          <Container delay={0.3} className="mt-8 flex justify-center">
             <B2bForm />
           </Container>
         </Wrapper>
-      </section>
+      </Section>
     </div>
   );
 };
