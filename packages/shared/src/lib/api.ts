@@ -6,7 +6,8 @@
 
 import { getBrandConfig } from "@brand/config";
 import { cacheLife, cacheTag } from "next/cache";
-import type { Catalog } from "../types/catalogs";
+import type { Brand, BrandCard } from "../types/brands";
+import type { Catalog, CatalogsResult } from "../types/catalogs";
 import type { Category } from "../types/categories";
 import type {
   Product,
@@ -119,6 +120,64 @@ export async function getCatalogs(): Promise<Catalog[]> {
     `/api/Storefront/CatalogsByBrand?brandSlug=${BRAND_SLUG}`,
     "auxiliary",
   );
+}
+
+// Not brand-scoped: every catalog in the CMS, each carrying the manufacturers it
+// belongs to. `getCatalogs()` above filters by BRAND_SLUG, which only resolves for
+// an app whose slug is itself a manufacturer (dck, sg-tools). Stridon is the importer,
+// not a manufacturer, so for it that call is structurally always empty and this is
+// the endpoint that has the data.
+export async function getAllCatalogs(): Promise<CatalogsResult> {
+  cacheLife("days");
+  cacheTag(TAGS.catalogs);
+  return apiFetch<CatalogsResult>("/api/Storefront/Catalogs", "auxiliary");
+}
+
+// The three brand fetchers below are not brand-scoped either - the CMS brand list is
+// the webshop's full catalogue of manufacturers, ordered by `orderNumber`. A site that
+// represents a subset passes its own slug list rather than a `count`.
+
+// Full fidelity, and heavy: 234 rows carrying their whole htmlDescription, ~828 KB
+// uncounted. For a listing page that reads a field or two per brand, prefer
+// `getBrandCards()`, or `getBrandBySlug()` per slug when the detail pages already
+// fill those entries - a cached value is stored whole, so what you return is what
+// the entry costs.
+export async function getBrands(count?: number): Promise<Brand[]> {
+  cacheLife("days");
+  cacheTag(TAGS.brands);
+  const params = new URLSearchParams();
+  if (count !== undefined) params.set("count", String(count));
+  const query = params.toString();
+  return apiFetch<Brand[]>(
+    `/api/Storefront/Brands${query ? `?${query}` : ""}`,
+    "auxiliary",
+  );
+}
+
+export async function getBrandCards(count?: number): Promise<BrandCard[]> {
+  cacheLife("days");
+  cacheTag(TAGS.brands);
+  const params = new URLSearchParams();
+  if (count !== undefined) params.set("count", String(count));
+  const query = params.toString();
+  return apiFetch<BrandCard[]>(
+    `/api/Storefront/BrandCards${query ? `?${query}` : ""}`,
+    "auxiliary",
+  );
+}
+
+export async function getBrandBySlug(slug: string): Promise<Brand | null> {
+  cacheLife("days");
+  cacheTag(TAGS.brands);
+  try {
+    return await apiFetch<Brand>(
+      `/api/Storefront/BrandBySlug?slug=${encodeURIComponent(slug)}`,
+      "critical",
+    );
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 404) return null;
+    throw error;
+  }
 }
 
 export async function getSitemapProducts(): Promise<SitemapEntry[]> {

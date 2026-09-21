@@ -197,4 +197,38 @@ describe("PACMS DTO shape", () => {
     );
     assertShape("StorefrontProductDTO", [product], "ProductBySlug");
   });
+
+  // The four below are not brand-scoped. They exist for stridon.rs, which is the
+  // importer rather than a manufacturer: `CatalogsByBrand?brandSlug=stridon` is
+  // structurally always empty, and the CMS brand list is the whole webshop
+  // catalogue that stridon curates a subset of.
+  it("StorefrontBrandDTO matches /api/Storefront/Brands", async () => {
+    const brands = await read<Record<string, unknown>[]>(
+      "/api/Storefront/Brands",
+    );
+    assertShape("StorefrontBrandDTO", brands, "Brands");
+  });
+
+  it("StorefrontBrandCardDTO matches /api/Storefront/BrandCards", async () => {
+    const cards = await read<Record<string, unknown>[]>(
+      "/api/Storefront/BrandCards",
+    );
+    assertShape("StorefrontBrandCardDTO", cards, "BrandCards");
+  });
+
+  it("StorefrontBrandDTO matches /api/Storefront/BrandBySlug", async () => {
+    // Bosch rather than dck: a brand every site in the monorepo links to, and one
+    // the shop will not retire before this test is read again.
+    const brand = await read<Record<string, unknown>>(
+      "/api/Storefront/BrandBySlug?slug=bosch",
+    );
+    assertShape("StorefrontBrandDTO", [brand], "BrandBySlug");
+  });
+
+  it("StorefrontCatalogDTO matches /api/Storefront/Catalogs", async () => {
+    const result = await read<{ catalogs: Record<string, unknown>[] }>(
+      "/api/Storefront/Catalogs",
+    );
+    assertShape("StorefrontCatalogDTO", result.catalogs, "Catalogs");
+  });
 });
