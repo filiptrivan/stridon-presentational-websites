@@ -1,8 +1,11 @@
 import { getPathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
+import { getBrandConfig } from "@brand/config";
 import { HREFLANG, type Locale } from "@brand/i18n/config";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
 import type { Metadata } from "next";
+
+const { siteName } = getBrandConfig();
 
 // Taken from `getPathname` itself rather than rebuilt: it is the type that
 // already knows a dynamic route needs its params alongside it.
@@ -59,6 +62,13 @@ export function createLocalizedMetadata({
     },
     openGraph: {
       ...base.openGraph,
+      // Next replaces a parent's `openGraph` wholesale instead of merging it,
+      // so `siteName` and `type` from the root layout are dropped the moment a
+      // page defines its own. Restating them here is what keeps `og:site_name`
+      // and `og:type` on every page rather than only on the homepage, which is
+      // the one page with no `generateMetadata` of its own.
+      siteName,
+      type: "website",
       locale: locale === "sr" ? "sr_RS" : "en_US",
     },
   };
