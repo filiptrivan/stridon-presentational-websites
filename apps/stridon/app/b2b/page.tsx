@@ -1,7 +1,7 @@
 import B2bForm from "@/components/b2b-form";
-import PageHeader from "@/components/page-header";
 import { B2B_PORTAL_URL } from "@/constants/links";
 import Container from "@brand/shared/components/container";
+import HeroHeader from "@brand/shared/components/hero-header";
 import Wrapper from "@brand/shared/components/wrapper";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
 import { Button } from "@brand/ui/button";
@@ -14,14 +14,14 @@ export const metadata = createPageMetadata({
   canonicalUrl: "/b2b",
 });
 
-// Inner-page header like the rest of the site, portal login for existing
+// Shared page header like the rest of the monorepo, portal login for existing
 // partners, then the access request form.
 const B2bPage = () => {
   return (
     <div>
-      <PageHeader
+      <HeroHeader
         title="B2B platforma"
-        lede="Prijavi se na portal ako već imaš nalog kod nas, ili zatraži pristup ako nam se tek pridružuješ."
+        description="Prijavi se na portal ako već imaš nalog kod nas, ili zatraži pristup ako nam se tek pridružuješ."
       />
 
       <section className="border-b border-border">

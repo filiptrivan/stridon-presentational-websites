@@ -1,3 +1,8 @@
+import type { CompanyLogo } from "@brand/shared/components/companies";
+import type { Milestone } from "@brand/shared/components/company-timeline";
+import type { Testimonial } from "@brand/shared/components/testimonials";
+import { Globe, Rocket, Speech, Store, Wrench } from "lucide-react";
+
 export interface OwnBrand {
   name: string;
   /** Section heading used on the homepage and on /o-nama. */
@@ -9,32 +14,21 @@ export interface OwnBrand {
   linkLabel: string;
 }
 
-export interface PartnerQuote {
-  company: string;
-  logo: string;
-  quote: string;
-}
-
-export interface ClientLogo {
-  src: string;
-  alt: string;
-}
-
-export interface Milestone {
-  date: string;
-  title: string;
-  description: string;
-  image: { src: string; alt: string; contain?: boolean };
-}
 
 // The company timeline, same story the sg-tools site tells (it is the same
-// family business). Kept verbatim from apps/sg-tools/constants/content.ts.
+// family business). Kept verbatim from apps/sg-tools/constants/content.ts,
+// icons and accent colours included, because the shared CompanyTimeline needs
+// them and all three sites should render this section identically.
 export const ABOUT_MILESTONES: Milestone[] = [
   {
     date: "1996.",
     title: "Prva tezga na Novobeogradskom buvljaku",
     description:
       "Naša priča počinje na jednoj tezgi Novobeogradskog buvljaka, gde su prodati prvi komadi alata i napravljene prve neraskidive veze sa kupcima.",
+    icon: Wrench,
+    color: "text-amber-400",
+    bg: "bg-amber-500/15",
+    border: "border-amber-500/30",
     image: {
       src: "/about/buvljak.jpg",
       alt: "Tezga sa alatima na Novobeogradskom buvljaku",
@@ -45,6 +39,10 @@ export const ABOUT_MILESTONES: Milestone[] = [
     title: "Otvaranje radnje u Vojislava Ilića",
     description:
       "Otvaranjem prve radnje gradili smo iskustvo iz neposrednog kontakta sa kupcima i njihovim svakodnevnim potrebama.",
+    icon: Store,
+    color: "text-blue-400",
+    bg: "bg-blue-500/15",
+    border: "border-blue-500/30",
     image: {
       src: "/about/vojislava-ilica.webp",
       alt: "Radnja u ulici Vojislava Ilića",
@@ -55,6 +53,10 @@ export const ABOUT_MILESTONES: Milestone[] = [
     title: "Pokretanje prodavnicaalata.rs",
     description:
       "Ulaskom u online prodaju povezali smo iskustvo iz radnje sa širim tržištem i dodatno proširili kontakt sa kupcima širom Srbije.",
+    icon: Globe,
+    color: "text-violet-400",
+    bg: "bg-violet-500/15",
+    border: "border-violet-500/30",
     image: {
       src: "/about/prodavnicaalata.svg",
       alt: "Logo prodavnicaalata.rs",
@@ -66,6 +68,10 @@ export const ABOUT_MILESTONES: Milestone[] = [
     title: "Otvaranje lokacije na Altini",
     description:
       "Širenjem poslovanja nastavili smo da učimo iz prakse i da još bolje razumemo šta tržište zaista traži od alata.",
+    icon: Speech,
+    color: "text-emerald-400",
+    bg: "bg-emerald-500/15",
+    border: "border-emerald-500/30",
     image: {
       src: "/about/altina.webp",
       alt: "Radnja na Altini",
@@ -76,6 +82,10 @@ export const ABOUT_MILESTONES: Milestone[] = [
     title: "Pokretanje brenda SG TOOLS",
     description:
       "SG TOOLS je nastao kao prirodan nastavak tog puta, sa ciljem da ponudi alat koji je pouzdan, funkcionalan i cenovno pristupačan.",
+    icon: Rocket,
+    color: "text-rose-400",
+    bg: "bg-rose-500/15",
+    border: "border-rose-500/30",
     image: {
       src: "/about/dck-trade-show-booth.webp",
       alt: "DCK štand na sajmu alata",
@@ -111,59 +121,53 @@ export const OWN_BRANDS: OwnBrand[] = [
   },
 ];
 
-// Verbatim from the old stridon.rs homepage.
-export const PARTNER_QUOTES: PartnerQuote[] = [
+// Verbatim from the old stridon.rs homepage. The shared Testimonial carries a
+// name and a quote only, so the company logos that used to sit under each quote
+// are gone; the same files still feed CLIENT_LOGOS below.
+export const PARTNER_QUOTES: Testimonial[] = [
   {
-    company: "IN GRADNJA",
-    logo: "/companies/svgs/ingradnja.svg",
+    personName: "IN GRADNJA",
     quote:
       "Veliki profesionalci i dobri ljudi, uvek spremni da ispune zahteve i rokove. Sve preporuke za bilo koju vrstu saradnje.",
   },
   {
-    company: "Enterijer Janković",
-    logo: "/companies/svgs/enterijerjankovic.svg",
+    personName: "Enterijer Janković",
     quote:
       "Vrlo dobro iskustvo u radu sa firmom Stridon Group. Odlični u komunikaciji, drže se rokova, uvek imaju dobar profesionalni savet i alat na lageru!",
   },
   {
-    company: "Hidro Ina",
-    logo: "/companies/svgs/hidroina.svg",
+    personName: "Hidro Ina",
     quote:
       "Firma koja uvek zna šta našoj firmi treba. Neprocenjivi prijateljski saveti i rešenja koja samo veliki profesionalci u svom poslu znaju. Sve preporuke za Stridon!",
   },
   {
-    company: "Termo Tim",
-    logo: "/companies/svgs/termotim.svg",
+    personName: "Termo Tim",
     quote:
       "Jednostavna i brza svakodnevna saradnja. Ljudi koji su uvek spremni da izađu u susret potrebama kupaca.",
   },
   {
-    company: "SILMAX doo",
-    logo: "/companies/svgs/silmaxlogo.svg",
+    personName: "SILMAX doo",
     quote:
       "Odličan lager alata i poznavanje potreba kupaca. Takođe, veliki broj brendova koje Stridon uvozi, čini ih nezaobilaznim svakodnevnim dobavljačem!",
   },
   {
-    company: "MBM RAD",
-    logo: "/companies/svgs/mbmrad.svg",
+    personName: "MBM RAD",
     quote:
       "Saveti profesionalnih prodavaca Stridona doveli su do skraćenja rada naše firme na pojedinim delovima projekata i do 50%!",
   },
   {
-    company: "Galens",
-    logo: "/companies/svgs/galens.svg",
+    personName: "Galens",
     quote:
       "Koliki god da projekat počinjete, Stridon uvek ima dovoljno alata za vas. Isporuka sutradan, alati kvalitetni, a želja da se kupcu istinski pomogne je nemerljiva!",
   },
   {
-    company: "COLLIGO ARS",
-    logo: "/companies/svgs/coligoars.svg",
+    personName: "COLLIGO ARS",
     quote:
       "Verni saradnik na svim našim projektima. U dugogodišnjoj saradnji nas ni jednom nisu izneverili. Preporuke za firmu Stridon!",
   },
 ];
 
-export const CLIENT_LOGOS: ClientLogo[] = [
+export const CLIENT_LOGOS: CompanyLogo[] = [
   { src: "/companies/svgs/galens.svg", alt: "Galens" },
   { src: "/companies/svgs/enterijerjankovic.svg", alt: "Enterijer Janković" },
   { src: "/companies/svgs/coligoars.svg", alt: "Colligo Ars" },

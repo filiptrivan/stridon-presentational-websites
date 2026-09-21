@@ -1,7 +1,7 @@
 import BrandLogo from "@/components/brand-logo";
-import PageHeader from "@/components/page-header";
 import { getCatalogsByBrand } from "@/constants/catalogs";
 import Container from "@brand/shared/components/container";
+import HeroHeader from "@brand/shared/components/hero-header";
 import Wrapper from "@brand/shared/components/wrapper";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
 import { ArrowRight, ExternalLink } from "lucide-react";
@@ -19,9 +19,9 @@ const KataloziPage = () => {
 
   return (
     <div>
-      <PageHeader
+      <HeroHeader
         title="Katalozi"
-        lede="Pregledaj širok izbor proizvoda i najbolje ponude mašina, električnog i ručnog alata za profesionalnu i kućnu upotrebu u našim akcijskim katalozima."
+        description="Pregledaj širok izbor proizvoda i najbolje ponude mašina, električnog i ručnog alata za profesionalnu i kućnu upotrebu u našim akcijskim katalozima."
       />
 
       {groups.map((group) => (

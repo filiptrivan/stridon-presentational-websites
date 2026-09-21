@@ -1,23 +1,18 @@
-import type { StridonLocation } from "@/constants/contact";
+import type { ContactLocation } from "@brand/shared/types/contact";
 
-export type ServiceCenter = StridonLocation;
+export type ServiceCenter = ContactLocation;
 
-/** An array because `LocationCards` takes a list; there is only one centre today. */
+/** An array because the shared ContactLocations takes a list; one centre today. */
 export const SERVICE_CENTERS: ServiceCenter[] = [
   {
-    id: "sg-servis",
     name: "SG Servis",
-    role: "Naš servisni partner",
-    address: "Vojislava Ilića 141b",
-    city: "11000 Beograd",
+    badge: "Naš servisni partner",
+    address: "Vojislava Ilića 141b, 11000 Beograd",
     phone: "065/337-8812",
-    phoneHref: "+381653378812",
     email: "sgservis22@gmail.com",
     coords: { lat: 44.785937, lng: 20.500664 },
   },
 ];
-
-export const SERVICE_CENTER = SERVICE_CENTERS[0];
 
 export interface ServicedBrand {
   name: string;

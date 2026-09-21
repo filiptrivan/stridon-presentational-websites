@@ -1,7 +1,7 @@
 import BrandLogo from "@/components/brand-logo";
-import PageHeader from "@/components/page-header";
 import { BRANDS } from "@/constants/brands";
 import Container from "@brand/shared/components/container";
+import HeroHeader from "@brand/shared/components/hero-header";
 import Wrapper from "@brand/shared/components/wrapper";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
 import { ArrowRight } from "lucide-react";
@@ -17,9 +17,9 @@ export const metadata = createPageMetadata({
 const BrendoviPage = () => {
   return (
     <div>
-      <PageHeader
+      <HeroHeader
         title="Uvoznik i distributer najboljih brendova"
-        lede="Brendovi mašina, pribora, električnog, ručnog i akumulatorskog alata koje uvozimo i za koje je naša firma uvoznik i distributer na teritoriji Srbije."
+        description="Brendovi mašina, pribora, električnog, ručnog i akumulatorskog alata koje uvozimo i za koje je naša firma uvoznik i distributer na teritoriji Srbije."
       />
 
       <section className="border-b border-border">

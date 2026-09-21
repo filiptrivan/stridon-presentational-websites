@@ -1,9 +1,14 @@
-import AboutTimeline from "@/components/about-timeline";
-import Clients from "@/components/clients";
 import OwnBrand from "@/components/own-brand";
-import PageHeader from "@/components/page-header";
-import PartnerQuotes from "@/components/partner-quotes";
-import { OWN_BRANDS } from "@/constants/about";
+import {
+  ABOUT_MILESTONES,
+  CLIENT_LOGOS,
+  OWN_BRANDS,
+  PARTNER_QUOTES,
+} from "@/constants/about";
+import Companies from "@brand/shared/components/companies";
+import CompanyValues from "@brand/shared/components/company-values";
+import HeroHeader from "@brand/shared/components/hero-header";
+import Testimonials from "@brand/shared/components/testimonials";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
 
 export const metadata = createPageMetadata({
@@ -16,16 +21,22 @@ export const metadata = createPageMetadata({
 const ONamaPage = () => {
   return (
     <div>
-      <PageHeader
+      <HeroHeader
         title="Uvoz, distribucija i servis alata od 30 godina"
-        lede="Stridon Group je porodična firma iz Beograda. Uvozimo i distribuiramo profesionalni alat, stojimo iza sopstvenih brendova i držimo servis u svojim rukama."
+        description="Stridon Group je porodična firma iz Beograda. Uvozimo i distribuiramo profesionalni alat, stojimo iza sopstvenih brendova i držimo servis u svojim rukama."
       />
 
-      <AboutTimeline />
+      <CompanyValues
+        milestones={ABOUT_MILESTONES}
+        title="Kako je nastao Stridon Group"
+      />
       <OwnBrand brand={OWN_BRANDS[0]} />
       <OwnBrand brand={OWN_BRANDS[1]} />
-      <PartnerQuotes />
-      <Clients />
+      <Testimonials
+        items={PARTNER_QUOTES}
+        title="Šta naši saradnici kažu o nama"
+      />
+      <Companies companies={CLIENT_LOGOS} title="Ko su naši klijenti" />
     </div>
   );
 };

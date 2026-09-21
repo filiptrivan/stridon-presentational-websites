@@ -1,48 +1,28 @@
 import { CONTACT_EMAIL } from "@/constants";
-
-export interface StridonLocation {
-  id: string;
-  /** Short label - the way people actually refer to the location. */
-  name: string;
-  /** What happens there, one line. */
-  role: string;
-  address: string;
-  city: string;
-  /** Display form, exactly as printed on the old site. */
-  phone: string;
-  /** E.164 form for the tel: link. */
-  phoneHref: string;
-  email: string;
-  coords: { lat: number; lng: number };
-}
+import type { ContactLocation } from "@brand/shared/types/contact";
 
 export interface OpeningHours {
   days: string;
   hours: string;
 }
 
-// Nothing renders these two right now: `/kontakt` went back to the shared
-// contact page. Kept because this is the real store data off the old site.
-export const LOCATIONS: StridonLocation[] = [
+// Nothing renders these two right now: `/kontakt` is the shared contact page,
+// which is the form only. Kept because this is the real store data off the old
+// site, already in the shape the shared ContactLocations card takes.
+export const LOCATIONS: ContactLocation[] = [
   {
-    id: "vojislava-ilica",
     name: "Vojislava Ilića",
-    role: "Veleprodaja, maloprodaja i uprava",
-    address: "Vojislava Ilića 141g",
-    city: "11000 Beograd",
+    badge: "Veleprodaja, maloprodaja i uprava",
+    address: "Vojislava Ilića 141g, 11000 Beograd",
     phone: "011/2886-509",
-    phoneHref: "+381112886509",
     email: CONTACT_EMAIL,
     coords: { lat: 44.785938, lng: 20.50069 },
   },
   {
-    id: "altina",
     name: "Altina",
-    role: "Veleprodaja i maloprodaja",
-    address: "Ugrinovačka 212",
-    city: "11080 Zemun",
+    badge: "Veleprodaja i maloprodaja",
+    address: "Ugrinovačka 212, 11080 Zemun",
     phone: "011/210-0230",
-    phoneHref: "+381112100230",
     email: CONTACT_EMAIL,
     coords: { lat: 44.847689, lng: 20.369133 },
   },

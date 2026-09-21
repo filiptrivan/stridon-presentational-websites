@@ -7,7 +7,7 @@ import Link from "next/link";
 
 // Full-bleed photo under an ink veil, centered type on top, and the red
 // diagonal from the logo running down the right edge - the same beam that
-// closes the page in PartnerCta.
+// closes the page in the shared CTA band.
 const Hero = () => {
   return (
     <section className="relative isolate overflow-hidden border-b border-border">

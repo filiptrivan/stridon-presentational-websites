@@ -1,12 +1,12 @@
 import BrandLogo from "@/components/brand-logo";
-import PageHeader from "@/components/page-header";
 import { BRANDS, getBrandBySlug } from "@/constants/brands";
 import { hasCatalogs } from "@/constants/catalogs";
 import Container from "@brand/shared/components/container";
+import HeroHeader from "@brand/shared/components/hero-header";
 import Wrapper from "@brand/shared/components/wrapper";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
 import { Button } from "@brand/ui/button";
-import { ExternalLink } from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -40,35 +40,50 @@ const BrandPage = async ({ params }: Props) => {
 
   return (
     <div>
-      <PageHeader
+      <HeroHeader
+        pretitle={
+          <Container>
+            <Link
+              href="/brendovi"
+              className="group mb-6 inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors duration-300 hover:text-foreground"
+            >
+              <ArrowLeft className="size-4 transition-transform duration-300 group-hover:-translate-x-1" />
+              Brendovi
+            </Link>
+          </Container>
+        }
         title={brand.name}
-        lede={brand.tagline}
-        backLink={{ href: "/brendovi", label: "Brendovi" }}
-        aside={
+        description={brand.tagline}
+      >
+        <Container delay={0.3}>
           <BrandLogo
             brand={brand}
-            className="w-full border border-border bg-background lg:w-80"
-            sizes="(min-width: 1024px) 320px, 100vw"
+            className="mt-10 w-64 border border-border bg-background sm:w-80"
+            sizes="(min-width: 640px) 320px, 256px"
           />
-        }
-      >
-        {brandHasCatalogs ? (
-          <Button asChild size="lg">
-            <Link href={`/katalozi#${brand.slug}`}>Pogledaj kataloge</Link>
-          </Button>
-        ) : null}
-        {/* Without a catalog button the shop link carries the header on its own. */}
-        <Button
-          asChild
-          size="lg"
-          variant={brandHasCatalogs ? "outline" : "default"}
-        >
-          <a href={brand.shopUrl} target="_blank" rel="noopener noreferrer">
-            Svi {brand.name} proizvodi
-            <ExternalLink className="size-4" />
-          </a>
-        </Button>
-      </PageHeader>
+        </Container>
+
+        <Container delay={0.4}>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            {brandHasCatalogs ? (
+              <Button asChild size="lg">
+                <Link href={`/katalozi#${brand.slug}`}>Pogledaj kataloge</Link>
+              </Button>
+            ) : null}
+            {/* Without a catalog button the shop link carries the header on its own. */}
+            <Button
+              asChild
+              size="lg"
+              variant={brandHasCatalogs ? "outline" : "default"}
+            >
+              <a href={brand.shopUrl} target="_blank" rel="noopener noreferrer">
+                Svi {brand.name} proizvodi
+                <ExternalLink className="size-4" />
+              </a>
+            </Button>
+          </div>
+        </Container>
+      </HeroHeader>
 
       <section className="border-b border-border">
         <Wrapper className="py-16 lg:py-24">

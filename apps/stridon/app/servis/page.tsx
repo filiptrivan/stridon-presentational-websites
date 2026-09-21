@@ -1,8 +1,8 @@
 import BrandLogo from "@/components/brand-logo";
-import LocationCards from "@/components/location-cards";
-import PageHeader from "@/components/page-header";
-import { SERVICE_CENTER, SERVICED_BRANDS } from "@/constants/service-centers";
+import { SERVICE_CENTERS, SERVICED_BRANDS } from "@/constants/service-centers";
 import Container from "@brand/shared/components/container";
+import ContactLocations from "@brand/shared/components/contact/contact-locations";
+import HeroHeader from "@brand/shared/components/hero-header";
 import Wrapper from "@brand/shared/components/wrapper";
 import { createPageMetadata } from "@brand/shared/lib/metadata";
 import Link from "next/link";
@@ -17,9 +17,9 @@ export const metadata = createPageMetadata({
 const ServisPage = () => {
   return (
     <div>
-      <PageHeader
+      <HeroHeader
         title="Servis alata van garancije u Beogradu"
-        lede="Servisiramo i održavamo električne, akumulatorske i ručne alate, za profesionalnu i za kućnu upotrebu."
+        description="Servisiramo i održavamo električne, akumulatorske i ručne alate, za profesionalnu i za kućnu upotrebu."
       />
 
       <section className="border-b border-border">
@@ -93,42 +93,40 @@ const ServisPage = () => {
 
       <section className="border-b border-border">
         <Wrapper className="py-14 lg:py-20">
-          <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
-            <Container>
-              <h2 className="text-2xl font-semibold tracking-tight lg:text-3xl">
-                SG Servis - naš pouzdani partner
-              </h2>
+          <Container>
+            <h2 className="text-2xl font-semibold tracking-tight lg:text-3xl">
+              SG Servis - naš pouzdani partner
+            </h2>
 
-              <div className="mt-5 space-y-4 text-[15px] leading-relaxed text-muted-foreground">
-                <p>
-                  SG Servis je naš dugogodišnji saradnik za servisiranje
-                  električnih alata. Ekipa stručnjaka je specijalizovana za
-                  održavanje i popravku širokog spektra brendova, od redovnog
-                  servisa i popravke do dijagnostike kvara.
-                </p>
-                <p>
-                  Serviseri imaju bogato iskustvo sa najpoznatijim proizvođačima
-                  električnog alata, pa model i složenost kvara nisu prepreka. U
-                  ugradnju idu isključivo kvalitetni zamenski delovi, da bi alat
-                  ostao pouzdan i posle popravke.
-                </p>
-                <p>
-                  Radno vreme je od 8:00 do 16:00 svakog radnog dana, subotom od
-                  9:00 do 15:00, nedeljom je neradan dan. Svrati u to vreme ili
-                  se javi telefonom, tim SG Servisa će te rado dočekati i
-                  pomoći oko svakog pitanja ili problema sa tvojim alatom.
-                </p>
-              </div>
-            </Container>
-
-            <Container delay={0.5}>
-              <div className="lg:sticky lg:top-24">
-                <LocationCards locations={[SERVICE_CENTER]} />
-              </div>
-            </Container>
-          </div>
+            <div className="mt-5 max-w-3xl space-y-4 text-[15px] leading-relaxed text-muted-foreground">
+              <p>
+                SG Servis je naš dugogodišnji saradnik za servisiranje
+                električnih alata. Ekipa stručnjaka je specijalizovana za
+                održavanje i popravku širokog spektra brendova, od redovnog
+                servisa i popravke do dijagnostike kvara.
+              </p>
+              <p>
+                Serviseri imaju bogato iskustvo sa najpoznatijim proizvođačima
+                električnog alata, pa model i složenost kvara nisu prepreka. U
+                ugradnju idu isključivo kvalitetni zamenski delovi, da bi alat
+                ostao pouzdan i posle popravke.
+              </p>
+              <p>
+                Radno vreme je od 8:00 do 16:00 svakog radnog dana, subotom od
+                9:00 do 15:00, nedeljom je neradan dan. Svrati u to vreme ili se
+                javi telefonom, tim SG Servisa će te rado dočekati i pomoći oko
+                svakog pitanja ili problema sa tvojim alatom.
+              </p>
+            </div>
+          </Container>
         </Wrapper>
       </section>
+
+      {/* dck passes pt-0! because there the card sits straight under the hero.
+          Here a bordered section closes right above it, so Section keeps its
+          own py-16 lg:py-24 and the map does not hug that line. The dashed
+          divider stays off - that border is already the separator. */}
+      <ContactLocations locations={SERVICE_CENTERS} showDivider={false} />
     </div>
   );
 };
