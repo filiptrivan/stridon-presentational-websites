@@ -81,11 +81,16 @@ const ContactForm = ({
           type="email"
           placeholder={t.emailPlaceholder}
           className="border-border/50"
+          // `aria-invalid` alone announces "invalid" without saying why: the
+          // message below has to be pointed at to be read out.
+          aria-describedby={errors.email ? "email-error" : undefined}
           aria-invalid={!!errors.email}
           {...register("email")}
         />
         {errors.email && (
-          <p className="text-sm text-destructive">{errors.email.message}</p>
+          <p id="email-error" className="text-sm text-destructive">
+            {errors.email.message}
+          </p>
         )}
       </div>
 
@@ -95,11 +100,14 @@ const ContactForm = ({
           id="message"
           placeholder={t.messagePlaceholder}
           className="min-h-[150px] border-border/50 resize-none"
+          aria-describedby={errors.message ? "message-error" : undefined}
           aria-invalid={!!errors.message}
           {...register("message")}
         />
         {errors.message && (
-          <p className="text-sm text-destructive">{errors.message.message}</p>
+          <p id="message-error" className="text-sm text-destructive">
+            {errors.message.message}
+          </p>
         )}
       </div>
 

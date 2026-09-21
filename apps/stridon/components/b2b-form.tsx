@@ -76,11 +76,16 @@ const B2bForm = ({ locale }: { locale: Locale }) => {
             inputMode={"inputMode" in field ? field.inputMode : undefined}
             placeholder={t(`fields.${field.name}.placeholder`)}
             className="border-border/50"
+            // `aria-invalid` alone announces "invalid" without saying why:
+            // the message below has to be pointed at to be read out.
+            aria-describedby={
+              errors[field.name] ? `${field.name}-error` : undefined
+            }
             aria-invalid={!!errors[field.name]}
             {...register(field.name)}
           />
           {errors[field.name] && (
-            <p className="text-sm text-destructive">
+            <p id={`${field.name}-error`} className="text-sm text-destructive">
               {errors[field.name]?.message}
             </p>
           )}
