@@ -13,7 +13,12 @@ export default function manifest(): MetadataRoute.Manifest {
     icons: [
       {
         src: "/favicon.ico",
-        sizes: "any",
+        // The real frames in the file, not "any". That value declares a
+        // scalable resource and belongs to vector formats; on a raster icon
+        // Chrome downloads it, finds 48px where the manifest promised any
+        // size, and logs "Resource size is not correct - typo in the
+        // Manifest?" on every page load.
+        sizes: "48x48 32x32 16x16",
         type: "image/x-icon",
       },
       {
