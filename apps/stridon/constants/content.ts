@@ -1,4 +1,3 @@
-import type { TrustBadge } from "@brand/shared/components/cta";
 import {
   BadgePercent,
   BookOpen,
@@ -40,5 +39,3 @@ export const CTA_TRUST_BADGES: readonly { key: string; icon: LucideIcon }[] = [
  * not the locale-independent half it looks like.
  */
 export const STAT_KEYS = ["customers", "dealers", "brands", "locations"] as const;
-
-export type { TrustBadge };

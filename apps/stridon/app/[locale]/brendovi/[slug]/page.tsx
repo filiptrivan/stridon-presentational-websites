@@ -133,8 +133,10 @@ const BrandPage = async ({ params }: Props) => {
         </Container>
       </HeroHeader>
 
+      {/* Section's own py-16 lg:py-24, unlike the shop-lead section below,
+          which is deliberately tighter. */}
       {brand.htmlDescription ? (
-        <Section className="py-16 lg:py-24">
+        <Section>
           <Wrapper>
             <Container>
               {/* The CMS ships one blob, so there is no column to break it into -
