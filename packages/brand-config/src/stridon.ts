@@ -25,9 +25,14 @@ export const config: BrandConfig = {
     external: false,
   },
 
-  defaultTitle: "Stridon Group - vodeći distributer alata u Srbiji",
+  // Carried over verbatim from the live stridon.rs so the redesign does not
+  // hand Google a different title for a URL it already ranks. These two also
+  // feed the OG card through `createRootMetadata`, which is why they have to
+  // move together with `Site.defaultTitle` / `Site.description` in the
+  // catalogs rather than only there.
+  defaultTitle: "Najbolja prodavnica alata u Srbiji | Stridon Group",
   siteDescription:
-    "Stridon Group je zvanični uvoznik i distributer profesionalnog alata u Srbiji. Preko 30 svetskih brendova, veleprodaja, tehnička podrška i brza isporuka.",
+    "Veleprodaja, maloprodaja i online prodaja opreme, alata i mašina najpoznatijih brendova po jeftinim cenama u Srbiji. Pogledajte naše cene, akcije i kataloge.",
   productsPageDescription:
     "Pregledaj brendove koje Stridon Group zvanično uvozi i distribuira u Srbiji.",
   productsPageHeroDescription: "Brendovi koje zvanično zastupamo u Srbiji.",
