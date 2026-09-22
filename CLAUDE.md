@@ -32,11 +32,11 @@
 
 - Use `NEXT_PUBLIC_` prefix for client-accessible vars
 - Use `.env.local` in each app directory for local development secrets (gitignored)
-- `NEXT_PUBLIC_BRAND_SLUG` - Set in `next.config.ts` per app (`"sg-tools"` or `"dck"`)
-- Key variables (same for both):
+- `NEXT_PUBLIC_BRAND_SLUG` - Set in `next.config.ts` per app (`"sg-tools"`, `"dck"` or `"stridon"`)
+- Key variables (same for all three):
   - `API_URL` - Base URL for the PACMS backend REST API (server-only)
   - `BREVO_API_KEY` - Brevo email service API key (contact form)
-  - `NEXT_PUBLIC_CARTO_BASEMAPS_KEY` - CARTO basemap key for the `/gde-kupiti` and `/kontakt` maps; absent ⇒ every tile carries an "API KEY REQUIRED" watermark, with no error anywhere. Same value for both apps; set in each Vercel project and each `.env.local`. Full telling: `packages/shared/src/lib/map.ts`.
+  - `NEXT_PUBLIC_CARTO_BASEMAPS_KEY` - CARTO basemap key for the `/gde-kupiti` and `/kontakt` maps, and for stridon's `/servis`; absent ⇒ every tile carries an "API KEY REQUIRED" watermark, with no error anywhere. Same value for all three apps; set in each Vercel project and each `.env.local`. Full telling: `packages/shared/src/lib/map.ts`.
   - `PACMS_RATELIMIT_BYPASS_SECRET` - Shared secret sent as the `X-Internal-Bypass` header on every `apiFetch` call; the Cloudflare edge fronting `api.pacms.in.rs` validates + strips it and injects the trusted rate-limit marker, so SSG build reads aren't throttled as anonymous. Optional (absent ⇒ anonymous). Set in each app's Vercel project; same value as the CMS `TF_VAR_storefront_ratelimit_bypass_secret`. See the PACMS repo `docs/trusted-first-party-caller.md`. **Also put it in each app's `.env.local`, or local builds break in a way that reads like a code bug.** `generateStaticParams` here returns the *complete* catalog (315 products / 91 categories on sg-tools, 139 / 64 on dck), so one `next build` is hundreds of anonymous reads against the production API — enough that the *next* build 429s mid-prerender and fails with an `ApiError` stack pointing at `api.ts`. Cost us a build on 2026-08-03. **The secret being set is not sufficient locally: a bare `pnpm build` runs both apps concurrently and still 429s** (observed 2026-08-05, both `.env.local`s populated) — and the retry inside the rate-limit window fails again, the second time as an opaque `Failed to collect page data` with the status swallowed, which reads even more like a code bug. Verify with `pnpm turbo build --filter=<app>` one app at a time.
 
 ## Tests
@@ -56,7 +56,7 @@ The integration tests **throw** rather than `skipIf` when `PACMS_API_KEY` is mis
 
 `pnpm preflight` = `turbo lint test`, ~6s cold. `.githooks/pre-push` runs it on every push, and the root `prepare` script arms the hook (`git config core.hooksPath .githooks`) on `pnpm install`. `core.hooksPath` is local config that does not travel with a clone, so a hook nobody installed is a file rather than a gate; hanging it off the one step you cannot skip removes that failure mode. Bypass a known-safe push with `git push --no-verify`. pa-storefront could adopt the same one-liner (it has a root `package.json` and still uses a manual `scripts/setup-hooks.sh`); **pa-cms genuinely cannot** — no root node install, so a .NET-only contributor would never run it.
 
-The hook must never run `test:integration` (see above — it writes to production). It is also not the enforcement point: `test.yml` runs `lint` and `unit` as **parallel** jobs, because a hook is one `--no-verify` away from silence, and because turbo halts `preflight` on the first failing task — folded into one job, a lint error would hide the test result. Lint ran nowhere in CI until 2026-08-04, and both apps now lint with `--max-warnings=0`; without it the warning tier is decorative, which is how `ComboboxChipsInput` sat destructuring `children` and dropping it. **Known gap:** `turbo lint` only reaches the two apps — `packages/{shared,ui,brand-config}` define no `lint` script, so the shared code both apps depend on is still unlinted. Closing it means an eslint config per package (or a shared `@brand/eslint-config`, the shape pa-storefront uses).
+The hook must never run `test:integration` (see above — it writes to production). It is also not the enforcement point: `test.yml` runs `lint` and `unit` as **parallel** jobs, because a hook is one `--no-verify` away from silence, and because turbo halts `preflight` on the first failing task — folded into one job, a lint error would hide the test result. Lint ran nowhere in CI until 2026-08-04, and all three apps now lint with `--max-warnings=0`; without it the warning tier is decorative, which is how `ComboboxChipsInput` sat destructuring `children` and dropping it. **Known gap:** `turbo lint` only reaches the three apps — `packages/{shared,ui,brand-config,i18n}` define no `lint` script, so the shared code every app depends on is still unlinted. Closing it means an eslint config per package (or a shared `@brand/eslint-config`, the shape pa-storefront uses).
 
 ## Architecture
 
@@ -87,7 +87,7 @@ The hook must never run `test:integration` (see above — it writes to productio
 
 ### App Shell Contents (what stays per-app)
 
-Each app (`apps/sg-tools/`, `apps/dck/`) contains only:
+Each app (`apps/sg-tools/`, `apps/dck/`, `apps/stridon/`) contains only:
 
 - `app/globals.css` - Theme OKLCH tokens (dark vs light)
 - `app/layout.tsx` - Viewport, structured data, body class
@@ -121,7 +121,7 @@ Three patterns for consuming brand-specific values in shared code:
 | `@brand/ui/*`     | `packages/ui/src/*`                                       |
 | `@brand/shared/*` | `packages/shared/src/*`                                   |
 
-### Route Structure (both apps)
+### Route Structure (dck and sg-tools)
 
 | Route                              | URL                            |
 | ---------------------------------- | ------------------------------ |
@@ -172,7 +172,7 @@ Every read is bounded by `packages/shared/src/lib/request-budget.ts`, and `apiFe
 
 **Of the 16 `next/image` files, 8 render remote PACMS URLs and 8 render local assets — do not reach for "most of them are local", which is how the autocomplete pair got missed on the first pass.** The remote 8: the six named above (`product-card`, `category-card`, `tag-card`, `product-gallery`, `product-autocomplete`, plus `catalog-card`) and two that need no guard for a checked reason — `media-lightbox` renders `item.url` from a list that cannot contain a null, and the tag page's `bannerMediaUrl` is guarded at block level, where absence correctly means no banner section at all. `catalog-card` is unguarded because `previewImageUrl` is `[Required]` on `StorefrontCatalogDTO` and catalogs are admin-uploaded, never synced.
 
-**Nothing mechanically enforces any of this, and the two obvious guards are both wrong here.** A shared `Image` wrapper is what pa-storefront uses, but its wrapper exists primarily for `overrideSrc` (pinning the raw media URL as the crawler-visible `src`, a channel worth ~14.7% of its organic clicks) and it couples image-presence to an eager-loading budget — the null branch there is a *rider* on a wrapper that had to exist anyway. This repo has zero `overrideSrc` usages and no such budget, so a wrapper here would carry one job that TypeScript already forces at every nullable site. A `no-restricted-imports` lint ban is blocked for a different reason: `turbo lint` only reaches the two apps (see Preflight above — `packages/{shared,ui,brand-config}` define no `lint` script), so a ban would cover 2 of the 8 remote sites and miss the six in `packages/shared` where the cards actually live. Standing up per-package eslint is the prerequisite for ever revisiting it. Until then: check the field's nullability in `packages/shared/src/types/api.ts` and branch.
+**Nothing mechanically enforces any of this, and the two obvious guards are both wrong here.** A shared `Image` wrapper is what pa-storefront uses, but its wrapper exists primarily for `overrideSrc` (pinning the raw media URL as the crawler-visible `src`, a channel worth ~14.7% of its organic clicks) and it couples image-presence to an eager-loading budget — the null branch there is a *rider* on a wrapper that had to exist anyway. This repo has zero `overrideSrc` usages and no such budget, so a wrapper here would carry one job that TypeScript already forces at every nullable site. A `no-restricted-imports` lint ban is blocked for a different reason: `turbo lint` only reaches the three apps (see Preflight above — `packages/{shared,ui,brand-config,i18n}` define no `lint` script), so a ban would cover 2 of the 8 remote sites and miss the six in `packages/shared` where the cards actually live. Standing up per-package eslint is the prerequisite for ever revisiting it. Until then: check the field's nullability in `packages/shared/src/types/api.ts` and branch.
 
 **Error reporting**: Errors are captured by `@sentry/nextjs` and sent to Sentry (email alerts configured per-project). Implementation:
 
