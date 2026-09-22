@@ -27,14 +27,18 @@ export function createBrandRequestConfig(
     // `requestedLocale` is set when a caller asks for a specific locale, which
     // is how Server Actions have to do it - root params are unavailable inside
     // an action, permanently, since an action is not tied to a route.
-    let locale = requestedLocale;
+    const locale = requestedLocale ?? (await rootParams.locale());
 
-    if (!locale) {
-      const fromRoute = await rootParams.locale();
-      if (!hasLocale(locales, fromRoute)) notFound();
-      locale = fromRoute;
-    }
+    // Both branches need the guard, not just the root-param one. The proxy
+    // matcher skips any path containing a dot, so a legacy asset URL such as
+    // `/favicon-96x96.png` reaches the `[locale]` segment with the filename
+    // sitting where the locale belongs. Unvalidated it went straight into the
+    // dynamic `import()` below and threw MODULE_NOT_FOUND, which a production
+    // server answers with 500 where a 404 belongs: a 5xx to a crawler, a
+    // Sentry event and a function invocation, all on an unauthenticated GET.
+    // `next dev` returns 404 for the same URLs, so it was invisible locally.
+    if (!hasLocale(locales, locale)) notFound();
 
-    return { locale, messages: await loadMessages(locale as Locale) };
+    return { locale, messages: await loadMessages(locale) };
   });
 }

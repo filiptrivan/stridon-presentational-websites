@@ -376,6 +376,28 @@ Every page carries one `Organization` block from the shared `root-layout.tsx`, a
 
 Same URL as itself. The parent is hardcoded for all three brands, which is correct for dck and sg-tools and nonsense here. A guard was written once and **reverted in `885fc72`** under the owner's standing rule: do not change architecture already shipped on dck and sg-tools, only stridon. Re-measured and re-raised on 2026-09-22 along with the thinness of the block - no `legalName`, no `taxID`, no address, no `telephone`, no `sameAs`, even though `constants/` and the new `/podacizaidentifikaciju` hold all of it - and **the owner declined again**. Leave it. It is a `packages/shared` change, not a stridon one.
 
+## A URL with a dot in it used to 500 in production and 404 in dev
+
+Found by the handover audit on 2026-09-22, fixed in `packages/i18n/src/request.ts`. Worth reading before touching `proxy.ts` or the locale plumbing, because the shape of it recurs.
+
+`createBrandRequestConfig` validated the locale on one of its two branches. The root-param branch checked `hasLocale` and called `notFound()`; the branch that takes the locale from the route segment did not, and passed it straight into the dynamic ``import(`../messages/${locale}.json`)``. The proxy matcher deliberately skips any path containing a dot, so a legacy asset URL reached `app/[locale]/page.tsx` with the filename sitting where the locale belongs, and the import threw `MODULE_NOT_FOUND`.
+
+Measured against `next start` on a clean build, before the fix:
+
+| URL | before | after |
+| --- | --- | --- |
+| `/favicon-96x96.png` | **500** | 404 |
+| `/apple-touch-icon-precomposed.png` | **500** | 404 |
+| `/ads.txt`, `/browserconfig.xml`, `/BingSiteAuth.xml` | **500** | 404 |
+| `/sitemap_index.xml`, `/favicon.png`, `/logo.png` | **500** | 404 |
+| `/wp-login.php`, `/a.b` | **500** | 404 |
+| `/sr/nema.png`, `/slike/foo.jpg` (two segments) | 404 | 404 |
+| `/nepostojeca-stranica` (no dot) | 404 | 404 |
+
+Every one of those is an unauthenticated GET, so each was a 5xx to a crawler, a Sentry event and a function invocation. Two of them are URLs this very branch created work for: `/favicon-96x96.png` is the generator leftover deleted in the favicon pass, and `/apple-touch-icon-precomposed.png` is what older iOS asks for before it falls back.
+
+**The reason it was invisible:** `next dev` returns 404 for all of them. The bug only exists in a production build, so no amount of local clicking finds it. When you change anything about how the locale is resolved, check it with `next start`, not `next dev`, and check a path with a dot in it.
+
 ## Opening the dev server from a phone shows a blank page
 
 Measured on 2026-09-22 and **not a bug in this code**. `next dev` refuses `/_next/*` to any origin that is not in `allowedDevOrigins`, which is unset in all three apps. From a phone on the LAN:
