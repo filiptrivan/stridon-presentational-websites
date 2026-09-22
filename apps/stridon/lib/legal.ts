@@ -9,12 +9,12 @@ import type { Locale } from "@brand/i18n/config";
  * the text a lawyer approved.
  *
  * The only thing a body cannot spell for itself is an internal link, because
- * `/politika-privatnosti` is `/en/privacy-policy` in the other locale. Those
+ * `/politikaprivatnosti` is `/en/privacy-policy` in the other locale. Those
  * two are left as tokens and filled in here. The bodies are ours, not user
  * input, so this is the same trust boundary the CMS copy already sits on.
  */
 export function fillLegalLinks(html: string, locale: Locale): string {
   return html
-    .replaceAll("__PRIVACY__", pathFor("/politika-privatnosti", locale))
+    .replaceAll("__PRIVACY__", pathFor("/politikaprivatnosti", locale))
     .replaceAll("__CONTACT__", pathFor("/kontakt", locale));
 }

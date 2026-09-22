@@ -1,7 +1,7 @@
 "use client";
 
 import { getPathname, usePathname } from "@/i18n/navigation";
-import type { Locale } from "@brand/i18n/config";
+import { HREFLANG, type Locale } from "@brand/i18n/config";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
@@ -43,7 +43,7 @@ const LanguageSwitch = ({ locale, label }: LanguageSwitchProps) => {
   return (
     <Link
       href={href}
-      hrefLang={target}
+      hrefLang={HREFLANG[target]}
       aria-label={label}
       className="flex items-center justify-center rounded-md p-1 transition-colors hover:bg-accent"
     >

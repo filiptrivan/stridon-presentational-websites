@@ -20,8 +20,13 @@ const staticPages: {
   { path: "/o-nama", changeFrequency: "monthly", priority: 0.7 },
   { path: "/b2b", changeFrequency: "monthly", priority: 0.7 },
   { path: "/kontakt", changeFrequency: "monthly", priority: 0.6 },
-  { path: "/politika-privatnosti", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/politikaprivatnosti", changeFrequency: "yearly", priority: 0.3 },
   { path: "/uslovi-koriscenja", changeFrequency: "yearly", priority: 0.3 },
+  {
+    path: "/podacizaidentifikaciju",
+    changeFrequency: "yearly",
+    priority: 0.3,
+  },
 ];
 
 /**
@@ -37,7 +42,6 @@ type Href = Parameters<typeof getPathname>[0]["href"];
 
 function entriesFor(
   href: Href,
-  lastModified: Date,
   changeFrequency: "weekly" | "monthly" | "yearly",
   priority: number,
 ): MetadataRoute.Sitemap {
@@ -50,24 +54,27 @@ function entriesFor(
 
   return routing.locales.map((locale) => ({
     url: `${SITE_URL}${getPathname({ href, locale })}`,
-    lastModified,
     changeFrequency,
     priority,
     alternates: { languages },
   }));
 }
 
+/**
+ * No `lastModified`. A `new Date()` here is dynamic IO under `cacheComponents`,
+ * which turned the whole route into a function invocation on every crawl, and
+ * it bought nothing: all 68 entries carried the same "now", which is exactly
+ * the pattern Google says it ignores. A real date needs a real signal, and the
+ * only one this site has is a CMS edit, which nothing reports here yet.
+ */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date();
-
   return [
     ...staticPages.flatMap((page) =>
-      entriesFor(page.path, lastModified, page.changeFrequency, page.priority),
+      entriesFor(page.path, page.changeFrequency, page.priority),
     ),
     ...BRAND_SLUGS.flatMap((slug) =>
       entriesFor(
         { pathname: "/brendovi/[slug]", params: { slug } },
-        lastModified,
         "monthly",
         0.6,
       ),

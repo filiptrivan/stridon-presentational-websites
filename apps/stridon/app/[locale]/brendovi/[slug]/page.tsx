@@ -38,14 +38,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: t("notFound") };
   }
 
+  const meta = await getTranslations({ locale, namespace: "Brand.meta" });
+
   return createLocalizedMetadata({
     locale: locale as Locale,
     href: { pathname: "/brendovi/[slug]", params: { slug: brand.slug } },
-    // The CMS writes these for the webshop, where the same brand ranks on the
-    // same queries, so they are the tested copy rather than a guess - and the
-    // CMS is also where they get translated.
-    title: brand.metaTitle,
-    description: brand.metaDescription,
+    // One template with the name interpolated, **not** `brand.metaTitle` /
+    // `brand.metaDescription`. Those are written for prodavnicaalata.rs and
+    // measured wrong for this site three ways (2026-09-22): they sell ("Online
+    // prodaja Srbija", "Prodaja X alata online") on a site whose own terms page
+    // says no purchase is possible here; they are byte-identical to what the
+    // webshop already serves on /proizvodjaci/<slug>/, so two domains with one
+    // owner would compete on the same snippet and the shop would win; and 8 of
+    // the 24 run past 160 chars, with sg-tools cut mid-word and dck carrying a
+    // 76-char title that has an "I" where a "|" belongs.
+    //
+    // `htmlDescription` is still the CMS's, below - that one really is per-brand
+    // copy and belongs on the page.
+    title: meta("title", { brand: brand.name }),
+    description: meta("description", { brand: brand.name }),
   });
 }
 

@@ -1,24 +1,21 @@
-import { colors, fontFamilies } from "./constants";
+import { LOGO_ASPECT, LOGO_PNG_DATA_URI } from "./logo-data";
 
 export function Logo({ width = 200 }: { width?: number }) {
-  // Wordmark rather than the real logo: satori renders OG images without a
-  // browser, so it would have to fetch and rasterise stridon-logo.svg on every
-  // request. Kept as type on purpose - the OG card is 1200x630 and the lockup
-  // would be unreadable at the size it would sit.
-  const height = Math.round(width * 0.35);
+  // The real lockup, not a type substitute. Satori renders without a browser,
+  // so the artwork is inlined as a data URI in `logo-data.ts` - see the note
+  // there for why a URL or the raw SVG is the worse trade.
+  const height = Math.round(width / LOGO_ASPECT);
 
   return (
-    <span
-      style={{
-        fontSize: height,
-        fontWeight: 600,
-        fontFamily: fontFamilies.heading,
-        color: colors.primary,
-        display: "flex",
-        letterSpacing: 2,
-      }}
-    >
-      STRIDON
-    </span>
+    // `next/image` means nothing to satori, which only understands `<img>`.
+    // Same disable the dck and sg-tools OG templates carry for product images.
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={LOGO_PNG_DATA_URI}
+      alt=""
+      width={width}
+      height={height}
+      style={{ display: "flex" }}
+    />
   );
 }

@@ -66,6 +66,7 @@ export const SOCIAL_LINKS = [
 ];
 
 export const LEGAL_LINKS: readonly NavLinkDef[] = [
-  { key: "privacy", href: "/politika-privatnosti" },
+  { key: "privacy", href: "/politikaprivatnosti" },
   { key: "terms", href: "/uslovi-koriscenja" },
+  { key: "identification", href: "/podacizaidentifikaciju" },
 ];

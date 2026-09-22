@@ -23,7 +23,13 @@ export const routing = defineRouting({
     "/servis": { en: "/service" },
     "/kontakt": { en: "/contact" },
     "/b2b": { en: "/b2b" },
-    "/politika-privatnosti": { en: "/privacy-policy" },
+    // These two are one word with no hyphens, unlike every other Serbian
+    // route here, because that is how the live site already spells them.
+    // The Serbian key is never rewritten, so the folder matches it - and
+    // the English alias is hyphenated regardless, which is the convention
+    // for a URL nobody has ranked yet.
+    "/politikaprivatnosti": { en: "/privacy-policy" },
+    "/podacizaidentifikaciju": { en: "/company-details" },
     "/uslovi-koriscenja": { en: "/terms-of-use" },
   },
 });

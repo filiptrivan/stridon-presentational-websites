@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return createLocalizedMetadata({
     locale: locale as Locale,
-    href: "/politika-privatnosti",
+    href: "/politikaprivatnosti",
     title: t("title"),
     description: t("description"),
   });

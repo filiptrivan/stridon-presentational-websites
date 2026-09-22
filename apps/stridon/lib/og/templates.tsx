@@ -91,8 +91,10 @@ export function DefaultTemplate({
           padding: "60px 80px",
         }}
       >
-        {/* Logo top-left as brand mark */}
-        <Logo width={140} />
+        {/* Logo top-left as brand mark. 260, not the 140 the wordmark used:
+            the lockup carries "group" under the name and needs the extra
+            width for it to read at the size a feed shows the card. */}
+        <Logo width={260} />
 
         {/* Title & description left-aligned */}
         <div
@@ -123,10 +125,13 @@ export function DefaultTemplate({
                 color: colors.muted,
                 marginTop: 20,
                 lineHeight: 1.5,
-                maxWidth: 750,
+                maxWidth: 820,
               }}
             >
-              {truncateText(description, 120)}
+              {/* 160, not the 120 this started at: every description the site
+                  ships is 145-157 characters, so all of them were truncated,
+                  and truncated mid-word - the homepage card ended on "Po...". */}
+              {truncateText(description, 160)}
             </div>
           )}
         </div>

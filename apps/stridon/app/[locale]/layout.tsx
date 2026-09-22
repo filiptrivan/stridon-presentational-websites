@@ -12,6 +12,7 @@ import { HREFLANG, type Locale } from "@brand/i18n/config";
 import { getBrandConfig } from "@brand/config";
 import RootLayout from "@brand/shared/components/root-layout";
 import { createRootMetadata } from "@brand/shared/lib/metadata";
+import { buildOgImageUrl, OG_SIZE } from "@brand/shared/lib/og/utils";
 import { getPathname } from "@/i18n/navigation";
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
@@ -46,12 +47,36 @@ export async function generateMetadata({
   // its icons, OG image and title template, then say where this locale lives.
   const base = createRootMetadata();
 
+  const title = t("defaultTitle");
+  const description = t("description");
+  const canonical = getPathname({ href: "/", locale });
+
+  // `Site.defaultTitle` is the whole `<title>`, brand suffix included, because
+  // it is the `default` and `template` never applies to it. The OG card is the
+  // one place that suffix is wrong: the logo sits directly above the headline,
+  // so "| Stridon Group" repeats the artwork and costs the title a second line.
+  const suffix = ` | ${siteName}`;
+  const cardTitle = title.endsWith(suffix)
+    ? title.slice(0, -suffix.length)
+    : title;
+  const cardUrl = buildOgImageUrl({
+    type: "default",
+    title: cardTitle,
+    description,
+  });
+  const cardImage = {
+    url: cardUrl,
+    width: OG_SIZE.width,
+    height: OG_SIZE.height,
+    alt: siteName,
+  };
+
   return {
     ...base,
-    title: { default: t("defaultTitle"), template: `%s | ${siteName}` },
-    description: t("description"),
+    title: { default: title, template: `%s | ${siteName}` },
+    description,
     alternates: {
-      canonical: getPathname({ href: "/", locale }),
+      canonical,
       languages: Object.fromEntries(
         routing.locales.map((other) => [
           HREFLANG[other],
@@ -61,8 +86,14 @@ export async function generateMetadata({
     },
     openGraph: {
       ...base.openGraph,
+      // Facebook and LinkedIn treat `og:url` as the share's canonical, which
+      // is what consolidates a link shared with tracking params onto one
+      // entry. Relative: Next resolves it against `metadataBase`.
+      url: canonical,
       locale: locale === "sr" ? "sr_RS" : "en_US",
+      images: [cardImage],
     },
+    twitter: { ...base.twitter, images: [{ url: cardUrl, alt: siteName }] },
   };
 }
 

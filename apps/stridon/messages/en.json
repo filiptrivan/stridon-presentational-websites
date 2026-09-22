@@ -39,7 +39,8 @@
       "contact": "Contact",
       "toolShop": "Prodavnica alata",
       "privacy": "Privacy policy",
-      "terms": "Terms of use"
+      "terms": "Terms of use",
+      "identification": "Company details"
     }
   },
   "Home": {
@@ -47,7 +48,7 @@
       "title": "Import, distribution and sale of professional tools in Serbia.",
       "description": "Stridon Group is the company behind the most successful tool shop in Serbia. Over 120 dealers, more than 30 international brands and our own service centre, with delivery across the country.",
       "shop": "Online store",
-      "catalog": "Browse the catalog"
+      "catalog": "Browse the catalogs"
     },
     "brands": {
       "title": "Brands we officially represent",
@@ -124,8 +125,8 @@
   },
   "Brands": {
     "meta": {
-      "title": "Brands",
-      "description": "Brands of machines, accessories, power, hand and cordless tools for which Stridon Group is the official importer and distributor in Serbia."
+      "title": "Importer and distributor of the best brands",
+      "description": "Brands of machines, accessories, power, hand and cordless tools that we import and for which our company is the importer and distributor in Serbia."
     },
     "hero": {
       "title": "Importer and distributor of the best brands",
@@ -134,6 +135,10 @@
     "goToBrand": "Go to brand"
   },
   "Brand": {
+    "meta": {
+      "title": "{brand} tools | Catalogs and range",
+      "description": "{brand} tools at Stridon Group. Read about the brand, browse current {brand} catalogs and find out where to buy {brand} tools in Serbia."
+    },
     "notFound": "Brand not found",
     "back": "Brands",
     "viewCatalogs": "View catalogs",
@@ -143,8 +148,8 @@
   },
   "Catalogs": {
     "meta": {
-      "title": "Catalogs",
-      "description": "PDF catalogs and price lists for machines, power tools and hand tools from the brands Stridon Group officially imports and distributes in Serbia."
+      "title": "Browse our promotional catalogs",
+      "description": "Browse a wide range of products and our best offers on machines, power tools and hand tools for professional and home use in our promotional catalogs."
     },
     "hero": {
       "title": "Catalogs",
@@ -159,8 +164,8 @@
   },
   "About": {
     "meta": {
-      "title": "About us",
-      "description": "Stridon Group is the official importer and distributor of professional tools in Serbia, with its own SG TOOLS and DCK brands, a service centre and a network of over 120 dealers."
+      "title": "About us | 30 years of tool distribution",
+      "description": "Meet Stridon Group, a family company from Belgrade importing, distributing and servicing professional tools for 30 years, behind SG TOOLS and DCK."
     },
     "hero": {
       "title": "Thirty years of importing, distributing and servicing tools",
@@ -209,8 +214,8 @@
   },
   "Service": {
     "meta": {
-      "title": "Service",
-      "description": "Out-of-warranty service for power, cordless and hand tools in Belgrade. SG Servis, Vojislava Ilića 141b."
+      "title": "Out-of-warranty machine and tool service",
+      "description": "Out-of-warranty service for machines and tools from DeWalt, Bosch, Makita, Metabo, Festool, Rubi and Senco. Repair services for the best-known tool brands."
     },
     "hero": {
       "title": "Out-of-warranty tool service in Belgrade",
@@ -241,8 +246,8 @@
   },
   "Contact": {
     "meta": {
-      "title": "Contact",
-      "description": "Get in touch with the Stridon team about wholesale, technical support, service or working together. We are here to help."
+      "title": "Contact | All the information you need",
+      "description": "Contact the Stridon team with questions, for support or to work together. Our expert team is here to help and inform you about our products and services."
     },
     "hero": {
       "title": "Get in touch",
@@ -271,8 +276,8 @@
   },
   "B2b": {
     "meta": {
-      "title": "B2B",
-      "description": "Request access to the Stridon B2B platform: wholesale prices, live stock levels and online ordering, for companies that sell tools."
+      "title": "Become our B2B partner | Partnership",
+      "description": "We give you room to grow with first-class support, a wide product range and the expertise of our team. Join us and reach your business goals."
     },
     "hero": {
       "title": "B2B platform",
@@ -361,8 +366,8 @@
   "Legal": {
     "privacy": {
       "meta": {
-        "title": "Privacy policy",
-        "description": "The Stridon Group privacy policy - how we collect, use and protect your data on stridon.rs."
+        "title": "User privacy policy",
+        "description": "Your privacy is our priority. Read our detailed privacy policy so you can be confident about how your personal data is protected on our website."
       },
       "hero": {
         "title": "Privacy policy",
@@ -372,14 +377,36 @@
     },
     "terms": {
       "meta": {
-        "title": "Terms of use",
-        "description": "The Stridon Group terms of use - the rules and conditions for using stridon.rs."
+        "title": "Terms of use for this website",
+        "description": "Read the terms under which you use the Stridon Group site: rules of use, intellectual property, limitation of liability and governing law."
       },
       "hero": {
         "title": "Terms of use",
         "description": "Read the terms under which you use our site."
       },
       "body": "<h2>General terms</h2>\n<p>These terms of use govern the use of the website <strong>stridon.rs</strong>, owned and operated by <strong>STRIDON GROUP DOO</strong>, registered in the Republic of Serbia. By accessing and using this site you accept these terms in full. If you do not agree with any part of them, please do not use the site.</p>\n<h2>Using the site</h2>\n<p>stridon.rs is an informational and marketing site. It presents Stridon Group and the brands we officially import and distribute, together with catalogs, service and terms of cooperation. <strong>Nothing can be bought on this site</strong> - all products are purchased only through <a href=\"https://www.prodavnicaalata.rs\" target=\"_blank\" rel=\"noopener noreferrer\">prodavnicaalata.rs</a>.</p>\n<p>You use the site at your own risk. You undertake to use it only for lawful purposes and in a way that does not infringe the rights of other users.</p>\n<h2>Intellectual property</h2>\n<p>All content on stridon.rs - including but not limited to text, photographs, graphics, logos, icons, audio and video material, as well as the design and structure of the site - is protected by copyright and is the intellectual property of STRIDON GROUP DOO.</p>\n<p>Copying, reproducing, distributing, publicly displaying or otherwise using content from this site is not permitted without prior written consent.</p>\n<h2>Links to external sites</h2>\n<p>This site may contain links to other sites, including <a href=\"https://www.prodavnicaalata.rs\" target=\"_blank\" rel=\"noopener noreferrer\">prodavnicaalata.rs</a> (for buying products) and other external resources. These links are provided for your convenience. STRIDON GROUP DOO is not responsible for the content, privacy policy or practices of other sites.</p>\n<h2>Limitation of liability</h2>\n<p>The information on stridon.rs is provided &quot;as is&quot;, without warranties of any kind, express or implied. We do our best to keep all information accurate and current, but we do not guarantee that the content is complete, accurate or reliable.</p>\n<p>Product specifications, descriptions and prices shown on the site are indicative and may differ from the actual state. For accurate and current product information, including prices and availability, check <a href=\"https://www.prodavnicaalata.rs\" target=\"_blank\" rel=\"noopener noreferrer\">prodavnicaalata.rs</a>.</p>\n<p>STRIDON GROUP DOO is not liable for any damage that may arise from using, or being unable to use, this site.</p>\n<h2>Privacy</h2>\n<p>Your privacy matters to us. You can find everything about how personal data is collected and processed in our <a href=\"__PRIVACY__\">Privacy policy</a>.</p>\n<h2>Changes to these terms</h2>\n<p>STRIDON GROUP DOO reserves the right to change these terms of use at any time, without prior notice. Amended terms take effect when they are published on this page. By continuing to use the site after a change is published, you accept the new terms.</p>\n<p>We recommend you read this page again from time to time so you are aware of any changes.</p>\n<h2>Governing law</h2>\n<p>These terms of use are governed by the law of the Republic of Serbia. Any dispute arising in connection with the use of stridon.rs falls under the jurisdiction of the courts of the Republic of Serbia.</p>\n<h2>Contact</h2>\n<p>For any question about these terms of use you can contact us by email at <a href=\"mailto:office@stridon.rs\">office@stridon.rs</a> or through our <a href=\"__CONTACT__\">contact page</a>.</p>"
+    },
+    "identification": {
+      "meta": {
+        "title": "Company identification details",
+        "description": "Find the identification details of Stridon Group DOO. Learn more about our business, contact information, registered address and legal status."
+      },
+      "hero": {
+        "title": "Company identification details",
+        "description": "The official registration details of our company."
+      },
+      "companyTitle": "Company details",
+      "activity": "Agents involved in the sale of furniture, household goods, hardware and ironmongery",
+      "fields": {
+        "legalName": "Full legal name",
+        "address": "Postal address",
+        "activity": "Activity and activity code",
+        "registrationNumber": "Registration number",
+        "taxNumber": "Tax number (PIB)",
+        "website": "Website",
+        "phone": "Phone",
+        "email": "E-mail"
+      }
     }
   }
 }

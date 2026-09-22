@@ -62,6 +62,11 @@ export function createLocalizedMetadata({
     },
     openGraph: {
       ...base.openGraph,
+      // `og:url` is the share's canonical for Facebook and LinkedIn: without
+      // it they key off the fetched URL, so the same page shared with tracking
+      // params splits into separate entries. Relative, like the canonical
+      // above - Next resolves both against `metadataBase`.
+      url: getPathname({ href, locale }),
       // Next replaces a parent's `openGraph` wholesale instead of merging it,
       // so `siteName` and `type` from the root layout are dropped the moment a
       // page defines its own. Restating them here is what keeps `og:site_name`

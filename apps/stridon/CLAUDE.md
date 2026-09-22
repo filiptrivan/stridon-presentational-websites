@@ -104,12 +104,13 @@ Each group passes `className="py-10 lg:py-12"` to `Section` rather than taking i
 
 - Done (design pass): homepage, `/brendovi`, `/brendovi/[slug]`, `/katalozi`, `/o-nama`, `/servis`, `/kontakt`, `/b2b`, 404.
 - Done (shared-component pass, 2026-09-19): every section with a `@brand/shared` counterpart now renders that counterpart. Deleted: `page-header`, `about-timeline`, `partner-quotes`, `clients`, `location-cards`, `stats-band`, `why-stridon`, `partner-cta`. Two known regressions were accepted at the time rather than forked around, and **both have since been fixed in `packages/shared`, which is where those notes said the fix belonged** - see the `tel:` and 404 notes above. **Remaining app-local components: `hero`, `brands`, `own-brand`, `brand-logo`, `b2b-form`** - the owner wants these redesigned toward the shared look next, not re-forked.
-- `/politika-privatnosti` and `/uslovi-koriscenja` were rewritten off the dck originals: stridon.rs, office@stridon.rs, distributor framing, and the privacy policy now lists the B2B form's company fields (PIB, matični broj) alongside the contact form's. They use the shared `HeroHeader`, which every other page now does too - the header treatment is consistent across the site as of 2026-09-19.
+- `/politikaprivatnosti` and `/uslovi-koriscenja` were rewritten off the dck originals: stridon.rs, office@stridon.rs, distributor framing, and the privacy policy now lists the B2B form's company fields (PIB, matični broj) alongside the contact form's. They use the shared `HeroHeader`, which every other page now does too - the header treatment is consistent across the site as of 2026-09-19.
+- **New page, 2026-09-22: `/podacizaidentifikaciju`** (`/en/company-details`), the statutory identification block, linked from the footer's legal row beside privacy and terms. **The Serbian URL is one word on purpose** - no hyphens - because that is the URL the live site already serves, and renaming it would cost the live page. It is one of two: `/politika-privatnosti` was renamed to **`/politikaprivatnosti`** on the same day, for the same reason (owner, 2026-09-22), and `git mv` kept the file's history. Those two are the only routes here that do not follow the kebab-case convention. **`/uslovi-koriscenja` and `/o-nama` keep their hyphens for good**, not provisionally: the owner confirmed on 2026-09-22 that the live site has neither page, so nothing is ranked under either spelling and the repo convention wins. **The English aliases stay hyphenated either way** - `/en/privacy-policy`, `/en/company-details` - because nothing has ranked them and a hyphen is what Google asks for. Renaming a Serbian route means seven places: the folder, its own `href` in `generateMetadata`, `i18n/routing.ts`, `constants/links.ts`, `app/sitemap.ts`, `lib/legal.ts` (the `__PRIVACY__` token the terms document links through), and a stale `.next/types/validator.ts` that keeps type-checking the deleted folder until it is deleted. Unlike its two siblings it is not a `Prose` document: the register fields are facts that read the same in both languages, so the values sit in `constants/company.ts` and only the labels are translated. Writing them into both catalogs instead would be the address and the PIB as two strings each, free to drift, with a wrong tax number on the English page being the sort of error nobody reads for. The single field that does have a language is the activity name, kept at `Legal.identification.activity` with the official English wording for NACE 4615; the code is shared.
 - Done (API pass, 2026-09-19, made fully dynamic 2026-09-21): `/brendovi`, `/brendovi/[slug]`, `/katalozi` and the homepage brand wall all read PACMS, and no brand copy is hand-written any more. Added to `packages/shared/src/lib/api.ts`: `getAllCatalogs`, `getBrands`, `getBrandCards`, `getBrandBySlug`, plus `TAGS.brands` and `src/types/brands.ts`. All four are covered by new cases in `apps/dck/__tests__/dto-shape.integration.test.ts` rather than parked in that suite's debt ledger - they are anonymous reads, so they need no key.
 - **The backend moved, it is not gone**: `api.pacms.in.rs` no longer resolves, but the same backend answers on `https://api.prodavnicaalata.rs` (the fallback in `dto-shape.integration.test.ts` has said so since 2026-08-30). Set `API_URL` to it in `.env.local`; it is not in `.env.production`, which reads `API_URL` from Vercel. The `/proizvodi/*` pages, `/gde-kupiti` with `constants/dealers.ts` and `app/api/products/search` are still deleted, and now for a different reason: product and category reads are brand-scoped, so they would render empty for `brandSlug=stridon`. Restoring them needs a product story, not just an API. `app/sitemap.ts` is a static list of the real pages plus the 19 brands.
 - Done (English, 2026-09-21): the site is bilingual, both locales prerendered, every Serbian URL unchanged. See **Internationalisation** below.
 - Done (optimisation and security pass, 2026-09-22): see that section below for the thirteen commits and what each one found.
-- **In progress: SEO.** The homepage is carried over; the remaining pages need the same treatment, page by page, from the live site's own tags. See the SEO section below.
+- **Done (SEO, 2026-09-22): every static page has its own title and description.** Eight are the live site's tags carried over verbatim, two (`/o-nama`, `/uslovi-koriscenja`) are written because those pages are new here, and the 24 `/brendovi/[slug]` pages share one interpolated template rather than the CMS's own tags. The pass also renamed `/politika-privatnosti` to `/politikaprivatnosti` and added `/podacizaidentifikaciju`, both to match URLs the live site already serves. See the SEO section below for the table and the rules. The OG card and the favicons were finished the same day and have their own sections. **Search Console after deploy is the only SEO item left**; the Organization JSON-LD below is known and deliberately not fixed.
 - Pending: the production `NEXT_PUBLIC_SENTRY_DSN`, which is empty in `.env.production` so Sentry is silently off. Turnstile is not missing - Filip removed it from the whole monorepo in `bda05b5`, env kept for rollback, so no form here has bot protection by decision.
 - Pending, raised and not acted on: no CSP header anywhere in the monorepo (a report-only draft sized for this app's actual sources is in the chat history), unescaped HTML in the shared `sendContactEmail`, `API_URL` in the Vercel env before deploy, and a PACMS webhook to `revalidateTag` so a CMS edit is not up to 24h behind.
 
@@ -123,7 +124,7 @@ Serbian and English, `next-intl@^4.14.5` on Next 16.3.5, both locales statically
 
 **The Next upgrade was a prerequisite, not a preference.** The locale is read with `next/root-params`, which is the only way to get it inside a `'use cache'` scope: `cookies()` and `headers()` both drop static prerendering under `cacheComponents`, and passing the locale by hand would mean threading it through every cached function in `@brand/shared`. That API is stable from 16.3.0, so 16.1.6 could not have it. All three apps moved together, and a `pnpm overrides` entry in the root `package.json` pins one version for every workspace package and every transitive peer - with only the apps bumped, `@brand/shared` resolved its `next` peer from the root install and the build type-checked against two different `NextRequest` types.
 
-**Routing.** `localePrefix: "as-needed"` with a `pathnames` map in `i18n/routing.ts`. The key of each entry is the internal route - the folder under `app/[locale]/` - and the value only names the locales that spell it differently, so **no folder was renamed** and `/o-nama`, `/brendovi/dewalt` and the rest are byte-identical to what Google has indexed. English is an alias on top: `/en/about`, `/en/brands/dewalt`. `/sr/*` 307s to the bare path so the two spellings never both rank, and the three legacy brand slugs still 308 through `redirects()` in `next.config.ts` (those run before the proxy).
+**Routing.** `localePrefix: "as-needed"` with a `pathnames` map in `i18n/routing.ts`. The key of each entry is the internal route - the folder under `app/[locale]/` - and the value only names the locales that spell it differently, so adding English renamed no folder and `/brendovi/dewalt` and the rest stayed byte-identical to what Google has indexed. **One folder was renamed later and not by i18n**: `politika-privatnosti` -> `politikaprivatnosti` in the SEO pass, to match a live URL. `/o-nama` is not in the indexed set at all - it is a page this redesign adds. English is an alias on top: `/en/about`, `/en/brands/dewalt`. `/sr/*` 307s to the bare path so the two spellings never both rank, and the three legacy brand slugs still 308 through `redirects()` in `next.config.ts` (those run before the proxy).
 
 Locale detection and the locale cookie are both **off**. With detection on, `/` becomes a per-visitor redirect and stops being one cacheable document; with the cookie on, which URL a redirect lands on depends on invisible state (next-intl#1845). The prefix is the whole story.
 
@@ -244,15 +245,173 @@ Re-run this classification before chasing anything in the dev console again.
 
 ## SEO
 
-**The homepage `<title>` and description are the live stridon.rs ones, carried over verbatim** (`167bb6c`): `Najbolja prodavnica alata u Srbiji | Stridon Group` (50 chars) and the 157-character description. This URL is already ranked, and a title is a ranking input, so the rebuild does not get to reword it. The one edit is the missing diacritic in "Pogledajte nase cene", which is not a ranking factor and is what shows in the snippet.
+**Every SR `<title>` and description is the live stridon.rs one, carried over verbatim.** These URLs are already ranked and a title is a ranking input, so the rebuild does not get to reword them. EN is a faithful translation of the same string, since those pages are new and rank nothing. Char counts below are the *rendered* title, i.e. the message plus the ` | Stridon Group` template from the layout.
 
-**Those two strings live in two places and must move together.** `messages/{sr,en}.json` -> `Site.defaultTitle` / `Site.description` feed the rendered tags; `packages/brand-config/src/stridon.ts` -> `defaultTitle` / `siteDescription` feed the **OG card** through `createRootMetadata`, because the layout overrides title and description but keeps the parent's `openGraph.images`. Change one and the social card silently keeps the old text.
+| Route | Rendered SR `<title>` | Chars | Desc |
+| --- | --- | --- | --- |
+| `/` | `Najbolja prodavnica alata u Srbiji \| Stridon Group` | 50 | 157 |
+| `/brendovi` | `Uvoznik i distributer najboljih brendova \| Stridon Group` | 56 | 149 |
+| `/katalozi` | `Pregledajte naše akcijske kataloge \| Stridon Group` | 50 | 150 |
+| `/servis` | `Servis mašina i alata van garantnog roka \| Stridon Group` | 56 | 153 |
+| `/o-nama` | `O nama \| 30 godina distribucije alata \| Stridon Group` | 53† | 152 |
+| `/kontakt` | `Kontakt \| Sve potrebne informacije \| Stridon Group` | 50* | 151 |
+| `/b2b` | `Postanite naš B2B partner \| Saradnja \| Stridon Group` | 52 | 151 |
+| `/politikaprivatnosti` | `Politika privatnosti korisnika \| Stridon Group` | 46* | 151 |
+| `/uslovi-koriscenja` | `Uslovi korišćenja internet sajta \| Stridon Group` | 48† | 145 |
+| `/podacizaidentifikaciju` | `Podaci za identifikaciju firme \| Stridon Group` | 46* | 154 |
 
-**Open, and a business call rather than a technical one:** that title and description promise a shop - "online prodaja", "jeftine cene", "Pogledajte naše cene, akcije". This site has no product, price or promotion; buying happens on prodavnicaalata.rs. Buy-intent traffic lands on a page that cannot serve it, and Google routinely rewrites a description that does not match the page. Flagged to the owner on 2026-09-22 and deliberately left as the live site has it.
+Every static page is done. `/brendovi/[slug]` has no row because all 24 share one template at `Brand.meta`, with the manufacturer's name interpolated - see below. The owner supplied each live pair by hand - **the live site cannot be fetched from here**, `https://www.stridon.rs/` fails TLS (curl exit 35) and the apex 308s to it.
+
+† **Written here, not carried over.** `/o-nama` and `/uslovi-koriscenja` are pages the live site never had (owner, 2026-09-22), so there were no tags to inherit. They are still written in the live site's house style rather than the redesign's, on purpose: a descriptive phrase instead of a bare page name, formal "Vi", and a description in the 145-155 band that names things actually on the page - the terms description lists four of that document's own `<h2>`s. **Their slugs keep the kebab-case convention**, unlike the two one-word ones above: nothing has ranked them, and a hyphen is what Google asks for.
+
+Four things that are not obvious from the diffs:
+
+**The homepage pair lives in two places and they must move together.** `messages/{sr,en}.json` -> `Site.defaultTitle` / `Site.description` feed the rendered tags; `packages/brand-config/src/stridon.ts` -> `defaultTitle` / `siteDescription` feed the **OG card** through `createRootMetadata`, because the layout overrides title and description but keeps the parent's `openGraph.images`. Change one and the social card silently keeps the old text. No other page has this problem: they all build their card from their own `*.meta.*`, and stridon renders none of the `productsPageDescription`-style brand-config fields (those are required by `BrandConfig` for dck and sg-tools).
+
+**Formal "Vi" under `meta` is deliberate - do not "fix" it.** The root `CLAUDE.md` makes informal "ti" a Critical Rule, and two carried-over descriptions break it: "Pogledajte naše cene" on `/`, and `/katalozi`, whose live description is this page's own hero paragraph with exactly one word changed (`Pregledaj` -> `Pregledajte`). The split is intentional and holds for every page: **on-page copy obeys the "ti" rule, `*.meta.*` is the live site's wording even when it is formal.** A meta description is not a ranking input and never appears on the page, so rewording it buys nothing and changes a snippet Google already serves.
+
+**On `/brendovi`, `Brands.meta.*` and `Brands.hero.*` are byte-identical** - the live title and description turned out to be the redesign's own H1 and hero paragraph, word for word. They are kept as separate keys so they can diverge later, but JSON takes no comment, so note it here: **reword that hero and the meta silently stops matching the live site.**
+
+**The `/servis` description hard-codes seven brand names** (DeWalt, Bosch, Makita, Metabo, Festool, Rubi, Senco). `constants/service-centers.ts` -> `SERVICED_BRAND_SLUGS` renders exactly those plus Stanley, so the claim is true today and stops being true the moment that list is trimmed.
+
+**`* ` in the table = ` DOO` dropped, by the owner's call.** Two live titles end `| Stridon Group DOO` rather than `| Stridon Group`: `/kontakt` (live 54), `/politikaprivatnosti` (live 50) and `/podacizaidentifikaciju` (live 50). That suffix is not typed per page - it is the layout's `title.template` - so keeping the legal form would mean either a doubled suffix in the rendered title or `title: { absolute: ... }` threaded through `createLocalizedMetadata`. Raised on `/kontakt`, the owner's answer was to drop it ("ignorisi ovo DOO", 2026-09-22), so it is a standing rule rather than a one-off: **the brand token is unchanged, the rendered title is four or five characters shorter than live, and the site keeps one brand suffix everywhere.**
+
+**`/b2b` is the one carry-over that is worse than what it replaced, and it was taken anyway.** The string it overwrote named what the page actually does - "veleprodajne cene, stanje lagera i poručivanje online, za firme koje prodaju alat" - against a live description that is generic growth copy matching no element on the page. It was carried over because the owner's rule is the live wording, and because a description is a CTR lever, not a ranking input; Google routinely rewrites one that does not match the page, which is the likely outcome here. The replaced string is one `git show` away if that call is ever reversed.
+
+**The 24 brand pages use one template, not `brand.metaTitle` / `brand.metaDescription`.** Reading the CMS looks like the obvious move - the copy is per-brand, already written and already translated - and it is wrong here for three measured reasons (2026-09-22):
+
+1. **It sells, and this site does not.** Every CMS title ends `Online prodaja Srbija` and every description opens `Prodaja X alata online`. `/uslovi-koriscenja` on this same site says "Na ovom sajtu nije moguća kupovina".
+2. **It is byte-identical to the webshop.** `prodavnicaalata.rs/proizvodjaci/dewalt/` serves the same description word for word and a title differing only in the brand suffix (checked on dewalt and knipex). Two domains, one owner, one snippet - Google keeps one, and the shop has the products and the links.
+3. **A third of it is malformed.** 8 of 24 descriptions run past 160 chars (max 210); `sg-tools` is cut mid-word at "Deo ponuda SG Tools proiz"; `dck` has a 76-char rendered title with an `I` where a `|` belongs and a description containing "alata.  profesionalni brend alata"; `oli`'s title is the three letters `OLI`.
+
+It is also already a template - 24 entries, 14 distinct skeletons, 7 of them the same sentence with the name swapped - so nothing per-brand is lost by replacing it. The wording is deliberately neutral ("u ponudi Stridon Group") rather than "zvanični distributer": the list includes Bosch, Makita, Metabo and Kärcher, which have their own importers in Serbia, and the owner chose the neutral form for all 24 over a per-brand split. Measured across every real brand name, from `DCK` to `HÖGERT Technik`: titles 45-56 rendered, descriptions 123-156, nothing over the limit. **`htmlDescription` is still the CMS's** and still renders in the page body - that one really is per-brand copy.
 
 Already done and needing nothing: every page has its own canonical plus `alternates.languages`, `sitemap.ts` lists both locales with the same pairs, and the proxy adds `Link: rel=alternate` headers. `<html lang>` is **`sr-Latn`**, not `sr-RS`: Serbian's default script is Cyrillic, so a bare `sr-RS` claims Cyrillic content. `sr-Latn-RS` is the form to use if the region is ever wanted.
 
-Remaining: the OG card still draws a text wordmark rather than the logo, the favicons are not generated from the new SVG, and Search Console wants watching for two weeks after deploy.
+**Open, and a business call rather than a technical one:** the homepage title and description promise a shop - "online prodaja", "jeftine cene", "Pogledajte naše cene, akcije". This site has no product, price or promotion; buying happens on prodavnicaalata.rs. Buy-intent traffic lands on a page that cannot serve it, and Google routinely rewrites a description that does not match the page. Flagged to the owner on 2026-09-22 and deliberately left as the live site has it.
+
+Remaining: Search Console wants watching for two weeks after deploy. The OG card and the favicons were both done on 2026-09-22 - see their own sections below.
+
+## Heading structure
+
+Measured across all 11 Serbian routes and 5 English ones on 2026-09-22: **every page has exactly one `h1`, starts at `h1`, and skips no level.** If that is ever in doubt, the check is a sweep of the rendered HTML rather than a read of the JSX - most headings on this site come from shared components, so the page file does not show them.
+
+Two defects were found and both were in `packages/shared`, so **the fix also lands on dck and sg-tools**, where the same two were present:
+
+- **`stats.tsx` wrapped each figure in an `h4`.** Two problems in one tag: it skipped a level under the surrounding `h2`, and the count-up is client-side, so the server-rendered outline carried four headings reading `0+`, `0+`, `0+`, `0`. Now a `p`.
+- **`footer.tsx` used `h3` for the newsletter and the two link columns.** On any page whose body has no `h2` - the contact page, on all three brands - the first heading after the `h1` was an `h3`. Now `h2`, which is also what a footer nav-region label should be.
+
+**Neither changes a pixel, and that was verified rather than assumed.** Tailwind's preflight strips `font-size`, `font-weight` and `margin` from `h1`-`h6`, and in both cases the classes already set everything, so the tag carried no styling. Computed font, line-height, weight, family, margins, bounding boxes, positions and the document height were captured before and after on the homepage and diffed: identical apart from the tag names.
+
+### The shared `Container` renders everything at `opacity: 0`
+
+Raised during the optimisation pass, re-surfaced on 2026-09-22 by an external SEO tool reporting "Content seems to be hidden", and now measured rather than argued.
+
+`packages/shared/src/components/container.tsx` passes `initial={{ opacity: 0, y: 20 }}` to `motion.div`, and framer-motion writes that into the **server** HTML as `style="opacity:0;transform:translateY(20px)"`. It wraps nearly every section on all three sites. On the stridon homepage that is 36 wrappers. What it costs, measured on the rendered page:
+
+| render | headings at `opacity: 0` |
+| --- | --- |
+| server HTML with scripts stripped | **13 of 13**, the `h1` included |
+| JS on, 1280x1080, no scroll | 11 of 13 |
+| JS on, 390x844, no scroll | 11 of 13 |
+| JS on, 1280x9000 | 0 of 13 |
+
+`whileInView` with `viewport={{ once: true }}` is what makes the viewport height decide it. **The text is in the HTML either way** - `opacity` is CSS, so anything reading the markup without applying styles (most AI crawlers, most extractors) gets the whole page. The exposure is renderers that *do* apply CSS at a short viewport without scrolling. Googlebot renders tall, so it most likely lands in the bottom row; nothing here proves that, and it is not a claim to lean on.
+
+The stronger argument for fixing it is not SEO: if the JS bundle fails to load, the page is blank rather than degraded.
+
+**The fix, if it is ever taken:** move the hidden state out of the server HTML and behind a `js` class set by a blocking inline script in `<head>`, with `initial={false}` on the motion element and the hidden state in CSS scoped to `html.js`. Animation stays identical for everyone with JS; without JS nothing is hidden. **Blast radius is the whole monorepo** - `Container` is on nearly every section of all three sites - so it needs its own visual pass, which is why it has not been done inside an SEO pass. The owner chose research-only on 2026-09-22.
+
+## Favicons
+
+**Until 2026-09-22 this app served dck's icons.** Not similar - byte-identical: `favicon.svg`, `favicon.ico`, `apple-touch-icon.png` and `web-app-manifest-512x512.png` all matched dck's md5 exactly, copied when the app was scaffolded and never replaced.
+
+The source is now the owner's `stridon-logo-favicon.svg`: the grey hexagon nut from the wordmark, `#9d9d9d`, `viewBox="0 0 191.62 164.68"`. **It is not square** (1.164:1), so every icon centres it on a square canvas at 88% of the canvas width and lets the padding fall where the aspect puts it. Offered a red `#E50113` tile with the mark knocked out - stronger at 16px - the owner chose the mark as supplied, transparent.
+
+| file | what | note |
+| --- | --- | --- |
+| `favicon.svg` | 512 square viewBox, transparent | the vector source; what modern browsers use |
+| `favicon.ico` | 16 + 32 + 48, PNG-compressed, transparent | frames match what `manifest.ts` declares |
+| `apple-touch-icon.png` | 180x180, **opaque white**, mark at 72% | the one opaque file, see below |
+| `web-app-manifest-192x192.png` | transparent | manifest `purpose` is the default "any" |
+| `web-app-manifest-512x512.png` | transparent | |
+
+Three things worth not rediscovering:
+
+- **`apple-touch-icon.png` has to be opaque.** iOS composites a transparent icon onto black. White matches the manifest's `background_color` and the light-only theme, and the deeper inset is the convention for a full-bleed tile. It is saved as RGB, not RGBA.
+- **The `.ico` is assembled by hand, not by Pillow's `save(sizes=[...])`.** That helper resizes one input image, so the 16 and 32 frames would be downsamples of the 48. Each frame here is rendered from the SVG at 4x its own size and resized with lanczos3, then the three PNGs are packed into an ICONDIR directly.
+- **`favicon-96x96.png` was deleted.** It was a RealFaviconGenerator leftover referenced by nothing - not `manifest.ts`, not the shared `createRootMetadata`.
+
+Regenerating: render the square SVG at 4x each target and resize down; `sharp` reads SVG but cannot write ICO, and a high `density` on an SVG that carries explicit `width`/`height` blows past sharp's pixel limit.
+
+## OG image
+
+The card is generated per page at `/api/og` (1200x630, `DefaultTemplate` is the only type stridon reaches) and it now draws **the real logo**, not the `STRIDON` type substitute it used until 2026-09-22.
+
+**The owner supplied the live site's own `og:image` and it is deliberately not used as-is.** That file is 470x200 WebP with an alpha channel - the bare logo, served as the card. Three problems: it is under the 600px width Facebook and LinkedIn want before they render a large card rather than a small square thumbnail, its transparency is composited by each platform onto a background we do not choose, and a single static image throws away the per-page title and description the generated card carries. The same artwork was already in the repo as vector at `public/stridon-logo.svg` (456x186) and renders sharper than the 470px raster, so that is the source.
+
+Two things worth not rediscovering:
+
+- **The logo is inlined as a base64 PNG** in `lib/og/logo-data.ts` (5.7 KB file, 7.5 KB encoded), not fetched. Satori renders with no browser, so an `<img>` on a URL costs a fetch on every cold render, and its SVG handling is thinner than its PNG handling. The constant is 400px wide, 2x the 260 the card draws, and the file's header carries the sharp incantation to regenerate it after a logo change.
+- **`<img>` needs `eslint-disable-next-line @next/next/no-img-element`.** `next/image` means nothing to satori. This is the same disable the dck and sg-tools OG templates already carry for product images, so match that comment rather than weakening the rule.
+
+Verified by fetching the `og:image` URL off `/`, `/brendovi` and `/en/brands`: all three render 200 as `image/png` at 1200x630.
+
+**The OG URL is absolute and points at the brand host, in every environment - that is deliberate.** A crawler, a chat client or a link preview resolves `og:image` with no page context, so relative is not an option, and the shipped code must name the production host. The visible consequence before launch is that a preview tool pointed at `localhost:3000` follows `og:image` to `https://www.stridon.rs/api/og`, where the **old pages-router site** still answers, returns its 404 page, and the tool saves an HTML document under an image name. dck and sg-tools never show it only because their production already serves the route. It resolves itself the moment this app is the thing behind stridon.rs. A `NODE_ENV === "development"` branch was tried and **backed out on the owner's call**: the shipped artefact should have one code path.
+
+**Three things the card gets right that are easy to lose:**
+
+- **`og:url` on every page**, matching the canonical exactly (checked on `/` and `/en`). Facebook and LinkedIn treat it as the share's canonical; without it the same page shared with tracking params splits into separate entries. Set in `lib/metadata.ts` for pages and in the `[locale]` layout for the homepage, relative both times, resolved against `metadataBase`.
+- **The homepage card drops the brand suffix from its headline.** `Site.defaultTitle` is the whole `<title>` including `| Stridon Group`, because it is the `default` and `template` never applies to it. On the card the logo sits directly above the headline, so the suffix repeats the artwork and costs a second line. The layout strips it for the card only.
+- **The description is cut at 160, not 120.** Every description this site ships is 145-157 characters, so at 120 every single card truncated, mid-word - the homepage ended on "Po...".
+
+## Organization JSON-LD: stridon is its own parent, on purpose
+
+Every page carries one `Organization` block from the shared `root-layout.tsx`, and on this site it reads:
+
+```json
+{ "name": "Stridon", "url": "https://www.stridon.rs",
+  "parentOrganization": { "name": "Stridon Group DOO", "url": "https://www.stridon.rs" } }
+```
+
+Same URL as itself. The parent is hardcoded for all three brands, which is correct for dck and sg-tools and nonsense here. A guard was written once and **reverted in `885fc72`** under the owner's standing rule: do not change architecture already shipped on dck and sg-tools, only stridon. Re-measured and re-raised on 2026-09-22 along with the thinness of the block - no `legalName`, no `taxID`, no address, no `telephone`, no `sameAs`, even though `constants/` and the new `/podacizaidentifikaciju` hold all of it - and **the owner declined again**. Leave it. It is a `packages/shared` change, not a stridon one.
+
+## Opening the dev server from a phone shows a blank page
+
+Measured on 2026-09-22 and **not a bug in this code**. `next dev` refuses `/_next/*` to any origin that is not in `allowedDevOrigins`, which is unset in all three apps. From a phone on the LAN:
+
+| request | LAN origin | localhost |
+| --- | --- | --- |
+| the HTML page | 200 | 200 |
+| `/_next/static/**.js` | **403 Unauthorized** | 200 |
+| `/_next/static/**.css` | **403 Unauthorized** | 200 |
+| `/_next/image?...` | 200 | 200 |
+| anything in `public/` | 200 | 200 |
+
+The same chunk fetched with **no** `Origin`/`Referer` returns 200, which is what makes this look like a network problem when it is an origin check.
+
+**Why that produces a blank page rather than an unstyled one** is the `Container` issue in its own section above: the hidden state is an *inline* `style="opacity:0"`, so it survives the missing stylesheet, and with no JS nothing ever animates it back. The one thing that renders on the homepage is the hero photo - it is the only element outside a `Container`, `next/image` positions it with inline styles, and `/_next/image` is the one `/_next/` path the check lets through. Every other page is blank.
+
+**Production is unaffected** - there is no origin check in `next build`/`next start` or on Vercel, verified by deploying and fetching the same chunks (200). The fix, if a phone test is ever wanted against dev, is `allowedDevOrigins` in `next.config.ts`; the owner has not taken it.
+
+## Deploying this app by hand
+
+Project `stridon-preview` on the owner's **personal** Vercel account (`atrigenbusiness-3294`), Root Directory already `apps/stridon`, **no custom domain on the account**, so it can never touch the live stridon.rs. Stable URL: `https://stridon-preview.vercel.app`.
+
+The working recipe, and it is not the obvious one:
+
+```bash
+tar -cf - --exclude=node_modules --exclude=.git --exclude=.next --exclude=.turbo           --exclude=.env.local . | tar -xf - -C "$TMP/stridon-deploy"
+# in the copy: drop the root package.json "prepare" script
+cd "$TMP/stridon-deploy" && vercel deploy --prod --yes --archive=tgz
+```
+
+Four walls, all hit on 2026-09-22:
+
+- **`.git` must be out of the copy.** Vercel reads the last commit's author and blocks a deploy it cannot match to a GitHub account.
+- **The root `prepare` script kills `pnpm install` with exit 128.** It is `git config core.hooksPath .githooks`, and with no `.git` in the copy git fails. Remove it **in the copy only**.
+- **`.vercelignore` is required.** Vercel packs the monorepo root and does not honour `.gitignore` here; the first attempt tried to upload **11.9 GB** because `.turbo` is that big. With the file: 26 MB, and the whole deploy takes about a minute.
+- **`API_URL` must be set on the project.** It had none. `NEXT_PUBLIC_BRAND_SLUG` comes from the committed `.env.production`, so `API_URL` is the only one missing.
 
 ## Commands
 
