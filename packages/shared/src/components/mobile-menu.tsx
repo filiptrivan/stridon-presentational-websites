@@ -58,7 +58,11 @@ const MobileMenu = ({
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button size="icon" variant="ghost">
+        {/* The icon is the only child, so without this the button has no
+            accessible name and a screen reader announces it as "button".
+            Radix contributes aria-haspopup and aria-expanded, neither of
+            which names the control. */}
+        <Button size="icon" variant="ghost" aria-label={t.menu}>
           <MenuIcon className="size-5" />
         </Button>
       </SheetTrigger>

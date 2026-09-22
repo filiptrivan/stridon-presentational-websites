@@ -43,14 +43,21 @@ const Stats = ({ stats, layout, locale = "sr-RS" }: StatsProps) => {
           {stats.map((stat, index) => (
             <Container key={index} delay={index}>
               <div className="flex flex-col items-center justify-center text-center">
-                <h4 className="text-4xl lg:text-5xl font-bold font-heading">
+                {/* A figure, not a section heading. As an `h4` this skipped a
+                    level under the surrounding `h2` and put four entries into
+                    every page outline whose server-rendered text is "0" - the
+                    count-up only reaches the real number once JS runs. `p`
+                    renders identically: Tailwind's preflight strips heading
+                    font-size, weight and margin, and all three are set by the
+                    classes here. */}
+                <p className="text-4xl lg:text-5xl font-bold font-heading">
                   <AnimatedStatValue
                     value={stat.value}
                     statRef={ref}
                     locale={locale}
                     groupSeparator={groupSeparator}
                   />
-                </h4>
+                </p>
                 <p className="text-muted-foreground mt-2">{stat.label}</p>
               </div>
             </Container>

@@ -41,7 +41,11 @@ function FooterLinkColumn({
   return (
     <Container animation={animation} delay={delay}>
       <div>
-        <h3 className="text-base font-medium">{title}</h3>
+        {/* `h2`, not `h3`: these label the footer's nav regions, and on a
+            page whose body has no `h2` of its own - the contact page is the
+            one on every brand - an `h3` here made the first heading after the
+            `h1` skip a level. Identical rendering, the classes set the type. */}
+        <h2 className="text-base font-medium">{title}</h2>
         <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
           {links.map((link) => (
             <li key={link.href + link.label}>
@@ -129,7 +133,7 @@ const Footer = ({
         {/* Newsletter */}
         <Container animation="fadeUp" delay={0.4}>
           <div>
-            <h3 className="text-base font-medium">{t.newsletterTitle}</h3>
+            <h2 className="text-base font-medium">{t.newsletterTitle}</h2>
             <p className="mt-2 mb-4 text-sm text-muted-foreground">
               {t.newsletterDescription}
             </p>

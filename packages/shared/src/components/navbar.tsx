@@ -68,6 +68,13 @@ const Navbar = ({
   const router = useRouter();
   const t = { ...DEFAULT_LABELS, ...labels };
   const ctaHref = headerCtaHref ?? headerCta.href;
+
+  // The right-hand cluster only gets crowded on a phone when a language switch
+  // sits beside the burger, which is the translated site and nothing else.
+  // Deriving it from the slot rather than taking a flag is what keeps dck and
+  // sg-tools rendering byte-identically to what they shipped before this app
+  // existed: they pass no switch, so they take neither class.
+  const tightMobile = Boolean(languageSwitch);
   const ctaLabel = t.headerCta ?? headerCta.label;
 
   return (
@@ -161,7 +168,12 @@ const Navbar = ({
           </NavigationMenu>
         </div>
 
-        <div className="flex items-center justify-end gap-x-2 md:gap-x-4">
+        <div
+          className={cn(
+            "flex items-center justify-end",
+            tightMobile ? "gap-x-2 md:gap-x-4" : "gap-x-4",
+          )}
+        >
           <Container animation="fadeLeft" delay={0.1}>
             <Button asChild size="sm" variant="outline" className="hidden md:inline-flex">
               {headerCta.external ? (
@@ -179,7 +191,7 @@ const Navbar = ({
               {languageSwitch}
             </Container>
           ) : null}
-          <div className="-mr-1.5 md:mr-0 md:hidden">
+          <div className={cn("md:hidden", tightMobile && "-mr-1.5 md:mr-0")}>
             <Container animation="fadeLeft" delay={0.1}>
               <MobileMenu
                 categories={categories}
