@@ -5,7 +5,7 @@ import type { Messages } from "next-intl";
 
 /**
  * Structure only. Every string a reader sees - the milestone titles, the
- * company blurbs, the partner quotes - lives under `About` and `OwnBrands` in
+ * company blurbs, the partner quotes - lives under `About` and `BrandSpotlights` in
  * `messages/`, keyed by `key` here. What stays is what does not change with the
  * language: the year, the icon, the accent colours the shared `Milestone` type
  * requires, and the photo.
@@ -72,14 +72,15 @@ export const ABOUT_MILESTONES: readonly MilestoneDef[] = [
   },
 ];
 
-export interface OwnBrandDef {
-  key: keyof Messages["OwnBrands"];
+export interface SpotlightBrandDef {
+  key: keyof Messages["BrandSpotlights"];
   name: string;
   image: { src: string };
   href: string;
 }
 
-export const OWN_BRANDS: readonly OwnBrandDef[] = [
+/** SG TOOLS (the group's own brand) and DCK (supplied by Stridon in Serbia). */
+export const SPOTLIGHT_BRANDS: readonly SpotlightBrandDef[] = [
   {
     key: "sgTools",
     name: "SG TOOLS",

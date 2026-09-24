@@ -36,7 +36,7 @@ export const CTA_TRUST_BADGES: readonly {
   icon: LucideIcon;
 }[] = [
   { key: "portal", icon: Globe },
-  { key: "ownBrands", icon: Factory },
+  { key: "ownBrand", icon: Factory },
   { key: "catalogs", icon: BookOpen },
   { key: "service", icon: Wrench },
 ];

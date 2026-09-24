@@ -1,4 +1,4 @@
-import type { OwnBrandDef } from "@/constants/about";
+import type { SpotlightBrandDef } from "@/constants/about";
 import type { Locale } from "@brand/i18n/config";
 import Container from "@brand/shared/components/container";
 import Section from "@brand/shared/components/section";
@@ -8,21 +8,22 @@ import { ExternalLink } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 
-interface OwnBrandProps {
-  brand: OwnBrandDef;
+interface BrandSpotlightProps {
+  brand: SpotlightBrandDef;
   locale: Locale;
 }
 
-// Stridon is not only a distributor: SG TOOLS and DCK are the group's own
-// lines. One section per brand, both reading copy left / photo right.
+// The two brands the site gives a section of their own: SG TOOLS, the group's
+// own brand, and DCK, which Stridon is the only verified supplier of in Serbia.
+// One section per brand, both reading copy left / photo right.
 //
-// The heading and the blurb come from `OwnBrands.<key>` rather than from the
+// The heading and the blurb come from `BrandSpotlights.<key>` rather than from the
 // page, so the homepage and /onama cannot drift apart - they render this same
 // component and therefore the same copy.
-const OwnBrand = async ({ brand, locale }: OwnBrandProps) => {
+const BrandSpotlight = async ({ brand, locale }: BrandSpotlightProps) => {
   const t = await getTranslations({
     locale,
-    namespace: `OwnBrands.${brand.key}`,
+    namespace: `BrandSpotlights.${brand.key}`,
   });
   const paragraphs = t.raw("paragraphs") as string[];
 
@@ -87,4 +88,4 @@ const OwnBrand = async ({ brand, locale }: OwnBrandProps) => {
   );
 };
 
-export default OwnBrand;
+export default BrandSpotlight;

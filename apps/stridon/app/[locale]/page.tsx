@@ -1,7 +1,7 @@
 import Brands from "@/components/brands";
 import Hero from "@/components/hero";
-import OwnBrand from "@/components/own-brand";
-import { OWN_BRANDS } from "@/constants/about";
+import BrandSpotlight from "@/components/brand-spotlight";
+import { SPOTLIGHT_BRANDS } from "@/constants/about";
 import { CTA_TRUST_BADGES, FEATURES, STAT_KEYS } from "@/constants/content";
 import { pathFor } from "@/lib/nav";
 import type { Locale } from "@brand/i18n/config";
@@ -10,11 +10,12 @@ import SharedCTA from "@brand/shared/components/cta";
 import Features from "@brand/shared/components/features";
 import { getTranslations } from "next-intl/server";
 
-const [SG_TOOLS, DCK] = OWN_BRANDS;
+const [SG_TOOLS, DCK] = SPOTLIGHT_BRANDS;
 
-// Order: what we carry -> numbers -> what is ours -> why us -> the ask.
+// Order: what we carry -> numbers -> our brand and the one we supply -> why us
+// -> the ask.
 //
-// Only Hero, Brands and the OwnBrand pair are app-local; the rest are
+// Only Hero, Brands and the BrandSpotlight pair are app-local; the rest are
 // @brand/shared and take their copy as props, which is how that package stays
 // free of an i18n dependency dck and sg-tools do not have.
 const HomePage = async ({
@@ -39,8 +40,8 @@ const HomePage = async ({
         // count-up has to read them back with the same separator.
         locale={locale}
       />
-      <OwnBrand brand={SG_TOOLS} locale={locale as Locale} />
-      <OwnBrand brand={DCK} locale={locale as Locale} />
+      <BrandSpotlight brand={SG_TOOLS} locale={locale as Locale} />
+      <BrandSpotlight brand={DCK} locale={locale as Locale} />
       <Features
         items={FEATURES.map(({ key, icon }) => ({
           icon,

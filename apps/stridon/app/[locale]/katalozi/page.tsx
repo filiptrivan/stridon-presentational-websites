@@ -30,11 +30,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 // Same cards dck and sg-tools get from the shared `catalogs-page`, but grouped by
 // manufacturer, which those two have no use for: each of them sells one brand,
-// so their whole page is one group. Stridon shows 22, and the groups are what
-// `/brendovi/[slug]` deep-links into.
+// so their whole page is one group. Here the groups are what `/brendovi/[slug]`
+// deep-links into.
 //
 // The page reads the unscoped endpoint: `getCatalogs()` filters by BRAND_SLUG,
-// and "stridon" is not a manufacturer in the CMS, so for this app it is empty.
+// and Stridon is the parent company, not a brand in PACMS, so for this app it is
+// always empty.
 const KataloziPage = async ({ params }: Props) => {
   const { locale } = await params;
 

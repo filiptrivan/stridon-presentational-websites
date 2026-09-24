@@ -124,9 +124,9 @@ export async function getCatalogs(): Promise<Catalog[]> {
 
 // Not brand-scoped: every catalog in the CMS, each carrying the manufacturers it
 // belongs to. `getCatalogs()` above filters by BRAND_SLUG, which only resolves for
-// an app whose slug is itself a manufacturer (dck, sg-tools). Stridon is the importer,
-// not a manufacturer, so for it that call is structurally always empty and this is
-// the endpoint that has the data.
+// an app whose slug is itself a brand in PACMS (dck, sg-tools). Stridon is the parent
+// company, not a brand there, so for it that call is structurally always empty and
+// this is the endpoint that has the data.
 export async function getAllCatalogs(): Promise<CatalogsResult> {
   cacheLife("days");
   cacheTag(TAGS.catalogs);

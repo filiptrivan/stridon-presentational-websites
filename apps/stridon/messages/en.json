@@ -97,13 +97,13 @@
       "action": "Become a distributor",
       "badges": {
         "portal": "B2B portal",
-        "ownBrands": "Our own brands",
+        "ownBrand": "Our own brand SG TOOLS",
         "catalogs": "Catalogs",
         "service": "Service in Belgrade"
       }
     }
   },
-  "OwnBrands": {
+  "BrandSpotlights": {
     "sgTools": {
       "heading": "SG Tools - our own brand",
       "paragraphs": [
@@ -117,7 +117,7 @@
       "heading": "DCK tools",
       "paragraphs": [
         "DCK is the professional brand of Dongcheng, with almost three decades of experience, its own manufacturing and distribution in over a hundred countries.",
-        "Here DCK comes with full support: a brushless cordless range, a three-year warranty and service in Serbia. The complete range and the technical detail live on the brand's own site."
+        "Stridon Group is the only verified supplier of DCK tools in Serbia. That comes with full support: a brushless cordless range, a three-year warranty and service in Serbia. The complete range and the technical detail live on the brand's own site."
       ],
       "linkLabel": "Visit dcksrbija.rs",
       "imageAlt": "The DCK stand at a tool fair"
@@ -165,11 +165,11 @@
   "About": {
     "meta": {
       "title": "About us | 30 years of tool distribution",
-      "description": "Meet Stridon Group, a family company from Belgrade importing, distributing and servicing professional tools for 30 years, behind SG TOOLS and DCK."
+      "description": "Meet Stridon Group, a family company from Belgrade importing, distributing and servicing professional tools for 30 years, and the company behind SG TOOLS."
     },
     "hero": {
       "title": "Thirty years of importing, distributing and servicing tools",
-      "description": "Stridon Group is a family business from Belgrade. We import and distribute professional tools, stand behind our own brands and keep service in our own hands."
+      "description": "Stridon Group is a family business from Belgrade. We import and distribute professional tools, stand behind our own brand SG TOOLS and keep service in our own hands."
     },
     "timelineTitle": "How Stridon Group came about",
     "testimonialsTitle": "What our partners say about us",

@@ -97,13 +97,13 @@
       "action": "Postani distributer",
       "badges": {
         "portal": "B2B portal",
-        "ownBrands": "Sopstveni brendovi",
+        "ownBrand": "Sopstveni brend SG TOOLS",
         "catalogs": "Katalozi",
         "service": "Servis u Beogradu"
       }
     }
   },
-  "OwnBrands": {
+  "BrandSpotlights": {
     "sgTools": {
       "heading": "SG Tools - naš sopstveni brend",
       "paragraphs": [
@@ -117,7 +117,7 @@
       "heading": "DCK alati",
       "paragraphs": [
         "DCK je profesionalni brend kompanije Dongcheng, sa skoro tri decenije iskustva, sopstvenom proizvodnjom i distribucijom u preko sto zemalja sveta.",
-        "Kod nas je DCK dostupan sa punom podrškom: brushless akumulatorski program, tri godine garancije i servis u Srbiji. Ceo asortiman i tehnički detalji su na posebnom sajtu brenda."
+        "Stridon Group je jedini verifikovani dobavljač DCK alata u Srbiji. Uz to ide puna podrška: brushless akumulatorski program, tri godine garancije i servis u Srbiji. Ceo asortiman i tehnički detalji su na posebnom sajtu brenda."
       ],
       "linkLabel": "Poseti dcksrbija.rs",
       "imageAlt": "DCK štand na sajmu alata"
@@ -165,11 +165,11 @@
   "About": {
     "meta": {
       "title": "O nama | 30 godina distribucije alata",
-      "description": "Upoznajte Stridon Group, porodičnu firmu iz Beograda koja već 30 godina uvozi, distribuira i servisira profesionalni alat, sa brendovima SG TOOLS i DCK."
+      "description": "Upoznajte Stridon Group, porodičnu firmu iz Beograda koja 30 godina uvozi, distribuira i servisira profesionalni alat i stoji iza sopstvenog brenda SG TOOLS."
     },
     "hero": {
       "title": "Uvoz, distribucija i servis alata od 30 godina",
-      "description": "Stridon Group je porodična firma iz Beograda. Uvozimo i distribuiramo profesionalni alat, stojimo iza sopstvenih brendova i držimo servis u svojim rukama."
+      "description": "Stridon Group je porodična firma iz Beograda. Uvozimo i distribuiramo profesionalni alat, stojimo iza sopstvenog brenda SG TOOLS i držimo servis u svojim rukama."
     },
     "timelineTitle": "Kako je nastao Stridon Group",
     "testimonialsTitle": "Šta naši saradnici kažu o nama",

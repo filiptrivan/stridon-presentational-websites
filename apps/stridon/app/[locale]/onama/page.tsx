@@ -1,9 +1,9 @@
-import OwnBrand from "@/components/own-brand";
+import BrandSpotlight from "@/components/brand-spotlight";
 import {
   ABOUT_MILESTONES,
   CLIENT_LOGOS,
-  OWN_BRANDS,
   PARTNER_QUOTES,
+  SPOTLIGHT_BRANDS,
 } from "@/constants/about";
 import { createLocalizedMetadata } from "@/lib/metadata";
 import type { Locale } from "@brand/i18n/config";
@@ -45,8 +45,8 @@ const ONamaPage = async ({ params }: Props) => {
         }))}
         title={t("timelineTitle")}
       />
-      <OwnBrand brand={OWN_BRANDS[0]} locale={locale as Locale} />
-      <OwnBrand brand={OWN_BRANDS[1]} locale={locale as Locale} />
+      <BrandSpotlight brand={SPOTLIGHT_BRANDS[0]} locale={locale as Locale} />
+      <BrandSpotlight brand={SPOTLIGHT_BRANDS[1]} locale={locale as Locale} />
       <Testimonials
         items={PARTNER_QUOTES.map(({ key, personName }) => ({
           personName,
