@@ -194,7 +194,7 @@ export default async function Layout({
       }}
       footerTagline={footer("tagline")}
       // brand-config spells both of these in Serbian and cannot vary by locale.
-      headerCtaHref={pathFor("/kontakt", locale as Locale)}
+      headerCtaHref={pathFor("/b2b", locale as Locale)}
       homeHref={pathFor("/", locale as Locale)}
     >
       {FONT_FILES.map((href) => (

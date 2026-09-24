@@ -20,8 +20,8 @@ export const config: BrandConfig = {
   navbarLogoHeight: "h-7 md:h-8",
   footerLogoClassName: "h-8 w-auto",
   headerCta: {
-    label: "Postani distributer",
-    href: "/kontakt",
+    label: "B2B platforma",
+    href: "/b2b",
     external: false,
   },
 

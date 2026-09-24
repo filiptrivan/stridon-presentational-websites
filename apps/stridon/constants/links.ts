@@ -34,7 +34,6 @@ export const NAV_LINKS: readonly NavLinkDef<NavKey>[] = [
   { key: "catalogs", href: "/katalozi" },
   { key: "service", href: "/servis" },
   { key: "about", href: "/o-nama" },
-  { key: "b2b", href: "/b2b" },
   { key: "contact", href: "/kontakt" },
 ];
 
