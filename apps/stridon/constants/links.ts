@@ -1,4 +1,5 @@
 import type { StaticPathname } from "@/i18n/routing";
+import type { Messages } from "next-intl";
 
 export const SITE_URL = "https://www.stridon.rs";
 
@@ -14,17 +15,21 @@ export const B2B_PORTAL_URL = "https://b2b.wings.rs/stridon";
  * module constants: they are evaluated once when the module loads, long before
  * any request has a locale. `lib/nav.ts` turns each of these into the
  * `{ label, href }` the shared navbar and footer expect, with the href already
- * spelled for the current locale.
+ * spelled for the current locale. `K` is the message key union of the
+ * namespace the label is read from, so a link without copy fails `tsc`.
  */
-export interface NavLinkDef {
+export interface NavLinkDef<K extends string = string> {
   /** Key under the `Nav` or `Footer.links` namespace. */
-  key: string;
+  key: K;
   /** Internal route, or an absolute URL when `external`. */
   href: StaticPathname | string;
   external?: boolean;
 }
 
-export const NAV_LINKS: readonly NavLinkDef[] = [
+export type NavKey = keyof Messages["Nav"];
+export type FooterLinkKey = keyof Messages["Footer"]["links"];
+
+export const NAV_LINKS: readonly NavLinkDef<NavKey>[] = [
   { key: "brands", href: "/brendovi" },
   { key: "catalogs", href: "/katalozi" },
   { key: "service", href: "/servis" },
@@ -33,14 +38,14 @@ export const NAV_LINKS: readonly NavLinkDef[] = [
   { key: "contact", href: "/kontakt" },
 ];
 
-export const PRODUCTS_FOOTER_LINKS: readonly NavLinkDef[] = [
+export const PRODUCTS_FOOTER_LINKS: readonly NavLinkDef<FooterLinkKey>[] = [
   { key: "allBrands", href: "/brendovi" },
   { key: "catalogs", href: "/katalozi" },
   { key: "onlineStore", href: SHOP_URL, external: true },
   { key: "becomePartner", href: "/kontakt" },
 ];
 
-export const COMPANY_FOOTER_LINKS: readonly NavLinkDef[] = [
+export const COMPANY_FOOTER_LINKS: readonly NavLinkDef<FooterLinkKey>[] = [
   { key: "about", href: "/o-nama" },
   { key: "service", href: "/servis" },
   { key: "contact", href: "/kontakt" },
@@ -65,7 +70,7 @@ export const SOCIAL_LINKS = [
   },
 ];
 
-export const LEGAL_LINKS: readonly NavLinkDef[] = [
+export const LEGAL_LINKS: readonly NavLinkDef<FooterLinkKey>[] = [
   { key: "privacy", href: "/politikaprivatnosti" },
   { key: "terms", href: "/uslovi-koriscenja" },
   { key: "identification", href: "/podacizaidentifikaciju" },

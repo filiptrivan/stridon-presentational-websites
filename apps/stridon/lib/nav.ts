@@ -33,10 +33,10 @@ export interface ResolvedLink {
 
 /** Turns the label-free link definitions in `constants/links.ts` into what the
     shared navbar and footer render. */
-export function resolveLinks(
-  defs: readonly NavLinkDef[],
+export function resolveLinks<K extends string>(
+  defs: readonly NavLinkDef<K>[],
   locale: Locale,
-  t: (key: string) => string,
+  t: (key: K) => string,
 ): ResolvedLink[] {
   return defs.map((def) => ({
     label: t(def.key),

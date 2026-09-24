@@ -5,6 +5,7 @@ import {
   NAV_LINKS,
   PRODUCTS_FOOTER_LINKS,
   SOCIAL_LINKS,
+  type FooterLinkKey,
 } from "@/constants/links";
 import { pathFor, resolveLinks } from "@/lib/nav";
 import { routing } from "@/i18n/routing";
@@ -138,7 +139,7 @@ export default async function Layout({
     B2b: messages.B2b,
   };
 
-  const footerLinkLabel = (key: string) => footer(`links.${key}`);
+  const footerLinkLabel = (key: FooterLinkKey) => footer(`links.${key}`);
 
   // Fonts are self-hosted via @font-face in globals.css (no next/font), so no
   // font className is injected here.

@@ -1,10 +1,13 @@
+import type { Messages } from "next-intl";
 import { z } from "zod";
 
 const PIB_REGEX = /^\d{9}$/;
 const REGISTRATION_NUMBER_REGEX = /^\d{8}$/;
 
-/** Reads a key under `B2b.form.errors`. */
-export type ErrorMessages = (key: string) => string;
+/** Reads a key under `B2b.form.errors`, typed against the catalog. */
+export type ErrorMessages = (
+  key: keyof Messages["B2b"]["form"]["errors"],
+) => string;
 
 /**
  * Same fields the old stridon.rs /b2b form collected, with its limits.

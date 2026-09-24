@@ -1,6 +1,7 @@
 import type { CompanyLogo } from "@brand/shared/components/companies";
 import { Globe, Rocket, Speech, Store, Wrench } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import type { Messages } from "next-intl";
 
 /**
  * Structure only. Every string a reader sees - the milestone titles, the
@@ -10,7 +11,7 @@ import type { LucideIcon } from "lucide-react";
  * requires, and the photo.
  */
 export interface MilestoneDef {
-  key: string;
+  key: keyof Messages["About"]["milestones"];
   date: string;
   icon: LucideIcon;
   color: string;
@@ -72,7 +73,7 @@ export const ABOUT_MILESTONES: readonly MilestoneDef[] = [
 ];
 
 export interface OwnBrandDef {
-  key: string;
+  key: keyof Messages["OwnBrands"];
   name: string;
   image: { src: string };
   href: string;
@@ -97,7 +98,10 @@ export const OWN_BRANDS: readonly OwnBrandDef[] = [
  * Verbatim from the old stridon.rs homepage. The company names are names, so
  * they are here; the quotes are under `About.quotes`.
  */
-export const PARTNER_QUOTES: readonly { key: string; personName: string }[] = [
+export const PARTNER_QUOTES: readonly {
+  key: keyof Messages["About"]["quotes"];
+  personName: string;
+}[] = [
   { key: "inGradnja", personName: "IN GRADNJA" },
   { key: "enterijerJankovic", personName: "Enterijer Janković" },
   { key: "hidroIna", personName: "Hidro Ina" },

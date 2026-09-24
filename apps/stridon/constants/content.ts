@@ -9,6 +9,7 @@ import {
   Wrench,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import type { Messages } from "next-intl";
 
 /**
  * Icons and figures only: the copy that goes with each of these lives under
@@ -16,9 +17,13 @@ import type { LucideIcon } from "lucide-react";
  *
  * These are module constants, evaluated once when the module loads, so there is
  * no request and no locale here to read a translation with. The page that
- * renders them has both, and pairs the two up.
+ * renders them has both, and pairs the two up. Each `key` is typed against the
+ * catalog, so a key with no copy behind it fails `tsc` instead of rendering raw.
  */
-export const FEATURES: readonly { key: string; icon: LucideIcon }[] = [
+export const FEATURES: readonly {
+  key: keyof Messages["Home"]["features"];
+  icon: LucideIcon;
+}[] = [
   { key: "import", icon: ShieldCheck },
   { key: "brands", icon: Layers },
   { key: "wholesale", icon: BadgePercent },
@@ -26,7 +31,10 @@ export const FEATURES: readonly { key: string; icon: LucideIcon }[] = [
 ];
 
 // Dealer-facing, deliberately different from the FEATURES row above them.
-export const CTA_TRUST_BADGES: readonly { key: string; icon: LucideIcon }[] = [
+export const CTA_TRUST_BADGES: readonly {
+  key: keyof Messages["Home"]["cta"]["badges"];
+  icon: LucideIcon;
+}[] = [
   { key: "portal", icon: Globe },
   { key: "ownBrands", icon: Factory },
   { key: "catalogs", icon: BookOpen },
