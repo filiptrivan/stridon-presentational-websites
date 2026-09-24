@@ -198,10 +198,11 @@ describe("PACMS DTO shape", () => {
     assertShape("StorefrontProductDTO", [product], "ProductBySlug");
   });
 
-  // The four below are not brand-scoped. They exist for stridon.rs, which is the
-  // importer rather than a manufacturer: `CatalogsByBrand?brandSlug=stridon` is
-  // structurally always empty, and the CMS brand list is the whole webshop
-  // catalogue that stridon curates a subset of.
+  // The four below are not brand-scoped. They exist for stridon.rs: Stridon is
+  // the parent company, not a brand in PACMS, so a brand-scoped read such as
+  // `CatalogsByBrand?brandSlug=stridon` is always empty for it. They sit in this
+  // suite because it is what api-contract-coverage.test.ts counts as coverage
+  // for an endpoint packages/shared calls.
   it("StorefrontBrandDTO matches /api/Storefront/Brands", async () => {
     const brands = await read<Record<string, unknown>[]>(
       "/api/Storefront/Brands",
@@ -217,10 +218,8 @@ describe("PACMS DTO shape", () => {
   });
 
   it("StorefrontBrandDTO matches /api/Storefront/BrandBySlug", async () => {
-    // Bosch rather than dck: a brand every site in the monorepo links to, and one
-    // the shop will not retire before this test is read again.
     const brand = await read<Record<string, unknown>>(
-      "/api/Storefront/BrandBySlug?slug=bosch",
+      "/api/Storefront/BrandBySlug?slug=dck",
     );
     assertShape("StorefrontBrandDTO", [brand], "BrandBySlug");
   });
