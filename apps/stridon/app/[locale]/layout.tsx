@@ -1,4 +1,5 @@
 import LanguageSwitch from "@/components/language-switch";
+import { base, heading } from "@/constants/fonts";
 import {
   COMPANY_FOOTER_LINKS,
   LEGAL_LINKS,
@@ -14,6 +15,7 @@ import { getBrandConfig } from "@brand/config";
 import RootLayout from "@brand/shared/components/root-layout";
 import { createRootMetadata } from "@brand/shared/lib/metadata";
 import { buildOgImageUrl, OG_SIZE } from "@brand/shared/lib/og/utils";
+import { cn } from "@brand/shared/lib/utils";
 import { getPathname } from "@/i18n/navigation";
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
@@ -98,17 +100,6 @@ export async function generateMetadata({
   };
 }
 
-// Both subsets of both families, because Serbian copy mixes plain latin with
-// č ć ž š đ on every page — the latin-ext file is never optional here. Without
-// next/font nothing preloads these, so the browser would only discover them
-// after it has parsed globals.css.
-const FONT_FILES = [
-  "/fonts/inter-latin.woff2",
-  "/fonts/inter-latinext.woff2",
-  "/fonts/spacegrotesk-latin.woff2",
-  "/fonts/spacegrotesk-latinext.woff2",
-];
-
 export default async function Layout({
   children,
   params,
@@ -141,12 +132,10 @@ export default async function Layout({
 
   const footerLinkLabel = (key: FooterLinkKey) => footer(`links.${key}`);
 
-  // Fonts are self-hosted via @font-face in globals.css (no next/font), so no
-  // font className is injected here.
   return (
     <RootLayout
       lang={HREFLANG[locale as Locale]}
-      fontClassNames=""
+      fontClassNames={cn(base.variable, heading.variable)}
       navLinks={resolveLinks(NAV_LINKS, locale as Locale, nav)}
       productLinks={resolveLinks(
         PRODUCTS_FOOTER_LINKS,
@@ -197,16 +186,6 @@ export default async function Layout({
       headerCtaHref={pathFor("/b2b", locale as Locale)}
       homeHref={pathFor("/", locale as Locale)}
     >
-      {FONT_FILES.map((href) => (
-        <link
-          key={href}
-          rel="preload"
-          href={href}
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-      ))}
       {/* Only the page content needs the client provider: everything outside it
           (navbar, footer, toaster) takes its text as props from this app, which
           is how @brand/shared stays free of an i18n dependency the other two
