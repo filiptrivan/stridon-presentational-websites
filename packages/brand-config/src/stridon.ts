@@ -20,7 +20,7 @@ export const config: BrandConfig = {
   navbarLogoHeight: "h-7 md:h-8",
   footerLogoClassName: "h-8 w-auto",
   headerCta: {
-    label: "B2B platforma",
+    label: "B2B",
     href: "/b2b",
     external: false,
   },
