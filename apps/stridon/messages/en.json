@@ -283,7 +283,7 @@
       "title": "B2B platform",
       "description": "Sign in to the portal if you already have an account with us, or request access if you are just joining."
     },
-    "existing": {
+    "existingB2BPartner": {
       "title": "Already have a B2B account?",
       "description": "The portal is for companies that already have an account with us.",
       "action": "Sign in to the portal"

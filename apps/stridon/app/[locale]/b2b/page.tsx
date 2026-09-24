@@ -41,10 +41,10 @@ const B2bPage = async ({ params }: Props) => {
         <Wrapper>
           <Container className="flex flex-col items-center text-center">
             <h2 className="text-2xl font-semibold tracking-tight lg:text-3xl">
-              {t("existing.title")}
+              {t("existingB2BPartner.title")}
             </h2>
             <p className="mt-3 max-w-xl text-muted-foreground">
-              {t("existing.description")}
+              {t("existingB2BPartner.description")}
             </p>
 
             <Button asChild size="lg" className="mt-7">
@@ -53,7 +53,7 @@ const B2bPage = async ({ params }: Props) => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {t("existing.action")}
+                {t("existingB2BPartner.action")}
                 <ExternalLink className="size-4" />
               </a>
             </Button>

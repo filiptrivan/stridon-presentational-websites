@@ -283,7 +283,7 @@
       "title": "B2B platforma",
       "description": "Prijavi se na portal ako već imaš nalog kod nas, ili zatraži pristup ako nam se tek pridružuješ."
     },
-    "existing": {
+    "existingB2BPartner": {
       "title": "Već imaš B2B nalog?",
       "description": "Portal koriste firme koje već imaju otvoren nalog kod nas.",
       "action": "Prijavi se na portal"
