@@ -2,78 +2,63 @@ import { SHOP_URL } from "@/constants/links";
 import { pathFor } from "@/lib/nav";
 import type { Locale } from "@brand/i18n/config";
 import Container from "@brand/shared/components/container";
-import Wrapper from "@brand/shared/components/wrapper";
+import HeroHeader from "@brand/shared/components/hero-header";
 import { Button } from "@brand/ui/button";
 import { ExternalLink } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
 
-// Full-bleed photo under an ink veil, centered type on top, and the red
-// diagonal from the logo running down the right edge - the same beam that
-// closes the page in the shared CTA band.
+// The hero dck uses (apps/dck/components/hero.tsx), with this site's copy and
+// photo: the shared HeroHeader over the column grid, two actions, and the
+// picture in dck's matted frame. Same classes on purpose, so the two sites
+// read as one family; the fonts are this app's, through --font-heading.
+//
+// dck art-directs two files (16:9 desktop, 4:5 mobile). The one photo here is a
+// portrait of the Altina shop, so the frame sets those two ratios itself and
+// the crop sits high enough to keep the shop sign and the window in view.
 const Hero = async ({ locale }: { locale: Locale }) => {
   const t = await getTranslations({ locale, namespace: "Home.hero" });
 
   return (
-    <section className="relative isolate overflow-hidden">
-      <Image
-        src="/about/sgtools-dck-tim.webp"
-        alt=""
-        aria-hidden
-        fill
-        // `priority` is deprecated in Next 16 in favour of `preload`, which is
-        // the same behaviour under the name that says what it does.
-        preload
-        sizes="100vw"
-        className="-z-20 object-cover"
-      />
-      <div aria-hidden className="absolute inset-0 -z-10 bg-foreground/85" />
-
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-10 top-[-20%] hidden h-[140%] w-36 -skew-x-[14deg] bg-primary lg:block"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute right-36 top-[-20%] hidden h-[140%] w-10 -skew-x-[14deg] bg-background/10 lg:block"
-      />
-
-      <Wrapper className="relative py-24 sm:py-28 lg:py-32">
-        <div className="mx-auto max-w-4xl text-center text-background">
-          <Container>
-            <h1 className="text-balance text-[clamp(2.25rem,5.2vw,4rem)] font-semibold leading-[1.04] tracking-tight">
-              {t("title")}
-            </h1>
-          </Container>
-
-          <Container delay={0.5}>
-            <p className="mx-auto mt-7 max-w-2xl text-lg text-background/70">
-              {t("description")}
-            </p>
-          </Container>
-
-          <Container delay={1}>
-            <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-              <Button asChild size="lg">
-                <a href={SHOP_URL} target="_blank" rel="noopener noreferrer">
-                  {t("shop")}
-                  <ExternalLink className="size-4" />
-                </a>
-              </Button>
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="border-background/30 bg-transparent text-background hover:bg-background hover:text-foreground"
-              >
-                <Link href={pathFor("/katalozi", locale)}>{t("catalog")}</Link>
-              </Button>
-            </div>
-          </Container>
+    <HeroHeader
+      title={t("title")}
+      description={t("description")}
+      showSvgGrid={true}
+    >
+      <Container delay={0.3}>
+        <div className="flex gap-3 mt-6">
+          <Button asChild>
+            <a href={SHOP_URL} target="_blank" rel="noopener noreferrer">
+              {t("shop")}
+              <ExternalLink className="size-4" />
+            </a>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href={pathFor("/katalozi", locale)}>{t("catalog")}</Link>
+          </Button>
         </div>
-      </Wrapper>
-    </section>
+      </Container>
+
+      <Container className="w-full z-30">
+        <div className="relative mx-auto max-w-7xl rounded-2xl md:rounded-[32px] border border-neutral-200/50 bg-neutral-100 p-2 backdrop-blur-lg mt-10 md:mt-14">
+          <div className="rounded-lg md:rounded-[24px] border border-neutral-200 bg-white">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-xl md:aspect-[2932/1664] md:rounded-[26px]">
+              <Image
+                src="/about/altina.webp"
+                alt={t("imageAlt")}
+                fill
+                // The LCP element on the homepage: `preload` (Next 16's name
+                // for `priority`) emits the preload link and fetchpriority.
+                preload
+                sizes="(min-width: 1280px) 1280px, 100vw"
+                className="object-cover object-[50%_20%]"
+              />
+            </div>
+          </div>
+        </div>
+      </Container>
+    </HeroHeader>
   );
 };
 
