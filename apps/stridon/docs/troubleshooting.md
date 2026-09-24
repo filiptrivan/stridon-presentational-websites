@@ -15,6 +15,10 @@
 
 The proxy matcher skips any path containing a dot, so a legacy asset URL such as `/favicon-96x96.png` reaches `app/[locale]/` with the filename where the locale belongs. `packages/i18n/src/request.ts` once validated the locale on one branch only and passed the other straight into a dynamic `import()` of the catalog, which threw `MODULE_NOT_FOUND`: a 500 to a crawler, a Sentry event and a function call per request. `next dev` answered 404, so it was invisible locally. Both branches go through `hasLocale` now. Any change to how the locale is resolved needs checking with `next start` and a dotted path.
 
+## An unknown URL shows global-error instead of the 404, in production only
+
+On Next 16.1, a catch-all that throws `notFound()` without reading its params is prerendered as one static shell, and its router tree carries the placeholder `%%drp:rest:...%%` instead of the real path. The client cannot match that tree to the URL and falls to `global-error`, with no console error and a correct 404 status; `next dev` renders the 404 fine. `app/[locale]/[...rest]/page.tsx` therefore reads its params, which makes an unknown URL render per request, and returns a placeholder from `generateStaticParams`, which Cache Components requires before params can be read. Next fixed the underlying notFound prerender in 16.3.0-canary.30 (vercel/next.js#94037); both lines can go once the repo is on 16.3. To check, look at the `0:` row of the flight data in the 404 HTML: its tree must hold the real path, not a `%%drp` placeholder.
+
 ## The dev server shows a blank page on a phone
 
 `next dev` refuses `/_next/*` to an origin that is not in `allowedDevOrigins`, which is unset in all three apps, so from the LAN the HTML loads and every JS and CSS chunk answers 403. Production has no such check. The page is blank rather than unstyled because of the `Container` note below. The owner has not taken `allowedDevOrigins`.

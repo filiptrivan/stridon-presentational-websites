@@ -24,7 +24,7 @@ Root `../../CLAUDE.md` applies. This file holds only what is specific to `apps/s
 - `next/image` gets `unoptimized` only for `.svg` sources, and `sizes` must match the grid the image sits in.
 - `app/robots.ts` must not disallow `/api/` or `/_next/`: that hides every OG image, every optimized image and the CSS/JS Googlebot renders with.
 - One divider style: the dashed hairline the shared `Section` draws. No skewed shapes or red slabs anywhere.
-- Do not delete `app/[locale]/[...rest]/page.tsx`. It is what sends an unknown URL to the localized 404, since the root layout lives under `[locale]`.
+- Do not delete `app/[locale]/[...rest]/page.tsx`. It is what sends an unknown URL to the localized 404, since the root layout lives under `[locale]`. On Next 16.1 it must keep reading its `params` and its placeholder `generateStaticParams`, or production shows global-error instead of the 404 (the file says why).
 
 ## Gotchas
 
