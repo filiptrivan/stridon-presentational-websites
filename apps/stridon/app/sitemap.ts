@@ -8,25 +8,20 @@ import { HREFLANG } from "@brand/i18n/config";
 
 // Stridon has no product routes (it is the distributor site, purchases happen
 // on prodavnicaalata.rs), so this is a static list - no API reads at build.
-const staticPages: {
-  path: StaticPathname;
-  changeFrequency: "weekly" | "monthly" | "yearly";
-  priority: number;
-}[] = [
-  { path: "/", changeFrequency: "weekly", priority: 1.0 },
-  { path: "/brendovi", changeFrequency: "monthly", priority: 0.9 },
-  { path: "/katalozi", changeFrequency: "monthly", priority: 0.8 },
-  { path: "/servis", changeFrequency: "monthly", priority: 0.7 },
-  { path: "/o-nama", changeFrequency: "monthly", priority: 0.7 },
-  { path: "/b2b", changeFrequency: "monthly", priority: 0.7 },
-  { path: "/kontakt", changeFrequency: "monthly", priority: 0.6 },
-  { path: "/politikaprivatnosti", changeFrequency: "yearly", priority: 0.3 },
-  { path: "/uslovi-koriscenja", changeFrequency: "yearly", priority: 0.3 },
-  {
-    path: "/podacizaidentifikaciju",
-    changeFrequency: "yearly",
-    priority: 0.3,
-  },
+// No `changeFrequency` or `priority`: Google ignores both
+// (https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap)
+// and so does Bing, and in `MetadataRoute.Sitemap` they are optional.
+const staticPages: StaticPathname[] = [
+  "/",
+  "/brendovi",
+  "/katalozi",
+  "/servis",
+  "/o-nama",
+  "/b2b",
+  "/kontakt",
+  "/politikaprivatnosti",
+  "/uslovi-koriscenja",
+  "/podacizaidentifikaciju",
 ];
 
 /**
@@ -40,11 +35,7 @@ const staticPages: {
  */
 type Href = Parameters<typeof getPathname>[0]["href"];
 
-function entriesFor(
-  href: Href,
-  changeFrequency: "weekly" | "monthly" | "yearly",
-  priority: number,
-): MetadataRoute.Sitemap {
+function entriesFor(href: Href): MetadataRoute.Sitemap {
   const languages = Object.fromEntries(
     routing.locales.map((locale) => [
       HREFLANG[locale],
@@ -54,8 +45,6 @@ function entriesFor(
 
   return routing.locales.map((locale) => ({
     url: `${SITE_URL}${getPathname({ href, locale })}`,
-    changeFrequency,
-    priority,
     alternates: { languages },
   }));
 }
@@ -69,15 +58,9 @@ function entriesFor(
  */
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
-    ...staticPages.flatMap((page) =>
-      entriesFor(page.path, page.changeFrequency, page.priority),
-    ),
+    ...staticPages.flatMap((path) => entriesFor(path)),
     ...BRAND_SLUGS.flatMap((slug) =>
-      entriesFor(
-        { pathname: "/brendovi/[slug]", params: { slug } },
-        "monthly",
-        0.6,
-      ),
+      entriesFor({ pathname: "/brendovi/[slug]", params: { slug } }),
     ),
   ];
 }

@@ -5,9 +5,8 @@ import { notFound } from "next/navigation";
  * none: the root layout is `app/[locale]/layout.tsx`, because `locale` has to be
  * a root param for `next/root-params` to read it. A nested `not-found.tsx` only
  * covers a `notFound()` thrown inside its own segment, so without this catch-all
- * every unknown URL - `/proizvodi` and `/gde-kupiti` among them, both still
- * indexed from the old site - falls through to Next's own unstyled 404 instead
- * of `[locale]/not-found.tsx`. This is next-intl's prescribed shape for a root
+ * every unknown URL falls through to Next's own unstyled 404 instead of
+ * `[locale]/not-found.tsx`. This is next-intl's prescribed shape for a root
  * layout that lives under `[locale]`.
  *
  * It sits below every static route, so it changes nothing for a page that
