@@ -17,7 +17,7 @@ interface OwnBrandProps {
 // lines. One section per brand, both reading copy left / photo right.
 //
 // The heading and the blurb come from `OwnBrands.<key>` rather than from the
-// page, so the homepage and /o-nama cannot drift apart - they render this same
+// page, so the homepage and /onama cannot drift apart - they render this same
 // component and therefore the same copy.
 const OwnBrand = async ({ brand, locale }: OwnBrandProps) => {
   const t = await getTranslations({

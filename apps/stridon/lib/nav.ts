@@ -4,7 +4,7 @@ import type { StaticPathname } from "@/i18n/routing";
 import type { Locale } from "@brand/i18n/config";
 
 /**
- * The URL a route has in a given locale: `/o-nama` in Serbian, `/en/about` in
+ * The URL a route has in a given locale: `/onama` in Serbian, `/en/about` in
  * English.
  *
  * Everything that hands a path to a `@brand/shared` component goes through here.

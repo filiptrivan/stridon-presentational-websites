@@ -16,7 +16,7 @@ const staticPages: StaticPathname[] = [
   "/brendovi",
   "/katalozi",
   "/servis",
-  "/o-nama",
+  "/onama",
   "/b2b",
   "/kontakt",
   "/politikaprivatnosti",
@@ -29,7 +29,7 @@ const staticPages: StaticPathname[] = [
  * translations under `alternates.languages`.
  *
  * `getPathname` rather than string concatenation, because the English routes
- * are not the Serbian ones with a prefix: `/o-nama` is `/en/about`. Building
+ * are not the Serbian ones with a prefix: `/onama` is `/en/about`. Building
  * them by hand here would silently drift from `routing.ts` the first time a
  * route is renamed.
  */

@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return createLocalizedMetadata({
     locale: locale as Locale,
-    href: "/o-nama",
+    href: "/onama",
     title: t("title"),
     description: t("description"),
   });

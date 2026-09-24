@@ -1,4 +1,4 @@
-import { LEGACY_BRAND_SLUGS } from "./constants/brands";
+import { LEGACY_BRAND_SLUGS, LEGACY_EN_PATHS } from "./constants/legacy-urls";
 import { TRUSTED_IMAGE_HOSTS } from "@brand/config/public-assets";
 import { withSentryConfig } from "@sentry/nextjs";
 import createNextIntlPlugin from "next-intl/plugin";
@@ -22,15 +22,34 @@ const nextConfig: NextConfig = {
   env: {
     BUILD_YEAR: String(new Date().getFullYear()),
   },
-  // Three brands are spelled differently on the live stridon.rs than in the CMS,
-  // and the CMS slug is canonical in the app. A permanent redirect keeps those
-  // indexed URLs working instead of trading their ranking for a tidier route.
+  // Live stridon.rs URLs this app spells differently (constants/legacy-urls.ts).
+  // Permanent, so an indexed URL keeps working instead of trading its ranking
+  // for a tidier route. Order matters: Next takes the first match, so a legacy
+  // brand slug under /en is mapped in one hop before the generic slug rule.
   async redirects() {
-    return Object.entries(LEGACY_BRAND_SLUGS).map(([from, to]) => ({
-      source: `/brendovi/${from}`,
-      destination: `/brendovi/${to}`,
-      permanent: true,
-    }));
+    const brands = Object.entries(LEGACY_BRAND_SLUGS);
+    return [
+      ...brands.map(([from, to]) => ({
+        source: `/brendovi/${from}`,
+        destination: `/brendovi/${to}`,
+        permanent: true,
+      })),
+      ...brands.map(([from, to]) => ({
+        source: `/en/brendovi/${from}`,
+        destination: `/en/brands/${to}`,
+        permanent: true,
+      })),
+      {
+        source: "/en/brendovi/:slug",
+        destination: "/en/brands/:slug",
+        permanent: true,
+      },
+      ...Object.entries(LEGACY_EN_PATHS).map(([from, to]) => ({
+        source: from,
+        destination: to,
+        permanent: true,
+      })),
+    ];
   },
   images: {
     formats: ["image/avif", "image/webp"],

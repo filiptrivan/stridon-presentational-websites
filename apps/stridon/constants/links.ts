@@ -33,7 +33,7 @@ export const NAV_LINKS: readonly NavLinkDef<NavKey>[] = [
   { key: "brands", href: "/brendovi" },
   { key: "catalogs", href: "/katalozi" },
   { key: "service", href: "/servis" },
-  { key: "about", href: "/o-nama" },
+  { key: "about", href: "/onama" },
   { key: "contact", href: "/kontakt" },
 ];
 
@@ -45,7 +45,7 @@ export const PRODUCTS_FOOTER_LINKS: readonly NavLinkDef<FooterLinkKey>[] = [
 ];
 
 export const COMPANY_FOOTER_LINKS: readonly NavLinkDef<FooterLinkKey>[] = [
-  { key: "about", href: "/o-nama" },
+  { key: "about", href: "/onama" },
   { key: "service", href: "/servis" },
   { key: "contact", href: "/kontakt" },
   { key: "toolShop", href: SHOP_URL, external: true },

@@ -10,7 +10,7 @@
 export const localeSettings = {
   locales: ["sr", "en"],
   defaultLocale: "sr",
-  // Serbian keeps the bare URL it is already indexed under (/o-nama), English
+  // Serbian keeps the bare URL it is already indexed under (/onama), English
   // gets a prefix (/en/about). The alternative, prefixing both, would mean a
   // redirect on every existing URL on the site.
   localePrefix: "as-needed",
