@@ -69,7 +69,8 @@ The hook must never run `test:integration` (see above — it writes to productio
 ├── packages/
 │   ├── brand-config/             # @brand/config - BrandConfig interface + per-brand values
 │   ├── ui/                       # @brand/ui - shadcn/ui primitives (brand-agnostic)
-│   └── shared/                   # @brand/shared - shared components, lib, types, styles
+│   ├── shared/                   # @brand/shared - shared components, lib, types, styles
+│   └── i18n/                     # @brand/i18n - locale settings + next-intl request config (stridon only)
 │
 └── apps/
     ├── sg-tools/                 # Thin app shell (dark theme)
@@ -153,7 +154,7 @@ DCK also has: `app/produzetak-garancije/` → `/produzetak-garancije` (with 308 
 
 **Serbian content**:
 
-- All Serbian strings are hardcoded directly - no i18n framework
+- dck and sg-tools: all Serbian strings are hardcoded directly - no i18n framework. stridon is bilingual through next-intl; its rules are in `apps/stridon/CLAUDE.md`
 - Structured data arrays live in per-app `constants/content.ts`
 - Navigation labels in per-app `constants/links.ts`
 

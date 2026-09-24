@@ -46,3 +46,6 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# personal Claude Code notes (see CLAUDE.md)
+CLAUDE.local.md
