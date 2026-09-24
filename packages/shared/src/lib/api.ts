@@ -134,14 +134,13 @@ export async function getAllCatalogs(): Promise<CatalogsResult> {
 }
 
 // The three brand fetchers below are not brand-scoped either - the CMS brand list is
-// the webshop's full catalogue of manufacturers, ordered by `orderNumber`. A site that
-// represents a subset passes its own slug list rather than a `count`.
+// the webshop's full catalogue of manufacturers, ordered by `orderNumber`, then id.
 
-// Full fidelity, and heavy: 234 rows carrying their whole htmlDescription, ~828 KB
-// uncounted. For a listing page that reads a field or two per brand, prefer
-// `getBrandCards()`, or `getBrandBySlug()` per slug when the detail pages already
-// fill those entries - a cached value is stored whole, so what you return is what
-// the entry costs.
+// Full fidelity, and heavy: 234 rows carrying their whole htmlDescription, ~848 KB.
+// It is the only brand list that carries `orderNumber`, which is how stridon picks
+// and orders the brands it shows; a page that only needs names and logos can read
+// `getBrandCards()` instead. A cached value is stored whole, so what you return is
+// what the entry costs.
 export async function getBrands(count?: number): Promise<Brand[]> {
   cacheLife("days");
   cacheTag(TAGS.brands);

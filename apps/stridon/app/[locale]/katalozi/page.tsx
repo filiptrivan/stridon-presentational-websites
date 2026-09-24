@@ -39,7 +39,7 @@ const KataloziPage = async ({ params }: Props) => {
   const { locale } = await params;
 
   // Both are cached reads the site already makes - `getBrandCards()` is the same
-  // entry the homepage brand wall fills, so the logos here are free.
+  // entry /servis fills, so the logos here are free.
   const [catalogs, cards, t] = await Promise.all([
     getAllCatalogs(),
     getBrandCards(),
@@ -52,7 +52,6 @@ const KataloziPage = async ({ params }: Props) => {
     // ours, and the route has to be the one this locale is served at.
     untaggedName: t("untagged"),
     brandHref: (slug) => brandPath(slug, locale as Locale),
-    sortLocale: locale,
   });
 
   return (

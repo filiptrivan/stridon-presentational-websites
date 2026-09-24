@@ -1,11 +1,10 @@
 import BrandLogo from "@/components/brand-logo";
-import { FEATURED_BRAND_SLUGS } from "@/constants/brands";
+import { FEATURED_BRAND_COUNT, getSiteBrands } from "@/lib/brands";
 import { brandPath, pathFor } from "@/lib/nav";
 import type { Locale } from "@brand/i18n/config";
 import Container from "@brand/shared/components/container";
 import Section from "@brand/shared/components/section";
 import Wrapper from "@brand/shared/components/wrapper";
-import { getBrandCards } from "@brand/shared/lib/api";
 import { ArrowRight } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
@@ -15,16 +14,13 @@ import Link from "next/link";
 // hover), so the homepage and /katalozi read as one language instead of two.
 // The last cell is the "all brands" link so the grid stays complete.
 const Brands = async ({ locale }: { locale: Locale }) => {
-  // Cards rather than full brands: the wall shows artwork and a name, and the
-  // full list is a megabyte of htmlDescription this section never reads.
-  const [cards, t] = await Promise.all([
-    getBrandCards(),
+  // The head of the same list /brendovi renders, so the wall and the listing
+  // can never disagree on order.
+  const [brands, t] = await Promise.all([
+    getSiteBrands(),
     getTranslations({ locale, namespace: "Home.brands" }),
   ]);
-  const bySlug = new Map(cards.map((card) => [card.slug, card]));
-  const featured = FEATURED_BRAND_SLUGS.map((slug) => bySlug.get(slug)).filter(
-    (card) => card !== undefined,
-  );
+  const featured = brands.slice(0, FEATURED_BRAND_COUNT);
 
   return (
     <Section className="py-20 lg:py-28">

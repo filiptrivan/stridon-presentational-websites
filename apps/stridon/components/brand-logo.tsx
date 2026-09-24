@@ -11,7 +11,7 @@ interface BrandLogoProps {
 
 // 2:1 logo cell for the hairline grids on the homepage, /brendovi and /servis.
 //
-// The artwork is the CMS one, so a brand added to BRAND_SLUGS shows its real
+// The artwork is the CMS one, so a brand the site starts showing has its real
 // logo with nothing drawn by hand. It is `object-contain` with padding, not
 // `object-cover`: PACMS stores a tight-cropped vendor logo of whatever shape and
 // format, so cropping it to 2:1 would cut letters off. A brand PACMS has no

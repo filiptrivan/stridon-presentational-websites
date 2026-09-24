@@ -1,4 +1,5 @@
-import { BRAND_SLUGS, shopUrlFor } from "@/constants/brands";
+import { shopUrlFor } from "@/constants/brands";
+import { getSiteBrands } from "@/lib/brands";
 import { createLocalizedMetadata } from "@/lib/metadata";
 import { pathFor } from "@/lib/nav";
 import { routing } from "@/i18n/routing";
@@ -21,12 +22,12 @@ type Props = {
   params: Promise<{ locale: string; slug: string }>;
 };
 
-// From the curated list, not from the API: these routes are fixed by what
-// Stridon shows, so a build should not fan out 234 brand reads to discover the
-// paths it already knows. Both locales, since each is its own prerendered page.
-export function generateStaticParams() {
+// The brands the site shows, from the one cached list the rest of the site
+// reads. Both locales, since each is its own prerendered page.
+export async function generateStaticParams() {
+  const brands = await getSiteBrands();
   return routing.locales.flatMap((locale) =>
-    BRAND_SLUGS.map((slug) => ({ locale, slug })),
+    brands.map((brand) => ({ locale, slug: brand.slug })),
   );
 }
 
@@ -62,8 +63,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 const BrandPage = async ({ params }: Props) => {
   const { locale, slug } = await params;
-  // Everything on this page is generated: a brand added to BRAND_SLUGS and
-  // written in the CMS renders here with no further code.
+  // Everything on this page is generated: a brand given an orderNumber and
+  // written in the CMS renders here with no further code. The brand itself is
+  // read by slug on the critical budget, since it is what the route is about.
   const [brand, { catalogs }, t] = await Promise.all([
     getBrandBySlug(slug),
     getAllCatalogs(),

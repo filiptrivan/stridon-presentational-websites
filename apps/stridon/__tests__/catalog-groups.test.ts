@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 
-import { BRAND_SLUGS } from "@/constants/brands";
 import {
   UNTAGGED_GROUP_SLUG,
   groupCatalogsByBrand,
@@ -8,10 +7,10 @@ import {
 import type { Catalog, CatalogsResult } from "@brand/shared/types/catalogs";
 
 /**
- * Ordering on `/katalozi` is a product decision, not an artifact of however
- * PACMS returned the rows, so it is pinned here rather than left to a reviewer
- * to eyeball. The backend's own `orderNumber` is not usable as a sort key: it
- * hands out duplicates (stanley, bosch and dewalt are all `3`).
+ * Ordering on `/katalozi` follows the brands' PACMS `orderNumber`, then id, the
+ * same rule as `/brendovi` (`lib/brand-order.ts`). It is pinned here because the
+ * `/Catalogs` response does not deliver it: its brand stubs arrive ordered by
+ * `orderNumber` but not by id within a tie (stanley 88 before bosch 13).
  */
 
 type CatalogBrand = Catalog["brands"][number];
@@ -19,8 +18,9 @@ type CatalogBrand = Catalog["brands"][number];
 const brand = (
   slug: string,
   name: string,
-  orderNumber = 1,
-): CatalogBrand => ({ id: slug.length, name, slug, orderNumber });
+  orderNumber: number | null = 1,
+  id = slug.length,
+): CatalogBrand => ({ id, name, slug, orderNumber });
 
 let nextId = 0;
 const catalog = (name: string, brands: CatalogBrand[]): Catalog => ({
@@ -45,20 +45,35 @@ describe("groupCatalogsByBrand", () => {
     expect(groupCatalogsByBrand(result([]))).toEqual([]);
   });
 
-  it("orders listed brands the way BRAND_SLUGS does, not the way the API replied", () => {
-    // Reversed on purpose: wera sits after dewalt in BRAND_SLUGS, so input order
-    // must not survive.
+  it("orders groups by orderNumber, not by the order the API replied", () => {
     const wera = catalog("Wera katalog", [brand("wera", "Wera", 11)]);
     const dewalt = catalog("DeWALT katalog", [brand("dewalt", "DeWalt", 3)]);
 
     const groups = groupCatalogsByBrand(result([wera, dewalt]));
 
     expect(groups.map((group) => group.slug)).toEqual(["dewalt", "wera"]);
-    const order = [...BRAND_SLUGS];
-    expect(order.indexOf("dewalt")).toBeLessThan(order.indexOf("wera"));
   });
 
-  it("links a listed brand to its page and carries the CMS logo", () => {
+  it("breaks an orderNumber tie by id", () => {
+    // The live /Catalogs order for the three brands PACMS gives `3`.
+    const stanley = catalog("Stanley katalog", [
+      brand("stanley", "Stanley", 3, 88),
+    ]);
+    const bosch = catalog("Bosch katalog", [brand("bosch", "Bosch", 3, 13)]);
+    const dewalt = catalog("DeWALT katalog", [
+      brand("dewalt", "DeWalt", 3, 49),
+    ]);
+
+    const groups = groupCatalogsByBrand(result([stanley, bosch, dewalt]));
+
+    expect(groups.map((group) => group.slug)).toEqual([
+      "bosch",
+      "dewalt",
+      "stanley",
+    ]);
+  });
+
+  it("links a brand the site shows to its page and carries the CMS logo", () => {
     const groups = groupCatalogsByBrand(
       result([
         catalog("Hogert katalog", [
@@ -89,22 +104,17 @@ describe("groupCatalogsByBrand", () => {
     expect(groups[0].imageUrl).toBeNull();
   });
 
-  it("puts brands we do not list after the listed ones, by name", () => {
-    // Neither is in BRAND_SLUGS, so both are unlinked and sorted by name.
-    const topex = catalog("Topex katalog", [brand("topex", "Topex", 20)]);
+  it("puts a brand without an orderNumber after the ordered ones, unlinked", () => {
+    // The site shows only brands with an orderNumber, so one without keeps its
+    // catalogs but has no page to link to.
+    const topex = catalog("Topex katalog", [brand("topex", "Topex", null)]);
     const gross = catalog("Gross katalog", [brand("gross", "Gross", 14)]);
-    const bosch = catalog("Bosch katalog", [brand("bosch", "Bosch", 3)]);
 
-    const groups = groupCatalogsByBrand(result([topex, gross, bosch]));
+    const groups = groupCatalogsByBrand(result([topex, gross]));
 
-    expect(groups.map((group) => group.slug)).toEqual([
-      "bosch",
-      "gross",
-      "topex",
-    ]);
-    expect(groups[0].href).toBe("/brendovi/bosch");
+    expect(groups.map((group) => group.slug)).toEqual(["gross", "topex"]);
+    expect(groups[0].href).toBe("/brendovi/gross");
     expect(groups[1].href).toBeNull();
-    expect(groups[2].href).toBeNull();
   });
 
   it("collects untagged catalogs into a trailing group", () => {
@@ -145,6 +155,7 @@ describe("groupCatalogsByBrand", () => {
 
     expect(groups[0].catalogs).toEqual([first, second]);
   });
+
   it("takes the brand route and the untagged heading from the caller", () => {
     // Both are locale-dependent, so neither can be decided in here: /brendovi
     // is /en/brands in English, and the heading is a translated string.

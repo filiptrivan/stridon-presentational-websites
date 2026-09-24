@@ -1,9 +1,9 @@
 import BrandLogo from "@/components/brand-logo";
-import { BRAND_SLUGS } from "@/constants/brands";
 import {
   SERVICE_CENTERS,
   SERVICED_BRAND_SLUGS,
 } from "@/constants/service-centers";
+import { getSiteBrands } from "@/lib/brands";
 import { createLocalizedMetadata } from "@/lib/metadata";
 import { brandPath } from "@/lib/nav";
 import type { Locale } from "@brand/i18n/config";
@@ -34,21 +34,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 const ServisPage = async ({ params }: Props) => {
   const { locale } = await params;
 
-  // Same cached entry the homepage brand wall and /katalozi read, so the names
-  // and logos here cost no extra request. Only the brands we also distribute
-  // get a link - Festool is serviced without being listed.
-  const [cards, t] = await Promise.all([
+  // Names and logos from the card list, which /katalozi reads too, because
+  // what SG Servis repairs does not depend on what the site lists. A card links
+  // to our brand page only when the site shows that brand.
+  const [cards, siteBrands, t] = await Promise.all([
     getBrandCards(),
+    getSiteBrands(),
     getTranslations({ locale, namespace: "Service" }),
   ]);
   const bySlug = new Map(cards.map((card) => [card.slug, card]));
+  const shown = new Set(siteBrands.map((brand) => brand.slug));
   const servicedBrands = SERVICED_BRAND_SLUGS.map((slug) => bySlug.get(slug))
     .filter((card) => card !== undefined)
     .map((card) => ({
       ...card,
-      href: BRAND_SLUGS.includes(card.slug as (typeof BRAND_SLUGS)[number])
-        ? brandPath(card.slug, locale as Locale)
-        : null,
+      href: shown.has(card.slug) ? brandPath(card.slug, locale as Locale) : null,
     }));
 
   const partnerParagraphs = t.raw("partner.paragraphs") as string[];

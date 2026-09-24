@@ -1,5 +1,7 @@
-import { BRAND_SLUGS } from "@/constants/brands";
+import { byOrderNumber, isSiteBrand } from "@/lib/brand-order";
 import type { Catalog, CatalogsResult } from "@brand/shared/types/catalogs";
+
+type CatalogBrand = Catalog["brands"][number];
 
 export interface CatalogGroup {
   /** PACMS slug: the anchor, and the `/brendovi` route when we show the brand. */
@@ -29,11 +31,10 @@ export const UNTAGGED_GROUP_SLUG = "ostali-katalozi";
  * the brand logos the page fetched once, so grouping costs no request and runs
  * at prerender.
  *
- * Order is deliberate. Brands we show come first in `BRAND_SLUGS` order, the one
- * the owner tuned and `/brendovi` uses. Everything else follows by name -
- * `orderNumber` looks like the obvious sort key and is not one, since PACMS hands
- * out duplicates (stanley, bosch and dewalt are all `3`), which would leave the
- * tail order up to however the backend returned the rows.
+ * Groups follow the brands' `orderNumber`, then id, the order `/brendovi` uses
+ * too (`lib/brand-order.ts`). Every catalog's brand stub carries both, so no
+ * extra read is needed to sort them. A brand the site shows links to its page;
+ * one it does not show still gets its group, unlinked, after the ordered ones.
  *
  * The two locale-dependent bits are passed in rather than decided here: the
  * label for the untagged group, and how a brand slug becomes a URL. Defaults
@@ -45,8 +46,6 @@ export interface GroupOptions {
   untaggedName?: string;
   /** Route for a brand we list. Localized, so it cannot be built from the slug here. */
   brandHref?: (slug: string) => string;
-  /** Collation for the tail of the list; `sr` orders č/ć/š/ž where a reader expects. */
-  sortLocale?: string;
 }
 
 export function groupCatalogsByBrand(
@@ -57,13 +56,14 @@ export function groupCatalogsByBrand(
     logoBySlug = new Map<string, string | null>(),
     untaggedName = "Ostali katalozi",
     brandHref = (slug: string) => `/brendovi/${slug}`,
-    sortLocale = "sr",
   } = options;
-  const byBrandSlug = new Map<string, Catalog[]>();
-  const untagged: Catalog[] = [];
-  const nameBySlug = new Map(
-    result.brands.map((brand) => [brand.slug, brand.name]),
+  // The response's own brand list first, the stub inside the catalog as the
+  // fallback: both carry the name, id and orderNumber a group needs.
+  const listed = new Map<string, CatalogBrand>(
+    result.brands.map((brand) => [brand.slug, brand]),
   );
+  const buckets = new Map<string, { brand: CatalogBrand; catalogs: Catalog[] }>();
+  const untagged: Catalog[] = [];
 
   for (const catalog of result.catalogs) {
     if (catalog.brands.length === 0) {
@@ -74,35 +74,25 @@ export function groupCatalogsByBrand(
     // shared catalog belongs under each of its brands rather than silently under
     // whichever one happened to be first.
     for (const brand of catalog.brands) {
-      if (!nameBySlug.has(brand.slug)) nameBySlug.set(brand.slug, brand.name);
-      const bucket = byBrandSlug.get(brand.slug);
-      if (bucket) bucket.push(catalog);
-      else byBrandSlug.set(brand.slug, [catalog]);
+      const bucket = buckets.get(brand.slug);
+      if (bucket) bucket.catalogs.push(catalog);
+      else
+        buckets.set(brand.slug, {
+          brand: listed.get(brand.slug) ?? brand,
+          catalogs: [catalog],
+        });
     }
   }
 
-  const shown = new Set<string>(BRAND_SLUGS);
-  const toGroup = (slug: string, catalogs: Catalog[]): CatalogGroup => ({
-    slug,
-    name: nameBySlug.get(slug) ?? slug,
-    imageUrl: logoBySlug.get(slug) ?? null,
-    href: shown.has(slug) ? brandHref(slug) : null,
-    catalogs,
-  });
-
-  const groups: CatalogGroup[] = [];
-
-  for (const slug of BRAND_SLUGS) {
-    const catalogs = byBrandSlug.get(slug);
-    if (catalogs) groups.push(toGroup(slug, catalogs));
-  }
-
-  groups.push(
-    ...[...byBrandSlug.entries()]
-      .filter(([slug]) => !shown.has(slug))
-      .map(([slug, catalogs]) => toGroup(slug, catalogs))
-      .sort((a, b) => a.name.localeCompare(b.name, sortLocale)),
-  );
+  const groups: CatalogGroup[] = [...buckets.values()]
+    .toSorted((a, b) => byOrderNumber(a.brand, b.brand))
+    .map(({ brand, catalogs }) => ({
+      slug: brand.slug,
+      name: brand.name,
+      imageUrl: logoBySlug.get(brand.slug) ?? null,
+      href: isSiteBrand(brand) ? brandHref(brand.slug) : null,
+      catalogs,
+    }));
 
   if (untagged.length > 0) {
     groups.push({

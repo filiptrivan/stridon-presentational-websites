@@ -20,10 +20,8 @@ export const SERVICE_CENTERS: Omit<ServiceCenter, "badge">[] = [
 /**
  * The brands the old stridon.rs service page lists, plus Stanley, by PACMS slug.
  * Name and logo are read from the CMS like everywhere else. A row links to our
- * brand page only when the slug is also in `BRAND_SLUGS`; Festool is the one
- * here that is serviced without being listed, so it is the one card with no
- * link. Nothing needs editing here to change that - add a slug there and the
- * link appears.
+ * brand page only when the site shows that brand (`lib/brands.ts`), so the
+ * link follows the CMS with no edit here.
  */
 export const SERVICED_BRAND_SLUGS: readonly string[] = [
   "dewalt",

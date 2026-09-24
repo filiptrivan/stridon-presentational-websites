@@ -1,64 +1,8 @@
 /**
- * The manufacturers stridon.rs shows, by their PACMS slug, in the order
- * `/brendovi` and `/katalozi` render them.
- *
- * This list is the **only** hand-kept brand data left. Name, description, logo,
- * SEO metadata and the catalog link are all read from the CMS, so adding a brand
- * is one line here and writing it in PACMS - no page, no copy, no asset.
- *
- * It has to exist because PACMS has no per-site brand association. `Brands`
- * returns the whole webshop catalogue (234 manufacturers ordered for
- * prodavnicaalata.rs), so "fetch the first N" would put Makita, Villager, Metabo
- * and Gardena on a page about what Stridon imports, and no field distinguishes
- * them: `orderNumber` is set on 94 brands including those four, `htmlDescription`
- * on 171, and `hasProducts` means the shop stocks it, not that Stridon imports
- * it. The clean fix is the endpoint Shreyas asked for on PR #4 and that was
- * declined - `BrandsByBrand?brandSlug=stridon`. When it exists, this array is
- * what one `await` replaces, and nothing else on the site changes.
+ * Brand data that is not in the CMS. Which brands the site shows, and in what
+ * order, is read from PACMS (`lib/brands.ts`); name, description, logo and the
+ * catalog link come from there too.
  */
-export const BRAND_SLUGS = [
-  "dewalt",
-  "stanley",
-  "bosch",
-  "rems",
-  "wiha",
-  "gtv",
-  "knipex",
-  "hogert-technik",
-  "senco",
-  "wera",
-  "rubi",
-  "max",
-  "black-decker",
-  "mtx",
-  "sparta",
-  "sg-tools",
-  "karcher",
-  "wolfcraft",
-  "kwb-germany",
-  "dck",
-  "einhell",
-  "oli",
-  "makita",
-  "metabo",
-] as const;
-
-export type BrandSlug = (typeof BRAND_SLUGS)[number];
-
-/** Shown in the homepage brand wall, a subset of the list above in the same order. */
-export const FEATURED_BRAND_SLUGS: readonly string[] = [
-  "dewalt",
-  "stanley",
-  "bosch",
-  "rems",
-  "wiha",
-  "gtv",
-  "knipex",
-  "hogert-technik",
-  "senco",
-  "wera",
-  "rubi",
-];
 
 /**
  * Routes the live stridon.rs already has indexed under a different spelling than

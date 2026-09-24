@@ -1,13 +1,13 @@
 import type { MetadataRoute } from "next";
 
-import { BRAND_SLUGS } from "@/constants/brands";
 import { SITE_URL } from "@/constants/links";
 import { getPathname } from "@/i18n/navigation";
 import { routing, type StaticPathname } from "@/i18n/routing";
+import { getSiteBrands } from "@/lib/brands";
 import { HREFLANG } from "@brand/i18n/config";
 
-// Stridon has no product routes (it is the distributor site, purchases happen
-// on prodavnicaalata.rs), so this is a static list - no API reads at build.
+// Stridon has no product routes (purchases happen on prodavnicaalata.rs). The
+// only API read is the cached brand list the brand pages are built from.
 // No `changeFrequency` or `priority`: Google ignores both
 // (https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap)
 // and so does Bing, and in `MetadataRoute.Sitemap` they are optional.
@@ -56,11 +56,15 @@ function entriesFor(href: Href): MetadataRoute.Sitemap {
  * the pattern Google says it ignores. A real date needs a real signal, and the
  * only one this site has is a CMS edit, which nothing reports here yet.
  */
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const brands = await getSiteBrands();
   return [
     ...staticPages.flatMap((path) => entriesFor(path)),
-    ...BRAND_SLUGS.flatMap((slug) =>
-      entriesFor({ pathname: "/brendovi/[slug]", params: { slug } }),
+    ...brands.flatMap((brand) =>
+      entriesFor({
+        pathname: "/brendovi/[slug]",
+        params: { slug: brand.slug },
+      }),
     ),
   ];
 }

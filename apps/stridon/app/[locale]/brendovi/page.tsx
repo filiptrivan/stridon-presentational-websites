@@ -1,5 +1,5 @@
 import BrandLogo from "@/components/brand-logo";
-import { BRAND_SLUGS } from "@/constants/brands";
+import { getSiteBrands } from "@/lib/brands";
 import { createLocalizedMetadata } from "@/lib/metadata";
 import { brandPath } from "@/lib/nav";
 import type { Locale } from "@brand/i18n/config";
@@ -7,7 +7,6 @@ import Container from "@brand/shared/components/container";
 import HeroHeader from "@brand/shared/components/hero-header";
 import Section from "@brand/shared/components/section";
 import Wrapper from "@brand/shared/components/wrapper";
-import { getBrandBySlug } from "@brand/shared/lib/api";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
@@ -30,15 +29,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 const BrendoviPage = async ({ params }: Props) => {
   const { locale } = await params;
 
-  // Per slug rather than `getBrands()`, which would be the obvious call and is
-  // the wrong one: it returns all 234 manufacturers with their full
-  // htmlDescription (828 KB) to render cards that read two fields. These are the
-  // same entries `/brendovi/[slug]` fills, so reusing them costs no extra cache
-  // and no extra build read.
+  // The site list already carries every field a card reads (name, logo,
+  // metaDescription), so the grid costs no read beyond the one the whole site
+  // shares.
   const [brands, t] = await Promise.all([
-    Promise.all(BRAND_SLUGS.map((slug) => getBrandBySlug(slug))).then((all) =>
-      all.filter((brand) => brand !== null),
-    ),
+    getSiteBrands(),
     getTranslations({ locale, namespace: "Brands" }),
   ]);
 
@@ -66,7 +61,7 @@ const BrendoviPage = async ({ params }: Props) => {
                     // This grid is two columns until lg, not three, so there is
                     // no 768px step to declare: below 1024px the slot is always
                     // ~50vw. Saying 100vw there made a phone pick the w=828
-                    // candidate for a ~173px slot, on all 24 logos.
+                    // candidate for a ~173px slot, on every logo.
                     sizes="(min-width: 1024px) 33vw, 50vw"
                   />
 
