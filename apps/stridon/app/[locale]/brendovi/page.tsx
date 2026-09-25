@@ -61,8 +61,9 @@ const BrendoviPage = async ({ params }: Props) => {
                     // This grid is two columns until lg, not three, so there is
                     // no 768px step to declare: below 1024px the slot is always
                     // ~50vw. Saying 100vw there made a phone pick the w=828
-                    // candidate for a ~173px slot, on every logo.
-                    sizes="(min-width: 1024px) 33vw, 50vw"
+                    // candidate for a ~173px slot, on every logo. From 1280px
+                    // up the grid is capped at max-w-7xl: 387px per cell.
+                    sizes="(min-width: 1280px) 387px, (min-width: 1024px) 33vw, 50vw"
                   />
 
                   <div className="flex flex-1 flex-col p-6 lg:p-7">

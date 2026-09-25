@@ -75,7 +75,9 @@ const BrandSpotlight = async ({ brand, locale }: BrandSpotlightProps) => {
                     src={brand.image.src}
                     alt={t("imageAlt")}
                     fill
-                    sizes="(min-width: 1024px) 50vw, 100vw"
+                    // A column of the capped max-w-7xl grid from 1280px up:
+                    // 548px of picture inside the mat, not half the viewport.
+                    sizes="(min-width: 1280px) 548px, (min-width: 1024px) 50vw, 100vw"
                     className="object-cover"
                   />
                 </div>

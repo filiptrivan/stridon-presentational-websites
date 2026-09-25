@@ -47,7 +47,11 @@ const BrandLogo = ({ name, logo, className, sizes }: BrandLogoProps) => {
         src={logo}
         alt={`${name} logo`}
         fill
-        sizes={sizes ?? "(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"}
+        // 286px is a cell of the four-column wall once max-w-7xl caps it.
+        sizes={
+          sizes ??
+          "(min-width: 1280px) 286px, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+        }
         // The optimizer rejects SVG unless dangerouslyAllowSVG is on, and a few
         // PACMS logos are SVG. Only those bypass it; the rest are resized and
         // served as AVIF/WebP like any other remote image.
