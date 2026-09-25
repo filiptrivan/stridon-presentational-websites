@@ -26,7 +26,7 @@ The live pairs were supplied by hand by the owner; `https://www.stridon.rs/` fai
 Rules that are not visible from the code:
 
 - **Formal "Vi" survives only in meta carried over from the live site.** Those strings keep the live wording even when it is formal; every string written here, meta included (the † rows and `Brand.meta`), uses "ti".
-- **The homepage pair lives in two places**: `Site.*` in `messages/*.json` for the tags, `defaultTitle`/`siteDescription` in `packages/brand-config/src/stridon.ts` for the OG card. Change both.
+- **The homepage pair lives in `Site.*`** in `messages/*.json`, for the tags and the OG card alike: the `[locale]` layout overrides the title, description and OG image that `createRootMetadata` builds from the brand config. `defaultTitle`/`siteDescription` in `packages/brand-config/src/stridon.ts` only mirror the Serbian pair because `BrandConfig` requires them.
 - **`Brands.meta.*` and `Brands.hero.*` are byte-identical**, because the live title and description were the page's own heading and lead. Reword the hero and the meta silently stops matching the live site.
 - **The `/servis` description names seven brands** (DeWalt, Bosch, Makita, Metabo, Festool, Rubi, Senco); true while `SERVICED_BRAND_SLUGS` keeps them.
 - **The homepage title promises a shop** ("online prodaja", "cene, akcije") on a site with no products. The owner kept the live wording knowingly.

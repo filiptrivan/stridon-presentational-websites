@@ -51,8 +51,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     // says no purchase is possible here; they are byte-identical to what the
     // webshop already serves on /proizvodjaci/<slug>/, so two domains with one
     // owner would compete on the same snippet and the shop would win; and 8 of
-    // the 24 run past 160 chars, with sg-tools cut mid-word and dck carrying a
-    // 76-char title that has an "I" where a "|" belongs.
+    // the 24 brands listed then ran past 160 chars, with sg-tools cut mid-word
+    // and dck carrying a 76-char title that has an "I" where a "|" belongs.
     //
     // `htmlDescription` is still the CMS's, below - that one really is per-brand
     // copy and belongs on the page.

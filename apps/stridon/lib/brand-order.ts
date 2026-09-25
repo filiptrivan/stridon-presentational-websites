@@ -2,8 +2,9 @@
  * Which PACMS brands stridon.rs shows, and in what order. Pure, so the catalog
  * grouping can use it without importing the API module.
  *
- * The site shows every brand the CMS gives an `orderNumber`, and no other, in
- * that order (review on PR #14: "Take them by order number"). The same rule
+ * The site lists every brand the CMS gives an `orderNumber`, and no other, in
+ * that order (review on PR #14: "Take them by order number"). The brand route
+ * itself still renders any slug PACMS knows, as it did before. The same rule
  * decides which catalog groups on /katalozi link to a brand page, so it is
  * written once, here.
  */

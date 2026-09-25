@@ -32,7 +32,7 @@
 
 - Use `NEXT_PUBLIC_` prefix for client-accessible vars
 - Use `.env.local` in each app directory for local development secrets (gitignored)
-- `NEXT_PUBLIC_BRAND_SLUG` - Set in `next.config.ts` per app (`"sg-tools"`, `"dck"` or `"stridon"`)
+- `NEXT_PUBLIC_BRAND_SLUG` - Set in each app's committed `.env.production` (`"sg-tools"`, `"dck"` or `"stridon"`)
 - Key variables (same for all three):
   - `API_URL` - Base URL for the PACMS backend REST API (server-only)
   - `BREVO_API_KEY` - Brevo email service API key (contact form)
@@ -140,7 +140,7 @@ DCK also has: `app/produzetak-garancije/` → `/produzetak-garancije` (with 308 
 
 **Server vs Client components**: Most section components are plain server components. Client components (`"use client"`) are used only where interactivity is needed: Navbar, MobileMenu, Container (Framer Motion animations), WhereToBuyContent, DealerList, WarrantyForm.
 
-**Dynamic IO under `cacheComponents: true`** (set in both `apps/*/next.config.ts`): zero-arg dynamic APIs — `new Date()`, `Date.now()`, `Math.random()`, `cookies()`, `headers()` — fail static prerender if called during render, including inside `"use client"` components. Acceptable patterns:
+**Dynamic IO under `cacheComponents: true`** (set in all three `apps/*/next.config.ts`): zero-arg dynamic APIs — `new Date()`, `Date.now()`, `Math.random()`, `cookies()`, `headers()` — fail static prerender if called during render, including inside `"use client"` components. Acceptable patterns:
 
 - **Client components**: defer the call to an event handler (e.g., `Popover.onOpenChange` in `apps/dck/components/warranty/warranty-form.tsx`) or to `useSyncExternalStore`. Do NOT use `useEffect` + `setState` — React 19 flags it as cascading renders. Lazy `useState(() => new Date())` also fails because the initializer runs during the first render.
 - **Server components**: wrap dynamic subtrees in `<Suspense>` or use `"use cache"`.

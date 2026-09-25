@@ -25,11 +25,11 @@ export const config: BrandConfig = {
     external: false,
   },
 
-  // Carried over verbatim from the live stridon.rs so the redesign does not
-  // hand Google a different title for a URL it already ranks. These two also
-  // feed the OG card through `createRootMetadata`, which is why they have to
-  // move together with `Site.defaultTitle` / `Site.description` in the
-  // catalogs rather than only there.
+  // Carried over verbatim from the live stridon.rs. Nothing on stridon renders
+  // these two: its `[locale]` layout builds the title, the description and the
+  // OG card from `Site.defaultTitle` / `Site.description` in the catalogs,
+  // which are the ones to edit. `BrandConfig` requires the fields, so they
+  // mirror the Serbian pair rather than hold something that could drift.
   defaultTitle: "Najbolja prodavnica alata u Srbiji | Stridon Group",
   siteDescription:
     "Veleprodaja, maloprodaja i online prodaja opreme, alata i mašina najpoznatijih brendova po jeftinim cenama u Srbiji. Pogledajte naše cene, akcije i kataloge.",

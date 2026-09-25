@@ -1,7 +1,7 @@
 /**
  * The locale settings every app in this monorepo shares. Only the `pathnames`
- * map is per-app, because it names that app's own routes - see `createNavigation`
- * in each app's `i18n/` folder.
+ * map is per-app, because it names that app's own routes - see `defineRouting`
+ * in each app's `i18n/routing.ts`.
  *
  * Kept `as const` so `defineRouting`'s const generics still see the literal
  * locale strings after the object is spread into it; widen them to `string[]`
@@ -32,7 +32,7 @@ export type Locale = (typeof locales)[number];
 /**
  * What goes in `hreflang`, which is not always the URL segment. Serbian is
  * digraphic and this site is Latin-only, so `sr-Latn` is the honest tag even
- * though the path stays `/sr`.
+ * though the locale segment stays `sr`.
  */
 export const HREFLANG: Record<Locale, string> = {
   sr: "sr-Latn",

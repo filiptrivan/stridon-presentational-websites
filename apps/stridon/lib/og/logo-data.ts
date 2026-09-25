@@ -4,8 +4,8 @@
  * The OG route runs on satori, which has no browser: an `<img>` pointing at a
  * URL would cost a fetch on every cold render, and its SVG support is thinner
  * than its PNG support. Inlining costs 7 KB in this module and nothing at
- * request time. 400px wide is 2x the 200 the card draws it at, so it stays
- * crisp where a preview is shown at 2x.
+ * request time. 400px wide is more than the 260 the card draws it at, so satori
+ * only ever scales it down.
  *
  * Regenerate after any change to the logo:
  *   sharp(svg, { density: 300 }).resize(400, 163, { fit: "fill" })

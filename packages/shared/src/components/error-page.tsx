@@ -17,7 +17,7 @@ const DEFAULT_LABELS = {
 export type ErrorPageLabels = Partial<typeof DEFAULT_LABELS>;
 
 interface ErrorPageProps {
-  /** Kept for the two callers that already pass them individually. */
+  /** Kept for the dck and sg-tools callers, which pass them individually. */
   title?: string;
   description?: string;
   labels?: ErrorPageLabels;
