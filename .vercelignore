@@ -1,9 +1,0 @@
-# Vercel uploads the whole monorepo root, and its .gitignore fallback does not
-# catch these - a deploy tried to push 11.9 GB of turbo cache before this file
-# existed. Everything here is rebuilt on the builder by `pnpm install` + build.
-node_modules
-.turbo
-.next
-.git
-.claude
-.agents
