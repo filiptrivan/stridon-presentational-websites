@@ -68,7 +68,7 @@ const BrandSpotlight = async ({ brand, locale }: BrandSpotlightProps) => {
                 outer plate, a hairline inner box, and the photo rounded inside
                 it. Tokens rather than dck's raw `neutral-*`, so it picks up this
                 app's palette instead of hardcoding the sibling site's. */}
-            <div className="rounded-2xl border border-border/50 bg-foreground/5 p-2 md:rounded-[32px] md:p-3">
+            <div className="rounded-2xl border border-border/50 bg-foreground/5 p-2 md:rounded-[32px]">
               <div className="overflow-hidden rounded-xl border border-border/60 bg-background md:rounded-[24px]">
                 <div className="relative aspect-[4/3] w-full">
                   <Image
