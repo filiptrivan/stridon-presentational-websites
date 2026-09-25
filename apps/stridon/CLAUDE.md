@@ -18,7 +18,7 @@ Root `../../CLAUDE.md` applies. This file holds only what is specific to `apps/s
 - A new client-side `useTranslations("X")` means adding `X` to `clientMessages` in `app/[locale]/layout.tsx`, or it throws at runtime.
 - Messages are typed against `messages/sr.json` (`global.ts`). A key built at runtime needs a literal-union type, not `string`. `__tests__/messages-parity.test.ts` holds `en.json` to the same keys.
 - Root params (`next/root-params`, read by `packages/i18n`) never work in a Server Action, so actions take `locale` as an argument and validate it. On Next 16.1 they also throw inside `"use cache"`: code there must pass `{ locale }` to next-intl explicitly.
-- `*.meta.*` copy is the live site's wording, carried over verbatim, even where it uses formal "Vi". On-page copy uses "ti". No em-dash in Serbian copy.
+- `*.meta.*` copy carried over from the live site keeps its wording verbatim, even where it uses formal "Vi". Everything written here, meta included, uses "ti" (`docs/seo.md` lists which is which). No em-dash in Serbian copy.
 - The homepage title and description exist twice: `Site.*` in `messages/*.json` and `defaultTitle`/`siteDescription` in `packages/brand-config/src/stridon.ts` (the OG card reads the latter). Change both.
 - A Serbian route keeps the live site's URL (`/onama`, `/politikaprivatnosti`, `/podacizaidentifikaciju`). An old live URL this app spells differently gets a 308 from `constants/legacy-urls.ts`.
 - `next/image` gets `unoptimized` only for `.svg` sources, and `sizes` must match the grid the image sits in.

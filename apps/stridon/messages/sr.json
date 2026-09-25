@@ -137,7 +137,7 @@
   "Brand": {
     "meta": {
       "title": "{brand} alati | Katalozi i ponuda",
-      "description": "{brand} alati u ponudi Stridon Group. Pogledajte opis brenda, aktuelne {brand} kataloge i saznajte gde da kupite {brand} alat u Srbiji."
+      "description": "{brand} alati u ponudi Stridon Group. Pogledaj opis brenda, aktuelne {brand} kataloge i saznaj gde da kupiš {brand} alat u Srbiji."
     },
     "notFound": "Brend nije pronađen",
     "back": "Brendovi",
@@ -165,7 +165,7 @@
   "About": {
     "meta": {
       "title": "O nama | 30 godina distribucije alata",
-      "description": "Upoznajte Stridon Group, porodičnu firmu iz Beograda koja 30 godina uvozi, distribuira i servisira profesionalni alat i stoji iza sopstvenog brenda SG TOOLS."
+      "description": "Upoznaj Stridon Group, porodičnu firmu iz Beograda koja 30 godina uvozi, distribuira i servisira profesionalni alat i stoji iza sopstvenog brenda SG TOOLS."
     },
     "hero": {
       "title": "Uvoz, distribucija i servis alata od 30 godina",
@@ -378,7 +378,7 @@
     "terms": {
       "meta": {
         "title": "Uslovi korišćenja internet sajta",
-        "description": "Pročitajte uslove pod kojima koristite sajt Stridon Group: pravila korišćenja, intelektualna svojina, ograničenje odgovornosti i merodavno pravo."
+        "description": "Pročitaj uslove pod kojima koristiš sajt Stridon Group: pravila korišćenja, intelektualna svojina, ograničenje odgovornosti i merodavno pravo."
       },
       "hero": {
         "title": "Uslovi korišćenja",

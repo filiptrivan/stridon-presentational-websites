@@ -10,22 +10,22 @@ Every Serbian `<title>` and description the live stridon.rs has is carried over 
 | `/brendovi` | `Uvoznik i distributer najboljih brendova \| Stridon Group` | 56 | 149 |
 | `/katalozi` | `Pregledajte naše akcijske kataloge \| Stridon Group` | 50 | 150 |
 | `/servis` | `Servis mašina i alata van garantnog roka \| Stridon Group` | 56 | 153 |
-| `/onama` | `O nama \| 30 godina distribucije alata \| Stridon Group` | 53† | 157† |
+| `/onama` | `O nama \| 30 godina distribucije alata \| Stridon Group` | 53† | 155† |
 | `/kontakt` | `Kontakt \| Sve potrebne informacije \| Stridon Group` | 50* | 151 |
 | `/b2b` | `Postanite naš B2B partner \| Saradnja \| Stridon Group` | 52 | 151 |
 | `/politikaprivatnosti` | `Politika privatnosti korisnika \| Stridon Group` | 46* | 151 |
-| `/uslovi-koriscenja` | `Uslovi korišćenja internet sajta \| Stridon Group` | 48† | 145† |
+| `/uslovi-koriscenja` | `Uslovi korišćenja internet sajta \| Stridon Group` | 48† | 142† |
 | `/podacizaidentifikaciju` | `Podaci za identifikaciju firme \| Stridon Group` | 46* | 154 |
 
 The live pairs were supplied by hand by the owner; `https://www.stridon.rs/` fails TLS from this machine.
 
-† Written here, not carried over: no live pair was supplied for these. `/uslovi-koriscenja` is a new page. `/onama` does exist on the live site (its navigation links it in web.archive.org captures), so its live tags are worth comparing in Search Console. Both are written in the live site's house style: a descriptive phrase, formal "Vi", a description that names what is on the page.
+† Written here, not carried over: no live pair was supplied for these. `/uslovi-koriscenja` is a new page. `/onama` does exist on the live site (its navigation links it in web.archive.org captures), so its live tags are worth comparing in Search Console. Both follow the live site's pattern, a descriptive phrase and a description that names what is on the page, but in the "ti" form the root CLAUDE.md asks for.
 
 \* ` DOO` dropped from the live title, by the owner's call: the suffix comes from the layout's `title.template`, and the site keeps one brand suffix everywhere.
 
 Rules that are not visible from the code:
 
-- **Formal "Vi" under `meta` is deliberate.** On-page copy uses "ti"; `*.meta.*` keeps the live wording even when it is formal. A description is not a ranking input and is not on the page.
+- **Formal "Vi" survives only in meta carried over from the live site.** Those strings keep the live wording even when it is formal; every string written here, meta included (the † rows and `Brand.meta`), uses "ti".
 - **The homepage pair lives in two places**: `Site.*` in `messages/*.json` for the tags, `defaultTitle`/`siteDescription` in `packages/brand-config/src/stridon.ts` for the OG card. Change both.
 - **`Brands.meta.*` and `Brands.hero.*` are byte-identical**, because the live title and description were the page's own heading and lead. Reword the hero and the meta silently stops matching the live site.
 - **The `/servis` description names seven brands** (DeWalt, Bosch, Makita, Metabo, Festool, Rubi, Senco); true while `SERVICED_BRAND_SLUGS` keeps them.
