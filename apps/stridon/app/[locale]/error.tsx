@@ -1,8 +1,10 @@
 "use client";
 
+import { pathFor } from "@/lib/nav";
+import type { Locale } from "@brand/i18n/config";
 import ErrorPage from "@brand/shared/components/error-page";
 import * as Sentry from "@sentry/nextjs";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect } from "react";
 
 export default function RootError({
@@ -13,6 +15,7 @@ export default function RootError({
   reset: () => void;
 }) {
   const t = useTranslations("Error");
+  const locale = useLocale() as Locale;
 
   useEffect(() => {
     if (!error.digest) {
@@ -29,6 +32,7 @@ export default function RootError({
         retry: t("retry"),
         home: t("home"),
       }}
+      homeHref={pathFor("/", locale)}
     />
   );
 }
