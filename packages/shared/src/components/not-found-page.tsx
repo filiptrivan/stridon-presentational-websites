@@ -17,9 +17,7 @@ export type NotFoundLabels = Partial<typeof DEFAULT_LABELS>;
 interface NotFoundPageProps {
   labels?: NotFoundLabels;
   homeHref?: string;
-  /** The second button. `null` removes it - Stridon has no product catalog, so
-      the default target would be a link from a 404 to another 404. */
-  secondaryHref?: string | null;
+  secondaryHref?: string;
 }
 
 const NotFoundPage = ({
@@ -39,14 +37,12 @@ const NotFoundPage = ({
               {t.home}
             </Link>
           </Button>
-          {secondaryHref ? (
-            <Button variant="ghost" size="sm" asChild>
-              <Link href={secondaryHref}>
-                <ShoppingBag className="size-4" />
-                {t.secondary}
-              </Link>
-            </Button>
-          ) : null}
+          <Button variant="ghost" size="sm" asChild>
+            <Link href={secondaryHref}>
+              <ShoppingBag className="size-4" />
+              {t.secondary}
+            </Link>
+          </Button>
         </div>
       </Container>
     </HeroHeader>

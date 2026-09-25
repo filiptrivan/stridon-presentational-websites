@@ -74,7 +74,6 @@
 /* The mobile menu CTA is a <Button asChild> inside <SheetClose asChild>, so the
    outer slot name wins and the rule above would miss it. The X button is a
    <button>, so it keeps its own small radius. */
-a[data-slot="sheet-close"],
-[data-slot="pagination-link"] {
+a[data-slot="sheet-close"] {
   --radius: 0.625rem;
 }

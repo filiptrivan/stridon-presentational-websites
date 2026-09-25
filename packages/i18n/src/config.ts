@@ -26,7 +26,6 @@ export const localeSettings = {
 } as const;
 
 export const locales = localeSettings.locales;
-export const defaultLocale = localeSettings.defaultLocale;
 
 export type Locale = (typeof locales)[number];
 

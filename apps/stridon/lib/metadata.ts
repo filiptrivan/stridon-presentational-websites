@@ -28,22 +28,16 @@ export function createLocalizedMetadata({
   href,
   title,
   description,
-  ogTitle,
-  ogDescription,
 }: {
   locale: Locale;
   href: Href;
   title: string;
   description: string;
-  ogTitle?: string;
-  ogDescription?: string;
 }): Metadata {
   const base = createPageMetadata({
     title,
     description,
     canonicalUrl: getPathname({ href, locale }),
-    ogTitle,
-    ogDescription,
   });
 
   return {
