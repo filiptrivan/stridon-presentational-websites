@@ -14,9 +14,9 @@ import Link from "next/link";
 // picture in dck's matted frame. Same classes on purpose, so the two sites
 // read as one family; the fonts are this app's, through --font-heading.
 //
-// dck art-directs two files (16:9 desktop, 4:5 mobile). The one photo here is a
-// portrait of the Altina shop, so the frame sets those two ratios itself and
-// the crop sits high enough to keep the shop sign and the window in view.
+// dck art-directs two files (16:9 desktop, 4:5 mobile). Here the picture is a
+// screenshot of the prodavnicaalata.rs homepage, so it keeps its own ratio at
+// every width: any crop would cut through the shop's header or its cards.
 const Hero = async ({ locale }: { locale: Locale }) => {
   const t = await getTranslations({ locale, namespace: "Home.hero" });
 
@@ -43,18 +43,20 @@ const Hero = async ({ locale }: { locale: Locale }) => {
       <Container className="w-full z-30">
         <div className="relative mx-auto max-w-7xl rounded-2xl md:rounded-[32px] border border-neutral-200/50 bg-neutral-100 p-2 backdrop-blur-lg mt-10 md:mt-14">
           <div className="rounded-lg md:rounded-[24px] border border-neutral-200 bg-white">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-xl md:aspect-[2932/1664] md:rounded-[26px]">
-              <Image
-                src="/about/altina.webp"
-                alt={t("imageAlt")}
-                fill
-                // The LCP element on the homepage: `preload` (Next 16's name
-                // for `priority`) emits the preload link and fetchpriority.
-                preload
-                sizes="(min-width: 1280px) 1280px, 100vw"
-                className="object-cover object-[50%_20%]"
-              />
-            </div>
+            <Image
+              src="/prodavnicaalata-pocetna.webp"
+              alt={t("imageAlt")}
+              width={1906}
+              height={1357}
+              // The LCP element on the homepage: `preload` (Next 16's name
+              // for `priority`) puts a preload link for it in the head. The
+              // docs say not to combine it with `fetchPriority`.
+              preload
+              // From 1280px up the frame stops growing: max-w-7xl less the
+              // wrapper padding and the mat leaves 1180px of picture.
+              sizes="(min-width: 1280px) 1180px, 100vw"
+              className="h-auto w-full rounded-xl md:rounded-[26px]"
+            />
           </div>
         </div>
       </Container>
