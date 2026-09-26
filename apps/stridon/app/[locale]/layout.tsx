@@ -10,7 +10,7 @@ import {
 } from "@/constants/links";
 import { pathFor, resolveLinks } from "@/lib/nav";
 import { routing } from "@/i18n/routing";
-import { HREFLANG, type Locale } from "@brand/i18n/config";
+import { HREFLANG } from "@brand/i18n/config";
 import { getBrandConfig } from "@brand/config";
 import RootLayout from "@brand/shared/components/root-layout";
 import { createRootMetadata } from "@brand/shared/lib/metadata";
@@ -134,20 +134,20 @@ export default async function Layout({
 
   return (
     <RootLayout
-      lang={HREFLANG[locale as Locale]}
+      lang={HREFLANG[locale]}
       fontClassNames={cn(base.variable, heading.variable)}
-      navLinks={resolveLinks(NAV_LINKS, locale as Locale, nav)}
+      navLinks={resolveLinks(NAV_LINKS, locale, nav)}
       productLinks={resolveLinks(
         PRODUCTS_FOOTER_LINKS,
-        locale as Locale,
+        locale,
         footerLinkLabel,
       )}
       companyLinks={resolveLinks(
         COMPANY_FOOTER_LINKS,
-        locale as Locale,
+        locale,
         footerLinkLabel,
       )}
-      legalLinks={resolveLinks(LEGAL_LINKS, locale as Locale, footerLinkLabel)}
+      legalLinks={resolveLinks(LEGAL_LINKS, locale, footerLinkLabel)}
       socialLinks={SOCIAL_LINKS}
       showCategoryMenu={false}
       languageSwitch={
@@ -158,7 +158,7 @@ export default async function Layout({
         // else - its one string arrives as a prop.
         <NextIntlClientProvider locale={locale} messages={{}}>
           <LanguageSwitch
-            locale={locale as Locale}
+            locale={locale}
             label={common("switchLanguage")}
           />
         </NextIntlClientProvider>
@@ -183,8 +183,8 @@ export default async function Layout({
       }}
       footerTagline={footer("tagline")}
       // brand-config spells both of these in Serbian and cannot vary by locale.
-      headerCtaHref={pathFor("/b2b", locale as Locale)}
-      homeHref={pathFor("/", locale as Locale)}
+      headerCtaHref={pathFor("/b2b", locale)}
+      homeHref={pathFor("/", locale)}
     >
       {/* Only the page content needs the client provider: everything outside it
           (navbar, footer, toaster) takes its text as props from this app, which

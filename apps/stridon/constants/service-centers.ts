@@ -1,13 +1,11 @@
 import type { ContactLocation } from "@brand/shared/types/contact";
 
-export type ServiceCenter = ContactLocation;
-
 /**
  * An array because the shared ContactLocations takes a list; one centre today.
  * The badge is the one translated field, so it is filled in on the page rather
  * than here - a module constant has no locale to read it with.
  */
-export const SERVICE_CENTERS: Omit<ServiceCenter, "badge">[] = [
+export const SERVICE_CENTERS: Omit<ContactLocation, "badge">[] = [
   {
     name: "SG Servis",
     address: "Vojislava Ilića 141b, 11000 Beograd",
