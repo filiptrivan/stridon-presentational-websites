@@ -128,8 +128,8 @@ export function DefaultTemplate({
                 maxWidth: 820,
               }}
             >
-              {/* 160, not the 120 this started at: every description the site
-                  ships is 145-157 characters, so all of them were truncated,
+              {/* 160, not the 120 this started at: the site's descriptions
+                  run up to 157 characters, so most of them were truncated,
                   and truncated mid-word - the homepage card ended on "Po...". */}
               {truncateText(description, 160)}
             </div>

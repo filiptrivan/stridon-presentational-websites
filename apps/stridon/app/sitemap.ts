@@ -52,7 +52,7 @@ function entriesFor(href: Href): MetadataRoute.Sitemap {
 /**
  * No `lastModified`. A `new Date()` here is dynamic IO under `cacheComponents`,
  * which turned the whole route into a function invocation on every crawl, and
- * it bought nothing: all 68 entries carried the same "now", which is exactly
+ * it bought nothing: every entry carried the same "now", which is exactly
  * the pattern Google says it ignores. A real date needs a real signal, and the
  * only one this site has is a CMS edit, which nothing reports here yet.
  */

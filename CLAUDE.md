@@ -88,7 +88,7 @@ The hook must never run `test:integration` (see above — it writes to productio
 
 ### App Shell Contents (what stays per-app)
 
-Each app (`apps/sg-tools/`, `apps/dck/`, `apps/stridon/`) contains only:
+Each app (`apps/sg-tools/`, `apps/dck/`) contains only (stridon is bilingual and laid out differently, see `apps/stridon/CLAUDE.md`):
 
 - `app/globals.css` - Theme OKLCH tokens (dark vs light)
 - `app/layout.tsx` - Viewport, structured data, body class
@@ -171,7 +171,7 @@ Every read is bounded by `packages/shared/src/lib/request-budget.ts`, and `apiFe
 - **`tag-card`** fills with `tag.color`, which is non-nullable on `StorefrontTagDTO` — a designed campaign tile carrying the tag's own data, not missing photography.
 - **`product-gallery`** keeps a visible „Nema slike" label: a gallery has no adjacent link text naming the product, so a silent grey frame reads as a failed load. Same exception pa-storefront's PDP gallery makes.
 
-**Of the 16 `next/image` files, 8 render remote PACMS URLs and 8 render local assets — do not reach for "most of them are local", which is how the autocomplete pair got missed on the first pass.** The remote 8: the six named above (`product-card`, `category-card`, `tag-card`, `product-gallery`, `product-autocomplete`, plus `catalog-card`) and two that need no guard for a checked reason — `media-lightbox` renders `item.url` from a list that cannot contain a null, and the tag page's `bannerMediaUrl` is guarded at block level, where absence correctly means no banner section at all. `catalog-card` is unguarded because `previewImageUrl` is `[Required]` on `StorefrontCatalogDTO` and catalogs are admin-uploaded, never synced.
+**In dck, sg-tools and `packages/shared`, of the 16 `next/image` files, 8 render remote PACMS URLs and 8 render local assets — do not reach for "most of them are local", which is how the autocomplete pair got missed on the first pass.** The remote 8: the six named above (`product-card`, `category-card`, `tag-card`, `product-gallery`, `product-autocomplete`, plus `catalog-card`) and two that need no guard for a checked reason — `media-lightbox` renders `item.url` from a list that cannot contain a null, and the tag page's `bannerMediaUrl` is guarded at block level, where absence correctly means no banner section at all. `catalog-card` is unguarded because `previewImageUrl` is `[Required]` on `StorefrontCatalogDTO` and catalogs are admin-uploaded, never synced.
 
 **Nothing mechanically enforces any of this, and the two obvious guards are both wrong here.** A shared `Image` wrapper is what pa-storefront uses, but its wrapper exists primarily for `overrideSrc` (pinning the raw media URL as the crawler-visible `src`, a channel worth ~14.7% of its organic clicks) and it couples image-presence to an eager-loading budget — the null branch there is a *rider* on a wrapper that had to exist anyway. This repo has zero `overrideSrc` usages and no such budget, so a wrapper here would carry one job that TypeScript already forces at every nullable site. A `no-restricted-imports` lint ban is blocked for a different reason: `turbo lint` only reaches the three apps (see Preflight above — `packages/{shared,ui,brand-config,i18n}` define no `lint` script), so a ban would cover 2 of the 8 remote sites and miss the six in `packages/shared` where the cards actually live. Standing up per-package eslint is the prerequisite for ever revisiting it. Until then: check the field's nullability in `packages/shared/src/types/api.ts` and branch.
 

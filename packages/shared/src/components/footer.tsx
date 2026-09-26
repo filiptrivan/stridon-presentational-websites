@@ -155,8 +155,8 @@ const Footer = ({
                 <Image
                   src={logoSrc}
                   alt={logoAlt}
-                  // Falls back to the pair this was hardcoded to, so a brand
-                  // that declares no logo dimensions renders exactly as before.
+                  // A brand that declares no logo dimensions gets 96x32, the
+                  // box dck's and sg-tools' `w-24 h-8` paints.
                   width={logoWidth ?? 96}
                   height={logoHeight ?? 32}
                   className={footerLogoClassName}
