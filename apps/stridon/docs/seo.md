@@ -48,7 +48,7 @@ Google treats only 301/308 as a canonical signal; next-intl's own redirect for t
 
 ## Canonical, hreflang, sitemap
 
-Every page has its own canonical plus `alternates.languages`, `app/sitemap.ts` lists both locales with the same pairs, and the proxy adds `Link: rel=alternate` headers. `<html lang>` is `sr-Latn`, not `sr-RS` (a bare `sr` claims Cyrillic). The sitemap has no `changeFrequency`/`priority` (ignored by Google and Bing) and no `lastModified`: `new Date()` is dynamic IO under `cacheComponents`, and every entry carrying "now" is exactly what Google says it ignores.
+Every page has its own canonical plus `alternates.languages`, `app/sitemap.ts` lists both locales with the same pairs, and those two are the only hreflang source: next-intl's `Link` response header is off (`alternateLinks: false` in `packages/i18n`), because it would say a bare `sr` and add an x-default that dck and sg-tools do not have either. `<html lang>` is `sr-Latn`, not `sr-RS` (a bare `sr` claims Cyrillic). The sitemap has no `changeFrequency`/`priority` (ignored by Google and Bing) and no `lastModified`: `new Date()` is dynamic IO under `cacheComponents`, and every entry carrying "now" is exactly what Google says it ignores.
 
 Next replaces a parent's `openGraph` wholesale instead of merging it, so `lib/metadata.ts` restates `siteName`, `type` and `og:url` for every page.
 

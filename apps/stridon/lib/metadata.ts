@@ -18,10 +18,10 @@ type Href = Parameters<typeof getPathname>[0]["href"];
  * The shared `createPageMetadata` takes a single `canonicalUrl`, which is right
  * for a one-language site and wrong here in two ways: the English page would
  * declare the Serbian URL as its canonical, effectively asking Google to drop
- * it, and neither page would name the other as an alternate. next-intl's proxy
- * does emit `Link: rel="alternate"` headers, but only on a request it handles -
- * the tags belong in the document as well, which is where the crawler looks
- * first.
+ * it, and neither page would name the other as an alternate. These tags and
+ * the sitemap are the only hreflang source: next-intl's `Link` header is off
+ * (`alternateLinks: false` in packages/i18n), since it would say a bare `sr`
+ * and add an x-default.
  */
 export function createLocalizedMetadata({
   locale,

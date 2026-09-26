@@ -23,6 +23,10 @@ export const localeSettings = {
   // shape of next-intl#1845, where a redirect lands on a previously visited
   // locale. The prefix is the whole story.
   localeCookie: false,
+  // hreflang lives in each page's metadata and in the sitemap, as `sr-Latn`
+  // with no x-default. next-intl's `Link` response header would send a second
+  // set that disagrees with it (a bare `sr`, plus an x-default), so it is off.
+  alternateLinks: false,
 } as const;
 
 export const locales = localeSettings.locales;
