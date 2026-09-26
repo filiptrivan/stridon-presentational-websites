@@ -71,9 +71,9 @@ const BrendoviPage = async ({ params }: Props) => {
                       {brand.name}
                     </h2>
 
-                    {/* Brand copy is translated in PACMS, not here: the CMS
-                        returns the right language for the request, so none of
-                        it belongs in messages/. */}
+                    {/* Brand copy is PACMS's, read without a language, so it
+                        is the same Serbian text on both locales. None of it
+                        belongs in messages/ (docs/i18n.md). */}
                     {brand.metaDescription ? (
                       <p className="mt-3 line-clamp-4 text-[15px] leading-relaxed text-muted-foreground">
                         {brand.metaDescription}

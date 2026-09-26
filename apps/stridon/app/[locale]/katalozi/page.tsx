@@ -49,8 +49,8 @@ const KataloziPage = async ({ params }: Props) => {
 
   const groups = groupCatalogsByBrand(catalogs, {
     logoBySlug: new Map(cards.map((card) => [card.slug, card.imageUrl ?? null])),
-    // Catalog titles come from PACMS and are translated there; these two are
-    // ours, and the route has to be the one this locale is served at.
+    // Catalog titles come from PACMS untranslated; these two are ours, and
+    // the route has to be the one this locale is served at.
     untaggedName: t("untagged"),
     brandHref: (slug) => brandPath(slug, locale as Locale),
   });
