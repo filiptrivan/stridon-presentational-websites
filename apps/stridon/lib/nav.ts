@@ -40,9 +40,7 @@ export function resolveLinks<K extends string>(
 ): ResolvedLink[] {
   return defs.map((def) => ({
     label: t(def.key),
-    href: def.external
-      ? (def.href as string)
-      : pathFor(def.href as StaticPathname, locale),
+    href: def.external ? def.href : pathFor(def.href, locale),
     external: def.external,
   }));
 }

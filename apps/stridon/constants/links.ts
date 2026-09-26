@@ -16,15 +16,23 @@ export const B2B_PORTAL_URL = "https://b2b.wings.rs/stridon";
  * any request has a locale. `lib/nav.ts` turns each of these into the
  * `{ label, href }` the shared navbar and footer expect, with the href already
  * spelled for the current locale. `K` is the message key union of the
- * namespace the label is read from, so a link without copy fails `tsc`.
+ * namespace the label is read from, so a link without copy fails `tsc`, and
+ * an internal href has to be a route from `i18n/routing.ts`, so a typo in one
+ * fails it too. Only a link marked `external` takes any string.
  */
-export interface NavLinkDef<K extends string = string> {
-  /** Key under the `Nav` or `Footer.links` namespace. */
-  key: K;
-  /** Internal route, or an absolute URL when `external`. */
-  href: StaticPathname | string;
-  external?: boolean;
-}
+export type NavLinkDef<K extends string = string> =
+  | {
+      /** Key under the `Nav` or `Footer.links` namespace. */
+      key: K;
+      href: StaticPathname;
+      external?: false;
+    }
+  | {
+      key: K;
+      /** Absolute URL, opened as is. */
+      href: string;
+      external: true;
+    };
 
 export type NavKey = keyof Messages["Nav"];
 export type FooterLinkKey = keyof Messages["Footer"]["links"];
