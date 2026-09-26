@@ -15,8 +15,8 @@ import Link from "next/link";
 // read as one family; the fonts are this app's, through --font-heading.
 //
 // dck art-directs two files (16:9 desktop, 4:5 mobile). Here the picture is a
-// screenshot of the prodavnicaalata.rs homepage, so it keeps its own ratio at
-// every width: any crop would cut through the shop's header or its cards.
+// wide spread of tools from the brands on the site, so it keeps its own ratio
+// at every width: any crop would cut brands off either edge.
 const Hero = async ({ locale }: { locale: Locale }) => {
   const t = await getTranslations({ locale, namespace: "Home.hero" });
 
@@ -44,10 +44,10 @@ const Hero = async ({ locale }: { locale: Locale }) => {
         <div className="relative mx-auto max-w-7xl rounded-2xl md:rounded-[32px] border border-neutral-200/50 bg-neutral-100 p-2 backdrop-blur-lg mt-10 md:mt-14">
           <div className="rounded-lg md:rounded-[24px] border border-neutral-200 bg-white">
             <Image
-              src="/prodavnicaalata-pocetna.webp"
+              src="/hero-brendovi.webp"
               alt={t("imageAlt")}
-              width={1906}
-              height={1357}
+              width={2758}
+              height={1504}
               // The LCP element on the homepage: `preload` (Next 16's name
               // for `priority`) puts a preload link for it in the head. The
               // docs say not to combine it with `fetchPriority`.
