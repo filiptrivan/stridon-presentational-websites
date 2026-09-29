@@ -1,4 +1,4 @@
-import { byOrderNumber, isSiteBrand } from "@/lib/brand-order";
+import { byOrderNumber } from "@/lib/brand-order";
 import type { Catalog, CatalogsResult } from "@brand/shared/types/catalogs";
 
 type CatalogBrand = Catalog["brands"][number];
@@ -18,9 +18,9 @@ export interface CatalogGroup {
  * Trailing group for catalogs PACMS has not tagged with a manufacturer.
  *
  * As of 2026-09-21 exactly one catalog lands here ("REMS akcija 2026."), and it
- * is a CMS tagging gap rather than a real category - REMS is a brand we show and
- * already has its own group. Tag it in the CMS and it moves up on the next
- * revalidate with no code change, which is the point of not hardcoding it.
+ * is a CMS tagging gap rather than a real category - REMS already has its own
+ * group. Tag it in the CMS and it moves up on the next revalidate with no code
+ * change, which is the point of not hardcoding it.
  */
 export const UNTAGGED_GROUP_SLUG = "ostali-katalozi";
 
@@ -33,8 +33,8 @@ export const UNTAGGED_GROUP_SLUG = "ostali-katalozi";
  *
  * Groups follow the brands' `orderNumber`, then id, the order `/brendovi` uses
  * too (`lib/brand-order.ts`). Every catalog's brand stub carries both, so no
- * extra read is needed to sort them. A brand the site shows links to its page;
- * one it does not show still gets its group, unlinked, after the ordered ones.
+ * extra read is needed to sort them. A brand the site lists (`siteSlugs`, from
+ * `getSiteBrands()`) links to its page; any other still gets its group, unlinked.
  *
  * The two locale-dependent bits are passed in rather than decided here: the
  * label for the untagged group, and how a brand slug becomes a URL. Defaults
@@ -42,6 +42,8 @@ export const UNTAGGED_GROUP_SLUG = "ostali-katalozi";
  */
 export interface GroupOptions {
   logoBySlug?: ReadonlyMap<string, string | null>;
+  /** Brands the site lists. Only these link to a brand page. */
+  siteSlugs?: ReadonlySet<string>;
   /** Heading for catalogs PACMS has not tagged with a manufacturer. */
   untaggedName?: string;
   /** Route for a brand we list. Localized, so it cannot be built from the slug here. */
@@ -54,6 +56,7 @@ export function groupCatalogsByBrand(
 ): CatalogGroup[] {
   const {
     logoBySlug = new Map<string, string | null>(),
+    siteSlugs = new Set<string>(),
     untaggedName = "Ostali katalozi",
     brandHref = (slug: string) => `/brendovi/${slug}`,
   } = options;
@@ -90,7 +93,7 @@ export function groupCatalogsByBrand(
       slug: brand.slug,
       name: brand.name,
       imageUrl: logoBySlug.get(brand.slug) ?? null,
-      href: isSiteBrand(brand) ? brandHref(brand.slug) : null,
+      href: siteSlugs.has(brand.slug) ? brandHref(brand.slug) : null,
       catalogs,
     }));
 

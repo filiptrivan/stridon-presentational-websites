@@ -1,14 +1,28 @@
 import { describe, expect, it } from "vitest";
 
-import { byOrderNumber, isSiteBrand } from "@/lib/brand-order";
+import {
+  SITE_BRAND_COUNT,
+  byOrderNumber,
+  pickSiteBrands,
+} from "@/lib/brand-order";
 
 // The one rule that decides what /brendovi, the homepage wall, the sitemap and
 // the brand routes contain, and in what order.
 describe("brand order", () => {
-  it("shows exactly the brands that have an orderNumber", () => {
-    expect(isSiteBrand({ id: 1, orderNumber: 1 })).toBe(true);
-    expect(isSiteBrand({ id: 2, orderNumber: null })).toBe(false);
-    expect(isSiteBrand({ id: 3 })).toBe(false);
+  it("shows the first 25 brands by orderNumber and none without one", () => {
+    // 30 ordered brands, listed back to front, plus two with no orderNumber.
+    const ordered = Array.from({ length: 30 }, (_, i) => ({
+      id: 100 + i,
+      orderNumber: i + 1,
+    })).toReversed();
+    const rows = [{ id: 1, orderNumber: null }, ...ordered, { id: 2 }];
+
+    const picked = pickSiteBrands(rows);
+
+    expect(SITE_BRAND_COUNT).toBe(25);
+    expect(picked.map((row) => row.orderNumber)).toEqual(
+      Array.from({ length: 25 }, (_, i) => i + 1),
+    );
   });
 
   it("sorts by orderNumber, then id, with unset orderNumbers last", () => {

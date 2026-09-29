@@ -1,20 +1,27 @@
 /**
- * Which PACMS brands stridon.rs shows, and in what order. Pure, so the catalog
- * grouping can use it without importing the API module.
+ * Which PACMS brands stridon.rs shows, and in what order. Pure, so it can be
+ * tested without the API module.
  *
- * The site lists every brand the CMS gives an `orderNumber`, and no other, in
- * that order (review on PR #14: "Take them by order number"). The brand route
- * itself still renders any slug PACMS knows, as it did before. The same rule
- * decides which catalog groups on /katalozi link to a brand page, so it is
- * written once, here.
+ * The site lists the first `SITE_BRAND_COUNT` brands by `orderNumber`, and no
+ * other (repo owner's rule). `orderNumber` is the webshop's sort key, and past
+ * the head of the list it only pushes brands down (100, 1,000,000), so taking
+ * every brand that has one listed 94. The brand route itself still renders any
+ * slug PACMS knows, as it did before. `/katalozi` and `/servis` link a brand to
+ * its page only when it is in this list.
  */
 export interface OrderedBrand {
   id: number;
   orderNumber?: number | null;
 }
 
-export function isSiteBrand(brand: OrderedBrand): boolean {
-  return brand.orderNumber != null;
+/** How many brands the site lists, from the head of the `orderNumber` order. */
+export const SITE_BRAND_COUNT = 25;
+
+export function pickSiteBrands<T extends OrderedBrand>(brands: readonly T[]): T[] {
+  return brands
+    .filter((brand) => brand.orderNumber != null)
+    .toSorted(byOrderNumber)
+    .slice(0, SITE_BRAND_COUNT);
 }
 
 /**

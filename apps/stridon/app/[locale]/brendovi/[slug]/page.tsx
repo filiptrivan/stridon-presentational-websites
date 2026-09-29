@@ -63,9 +63,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 const BrandPage = async ({ params }: Props) => {
   const { locale, slug } = await params;
-  // Everything on this page is generated: a brand given an orderNumber and
-  // written in the CMS renders here with no further code. The brand itself is
-  // read by slug on the critical budget, since it is what the route is about.
+  // Everything on this page is generated: a brand that enters the site list
+  // (`lib/brand-order.ts`) renders here with no further code. The brand itself
+  // is read by slug on the critical budget, since it is what the route is about.
   const [brand, { catalogs }, t] = await Promise.all([
     getBrandBySlug(slug),
     getAllCatalogs(),

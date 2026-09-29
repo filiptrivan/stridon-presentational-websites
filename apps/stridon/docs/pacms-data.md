@@ -4,7 +4,7 @@ Everything this site shows about brands and catalogs comes from the PACMS API (`
 
 ## Brands
 
-`lib/brands.ts` `getSiteBrands()` is the list the site shows: every brand from `getBrands()` that has an `orderNumber`, sorted by `byOrderNumber` from `lib/brand-order.ts` (orderNumber ascending, unset last, then id). It feeds `/brendovi`, the homepage wall (its first `FEATURED_BRAND_COUNT`), the brand routes' `generateStaticParams`, the sitemap and the links on `/servis`. This is the repo owner's rule from review: take the brands by order number.
+`lib/brands.ts` `getSiteBrands()` is the list the site shows: the first `SITE_BRAND_COUNT` (25) brands from `getBrands()` by `orderNumber`, sorted by `byOrderNumber` from `lib/brand-order.ts` (orderNumber ascending, then id; a brand without one never counts). It feeds `/brendovi`, the homepage wall (its first `FEATURED_BRAND_COUNT`), the brand routes' `generateStaticParams`, the sitemap and the links on `/servis` and `/katalozi`. This is the repo owner's rule: the first 25 by order number. `orderNumber` is the webshop's sort key, and past the head of the list it only pushes brands down (100, 1,000,000), so taking every brand that has one listed 94.
 
 - `getBrands()` is used because it is the only brand list that carries `orderNumber`; `getBrandCards()` (id, name, slug, logo) does not. It is one cached entry of about 850 KB shared by every consumer.
 - The comparator is written out rather than inherited from API order: `/Brands` is sorted by orderNumber then id, but the brand stubs inside `/Catalogs` are not id-ordered within a tie.
@@ -12,13 +12,13 @@ Everything this site shows about brands and catalogs comes from the PACMS API (`
 - The brand page body is the CMS `htmlDescription` through `@brand/ui` `Prose`. Many brands have none, and their page is the hero plus the shop link; the fix is CMS copy, not code.
 - Logos are the CMS `imageUrl`. `BrandLogo` uses `object-contain` with padding (vendor logos are tight crops of any shape) and falls back to a wordmark cell when a brand has no image. Several CMS logos are JPEGs with a baked-in white ground, which is why logo plates stay white.
 - Brand meta tags are one template with the name interpolated, not the CMS `metaTitle`/`metaDescription`; see `seo.md`.
-- A brand slug outside the list still renders on demand if the CMS has it, since the route has no membership check. Nothing links to such a page.
+- A brand slug outside the list still renders on demand if the CMS has it, since the route has no membership check. Nothing links to such a page; the one way in is the 308 from the old `/brendovi/black-and-decker` (`constants/legacy-urls.ts`), whose target `black-decker` is past the first 25.
 
 ## Catalogs
 
 `/katalozi` reads `getAllCatalogs()` (the unscoped `/Catalogs`) and renders the shared `CatalogCardsGrid`, grouped by brand in `lib/catalog-groups.ts`, a pure function over that response plus the `getBrandCards()` logos. `__tests__/catalog-groups.test.ts` pins it.
 
-- Groups follow the same comparator as `/brendovi`, over the brand stub each catalog carries (catalogs themselves have no orderNumber). A group links to its brand page when that brand has an orderNumber.
+- Groups follow the same comparator as `/brendovi`, over the brand stub each catalog carries (catalogs themselves have no orderNumber). A group links to its brand page when that brand is in `getSiteBrands()`.
 - A catalog with several brands is listed under each of them (none does today, but the DTO allows it).
 - Catalogs with no brand go to a trailing "Ostali katalozi" group; tagging them in the CMS moves them with no code change.
 - The group anchor is the CMS slug, the same one `/brendovi/[slug]` uses, so the brand page's "catalogs" button deep-links to `/katalozi#<slug>`. The button appears only when the live data has a catalog for that brand.

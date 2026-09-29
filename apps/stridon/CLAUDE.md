@@ -12,7 +12,7 @@ Root `../../CLAUDE.md` applies. This file holds only what is specific to `apps/s
 ## Rules
 
 - Stridon is not a brand in PACMS, so every brand-scoped fetcher (`getCatalogs`, `getCategories`, `getTopProductsByBrand`) is empty here. Use the unscoped ones: `getAllCatalogs`, `getBrands`, `getBrandCards`, `getBrandBySlug`.
-- The site shows every PACMS brand that has an `orderNumber`, sorted by orderNumber then id (`lib/brand-order.ts`, `lib/brands.ts`). There is no hand-kept brand list; do not add one.
+- The site shows the first 25 PACMS brands by `orderNumber`, then id (`lib/brand-order.ts`, `lib/brands.ts`). There is no hand-kept brand list; do not add one.
 - `@brand/shared` never imports next-intl: dck and sg-tools have no i18n config and would throw. Shared components take text as optional `labels` with Serbian defaults, and `app/[locale]/layout.tsx` fills them in.
 - Every path handed to a shared component goes through `lib/nav.ts` (`pathFor`, `brandPath`). Shared components link with plain `next/link`, so an unconverted `/brendovi` sends English readers to Serbian.
 - A new client-side `useTranslations("X")` means adding `X` to `clientMessages` in `app/[locale]/layout.tsx`, or it throws at runtime.

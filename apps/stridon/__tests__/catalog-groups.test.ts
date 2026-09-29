@@ -84,6 +84,7 @@ describe("groupCatalogsByBrand", () => {
         logoBySlug: new Map([
           ["hogert-technik", "https://media.example.com/hogert.png"],
         ]),
+        siteSlugs: new Set(["hogert-technik"]),
       },
     );
 
@@ -104,17 +105,28 @@ describe("groupCatalogsByBrand", () => {
     expect(groups[0].imageUrl).toBeNull();
   });
 
-  it("puts a brand without an orderNumber after the ordered ones, unlinked", () => {
-    // The site shows only brands with an orderNumber, so one without keeps its
-    // catalogs but has no page to link to.
+  it("links only the brands the site lists", () => {
+    // The site lists the first 25 brands by orderNumber, so a brand past them
+    // (rems) or without one (topex, sorted last) keeps its catalogs but has no
+    // page to link to.
     const topex = catalog("Topex katalog", [brand("topex", "Topex", null)]);
+    const rems = catalog("REMS katalog", [brand("rems", "REMS", 18)]);
     const gross = catalog("Gross katalog", [brand("gross", "Gross", 14)]);
 
-    const groups = groupCatalogsByBrand(result([topex, gross]));
+    const groups = groupCatalogsByBrand(result([topex, rems, gross]), {
+      siteSlugs: new Set(["gross"]),
+    });
 
-    expect(groups.map((group) => group.slug)).toEqual(["gross", "topex"]);
-    expect(groups[0].href).toBe("/brendovi/gross");
-    expect(groups[1].href).toBeNull();
+    expect(groups.map((group) => group.slug)).toEqual([
+      "gross",
+      "rems",
+      "topex",
+    ]);
+    expect(groups.map((group) => group.href)).toEqual([
+      "/brendovi/gross",
+      null,
+      null,
+    ]);
   });
 
   it("collects untagged catalogs into a trailing group", () => {
@@ -165,6 +177,7 @@ describe("groupCatalogsByBrand", () => {
         catalog("REMS akcija", []),
       ]),
       {
+        siteSlugs: new Set(["wera"]),
         brandHref: (slug) => `/en/brands/${slug}`,
         untaggedName: "Other catalogs",
       },
