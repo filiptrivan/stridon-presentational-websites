@@ -57,7 +57,7 @@ const HomePage = async ({
         }))}
         heading={t("cta.heading")}
         labels={{ action: t("cta.action") }}
-        actionHref={pathFor("/kontakt", locale as Locale)}
+        actionHref={pathFor("/b2b", locale as Locale)}
       />
     </div>
   );
