@@ -49,7 +49,7 @@ export const PRODUCTS_FOOTER_LINKS: readonly NavLinkDef<FooterLinkKey>[] = [
   { key: "allBrands", href: "/brendovi" },
   { key: "catalogs", href: "/katalozi" },
   { key: "onlineStore", href: SHOP_URL, external: true },
-  { key: "becomePartner", href: "/kontakt" },
+  { key: "becomePartner", href: "/b2b" },
 ];
 
 export const COMPANY_FOOTER_LINKS: readonly NavLinkDef<FooterLinkKey>[] = [
