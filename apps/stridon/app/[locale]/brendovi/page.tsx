@@ -48,7 +48,7 @@ const BrendoviPage = async ({ params }: Props) => {
             {/* Same card treatment as the homepage brand wall and the shared
                 `catalog-card`: separated, rounded, hairline border that turns
                 primary on hover. */}
-            <div className="grid grid-cols-2 gap-3 lg:grid-cols-3 lg:gap-4">
+            <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
               {brands.map((brand) => (
                 <Link
                   key={brand.slug}
@@ -59,12 +59,12 @@ const BrendoviPage = async ({ params }: Props) => {
                     name={brand.name}
                     logo={brand.imageUrl ?? null}
                     className="border-b border-border/60"
-                    // This grid is two columns until lg, not three, so there is
+                    // This grid is two columns until lg, not four, so there is
                     // no 768px step to declare: below 1024px the slot is always
                     // ~50vw. Saying 100vw there made a phone pick the w=828
                     // candidate for a ~173px slot, on every logo. From 1280px
-                    // up the grid is capped at max-w-7xl: 387px per cell.
-                    sizes="(min-width: 1280px) 387px, (min-width: 1024px) 33vw, 50vw"
+                    // up the grid is capped at max-w-7xl: 288px per cell.
+                    sizes="(min-width: 1280px) 288px, (min-width: 1024px) 25vw, 50vw"
                   />
 
                   <div className="flex flex-1 flex-col p-6 lg:p-7">
