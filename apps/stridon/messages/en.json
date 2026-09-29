@@ -136,15 +136,18 @@
   },
   "Brand": {
     "meta": {
-      "title": "{brand} tools | Catalogs and range",
-      "description": "{brand} tools at Stridon Group. Read about the brand, browse current {brand} catalogs and find out where to buy {brand} tools in Serbia."
+      "title": "{brand} tools | Catalogs and range"
     },
     "notFound": "Brand not found",
     "back": "Brands",
     "viewCatalogs": "View catalogs",
     "allProducts": "All {brand} products",
     "shopLead": "See the complete {brand} range and current availability in our official online store.",
-    "openShop": "Open the store"
+    "openShop": "Open the store",
+    "description": {
+      "withCatalogs": "{brand} tools at Stridon Group. Read about the brand, browse current {brand} catalogs and find out where to buy {brand} tools in Serbia.",
+      "withoutCatalogs": "{brand} tools at Stridon Group. Read about the brand and find out where to buy {brand} tools in Serbia."
+    }
   },
   "Catalogs": {
     "meta": {

@@ -11,7 +11,7 @@ Everything this site shows about brands and catalogs comes from the PACMS API (`
 - A brand page reads its brand with `getBrandBySlug()`, on the `critical` budget that `packages/shared/src/lib/request-budget.ts` reserves for the entity a route is about.
 - The brand page body is the CMS `htmlDescription` through `@brand/ui` `Prose`. Many brands have none, and their page is the hero plus the shop link; the fix is CMS copy, not code.
 - Logos are the CMS `imageUrl`. `BrandLogo` uses `object-contain` with padding (vendor logos are tight crops of any shape) and falls back to a wordmark cell when a brand has no image. Several CMS logos are JPEGs with a baked-in white ground, which is why logo plates stay white.
-- Brand meta tags are one template with the name interpolated, not the CMS `metaTitle`/`metaDescription`; see `seo.md`.
+- Brand meta tags and the subtitle under the brand name are templates with the name interpolated (`Brand.meta.title`, `Brand.description`), not the CMS `metaTitle`/`metaDescription`; see `seo.md`. The `/brendovi` cards carry no blurb: the CMS `metaDescription` is the webshop's SEO copy, cut off mid-word on some brands.
 - A brand slug outside the list still renders on demand if the CMS has it, since the route has no membership check. Nothing links to such a page; the one way in is the 308 from the old `/brendovi/black-and-decker` (`constants/legacy-urls.ts`), whose target `black-decker` is past the first 25.
 
 ## Catalogs

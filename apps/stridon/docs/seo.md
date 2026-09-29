@@ -25,7 +25,7 @@ The live pairs were supplied by hand by the owner; `https://www.stridon.rs/` fai
 
 Rules that are not visible from the code:
 
-- **Formal "Vi" survives only in meta carried over from the live site.** Those strings keep the live wording even when it is formal; every string written here, meta included (the † rows and `Brand.meta`), uses "ti".
+- **Formal "Vi" survives only in meta carried over from the live site.** Those strings keep the live wording even when it is formal; every string written here, meta included (the † rows, `Brand.meta` and `Brand.description`), uses "ti".
 - **The homepage pair lives in `Site.*`** in `messages/*.json`, for the tags and the OG card alike: the `[locale]` layout overrides the title, description and OG image that `createRootMetadata` builds from the brand config. `defaultTitle`/`siteDescription` in `packages/brand-config/src/stridon.ts` only mirror the Serbian pair because `BrandConfig` requires them.
 - **`Brands.meta.*` and `Brands.hero.*` are byte-identical**, because the live title and description were the page's own heading and lead. Reword the hero and the meta silently stops matching the live site.
 - **The `/servis` description names seven brands** (DeWalt, Bosch, Makita, Metabo, Festool, Rubi, Senco); true while `SERVICED_BRAND_SLUGS` keeps them.
@@ -33,7 +33,7 @@ Rules that are not visible from the code:
 
 ## Brand pages
 
-One template at `Brand.meta` with the name interpolated, not the CMS `metaTitle`/`metaDescription`. Measured on the CMS copy: it sells ("Online prodaja Srbija") on a site that sells nothing, it is word for word what prodavnicaalata.rs serves on `/proizvodjaci/<slug>/` (two domains, one owner, one snippet), and about a third of it runs past 160 characters or is malformed. The template wording is neutral ("u ponudi Stridon Group") because the list includes brands with their own importers in Serbia. The body `htmlDescription` is still the CMS's.
+Templates with the name interpolated (`Brand.meta.title`, `Brand.description`), not the CMS `metaTitle`/`metaDescription`. Measured on the CMS copy: it sells ("Online prodaja Srbija") on a site that sells nothing, it is word for word what prodavnicaalata.rs serves on `/proizvodjaci/<slug>/` (two domains, one owner, one snippet), and about a third of it runs past 160 characters or is malformed. The template wording is neutral ("u ponudi Stridon Group") because the list includes brands with their own importers in Serbia. The description is also the visible subtitle under the brand name, and a brand with no catalog gets it without the catalogs (`Brand.description.withoutCatalogs`). The body `htmlDescription` is still the CMS's.
 
 ## URLs of the live site
 

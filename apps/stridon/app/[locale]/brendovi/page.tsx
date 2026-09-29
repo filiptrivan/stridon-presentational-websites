@@ -29,9 +29,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 const BrendoviPage = async ({ params }: Props) => {
   const { locale } = await params;
 
-  // The site list already carries every field a card reads (name, logo,
-  // metaDescription), so the grid costs no read beyond the one the whole site
-  // shares.
+  // The site list already carries every field a card reads (name, logo), so
+  // the grid costs no read beyond the one the whole site shares. No blurb under
+  // the name: the CMS `metaDescription` is the webshop's SEO copy, cut off
+  // mid-word on some brands.
   const [brands, t] = await Promise.all([
     getSiteBrands(),
     getTranslations({ locale, namespace: "Brands" }),
@@ -70,15 +71,6 @@ const BrendoviPage = async ({ params }: Props) => {
                     <h2 className="font-heading text-lg font-semibold tracking-tight">
                       {brand.name}
                     </h2>
-
-                    {/* Brand copy is PACMS's, read without a language, so it
-                        is the same Serbian text on both locales. None of it
-                        belongs in messages/ (docs/i18n.md). */}
-                    {brand.metaDescription ? (
-                      <p className="mt-3 line-clamp-4 text-[15px] leading-relaxed text-muted-foreground">
-                        {brand.metaDescription}
-                      </p>
-                    ) : null}
 
                     <span className="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-medium text-primary">
                       {t("goToBrand")}
