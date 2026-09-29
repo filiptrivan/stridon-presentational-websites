@@ -136,15 +136,18 @@
   },
   "Brand": {
     "meta": {
-      "title": "{brand} alati | Katalozi i ponuda",
-      "description": "{brand} alati u ponudi Stridon Group. Pogledaj opis brenda, aktuelne {brand} kataloge i saznaj gde da kupiš {brand} alat u Srbiji."
+      "title": "{brand} alati | Katalozi i ponuda"
     },
     "notFound": "Brend nije pronađen",
     "back": "Brendovi",
     "viewCatalogs": "Pogledaj kataloge",
     "allProducts": "Svi {brand} proizvodi",
     "shopLead": "Kompletan asortiman i dostupnost proizvoda brenda {brand} pogledaj u našoj zvaničnoj internet prodavnici.",
-    "openShop": "Otvori prodavnicu"
+    "openShop": "Otvori prodavnicu",
+    "description": {
+      "withCatalogs": "{brand} alati u ponudi Stridon Group. Pogledaj opis brenda, aktuelne {brand} kataloge i saznaj gde da kupiš {brand} alat u Srbiji.",
+      "withoutCatalogs": "{brand} alati u ponudi Stridon Group. Pogledaj opis brenda i saznaj gde da kupiš {brand} alat u Srbiji."
+    }
   },
   "Catalogs": {
     "meta": {

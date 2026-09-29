@@ -9,6 +9,7 @@ import HeroHeader from "@brand/shared/components/hero-header";
 import Section from "@brand/shared/components/section";
 import Wrapper from "@brand/shared/components/wrapper";
 import { getAllCatalogs, getBrandBySlug } from "@brand/shared/lib/api";
+import type { Catalog } from "@brand/shared/types/catalogs";
 import { Button } from "@brand/ui/button";
 import { Prose } from "@brand/ui/prose";
 import { ArrowLeft, ExternalLink } from "lucide-react";
@@ -22,6 +23,20 @@ type Props = {
   params: Promise<{ locale: string; slug: string }>;
 };
 
+// The meta description and the subtitle under the name are one sentence, and
+// it mentions the brand's catalogs only when PACMS has some for it.
+function descriptionKey(catalogs: Catalog[], slug: string) {
+  return hasCatalogs(catalogs, slug)
+    ? "description.withCatalogs"
+    : "description.withoutCatalogs";
+}
+
+function hasCatalogs(catalogs: Catalog[], slug: string): boolean {
+  return catalogs.some((catalog) =>
+    catalog.brands.some((catalogBrand) => catalogBrand.slug === slug),
+  );
+}
+
 // The brands the site shows, from the one cached list the rest of the site
 // reads. Both locales, since each is its own prerendered page.
 export async function generateStaticParams() {
@@ -33,18 +48,18 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
-  const brand = await getBrandBySlug(slug);
-  if (!brand) {
-    const t = await getTranslations({ locale, namespace: "Brand" });
-    return { title: t("notFound") };
-  }
-
-  const meta = await getTranslations({ locale, namespace: "Brand.meta" });
+  // Same cached reads as the page below, so metadata costs no extra request.
+  const [brand, { catalogs }, t] = await Promise.all([
+    getBrandBySlug(slug),
+    getAllCatalogs(),
+    getTranslations({ locale, namespace: "Brand" }),
+  ]);
+  if (!brand) return { title: t("notFound") };
 
   return createLocalizedMetadata({
     locale: locale as Locale,
     href: { pathname: "/brendovi/[slug]", params: { slug: brand.slug } },
-    // One template with the name interpolated, **not** `brand.metaTitle` /
+    // Templates with the name interpolated, **not** `brand.metaTitle` /
     // `brand.metaDescription`. Those are written for prodavnicaalata.rs and
     // measured wrong for this site three ways (2026-09-22): they sell ("Online
     // prodaja Srbija", "Prodaja X alata online") on a site whose own terms page
@@ -56,8 +71,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     //
     // `htmlDescription` is still the CMS's, below - that one really is per-brand
     // copy and belongs on the page.
-    title: meta("title", { brand: brand.name }),
-    description: meta("description", { brand: brand.name }),
+    title: t("meta.title", { brand: brand.name }),
+    description: t(descriptionKey(catalogs, brand.slug), { brand: brand.name }),
   });
 }
 
@@ -73,9 +88,7 @@ const BrandPage = async ({ params }: Props) => {
   ]);
   if (!brand) notFound();
 
-  const brandHasCatalogs = catalogs.some((catalog) =>
-    catalog.brands.some((catalogBrand) => catalogBrand.slug === brand.slug),
-  );
+  const brandHasCatalogs = hasCatalogs(catalogs, brand.slug);
   const catalogsPath = pathFor("/katalozi", locale as Locale);
 
   return (
@@ -115,7 +128,11 @@ const BrandPage = async ({ params }: Props) => {
             {brand.name}
           </span>
         }
-        description={brand.metaDescription}
+        // Not `brand.metaDescription`: that is the webshop's SEO copy (see the
+        // metadata above), cut off mid-word on some brands.
+        description={t(descriptionKey(catalogs, brand.slug), {
+          brand: brand.name,
+        })}
       >
         <Container delay={0.3}>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
