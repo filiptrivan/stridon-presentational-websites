@@ -1,3 +1,4 @@
+import { getSiteBrands } from "@/lib/brands";
 import { groupCatalogsByBrand } from "@/lib/catalog-groups";
 import { createLocalizedMetadata } from "@/lib/metadata";
 import { brandPath } from "@/lib/nav";
@@ -39,16 +40,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 const KataloziPage = async ({ params }: Props) => {
   const { locale } = await params;
 
-  // Both are cached reads the site already makes - `getBrandCards()` is the same
-  // entry /servis fills, so the logos here are free.
-  const [catalogs, cards, t] = await Promise.all([
+  // All cached reads the site already makes - `getBrandCards()` and
+  // `getSiteBrands()` are the same entries /servis fills, so the logos and the
+  // links here are free.
+  const [catalogs, cards, siteBrands, t] = await Promise.all([
     getAllCatalogs(),
     getBrandCards(),
+    getSiteBrands(),
     getTranslations({ locale, namespace: "Catalogs" }),
   ]);
 
   const groups = groupCatalogsByBrand(catalogs, {
     logoBySlug: new Map(cards.map((card) => [card.slug, card.imageUrl ?? null])),
+    siteSlugs: new Set(siteBrands.map((brand) => brand.slug)),
     // Catalog titles come from PACMS untranslated; these two are ours, and
     // the route has to be the one this locale is served at.
     untaggedName: t("untagged"),

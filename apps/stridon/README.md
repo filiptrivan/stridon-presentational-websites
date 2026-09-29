@@ -17,7 +17,7 @@ graph LR
     A -->|brand page link| C[prodavnicaalata.rs<br/>Shop]
 ```
 
-Brands (every PACMS brand with an `orderNumber`, in that order) and catalogs are read server-side from the prodavnicaalata.rs REST API. There are no product pages: each brand page links to that brand on prodavnicaalata.rs, and this site has no cart or checkout.
+Brands (the first 25 PACMS brands by `orderNumber`, in that order) and catalogs are read server-side from the prodavnicaalata.rs REST API. There are no product pages: each brand page links to that brand on prodavnicaalata.rs, and this site has no cart or checkout.
 
 ## Getting Started
 
