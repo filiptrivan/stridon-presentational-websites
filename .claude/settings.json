@@ -35,6 +35,7 @@
       "Bash(cd \"C:\\Users\\user\\Documents\\Projects\\SGAndDCKWebsites\" && pnpm -C apps/dck test:*)",
       "Bash(npx shadcn@latest view:*)",
       "Bash(npx playwright test)",
+      "Bash(node .claude/skills/add-dealer/scripts/*)",
       "WebFetch(domain:www.spiderly.dev)",
       "WebFetch(domain:nextjs.org)",
       "WebFetch(domain:react.dev)",

@@ -33,6 +33,7 @@ Thumbs.db
 !.claude/skills/agent-browser/
 !.claude/skills/env-update/
 !.claude/skills/prod-vercel/
+!.claude/skills/add-dealer/
 skills-lock.json
 bash.exe.stackdump
 
