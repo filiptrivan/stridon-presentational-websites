@@ -54,7 +54,7 @@ export function writeChoicePage({ name, candidates, imageFile }) {
   <div class="cards">
 ${cards}
   </div>
-  <p class="back">${two ? "Vrati se u Claude i izaberi plavu ili crvenu. Ako nisi siguran, izaberi bilo koju od dve." : "Vrati se u Claude i odgovori da ili ne."}</p>
+  <p class="back">${two ? "Vrati se u Claude i izaberi plavu ili crvenu. Ako nisi siguran, proveri sa dilerom, radnjom ili servisom, pa javi Claude-u." : "Vrati se u Claude i odgovori da ili ne. Ako nisi siguran, proveri sa dilerom."}</p>
 </main>
 </body>
 </html>
