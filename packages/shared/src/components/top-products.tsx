@@ -4,7 +4,6 @@ import SectionHeader from "./section-header";
 import Section from "./section";
 import Wrapper from "./wrapper";
 
-/** @see ./top-products-skeleton.tsx — update the skeleton when this layout changes */
 const TopProducts = async () => {
   let products;
   try {
