@@ -70,13 +70,14 @@ const ProductDetail = ({
           />
         </Container>
 
-        {/* Right: Product info */}
-        <Container delay={1}>
-          <div className="flex flex-col">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
-              {product.title}
-            </h1>
+        {/* Right: Product info. The H1 is not animated, so the product's
+            name shows the moment the HTML does; the rest still fades in. */}
+        <div className="flex flex-col">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
+            {product.title}
+          </h1>
 
+          <Container delay={1}>
             {product.description && (
               <div
                 className="text-muted-foreground mt-3 leading-relaxed whitespace-pre-line"
@@ -111,8 +112,8 @@ const ProductDetail = ({
             {dealers && dealers.length > 0 && (
               <ProductDistributors dealers={dealers.slice(0, 6)} />
             )}
-          </div>
-        </Container>
+          </Container>
+        </div>
       </div>
 
       {/* Product details / specification */}

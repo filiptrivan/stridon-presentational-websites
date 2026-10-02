@@ -28,7 +28,7 @@ Every 404 here comes from `notFound()` (an unknown brand, and every unknown URL 
 
 ## The shared `Container` renders at `opacity: 0`
 
-`packages/shared/src/components/container.tsx` gives `motion.div` `initial={{ opacity: 0, y: 20 }}`, which framer-motion writes into the server HTML, and it wraps nearly every section on all three sites. With `whileInView` and `once: true`, a section outside the first viewport stays invisible until scrolled to, and with no JavaScript nothing ever shows. The text is in the HTML either way. A fix (hidden state behind a `js` class set by an inline script, `initial={false}`) touches every section of all three sites; the owner chose research only. Before a visual check or a screenshot, scroll the whole page once so every section has animated in.
+`packages/shared/src/components/container.tsx` gives `motion.div` `initial={{ opacity: 0, y: 20 }}`, which framer-motion writes into the server HTML, and it wraps nearly every section on all three sites. With `whileInView` and `once: true`, a section outside the first viewport stays invisible until scrolled to, and with no JavaScript nothing ever shows. The text is in the HTML either way. Without JavaScript a `<noscript>` stylesheet in `root-layout.tsx` overrides that inline style for every element marked `data-reveal` (`Container` and the navbar logo), so a new motion wrapper that starts hidden needs the attribute too. The H1 of the hero header and of a product page is not animated at all. With JavaScript nothing changed: before a visual check or a screenshot, scroll the whole page once so every section has animated in.
 
 ## Building without touching the owner's dev server
 
