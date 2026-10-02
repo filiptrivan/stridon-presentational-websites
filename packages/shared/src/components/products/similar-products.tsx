@@ -1,6 +1,7 @@
 import SectionHeader from "../section-header";
 import Wrapper from "../wrapper";
 import { getFilteredProductsByCategory } from "@brand/shared/lib/api";
+import type { ProductCardData } from "@brand/shared/types/products";
 import ProductCard from "./product-card";
 
 interface SimilarProductsProps {
@@ -12,8 +13,16 @@ const SimilarProducts = async ({
   categorySlug,
   excludeProductIds,
 }: SimilarProductsProps) => {
-  const { data } = await getFilteredProductsByCategory(categorySlug, 0, 4 + excludeProductIds.length);
-  const products = data.filter((p) => !excludeProductIds.includes(p.id)).slice(0, 4);
+  // On the server only a Suspense boundary catches a thrown render, and this
+  // section has none any more, so a failed read drops it instead of the page.
+  let candidates: ProductCardData[] = [];
+  try {
+    const result = await getFilteredProductsByCategory(categorySlug, 0, 4 + excludeProductIds.length);
+    candidates = result.data;
+  } catch {
+    return null;
+  }
+  const products = candidates.filter((p) => !excludeProductIds.includes(p.id)).slice(0, 4);
 
   if (products.length === 0) return null;
 

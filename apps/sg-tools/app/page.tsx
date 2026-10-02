@@ -1,5 +1,4 @@
 import Categories from "@brand/shared/components/categories";
-import CategoriesSkeleton from "@brand/shared/components/categories-skeleton";
 import Companies from "@brand/shared/components/companies";
 import SharedCTA from "@brand/shared/components/cta";
 import Features from "@brand/shared/components/features";
@@ -9,7 +8,6 @@ import HomeAbout from "@brand/shared/components/home-about";
 import Stats from "@brand/shared/components/stats";
 import Testimonials from "@brand/shared/components/testimonials";
 import TopProducts from "@brand/shared/components/top-products";
-import TopProductsSkeleton from "@brand/shared/components/top-products-skeleton";
 import {
   CTA_TRUST_BADGES,
   FEATURES,
@@ -17,7 +15,6 @@ import {
   STATS,
 } from "@/constants/content";
 import { TESTIMONIALS } from "@/constants";
-import { Suspense } from "react";
 
 const companies = [
   { src: "/companies/svgs/enterijerjankovic.svg", alt: "Enterijer Jankovic" },
@@ -41,12 +38,8 @@ const HomePage = () => {
       <HeroDecorations />
       <Hero />
       <Companies companies={companies} />
-      <Suspense fallback={<TopProductsSkeleton />}>
-        <TopProducts />
-      </Suspense>
-      <Suspense fallback={<CategoriesSkeleton />}>
-        <Categories />
-      </Suspense>
+      <TopProducts />
+      <Categories />
       <Features items={FEATURES} />
       <HomeAbout description={HOME_ABOUT_PARAGRAPH} />
       <Stats stats={STATS} layout="three-up-from-sm" />

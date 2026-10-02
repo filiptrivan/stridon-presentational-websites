@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Pagination,
   PaginationContent,
@@ -9,33 +7,26 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@brand/ui/pagination";
-import { usePathname, useSearchParams } from "next/navigation";
 
 type ListingPaginationProps = {
   currentPage: number;
   totalRecords: number;
   pageSize: number;
+  /** The listing's own path, e.g. `/proizvodi`. Page links are built from it on
+      the server rather than from the client router, so they are in the HTML. */
+  basePath: string;
 };
 
 export function ListingPagination({
   currentPage,
   totalRecords,
   pageSize,
+  basePath,
 }: ListingPaginationProps) {
   const totalPages = Math.ceil(totalRecords / pageSize);
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
 
-  const createPageUrl = (page: number) => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (page === 1) {
-      params.delete("strana");
-    } else {
-      params.set("strana", page.toString());
-    }
-    const queryString = params.toString();
-    return queryString ? `${pathname}?${queryString}` : pathname;
-  };
+  const createPageUrl = (page: number) =>
+    page === 1 ? basePath : `${basePath}?strana=${page}`;
 
   const getVisiblePages = () => {
     const pages: (number | "ellipsis")[] = [];
