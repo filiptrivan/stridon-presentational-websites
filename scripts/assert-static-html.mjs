@@ -8,8 +8,9 @@
 // green and looks right with JavaScript on. A Suspense boundary around content
 // outlines it into a hidden `<div hidden id="S:n">` (React 19.2, static pages
 // included), cacheComponents brings back the PPR shell, and a static route that
-// starts reading a request API silently becomes dynamic. None of that is
-// visible in source; all of it is in `.next/`.
+// starts reading a request API silently becomes dynamic. All of it shows in
+// `.next/` for prerendered pages. The dynamic ones have no HTML here, so for
+// them apps/dck/__tests__/ssr-guard.test.ts checks the source.
 
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { basename, join, relative, sep } from "node:path";
@@ -18,19 +19,14 @@ const appDir = process.cwd();
 const app = basename(appDir);
 const nextDir = join(appDir, ".next");
 
-// Routes that must stay prerendered. One that drops out has turned dynamic,
-// usually through cookies(), headers() or searchParams read somewhere in it.
-const MUST_PRERENDER = {
-  dck: ["/", "/o-nama", "/kontakt", "/katalozi", "/proizvodi/kategorije", "/proizvodi/tagovi"],
-  "sg-tools": ["/", "/o-nama", "/kontakt", "/katalozi", "/proizvodi/kategorije"],
-  stridon: ["/sr", "/en", "/sr/onama", "/sr/brendovi", "/sr/katalozi", "/sr/kontakt"],
-};
-
-// Dynamic routes whose pages must be prerendered too (at least one page each).
-const MUST_PRERENDER_PAGES_OF = {
-  dck: ["/proizvodi/[slug]"],
-  "sg-tools": ["/proizvodi/[slug]"],
-  stridon: ["/[locale]/brendovi/[slug]"],
+// Pages that render per request on purpose: they read searchParams (`?strana=`).
+// Every other page must come out of the build prerendered; one that does not
+// has turned dynamic, usually through cookies(), headers() or searchParams read
+// somewhere in it, and its HTML is no longer checked below.
+const DYNAMIC_PAGES = {
+  dck: ["/proizvodi", "/proizvodi/kategorije/[slug]", "/proizvodi/tagovi/[slug]"],
+  "sg-tools": ["/proizvodi", "/proizvodi/kategorije/[slug]"],
+  stridon: [],
 };
 
 // Client-side rendering bailouts allowed per HTML file, each with its reason.
@@ -46,15 +42,14 @@ const ALLOWED_BAILOUTS = {
   [join("en", "servis.html")]: 1,
 };
 
-if (!MUST_PRERENDER[app]) {
+if (!DYNAMIC_PAGES[app]) {
   console.error(`assert-static-html: unknown app "${app}" (run it from apps/<app>)`);
   process.exit(1);
 }
 
 const errors = [];
-const manifest = JSON.parse(
-  readFileSync(join(nextDir, "prerender-manifest.json"), "utf8"),
-);
+const readJson = (file) => JSON.parse(readFileSync(join(nextDir, file), "utf8"));
+const manifest = readJson("prerender-manifest.json");
 
 for (const [route, meta] of Object.entries(manifest.routes)) {
   if (meta.renderingMode && meta.renderingMode !== "STATIC") {
@@ -62,15 +57,32 @@ for (const [route, meta] of Object.entries(manifest.routes)) {
   }
   if (meta.experimentalPPR) errors.push(`${route}: experimentalPPR`);
 }
-for (const route of MUST_PRERENDER[app]) {
-  if (!manifest.routes[route]) {
-    errors.push(`${route}: no longer prerendered (did it start reading a request API?)`);
+
+// Every page the build has ("/o-nama/page" -> "/o-nama"; route handlers end in
+// "/route") against the pages it prerendered ("/sr/onama" came from "/[locale]/onama").
+const pages = new Set(
+  Object.entries(readJson("app-path-routes-manifest.json"))
+    .filter(([entry]) => entry.endsWith("/page"))
+    .map(([, route]) => route),
+);
+const prerendered = new Set(Object.values(manifest.routes).map((meta) => meta.srcRoute));
+for (const page of pages) {
+  // Next's own pages (_not-found, _global-error) are not ours to keep static.
+  if (page.startsWith("/_")) continue;
+  const dynamic = DYNAMIC_PAGES[app].includes(page);
+  if (!dynamic && !prerendered.has(page)) {
+    errors.push(
+      page.includes("[")
+        ? `${page}: no page prerendered (empty generateStaticParams, or it reads a request API)`
+        : `${page}: not prerendered (did it start reading cookies(), headers() or searchParams?)`,
+    );
+  }
+  if (dynamic && prerendered.has(page)) {
+    errors.push(`${page}: prerendered, yet DYNAMIC_PAGES lists it; take it off the list`);
   }
 }
-for (const src of MUST_PRERENDER_PAGES_OF[app]) {
-  if (!Object.values(manifest.routes).some((meta) => meta.srcRoute === src)) {
-    errors.push(`${src}: no page prerendered`);
-  }
+for (const page of DYNAMIC_PAGES[app]) {
+  if (!pages.has(page)) errors.push(`${page}: in DYNAMIC_PAGES, but there is no such page`);
 }
 
 function* htmlFiles(dir) {
