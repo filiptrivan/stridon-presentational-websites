@@ -15,7 +15,7 @@ import { Toaster } from "@brand/ui/sonner";
 import { createRootMetadata } from "@brand/shared/lib/metadata";
 import { cn } from "@brand/shared/lib/utils";
 import type { Viewport } from "next";
-import { Suspense, type ReactNode } from "react";
+import type { ReactNode } from "react";
 
 const brand = getBrandConfig();
 
@@ -100,29 +100,20 @@ export default function RootLayout({
             }),
           }}
         />
+        {/* Never behind a Suspense boundary, here or anywhere content lives:
+            React moves a finished boundary over ~500 B into a hidden
+            `<div hidden id="S:n">` once the page passes ~12.8 KB, static
+            pages included, so without JS the menu would not be there.
+            NavbarWithCategories already falls back to no categories. */}
         {showCategoryMenu ? (
-          <Suspense
-            fallback={
-              <Navbar
-                categories={[]}
-                navLinks={navLinks}
-                languageSwitch={languageSwitch}
-                labels={navbarLabels}
-                mobileLabels={mobileLabels}
-                headerCtaHref={headerCtaHref}
-                homeHref={homeHref}
-              />
-            }
-          >
-            <NavbarWithCategories
-              navLinks={navLinks}
-              languageSwitch={languageSwitch}
-              labels={navbarLabels}
-              mobileLabels={mobileLabels}
-              headerCtaHref={headerCtaHref}
-              homeHref={homeHref}
-            />
-          </Suspense>
+          <NavbarWithCategories
+            navLinks={navLinks}
+            languageSwitch={languageSwitch}
+            labels={navbarLabels}
+            mobileLabels={mobileLabels}
+            headerCtaHref={headerCtaHref}
+            homeHref={homeHref}
+          />
         ) : (
           <Navbar
             categories={[]}

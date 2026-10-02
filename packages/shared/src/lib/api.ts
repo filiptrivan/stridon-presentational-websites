@@ -241,13 +241,6 @@ export async function getSitemapTags(): Promise<SitemapEntry[]> {
   });
 }
 
-export async function getPrerenderedTagSlugs(): Promise<string[]> {
-  return apiFetch<string[]>("/api/Storefront/PrerenderedTagSlugs", "auxiliary", {
-    ...DAYS,
-    tag: TAGS.tags,
-  });
-}
-
 //#endregion
 
 //#region Hours profile - product/detail data
