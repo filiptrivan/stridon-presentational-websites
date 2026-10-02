@@ -17,7 +17,6 @@ interface ProductDetailProps {
   dealers?: Dealer[];
 }
 
-/** @see ./product-detail-skeleton.tsx — update the skeleton when this layout changes */
 const ProductDetail = ({
   product,
   categoryBreadcrumbs,
