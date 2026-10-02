@@ -48,7 +48,8 @@ const HeroHeader = ({
           {pretitle}
 
           {/* Not animated, so it shows the moment the HTML does instead of
-              waiting for JavaScript: the page's name and its likely LCP. */}
+              waiting for JavaScript: the page's name, and the LCP of a page
+              with no larger picture above the fold. */}
           <Heading className="text-balance leading-tight! text-center text-4xl md:text-6xl font-semibold tracking-tight w-full">
             {title}
           </Heading>

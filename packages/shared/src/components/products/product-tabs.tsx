@@ -68,8 +68,9 @@ const ProductTabs = ({ htmlDescription, specification }: ProductTabsProps) => {
       </div>
 
       {/* Both panels are in the HTML, the inactive one `hidden`, so the
-          specification is there for crawlers and readers even though only
-          one tab shows at a time. */}
+          specification is there for crawlers that read the DOM even though
+          only one tab shows at a time. Screen readers skip `hidden`, and
+          without JavaScript the tabs cannot switch. */}
       {availableTabs.map((tab) => (
         <Prose
           key={tab.key}
