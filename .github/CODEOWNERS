@@ -1,5 +1,10 @@
-# Owner-reserved cross-cutting packages — a change here affects BOTH brand sites
-# (sg-tools + dck) at once. Require @filiptrivan review.
-# Only enforced when branch protection requires Code Owner review.
-/packages/shared/        @filiptrivan
-/packages/brand-config/  @filiptrivan
+# Every change needs @filiptrivan's review (the main ruleset requires Code Owner review), so a
+# collaborator with write access, such as sales running the add-dealer skill, cannot merge
+# anything else on their own. Later lines win.
+*                                    @filiptrivan
+
+# The two dealer lists have no owner: their gate is the required dealer-change check, which lets
+# an expected change (one dealer added or moved, on one site or identically on both) auto-merge and fails
+# every other dealer change until @filiptrivan approves (.github/workflows/dealer-change.yml).
+/apps/dck/constants/dealers.ts
+/apps/sg-tools/constants/dealers.ts

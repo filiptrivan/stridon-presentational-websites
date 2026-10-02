@@ -1,0 +1,82 @@
+name: Dealer change
+
+# Required check on main (ruleset). It gives every PR a verdict, so the check never sits waiting:
+# a PR that does not touch the two dealer lists passes at once. An "expected" change (the
+# add-dealer skill: exactly one dealer added, or one dealer's address and pin moved, on one site
+# or identically on both, first 6 untouched, nothing else) passes and auto-merges with no human
+# review; CODEOWNERS leaves the two dealers.ts files ownerless for that reason. Any other dealer
+# change fails: @filiptrivan approves
+# the PR and re-runs this job (a re-run keeps the same commit and reads the reviews again), or
+# merges with the ruleset bypass. Owner's decision on PR #20, 2026-10-01; the rule itself is
+# classifyChange() in .claude/skills/add-dealer/scripts/lib/dealers-io.mjs.
+#
+# No paths filter on purpose: a required check whose workflow is filtered out stays "Expected"
+# and blocks the merge. GitHub runs no workflow on a PR with a merge conflict, so two dealer PRs
+# that both append at the end of the shop block wait for each other (the skill warns about it).
+#
+# Nothing from the PR is executed: the script is checked out from the base commit and reads the
+# PR's dealer files as text with `git show`.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: dealer-change-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  dealer-change:
+    name: dealer-change
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Classify the dealer change
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          OWNER: ${{ github.repository_owner }}
+          SCRIPT: .claude/skills/add-dealer/scripts/dealers.mjs
+        # Actions runs this as `bash -e`: every command whose exit code is read must be guarded.
+        run: |
+          set -uo pipefail
+          git fetch --no-tags --quiet origin "+refs/pull/$PR/head:refs/remotes/pr/head"
+
+          # The PR that introduces this check has no script on its base yet.
+          if [ ! -f "$SCRIPT" ]; then
+            changed=$(git diff --name-only "$BASE_SHA...$HEAD_SHA")
+            if grep -qE '^apps/(dck|sg-tools)/constants/dealers\.ts$' <<< "$changed"; then
+              echo "::error::Dealer files changed before the dealer-change script exists on main."
+              exit 1
+            fi
+            echo "No dealer change."
+            exit 0
+          fi
+
+          # Exit 0 pass, 1 invalid, 2 needs the owner.
+          node "$SCRIPT" diff --base "$BASE_SHA" --head "$HEAD_SHA" && code=0 || code=$?
+          if [ "$code" -ne 2 ]; then exit "$code"; fi
+
+          # Not an expected change: it passes only with the owner's approval of this exact commit.
+          state=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR/reviews?per_page=100" --jq \
+            "[.[] | select(.user.login == \"$OWNER\" and .commit_id == \"$HEAD_SHA\" and (.state == \"APPROVED\" or .state == \"CHANGES_REQUESTED\" or .state == \"DISMISSED\"))] | last | .state // \"\"")
+          if [ "$state" = "APPROVED" ]; then
+            echo "Approved by @$OWNER." | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          echo "::error::This dealer change is not an expected one; it needs @$OWNER's approval."
+          exit 1
