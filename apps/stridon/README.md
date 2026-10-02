@@ -4,7 +4,7 @@ Site of Stridon Group DOO, the parent company behind the SG TOOLS brand, the onl
 
 ## Tech Stack
 
-- **Next.js 16** (App Router) + TypeScript, `cacheComponents`
+- **Next.js 16** (App Router) + TypeScript, full SSR (static pages with ISR, no `cacheComponents`)
 - **next-intl** (Serbian default, English under `/en`)
 - **Tailwind CSS v4** with OKLCH color tokens
 - **Deployed on Vercel**

@@ -6,7 +6,6 @@
 |---|---|
 | 404 on `?_rsc=` prefetch requests on Serbian pages | known, not a bug; see "Known: five failing prefetches" in `i18n.md` |
 | hydration mismatch on `cz-shortcut-listen="true"` | the ColorZilla browser extension writing to `<body>`. None in a headless browser. Do not add `suppressHydrationWarning` for it |
-| `Route /[locale] is rendering with server caches disabled` | dev only, Next's notice that `use cache` is bypassed in `next dev` |
 | "preloaded but not used" for a font or the hero image | dev compile time, or a page loaded twice in a row by a test script. Check one clean load of a production build before chasing it |
 | `Image ... has either width or height modified` | real when it happens: the declared width/height ratio does not match the rendered one. Logo dimensions come from `logoWidth`/`logoHeight` in brand-config |
 | `icon from the Manifest (Resource size is not correct)` | real when it happens: a size in `app/manifest.ts` does not match the file |
@@ -17,7 +16,7 @@ The proxy matcher skips any path containing a dot, so a legacy asset URL such as
 
 ## An unknown URL shows global-error instead of the 404, in production only
 
-On Next 16.1, a catch-all that throws `notFound()` without reading its params is prerendered as one static shell, and its router tree carries the placeholder `%%drp:rest:...%%` instead of the real path. The client cannot match that tree to the URL and falls to `global-error`, with no console error and a correct 404 status; `next dev` renders the 404 fine. `app/[locale]/[...rest]/page.tsx` therefore reads its params, which makes an unknown URL render per request, and returns a placeholder from `generateStaticParams`, which Cache Components requires before params can be read. Next fixed the underlying notFound prerender in 16.3.0-canary.30 (vercel/next.js#94037); both lines can go once the repo is on 16.3. To check, look at the `0:` row of the flight data in the 404 HTML: its tree must hold the real path, not a `%%drp` placeholder.
+On Next 16.1, a catch-all that throws `notFound()` without reading its params is prerendered as one static shell, and its router tree carries the placeholder `%%drp:rest:...%%` instead of the real path. The client cannot match that tree to the URL and falls to `global-error`, with no console error and a correct 404 status; `next dev` renders the 404 fine. `app/[locale]/[...rest]/page.tsx` therefore reads its params, which makes an unknown URL render per request, and returns a placeholder from `generateStaticParams`, which Cache Components required before params could be read. Next fixed the underlying notFound prerender in 16.3.0-canary.30 (vercel/next.js#94037); both lines can go once the repo is on 16.3. To check, look at the `0:` row of the flight data in the 404 HTML: its tree must hold the real path, not a `%%drp` placeholder.
 
 ## The dev server shows a blank page on a phone
 
