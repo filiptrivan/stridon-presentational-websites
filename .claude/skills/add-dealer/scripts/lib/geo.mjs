@@ -1,4 +1,4 @@
-// Distances, the Serbia bounding box, map links and slippy-map tile math.
+// Distances, the Serbia bounding box, and reading a pin out of the link the requester sends.
 
 // Serbia with a small margin: catches swapped lat/lng and hits in another country.
 export const SERBIA = { minLat: 42.2, maxLat: 46.2, minLng: 18.8, maxLng: 23.05 };
@@ -16,6 +16,23 @@ export function distanceM(a, b) {
   return Math.round(2 * R * Math.asin(Math.sqrt(x)));
 }
 
+// Shortest distance from a point to a polyline of [lng, lat] pairs (GeoJSON order). A local flat
+// projection is exact enough at street scale.
+export function distanceToLineM(point, coords) {
+  const k = Math.cos((point.lat * Math.PI) / 180);
+  const toXY = ([lng, lat]) => [(lng - point.lng) * k * 111320, (lat - point.lat) * 111320];
+  let best = Infinity;
+  for (let i = 0; i + 1 < coords.length; i++) {
+    const [ax, ay] = toXY(coords[i]);
+    const [bx, by] = toXY(coords[i + 1]);
+    const dx = bx - ax;
+    const dy = by - ay;
+    const t = dx || dy ? Math.max(0, Math.min(1, -(ax * dx + ay * dy) / (dx * dx + dy * dy))) : 0;
+    best = Math.min(best, Math.hypot(ax + t * dx, ay + t * dy));
+  }
+  return Math.round(best);
+}
+
 // Nominatim returns 7 decimals (about 1 cm); existing entries use 6 to 7.
 export function round7(n) {
   return Math.round(Number(n) * 1e7) / 1e7;
@@ -28,30 +45,67 @@ export function mapLinks({ lat, lng }) {
   };
 }
 
-// Fractional tile coordinates (Web Mercator) for a point at a zoom level.
-export function tileXY(lat, lng, zoom) {
-  const n = 2 ** zoom;
-  const latRad = (lat * Math.PI) / 180;
-  return {
-    x: ((lng + 180) / 360) * n,
-    y: ((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2) * n,
-  };
-}
-
-// Coordinates from a pasted map link. Google `!3d!4d` is the place itself, `@lat,lng` only
-// the viewport centre. OSM `mlat/mlon` is a marker, `#map=z/lat/lng` the viewport centre.
-export function coordsFromLink(link) {
-  const url = String(link ?? "").trim();
+// Coordinates written in a map URL. Google `!3d!4d` is the place itself; `@lat,lng` is only
+// where the map was centred (65 km away from the pin in one tested link), so it never counts as a
+// pin. OSM `mlat/mlon` is a marker. A directions link has several places and is refused.
+export function coordsFromUrl(raw) {
+  let url = String(raw);
+  try {
+    url = decodeURIComponent(url);
+  } catch {}
+  if (/\/maps\/dir\//.test(url) || (url.match(/!3d-?\d/g) ?? []).length > 1) return { error: "directions" };
   const patterns = [
-    [/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/, "place"],
+    [/!3d(-?\d{1,2}\.\d+)!4d(-?\d{1,3}\.\d+)/, "place"],
     [/[?&]mlat=(-?\d+\.\d+)&mlon=(-?\d+\.\d+)/, "marker"],
-    [/[?&](?:q|query|ll)=(-?\d+\.\d+),\s*(-?\d+\.\d+)/, "query"],
-    [/@(-?\d+\.\d+),(-?\d+\.\d+)/, "viewport"],
-    [/#map=\d+\/(-?\d+\.\d+)\/(-?\d+\.\d+)/, "viewport"],
+    [/\/maps\/search\/(-?\d{1,2}\.\d+),\s*\+?(-?\d{1,3}\.\d+)/, "point"],
+    // `ll=` is the map centre, like `@lat,lng`, so only `q` and `query` count.
+    [/[?&](?:q|query)=(-?\d{1,2}\.\d+),\s*\+?(-?\d{1,3}\.\d+)/, "point"],
   ];
   for (const [re, kind] of patterns) {
     const m = url.match(re);
-    if (m) return { lat: Number(m[1]), lng: Number(m[2]), kind };
+    if (m) return { lat: round7(m[1]), lng: round7(m[2]), kind };
   }
   return null;
+}
+
+// Hosts that only redirect to a full Google Maps URL. Only the Location header is read, never
+// the page, so this is following a link, not scraping (owner's decision 2026-10-01: no Google
+// scraping, no browser). Tested 2026-10-02 on 12 public maps.app.goo.gl links: every one answers
+// 302 without a browser, but only links shared from a computer carry the place's `!3d!4d`; links
+// shared from the phone app (`g_st=`, `entry=gps`) carry only a place id, so the requester is
+// asked for the coordinates instead. `share.google` answers with an HTML page and is unusable.
+const SHORT_HOSTS = /^(maps\.app\.goo\.gl|goo\.gl)$/i;
+
+// The pin from what the requester pasted: "lat, lng", an OSM link, a Google Maps place link or a
+// short Google link. Returns { lat, lng, kind, resolved } or { error } with the reason.
+export async function pinFromLink(raw) {
+  const text = String(raw ?? "").trim();
+  const plain = text.match(/^(-?\d{1,2}\.\d{4,})\s*,\s*(-?\d{1,3}\.\d{4,})$/);
+  if (plain) return { lat: round7(plain[1]), lng: round7(plain[2]), kind: "coordinates", resolved: text };
+
+  let url = text;
+  for (let hop = 0; hop < 5; hop++) {
+    const found = coordsFromUrl(url);
+    if (found) return { ...found, resolved: url };
+    let parsed;
+    try {
+      parsed = new URL(url);
+    } catch {
+      return { error: "not_a_link" };
+    }
+    if (/^share\.google$/i.test(parsed.hostname)) return { error: "no_coordinates", resolved: url };
+    // Outside the EU Google does not ask for consent, but a server elsewhere may get the consent
+    // page; the real target is in its `continue` parameter.
+    if (/^consent\.google\./i.test(parsed.hostname) && parsed.searchParams.get("continue")) {
+      url = parsed.searchParams.get("continue");
+      continue;
+    }
+    if (!SHORT_HOSTS.test(parsed.hostname)) break;
+    const res = await fetch(url, { redirect: "manual", signal: AbortSignal.timeout(15000) });
+    const next = res.headers.get("location");
+    if (!next) return { error: res.status === 404 ? "link_not_found" : `no_redirect_${res.status}` };
+    url = new URL(next, url).href;
+  }
+  // A Google link without `!3d!4d` points at a search or a map view, not at one place.
+  return { error: /@-?\d+\.\d+,-?\d+\.\d+/.test(url) ? "map_view_not_place" : "no_coordinates", resolved: url };
 }
