@@ -1,326 +1,298 @@
 #!/usr/bin/env node
-// The only writer of apps/*/constants/dealers.ts for the add-dealer skill.
+// The only writer of apps/*/constants/dealers.ts, and the dealer-change PR check.
 //
-//   dealers.mjs list [--find <text>]         existing dealers on both sites
-//   dealers.mjs validate                     rules for both files (exit 1 on errors)
-//   dealers.mjs plan --locate <locate.json> --sites dck,sg-tools --category dealer|online
-//                    [--name] [--id] [--address] [--city] [--phone] [--email] [--website]
-//                    [--comment] [--company <link>] [--pib] [--mb] [--requested-by] [--requested-on]
-//                    [--choice osm|google|manual] [--allow-top6-change]
-//   dealers.mjs apply --plan <plan.json>     writes, re-imports, verifies, restores on failure
-//   dealers.mjs message --plan <plan.json>   commit message and PR body files
+//   dealers.mjs check                        can this machine run the skill and push the change?
+//   dealers.mjs list [--find <name>]         existing dealers on both sites (+ the id a new one would get)
+//   dealers.mjs add  --name <n> --sites dck,sg-tools --category dealer|online
+//                    --street <s> --number <no> --place <settlement> [--municipality <m>]
+//                    [--link <Google Maps link | lat,lng>] [--phone] [--email] [--website] [--id]
+//                    [--allow-top6-change]
+//   dealers.mjs move --id <id> --street <s> --number <no> --place <settlement> [--municipality <m>]
+//                    [--link <Google Maps link | lat,lng>]
+//   dealers.mjs diff --base <sha> --head <sha>   (CI) classify a PR; exit 0 pass, 2 needs Filip, 1 invalid
+//
+// add and move check the pin, write the file, import it back the way the sites do, compare with
+// what was intended and restore the original on any mismatch. Then they say whether the change
+// is "expected" (merges by itself) or waits for Filip, by the same rule the PR check applies.
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
-import { parseArgs, print, fail } from "./lib/cli.mjs";
-import { REPO_ROOT, SITES, WORK_DIR } from "./lib/paths.mjs";
+import { parseArgs, print, fail, REPO_ROOT, SITES, SERVICE_FILES, LIVE_PAGES, UPSTREAM_REPO } from "./lib/common.mjs";
 import {
-  loadDealers,
+  importDealers,
   readText,
+  parseDealers,
+  entriesOf,
   renderEntry,
   insertEntry,
+  replaceEntry,
   simulateInsert,
   checkEntry,
   checkSites,
+  classifyChange,
+  serviceIds,
   FIELD_ORDER,
 } from "./lib/dealers-io.mjs";
-import { mapLinks } from "./lib/geo.mjs";
-import { similarity, slugify } from "./lib/text.mjs";
+import { distanceM, mapLinks, pinFromLink } from "./lib/geo.mjs";
+import { checkPin, geocodeOffice } from "./lib/osm.mjs";
+import { normalizeHouseNumber, similarity, simple, slugify } from "./lib/text.mjs";
 
 const args = parseArgs(process.argv.slice(2));
 const command = args._[0];
+const git = (...a) => spawnSync("git", a, { cwd: REPO_ROOT, encoding: "utf8" });
+const rel = (file) => path.relative(REPO_ROOT, file).replace(/\\/g, "/");
 
 async function loadAll() {
   const bySite = {};
-  for (const [site, file] of Object.entries(SITES)) bySite[site] = await loadDealers(path.join(REPO_ROOT, file));
+  for (const [site, file] of Object.entries(SITES)) bySite[site] = await importDealers(path.join(REPO_ROOT, file));
   return bySite;
 }
 
-function normalizeWebsite(w) {
+const parseAll = () =>
+  Object.fromEntries(Object.entries(SITES).map(([site, file]) => [site, parseDealers(readText(path.join(REPO_ROOT, file)).text)]));
+
+// `--key` given without a value parses as `true`; never write that into a dealer.
+function str(key, { required = false } = {}) {
+  const v = args[key];
+  if (v === undefined) {
+    if (required) fail(`Nedostaje --${key}.`);
+    return undefined;
+  }
+  if (typeof v !== "string" || !v.trim()) fail(`--${key} je bez vrednosti.`);
+  return v.trim();
+}
+
+// Every entry links over https (`https://host/`). A site given as http:// is written as https://
+// (2 of 100 shops in the 2026-10-02 test were blocked on this before); the requester checks the
+// link once the dealer is live, as with the pin.
+function normalizeWebsite(w, warnings) {
   if (!w) return undefined;
   try {
-    return new URL(/^https?:\/\//i.test(w) ? w : `https://${w}`).href;
+    const url = new URL(/^https?:\/\//i.test(w) ? w : `https://${w}`);
+    if (url.protocol === "http:") {
+      url.protocol = "https:";
+      warnings.push(`Sajt je bio naveden sa http://, upisan je kao ${url.href}. Kad diler bude na sajtu, proveri da link radi.`);
+    }
+    return url.href;
   } catch {
     return w;
   }
 }
 
-const readJson = (file) => JSON.parse(fs.readFileSync(file, "utf8"));
-
-// Shared by plan and apply: everything is re-checked against the files as they are now.
-function prepare(plan, bySite) {
-  const errors = [];
-  const warnings = [];
-  const { entry, sites, position } = plan;
-
-  const own = checkEntry(entry, { strict: true });
-  errors.push(...own.errors);
-  warnings.push(...own.warnings);
-
-  for (const site of sites) {
-    if (!SITES[site]) errors.push(`nepoznat sajt "${site}" (dozvoljeno: ${Object.keys(SITES).join(", ")})`);
-    else if (bySite[site].some((d) => d.id === entry.id)) errors.push(`${site}: diler sa id "${entry.id}" već postoji`);
+// A second shop of a chain has the same name, so the same id. Offer one with the street (or the
+// settlement), e.g. "doming-zrenjaninski-put"; in the 2026-10-02 test 6 chains had 2 to 5 shops.
+function freeId(base, input, bySite) {
+  const taken = new Set(Object.values(bySite).flat().map((d) => d.id));
+  for (const candidate of [`${base}-${slugify(input.street)}`, `${base}-${slugify(input.place)}`, `${base}-${slugify(input.street)}-${slugify(input.numberRaw)}`]) {
+    if (!taken.has(candidate)) return candidate;
   }
-  for (const [site, dealers] of Object.entries(bySite)) {
-    const same = dealers.find((d) => d.id !== entry.id && similarity(d.name, entry.name) >= 0.85);
-    if (same) warnings.push(`${site}: postoji sličan diler „${same.name}“ (${same.id}, ${same.address ?? ""}, ${same.city ?? ""}); proveri da nije isti`);
-  }
-  if (errors.length) return { errors, warnings };
+  for (let n = 2; ; n++) if (!taken.has(`${base}-${n}`)) return `${base}-${n}`;
+}
 
-  const next = { ...bySite };
-  const effects = {};
-  for (const site of sites) {
-    const sim = simulateInsert(bySite[site], entry, position);
-    next[site] = sim.next;
-    const idx = sim.next.findIndex((d) => d.id === entry.id);
-    effects[site] = {
-      after: sim.next[idx - 1]?.id ?? null,
-      before: sim.next[idx + 1]?.id ?? null,
-      top6Before: sim.top6Before,
-      top6After: sim.top6After,
-      top6Changed: sim.top6Before.join() !== sim.top6After.join(),
-    };
-    if (effects[site].top6Changed && !plan.allowTop6Change) {
-      errors.push(
-        `${site}: unos menja prvih 6 dilera na stranici proizvoda (${sim.top6Before.join(", ")} → ${sim.top6After.join(", ")}). ` +
-          "To je poslovna odluka: tek uz izričito odobrenje dodaj --allow-top6-change.",
+// Messages are relayed to the requester, who is not technical (Serbian, informal).
+const LINK_HELP = {
+  not_a_link: "To nije link ni koordinate. Pošalji link radnje sa Google mapa (otvori radnju, pa Podeli i Kopiraj link).",
+  link_not_found: "Google kaže da taj link ne postoji. Pošalji ponovo link radnje sa Google mapa.",
+  map_view_not_place: "Link pokazuje deo mape, a ne samu radnju. Otvori radnju na Google mapama (klikni na njen naziv), pa Podeli i Kopiraj link.",
+  directions: "To je link za putanju, a ne za radnju. Otvori samu radnju na Google mapama, pa Podeli i Kopiraj link.",
+  // Links shared from the phone app carry only a place id (tested 2026-10-02), not coordinates.
+  no_coordinates:
+    "Iz tog linka ne mogu da pročitam tačnu lokaciju (linkovi iz aplikacije na telefonu je nemaju). Pošalji mi koordinate radnje: na telefonu drži prst na zgradi radnje dok se ne pojavi crvena oznaka, pa kopiraj brojeve iz polja za pretragu; na računaru desni klik na zgradu radnje, pa klikni na brojeve na vrhu menija (kopiraju se). Izgledaju ovako: 44.80123, 20.46543.",
+  unreadable: "Taj link trenutno ne mogu da otvorim. Pošalji ga ponovo ili mi pošalji koordinate radnje (na primer 44.80123, 20.46543).",
+};
+
+function addressInput() {
+  const number = str("number");
+  return {
+    street: str("street", { required: true }),
+    numberRaw: number ?? "",
+    hn: normalizeHouseNumber(number),
+    place: str("place", { required: true }),
+    // Only a search hint for the office address: the pin's settlement must match --place itself.
+    municipality: str("municipality") ?? "",
+  };
+}
+
+// The pin, by the owner's rule (2026-10-01): a physical shop's pin is its Google Maps link and
+// OSM only checks that it lies on the stated street in the stated settlement; an online dealer
+// is pinned on the registered office from OSM (or a link, checked the same way).
+async function pinFor(input, category) {
+  const link = str("link");
+  if (link) {
+    const pin = await pinFromLink(link);
+    if (pin.error) fail(LINK_HELP[pin.error] ?? LINK_HELP.unreadable, { code: "bad_link", detail: pin.error, resolved: pin.resolved ?? null });
+    const check = await checkPin(pin, input);
+    if (!check.ok) {
+      fail(
+        check.suggestedPlace
+          ? `Tačka je u ulici sa adrese, ali u naselju „${check.suggestedPlace}“, a ne „${input.place}“. Pitaj da li da upišeš „${check.suggestedPlace}“ kao mesto.`
+          : "Tačka iz linka i adresa ne opisuju isto mesto. Pitaj šta je tačno: link radnje ili adresa.",
+        {
+          code: "pin_address_mismatch",
+          reasons: check.reasons,
+          suggestedPlace: check.suggestedPlace ?? null,
+          atPin: check.atPin,
+          pin: { lat: pin.lat, lng: pin.lng, links: mapLinks(pin) },
+        },
       );
     }
+    return { lat: pin.lat, lng: pin.lng, source: "link", link, resolved: pin.resolved, osmCheck: check.how };
   }
-  const whole = checkSites(next);
-  errors.push(...whole.errors);
-  return { errors, warnings, effects, next };
+  if (category !== "online") fail("Za radnju treba link radnje sa Google mapa (--link).", { code: "link_required" });
+  const office = await geocodeOffice(input);
+  if (office.error) fail(`${office.error} Pošalji link sedišta sa Google mapa (--link).`, { code: "office_not_found" });
+  return { lat: office.lat, lng: office.lng, source: "osm", osmCheck: office.how };
 }
 
-function wrap(text, width = 72) {
-  const out = [];
-  let line = "";
-  for (const word of text.split(/\s+/).filter(Boolean)) {
-    if (line && line.length + 1 + word.length > width) {
-      out.push(line);
-      line = word;
-    } else line = line ? `${line} ${word}` : word;
-  }
-  if (line) out.push(line);
-  return out.join("\n");
+function refuseOnMain() {
+  const branch = git("branch", "--show-current").stdout.trim();
+  if (branch === "main") fail("Na grani main si. Prvo napravi granu dealers/<id> (korak „Grana“ u SKILL.md).");
+  return branch;
 }
 
-const siteLabel = (sites) => (sites.length === 2 ? "both sites" : sites[0]);
+const fingerprint = (list) => list.map((d) => JSON.stringify([...FIELD_ORDER, "coordinates"].map((k) => d[k] ?? null))).join("\n");
 
-function describePin(plan) {
-  const { verdict, choice, candidates, agreementM } = plan.locate;
-  const who = plan.meta.requestedBy || "the requester";
-  const { osm, google, manual } = candidates;
-  const at = (c) => `${c.lat}, ${c.lng}`;
-  const googleText = google ? `Google Maps place "${google.name}"${google.address ? ` (${google.address})` : ""}` : null;
-  if (verdict === "green") {
-    return `Coordinates via OSM (${osm.osm}, ${at(osm)}); ${googleText} agrees within ${agreementM} m. Both checked automatically, map image reviewed.`;
+// Writes every site with `edit`, imports the files back and compares them with `expected`;
+// any mismatch or rule error restores the originals.
+async function writeVerified(sites, edit, expected) {
+  const originals = {};
+  try {
+    for (const site of sites) {
+      const file = path.join(REPO_ROOT, SITES[site]);
+      const { text, eol } = readText(file);
+      originals[site] = { file, text };
+      fs.writeFileSync(file, edit(site, text, eol));
+    }
+    const after = await loadAll();
+    for (const site of sites) if (fingerprint(after[site]) !== fingerprint(expected(site))) throw new Error(`${site}: fajl posle upisa ne odgovara planu`);
+    const { errors, mismatches } = checkSites(after);
+    if (errors.length || mismatches.length) throw new Error([...errors, ...mismatches].join("; "));
+  } catch (err) {
+    for (const { file, text } of Object.values(originals)) fs.writeFileSync(file, text);
+    fail(`Upis je vraćen na staro stanje: ${err.message}`);
   }
-  const other =
-    choice === "osm" ? (google ? `${googleText} was ${agreementM} m away` : "Google Maps did not know the shop")
-    : choice === "google" ? (osm ? `OSM (${osm.osm}) was ${agreementM} m away` : "OSM had no house-level match")
-    : "neither source had the shop";
-  const source =
-    choice === "osm" ? `Coordinates via OSM (${osm.osm}, ${at(osm)})`
-    : choice === "google" ? `Coordinates from ${googleText} at ${at(google)}`
-    : `Coordinates sent by ${who} (${manual.from}, ${at(manual)})`;
-  return `${source}. ${other[0].toUpperCase()}${other.slice(1)}, so ${who} chose this point on the map image.`;
+  // Same rule as the dealer-change check on the PR, so the requester knows what happens next.
+  const before = Object.fromEntries(Object.keys(SITES).map((s) => [s, parseDealers(originals[s]?.text ?? readText(path.join(REPO_ROOT, SITES[s])).text)]));
+  const changed = Object.values(originals).map((o) => rel(o.file));
+  const reserved = Object.fromEntries(Object.entries(SERVICE_FILES).map(([s, f]) => [s, serviceIds(readText(path.join(REPO_ROOT, f)).text)]));
+  return { changed, gate: classifyChange(before, parseAll(), changed, reserved) };
 }
 
-function commitMessage(plan) {
-  const { entry, sites, position, effects, meta } = plan;
-  const subject = `feat(dealers): add ${entry.name} to ${siteLabel(sites)}`;
-  const where = [entry.address, entry.city].filter(Boolean).join(", ");
-  const paragraphs = [];
-  if (position === "online") {
-    const first = effects[sites[0]];
-    paragraphs.push(
-      `Webshop${where ? ` with its registered office at ${where}` : ""}, inserted after ${first.after} at the end of the online block. ` +
-        (first.top6Changed
-          ? `This changes the product-page first 6 (${first.top6After.join(", ")}), approved before the change.`
-          : "The product-page first-6 grid is untouched."),
-    );
-  } else {
-    paragraphs.push(
-      `Physical shop in ${entry.city} (${entry.address}), appended at the end of the dealer block so the ` +
-        "product-page first-6 grid is untouched. No logoSrc: the entry cannot reach the only surface that renders logos.",
-    );
+function nearbyWarnings(bySite, point, skipId) {
+  const out = new Map();
+  for (const [site, dealers] of Object.entries(bySite)) {
+    for (const d of dealers) {
+      if (d.id === skipId || d.category === "service") continue;
+      const m = distanceM(point, d.coordinates);
+      if (m <= 50) out.set(d.id, `Na ${m} m od tačke već je diler „${d.name}“ (${site}); proveri da nije isti.`);
+    }
   }
-  const who = [meta.requestedBy && `Requested by ${meta.requestedBy}`, meta.requestedOn && `on ${meta.requestedOn}`].filter(Boolean).join(" ");
-  const company = meta.company
-    ? `Company checked by a person via ${meta.company}${meta.pib || meta.mb ? ` (${[meta.pib && `PIB ${meta.pib}`, meta.mb && `MB ${meta.mb}`].filter(Boolean).join(", ")})` : ""}.`
-    : "";
-  paragraphs.push([who && `${who}.`, company].filter(Boolean).join(" "));
-  paragraphs.push(describePin(plan));
-  return [subject, "", ...paragraphs.filter(Boolean).map((p) => wrap(p)).flatMap((p) => [p, ""])].join("\n").trimEnd() + "\n";
+  return [...out.values()];
 }
 
-function prBody(plan) {
-  const { entry, sites, locate, meta } = plan;
-  const links = mapLinks(entry.coordinates);
-  const rows = [
-    ["Sites", sites.join(", ")],
-    ["Category", entry.category === "dealer" ? "dealer (physical shop)" : entry.category],
-    ["Address", [entry.address, entry.city].filter(Boolean).join(", ")],
-    ["Pin", `${entry.coordinates.lat}, ${entry.coordinates.lng} ([OSM](${links.osm}), [Google](${links.google}))`],
-    ["Pin source", { osm: "OpenStreetMap", google: "Google Maps", manual: "sent by the requester" }[locate.choice]],
-    ["Google vs OSM", locate.agreementM === null ? "only one source had the shop" : `${locate.agreementM} m apart`],
-    ["Verdict", locate.verdict === "green" ? "green (both sources agree within 10 m)" : `yellow, point chosen by ${meta.requestedBy || "the requester"}`],
-    ["Company", meta.company ? `${meta.company}${meta.pib ? ` PIB ${meta.pib}` : ""}${meta.mb ? ` MB ${meta.mb}` : ""}` : "not given"],
-    ["Requested by", [meta.requestedBy, meta.requestedOn].filter(Boolean).join(", ") || "not given"],
-  ];
-  const checks = locate.reasons.map((r) => `- **${r.level}** ${r.code}: ${r.msg}`);
-  return [
-    `Adds **${entry.name}** to the /gde-kupiti map (${sites.join(", ")}).`,
-    "",
-    "| | |",
-    "|---|---|",
-    ...rows.map(([k, v]) => `| ${k} | ${String(v).replace(/\|/g, "\\|")} |`),
-    "",
-    "Pin checks (messages are in Serbian for the requester):",
-    "",
-    ...checks,
-    "",
-    "Made with the `add-dealer` skill (`.claude/skills/add-dealer/`). Map data © OpenStreetMap contributors.",
-    "",
-  ].join("\n");
-}
-
-async function cmdPlan() {
-  if (!args.locate) fail("Nedostaje --locate <putanja do locate.json>.");
-  if (!args.sites) fail("Nedostaje --sites (dck, sg-tools ili dck,sg-tools).");
-  if (!["dealer", "online"].includes(args.category)) fail("--category mora biti dealer (radnja) ili online (webshop bez radnje).");
-  const report = readJson(args.locate);
-  if (report.verdict === "red") {
-    fail("Pin je CRVEN: ni Google ni OpenStreetMap ne znaju ovu radnju. Traži od Alekse tačnu lokaciju i ponovo pokreni locate.mjs sa --pin.", {
-      reasons: report.reasons.map((r) => `${r.level}: ${r.msg}`),
-    });
-  }
-  // Green: Google and OSM agree within 10 m, the OSM point is written. Yellow: the requester chose.
-  const choice = report.verdict === "green" ? "osm" : args.choice;
-  if (!report.candidates[choice]) {
-    fail(`Pin je ŽUT: Aleksa mora da izabere tačku na slici, pa ponovi sa --choice ${Object.keys(report.candidates).join(" | ")}.`, {
-      reasons: report.reasons.filter((r) => r.level === "yellow").map((r) => r.msg),
-    });
-  }
-  const picked = report.candidates[choice];
-  const ageH = (Date.now() - Date.parse(report.createdAt)) / 36e5;
-
-  const input = report.input;
-  const entry = {
-    id: args.id ?? input.id ?? slugify(args.name ?? input.name),
-    name: args.name ?? input.name,
-    address: args.address ?? [input.street, input.numberRaw].filter(Boolean).join(" "),
-    city: args.city ?? input.place,
-    phone: args.phone,
-    email: args.email,
-    website: normalizeWebsite(args.website),
-    category: args.category,
-    coordinates: { lat: picked.lat, lng: picked.lng },
-  };
-  if (args.comment) entry.comments = [String(args.comment)];
-  for (const k of Object.keys(entry)) if (entry[k] === undefined) delete entry[k];
-
-  const plan = {
-    entry,
-    sites: String(args.sites).split(",").map((s) => s.trim()).filter(Boolean),
-    position: args.category === "online" ? "online" : "dealers",
-    allowTop6Change: Boolean(args["allow-top6-change"]),
-    locate: {
-      verdict: report.verdict,
-      choice,
-      agreementM: report.agreementM,
-      reasons: report.reasons,
-      candidates: report.candidates,
-      file: path.resolve(args.locate),
-    },
-    meta: {
-      company: args.company ?? "",
-      pib: args.pib ?? "",
-      mb: args.mb ?? "",
-      // Defaults: whoever runs the skill (their git name) and today, so nobody has to be asked.
-      requestedBy: args["requested-by"] ?? spawnSync("git", ["config", "user.name"], { cwd: REPO_ROOT, encoding: "utf8" }).stdout.trim(),
-      requestedOn: args["requested-on"] ?? new Date().toISOString().slice(0, 10),
-    },
-  };
-  const bySite = await loadAll();
-  const { errors, warnings, effects } = prepare(plan, bySite);
-  if (ageH > 24) warnings.push(`izveštaj o pinu je star ${Math.round(ageH)} h; po potrebi ponovo pokreni locate.mjs`);
-  if (errors.length) fail("Plan ne prolazi pravila.", { errors, warnings });
-  plan.effects = effects;
-
-  const dir = path.join(WORK_DIR, entry.id);
-  fs.mkdirSync(dir, { recursive: true });
-  const planFile = path.join(dir, "plan.json");
-  fs.writeFileSync(planFile, JSON.stringify(plan, null, 2));
+function report(mode, entry, sites, pin, written, warnings) {
   print({
     ok: true,
-    plan: planFile,
-    preview: renderEntry(entry, "\n"),
-    placement: Object.fromEntries(Object.entries(effects).map(([s, e]) => [s, `posle „${e.after}“${e.before ? `, pre „${e.before}“` : ", na kraju niza"}`])),
-    top6Changed: Object.fromEntries(Object.entries(effects).map(([s, e]) => [s, e.top6Changed])),
+    mode,
+    id: entry.id,
+    changed: written.changed,
+    entry: renderEntry(entry, "\n"),
+    pin: { ...pin, links: mapLinks(pin) },
+    expected: written.gate.kind === "expected",
+    gateKind: written.gate.kind,
+    gate: written.gate.reasons ?? written.gate.errors,
+    livePages: sites.map((s) => LIVE_PAGES[s]),
     warnings,
   });
 }
 
-async function cmdApply() {
-  if (!args.plan) fail("Nedostaje --plan <putanja do plan.json>.");
-  const plan = readJson(args.plan);
-  const before = await loadAll();
-  const { errors } = prepare(plan, before);
-  if (errors.length) fail("Plan više ne prolazi pravila (fajlovi su se promenili?).", { errors });
+async function cmdAdd() {
+  const name = str("name", { required: true });
+  const category = str("category", { required: true });
+  if (!["dealer", "online"].includes(category)) fail("--category mora biti dealer (radnja) ili online (webshop bez radnje).");
+  const sites = [...new Set((str("sites", { required: true })).split(",").map((s) => s.trim()).filter(Boolean))];
+  if (!sites.length || sites.some((s) => !SITES[s])) fail(`--sites mora biti ${Object.keys(SITES).join(", ")} ili oba, odvojeno zarezom.`);
+  refuseOnMain();
+  const input = addressInput();
+  const contact = { id: str("id"), phone: str("phone"), email: str("email"), website: str("website") };
+  const id = contact.id ?? slugify(name);
+  const address = [input.street, input.numberRaw].filter(Boolean).join(" ");
 
-  const originals = {};
-  const restore = () => {
-    for (const [file, text] of Object.entries(originals)) fs.writeFileSync(file, text);
-  };
-  try {
-    for (const site of plan.sites) {
-      const file = path.join(REPO_ROOT, SITES[site]);
-      const { text, eol } = readText(file);
-      originals[file] = text;
-      fs.writeFileSync(file, insertEntry(text, eol, plan.entry, plan.position, before[site]));
-    }
-    // Re-import what was written and compare it with the plan, entry by entry.
-    const after = await loadAll();
-    const fingerprint = (list) =>
-      list.map((d) => JSON.stringify([...FIELD_ORDER, "coordinates"].map((k) => d[k] ?? null))).join("\n");
-    for (const site of plan.sites) {
-      const expected = simulateInsert(before[site], plan.entry, plan.position).next;
-      if (fingerprint(after[site]) !== fingerprint(expected)) throw new Error(`${site}: fajl posle upisa ne odgovara planu`);
-    }
-    const { errors: afterErrors } = checkSites(after);
-    if (afterErrors.length) throw new Error(afterErrors.join("; "));
-  } catch (err) {
-    restore();
-    fail(`Upis je vraćen na staro stanje: ${err.message}`);
+  // The id must be free on both sites (service centres included) before anything is looked up.
+  const bySite = await loadAll();
+  const holders = Object.entries(bySite).flatMap(([site, list]) => list.filter((d) => d.id === id).map((d) => ({ site, name: d.name, address: d.address ?? "", city: d.city ?? "" })));
+  if (holders.length) {
+    const sameShop = holders.find((h) => simple(h.address) === simple(address) && simple(h.city) === simple(input.place));
+    if (sameShop) fail(`Ova radnja je već na mapi (${sameShop.site}: ${sameShop.address}, ${sameShop.city}).`, { code: "already_on_map", existing: holders });
+    const suggestedId = freeId(id, input, bySite);
+    fail(`Već postoji diler „${holders[0].name}“ na drugoj adresi (${holders[0].site}: ${holders[0].address}, ${holders[0].city}). Ako je ovo druga radnja istog lanca, ponovi sa --id ${suggestedId}.`, {
+      code: "name_taken",
+      suggestedId,
+      existing: holders,
+    });
   }
-  print({ ok: true, changed: Object.keys(originals).map((f) => path.relative(REPO_ROOT, f).replace(/\\/g, "/")) });
+
+  const pin = await pinFor(input, category);
+  const warnings = [];
+  const entry = {
+    id,
+    name,
+    address,
+    city: input.place,
+    phone: contact.phone,
+    email: contact.email,
+    website: normalizeWebsite(contact.website, warnings),
+    category,
+    coordinates: { lat: pin.lat, lng: pin.lng },
+  };
+  for (const k of Object.keys(entry)) if (entry[k] === undefined) delete entry[k];
+
+  const own = checkEntry(entry, { strict: true });
+  const errors = [...own.errors];
+  warnings.push(...own.warnings, ...nearbyWarnings(bySite, pin));
+  const position = entry.category === "online" ? "online" : "dealers";
+  const next = {};
+  for (const site of sites) {
+    const same = bySite[site].find((d) => d.id !== entry.id && similarity(d.name, entry.name) >= 0.85);
+    if (same) warnings.push(`${site}: postoji sličan diler „${same.name}“ (${same.address ?? ""}, ${same.city ?? ""}); proveri da nije isti`);
+    const sim = simulateInsert(bySite[site], entry, position);
+    next[site] = sim.next;
+    // The first 6 dealers on product pages are a business decision: only with Filip's yes.
+    if (sim.top6Before.join() !== sim.top6After.join() && !args["allow-top6-change"]) {
+      errors.push(`${site}: unos menja prvih 6 dilera na stranici proizvoda (${sim.top6Before.join(", ")} → ${sim.top6After.join(", ")}); to odlučuje Filip`);
+    }
+  }
+  if (errors.length) fail("Diler ne prolazi pravila.", { errors, warnings });
+
+  const written = await writeVerified(
+    sites,
+    (site, text, eol) => insertEntry(text, eol, entry, position, bySite[site]),
+    (site) => next[site],
+  );
+  report("add", entry, sites, pin, written, warnings);
 }
 
-function cmdMessage() {
-  if (!args.plan) fail("Nedostaje --plan <putanja do plan.json>.");
-  const plan = readJson(args.plan);
-  const dir = path.dirname(path.resolve(args.plan));
-  const commitFile = path.join(dir, "commit.txt");
-  const prFile = path.join(dir, "pr.md");
-  const message = commitMessage(plan);
-  fs.writeFileSync(commitFile, message);
-  fs.writeFileSync(prFile, prBody(plan));
-  print({
-    ok: true,
-    branch: `dealers/${plan.entry.id}`,
-    title: message.split("\n")[0],
-    commitFile,
-    prFile,
-    commitMessage: message,
-  });
-}
+async function cmdMove() {
+  const id = str("id", { required: true });
+  refuseOnMain();
+  const bySite = await loadAll();
+  const parsed = parseAll();
+  // A dealer listed on both sites moves on both.
+  const sites = Object.keys(SITES).filter((s) => bySite[s].some((d) => d.id === id));
+  if (!sites.length) fail(`Diler "${id}" ne postoji ni na jednom sajtu.`);
+  const old = bySite[sites[0]].find((d) => d.id === id);
+  const input = addressInput();
+  const pin = await pinFor(input, old.category);
+  const changes = { address: [input.street, input.numberRaw].filter(Boolean).join(" "), city: input.place, coordinates: { lat: pin.lat, lng: pin.lng } };
+  const strict = checkEntry({ ...old, ...changes }, { strict: true });
+  if (strict.errors.length) fail("Diler ne prolazi pravila.", { errors: strict.errors });
 
-async function cmdValidate() {
-  const { errors, warnings } = checkSites(await loadAll());
-  print({ ok: errors.length === 0, errors, warnings });
-  if (errors.length) process.exit(1);
+  const written = await writeVerified(
+    sites,
+    (site, text, eol) => replaceEntry(text, eol, { ...entriesOf(parsed[site]).find((d) => d.id === id), ...changes }),
+    (site) => bySite[site].map((d) => (d.id === id ? { ...d, ...changes } : d)),
+  );
+  report("move", { ...old, ...changes }, sites, pin, written, nearbyWarnings(bySite, pin, id));
 }
 
 async function cmdList() {
@@ -332,9 +304,87 @@ async function cmdList() {
       .map((d, i) => ({ i, id: d.id, name: d.name, address: d.address ?? "", city: d.city ?? "", category: d.category }))
       .filter((d) => !find || similarity(d.name, find) >= 0.6 || d.name.toLowerCase().includes(find.toLowerCase()));
   }
-  print(rows);
+  print({ ...rows, ...(find ? { newId: slugify(find) } : {}) });
 }
 
-const commands = { plan: cmdPlan, apply: cmdApply, message: cmdMessage, validate: cmdValidate, list: cmdList };
+function cmdCheck() {
+  const problems = [];
+  const notes = [];
+  const run = (cmd, a) => spawnSync(cmd, a, { cwd: REPO_ROOT, encoding: "utf8" });
+  // The write is verified by importing the .ts files: Node 22.18+ strips types without flags.
+  const [major, minor] = process.versions.node.split(".").map(Number);
+  if (major < 22 || (major === 22 && minor < 18)) problems.push(`Node ${process.versions.node} je star; treba 22.18 ili noviji (https://nodejs.org, LTS).`);
+
+  const remotes = run("git", ["remote", "-v"]).stdout;
+  const remote = remotes.match(new RegExp(`^(\\S+)\\s+\\S*${UPSTREAM_REPO.replace("/", "[/:]")}(?:\\.git)?\\s+\\(fetch\\)`, "im"))?.[1] ?? null;
+  if (!remote) problems.push(`Nijedan git remote ne pokazuje na ${UPSTREAM_REPO}.`);
+  const dirty = run("git", ["status", "--porcelain", "--", ...Object.values(SITES)]).stdout.trim();
+  if (dirty) problems.push(`U fajlovima dilera već ima nesačuvanih izmena:\n${dirty}\nSačuvaj ih ili vrati pre novog dilera.`);
+
+  const dryRun = Boolean(process.env.ADD_DEALER_DRY_RUN);
+  // Claude Code on the web: git and gh go through a GitHub proxy, `git push` works only on the
+  // session's own branch, and the proxy serves only pull-request operations, so the permission
+  // query is skipped there (the push itself tells).
+  const cloud = Boolean(process.env.CLAUDE_CODE_REMOTE_SESSION_ID || process.env.CLAUDE_CODE_REMOTE);
+  const branch = run("git", ["branch", "--show-current"]).stdout.trim();
+  // The dry run stops at the local commit, so it needs no GitHub at all.
+  const gh = dryRun ? [] : problems;
+  let permission = null;
+  if (run("gh", ["--version"]).status !== 0) gh.push("GitHub CLI (gh) nije instaliran (https://cli.github.com).");
+  else if (!cloud && run("gh", ["auth", "status"]).status !== 0) gh.push("gh nije prijavljen: pokreni `gh auth login`.");
+  else if (!cloud) permission = run("gh", ["repo", "view", UPSTREAM_REPO, "--json", "viewerPermission", "-q", ".viewerPermission"]).stdout.trim() || null;
+  if (!cloud && !dryRun && !gh.length && !["ADMIN", "MAINTAIN", "WRITE"].includes(permission)) gh.push("Tvoj GitHub nalog nema pravo pisanja na repo; Filip treba da ti ga da.");
+  if (dryRun) notes.push("Probni režim (ADD_DEALER_DRY_RUN): sve se radi lokalno, ništa se ne šalje na GitHub.");
+
+  // Two open dealer PRs both append at the end of the shop block, so the second one conflicts,
+  // and GitHub runs no checks on a conflicting PR.
+  const open = run("gh", ["pr", "list", "--repo", UPSTREAM_REPO, "--state", "open", "--search", "(dealers) in:title", "--json", "url,title"]);
+  // Titles this skill writes (SKILL.md step 5): "feat(dealers): add X to both sites", "fix(dealers): move X to ...".
+  const skillTitle = /^(feat\(dealers\): add .+ to (both sites|dck|sg-tools)|fix\(dealers\): move .+ to .+)$/;
+  const pending = open.status === 0 ? JSON.parse(open.stdout || "[]").filter((p) => skillTitle.test(p.title)) : [];
+  if (pending.length) notes.push(`Prethodni diler još nije na sajtu (${pending.map((p) => p.url).join(", ")}). Novi bi se sudario sa njim: sačekaj da se spoji.`);
+
+  print({ ok: problems.length === 0, problems, notes, node: process.versions.node, remote, permission, cloud, branch, route: dryRun ? "dry-run" : "push" });
+  if (problems.length) process.exit(1);
+}
+
+// CI (.github/workflows/dealer-change.yml): reads the PR's dealer files as text with `git show`;
+// nothing from the PR is executed (this script itself is checked out from the base commit).
+function cmdDiff() {
+  if (!args.base || !args.head) fail("diff traži --base i --head.");
+  const mergeBase = git("merge-base", String(args.base), String(args.head)).stdout.trim();
+  if (!mergeBase) fail(`Nema zajedničkog pretka za ${args.base} i ${args.head}.`);
+  const names = git("diff", "--name-only", "--no-renames", mergeBase, String(args.head));
+  if (names.status !== 0) fail(`git diff nije uspeo: ${names.stderr}`);
+  const changed = names.stdout.split(/\r?\n/).filter(Boolean);
+  const at = (ref, file) => {
+    const r = git("show", `${ref}:${file}`);
+    return r.status === 0 ? parseDealers(r.stdout) : null;
+  };
+  const base = Object.fromEntries(Object.entries(SITES).map(([s, f]) => [s, at(mergeBase, f)]));
+  const head = Object.fromEntries(Object.entries(SITES).map(([s, f]) => [s, at(String(args.head), f)]));
+  const reserved = Object.fromEntries(Object.entries(SERVICE_FILES).map(([s, f]) => [s, serviceIds(git("show", `${args.head}:${f}`).stdout)]));
+  let gate;
+  try {
+    gate = classifyChange(base, head, changed, reserved);
+  } catch (err) {
+    // An edit the rule did not foresee is never routine; Filip decides.
+    gate = { kind: "owner", ok: false, reasons: [`provera nije mogla da pročita izmenu: ${err.message}`] };
+  }
+  print(gate);
+
+  const lines = gate.reasons ?? gate.errors ?? [];
+  const title = { none: "Nije izmena dilera", mixed: "Izmena dilera uz druge fajlove", expected: "Očekivana izmena dilera", owner: "Čeka @filiptrivan", invalid: "Spisak dilera ne prolazi proveru" }[gate.kind];
+  if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `### dealer-change: ${title}\n\n${lines.map((l) => `- ${l}`).join("\n")}\n`);
+  if (process.env.GITHUB_OUTPUT) fs.appendFileSync(process.env.GITHUB_OUTPUT, `kind=${gate.kind}\nexpected=${gate.kind === "expected"}\n`);
+  process.exit(gate.ok ? 0 : gate.kind === "owner" ? 2 : 1);
+}
+
+const commands = { check: cmdCheck, list: cmdList, add: cmdAdd, move: cmdMove, diff: cmdDiff };
 if (!commands[command]) fail(`Nepoznata komanda "${command ?? ""}". Dozvoljeno: ${Object.keys(commands).join(", ")}.`);
-await commands[command]();
+try {
+  await commands[command]();
+} catch (err) {
+  // Network or HTTP errors (OpenStreetMap, the short link) still end as JSON for Claude to relay.
+  fail(`Nešto nije uspelo: ${err.message}. Sačekaj minut i probaj ponovo.`, { code: "error" });
+}

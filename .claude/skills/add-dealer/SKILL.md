@@ -1,98 +1,95 @@
 ---
 name: add-dealer
-description: Adds a new DCK or SG TOOLS dealer (diler, prodavac, radnja, online prodavnica) to the /gde-kupiti map of dcksrbija.rs and sgtools.rs. Checks the pin on both OpenStreetMap and Google Maps, lets the requester pick when they disagree, then opens a pull request for Filip. Use when someone says "dodaj dilera", "novi diler", "ubaci prodavca", "dodaj radnju na mapu", or sends a dealer's name, address, website or CompanyWall link for the map.
-argument-hint: "[firma] [adresa radnje] [dck|sg|oba] [radnja|online]"
+description: Adds a DCK or SG TOOLS dealer (diler, prodavac, radnja, online prodavnica) to the /gde-kupiti map of dcksrbija.rs and sgtools.rs, or moves an existing dealer to a new address. The pin comes from the shop's Google Maps link, OpenStreetMap checks that it is on the stated street, and an expected change merges by itself. Use when someone says "dodaj dilera", "novi diler", "ubaci prodavca", "dodaj radnju na mapu", "diler se preselio", "pomeri dilera", or sends a dealer's name, address and Google Maps link.
+argument-hint: "[firma] [adresa] [Google Maps link] [dck|sg|oba]"
 allowed-tools:
   - Bash(node .claude/skills/add-dealer/scripts/*)
   - Bash(git status *)
   - Bash(git fetch *)
+  - Bash(git switch *)
+  - Bash(git add apps/dck/constants/dealers.ts apps/sg-tools/constants/dealers.ts)
+  - Bash(git add apps/dck/constants/dealers.ts)
+  - Bash(git add apps/sg-tools/constants/dealers.ts)
+  - Bash(git commit *)
+  - Bash(git push -u *)
+  - Bash(gh pr create *)
+  - Bash(gh pr merge *)
 hooks:
   PreToolUse:
     - matcher: "Edit|Write|MultiEdit|NotebookEdit"
       hooks:
         - type: command
           command: node "$CLAUDE_PROJECT_DIR/.claude/skills/add-dealer/scripts/guard.mjs"
-    - matcher: "Bash"
-      hooks:
-        - type: command
-          if: "Bash(git commit *)"
-          command: node "$CLAUDE_PROJECT_DIR/.claude/skills/add-dealer/scripts/guard.mjs"
 ---
 
-# Add a dealer to the /gde-kupiti map
+# Add or move a dealer on the /gde-kupiti map
 
-The person running this is usually from sales, not a developer. Talk to them in Serbian, informal "ti", short and plain (no jargon, no em dashes). Everything that touches data is done by the scripts below; your job is to collect the facts, run the scripts in order, show the results honestly and ask only when the rules say so.
+The person running this is usually from sales, not a developer. Talk to them in Serbian, informal "ti", short and plain (no jargon, no em dashes). The scripts do everything that touches data; your job is to collect the facts, run them, relay what they say and write the commit and PR text.
 
-Run every command from the repo root. Scripts print JSON. Work files (reports, map image, plan, commit message) go to the OS temp folder, never into the repo.
+Run every command from the repo root. Scripts print JSON, errors included; messages meant for the requester are already in plain Serbian. If Claude Code asks the requester to allow a git or gh command from the steps below, tell them in one line that it is the skill's own step and safe to allow.
 
-## How the pin is decided
+## Rules (owner's decisions, 2026-10-01; background in `reference.md`)
 
-The pin is looked up in two independent places: OpenStreetMap (address register data) and Google Maps (business listings, searched in a browser the way a person would).
-- **green**: both found the shop and they are **within 10 m** of each other. The OSM point is written and the PR goes to Filip without asking the requester anything.
-- **yellow**: they disagree by more than 10 m, or only one of them knows the shop. The requester looks at the map image and says which point is right; then the PR goes to Filip.
-- **red**: neither knows the shop. The requester sends the exact location (a Google Maps or OpenStreetMap link, or coordinates).
-
-## Hard rules
-
-1. **Never edit `apps/*/constants/dealers.ts` yourself.** Only `dealers.mjs apply` writes them (a hook blocks Edit/Write on them and validates every commit that touches them).
-2. **Coordinates come only from a `locate.mjs` report.** Never type, round or "fix" coordinates by hand; a point the requester sends goes through `locate.mjs --pin`.
-3. **Never decide for the requester on a yellow pin.** Ask, and pass exactly what they chose.
-4. **Do not fetch CompanyWall** with scripts or WebFetch: its terms forbid automated access. Use the link the requester gave as-is.
-5. OpenStreetMap services are used within their usage policies (https://operations.osmfoundation.org/policies/nominatim/, https://operations.osmfoundation.org/policies/tiles/), and Google Maps gets one search per dealer. One dealer at a time; never loop the scripts over many addresses.
-6. One dealer per branch and per PR. Changing or removing an existing dealer, logos and service centres are out of scope: tell the requester that Filip handles those.
+1. **Never edit `apps/*/constants/dealers.ts` yourself.** Only `dealers.mjs add` and `move` write them (a hook blocks Edit/Write on them).
+2. **Coordinates come only from the script.** Never type, round or "fix" them.
+3. **A physical shop's pin is the Google Maps link the requester sends.** Do not search Google, open Google in a browser or look the shop up anywhere; OpenStreetMap only checks that the link's point is on the stated street in the stated settlement. An online dealer (webshop without a shop) is pinned on its registered office from OpenStreetMap.
+4. **The printed address is the official one the requester gives** (for example from the dealer's website); the pin sits on the building the shop is actually in. When the script says the two do not describe the same place, ask the requester which is right. Never choose yourself.
+5. **Do not fetch CompanyWall or the dealer's website** with tools; use what the requester wrote. A CompanyWall link goes into the PR text as-is.
+6. One dealer per branch and per PR, one at a time. Removing a dealer, renaming, changing the phone or email, logos and service centres are out of scope: say that Filip handles those.
+7. Never push to `main`. Auto-merge is turned on only when the script says the change is `expected`.
+8. OpenStreetMap's Nominatim is used only through the script, within its usage policy (https://operations.osmfoundation.org/policies/nominatim/): one dealer at a time, never in a loop.
 
 ## Steps
 
-**1. Environment.** `node .claude/skills/add-dealer/scripts/check-env.mjs`. If `problems` is not empty, tell the requester exactly what to install or fix and stop. If `googleReady` is false, run `node .claude/skills/add-dealer/scripts/setup-google.mjs` once: it installs a small browser driver (playwright-core, about 13 MB) into `~/.add-dealer`, outside the repo, and uses the browser the requester already has (Edge or Chrome); only if neither exists it downloads Chromium. Tell the requester in one sentence that you are setting up Google Maps search. Remember `upstreamRemote`, `forkRemote` and `prRoute` for step 7.
+**1. Check.** `node .claude/skills/add-dealer/scripts/dealers.mjs check`. If `problems` is not empty, tell the requester exactly what to fix and stop. If `notes` says the previous dealer is not merged yet, tell them to wait. Remember `remote`, `route`, `cloud` and `branch`.
 
-**2. Facts.** Keep it short: the requester should answer as few questions as possible. Ask only for what is missing from their message, all in one short question:
+**2. Facts.** Ask only for what is missing from their message, in one short question:
 - Company name as it should appear on the map.
-- Brand: DCK, SG TOOLS, or both.
-- Type: **radnja** (a physical shop, even if it also sells online; keep its website) or **webshop bez radnje** (online only; the pin goes on the registered office). If they gave a street address and said nothing else, it is a radnja.
-- **Address of the shop**: street, house number, settlement.
+- **Which site**: always ask, unless they already said it: "Da li diler ide na oba sajta (DCK i SG TOOLS) ili samo na jedan? Ako na jedan, koji?" A dealer on one site goes live by itself just like one on both.
+- Type: **radnja** (a physical shop, even if it also sells online; keep its website) or **webshop bez radnje** (online only). A street address with nothing else means radnja.
+- Address: street, house number, settlement.
+- For a radnja: **the shop's Google Maps link** ("otvori radnju na Google mapama, pa Podeli i Kopiraj link"), or its coordinates. A link shared from the phone app has no coordinates in it; the script then says how to copy them.
 - Phone, email, website, CompanyWall link: use them if given, never ask for them.
 
-Do not ask who is requesting or the date (the plan takes the git name and today).
+For a dealer who **moved**: which dealer, the new address and the new Google Maps link.
 
-Then `node .claude/skills/add-dealer/scripts/dealers.mjs list --find "<name>"` to make sure the dealer is not already on the map.
+Then `node .claude/skills/add-dealer/scripts/dealers.mjs list --find "<name>"`. Adding a dealer that is already on the map: ask whether it moved. Note `newId` (or the existing id when moving).
 
-**3. Pin.**
+**3. Branch.** `git fetch <remote> main`, then `git switch -c dealers/<id> <remote>/main`; `<branch>` is now `dealers/<id>`. If that fails (local changes), stop and tell the requester. With `cloud: true` (Claude Code on the web) do not create a branch: `git push` works only on the session's own branch, so stay on `branch` (one dealer per session).
+
+**4. Write.** One command:
 ```
-node .claude/skills/add-dealer/scripts/locate.mjs --name "<name>" --street "<street>" --number "<no>" --place "<settlement>" [--municipality "<municipality>"]
+node .claude/skills/add-dealer/scripts/dealers.mjs add --name "<name>" --sites dck,sg-tools --category dealer|online \
+  --street "<street>" --number "<no>" --place "<settlement>" [--municipality "<municipality>"] \
+  [--link "<Google Maps link>"] [--phone "0XX/XXX-XXXX"] [--email ...] [--website ...]
+node .claude/skills/add-dealer/scripts/dealers.mjs move --id <id> --street "<street>" --number "<no>" --place "<settlement>" --link "<Google Maps link>"
 ```
-**Read the image file** from the output yourself (red ring = OpenStreetMap, blue = Google Maps, orange = a point the requester sent) and check that each ring sits on a building, not on a road or a field. Do not describe the technical details to the requester.
+`--sites` is `dck`, `sg-tools` or both. `--link` is required for a radnja; for a webshop leave it out (the registered office comes from OpenStreetMap) unless the script asks for one. Phone format `0XX/XXX-XXXX` like the other entries; the address never contains a postal code.
 
-Talk to the requester exactly this simply (they are not technical):
-- **green**: one line, for example "Našao sam radnju, Google i mapa se slažu. Upisujem je i šaljem Filipu." Then go on without asking.
-- **yellow with two points**: `locate.mjs` has already opened a page with the picture in their browser (`page` in the output). Say: "Našao sam dve tačke za <name>. Otvorio sam ti sliku, pogledaj je i reci mi koja je dobra: plava (Google) ili crvena (OpenStreetMap). Ako nisi siguran, proveri sa dilerom, radnjom ili servisom, pa mi javi." Below that line put the `page` path, in case the browser did not open. Ask with AskUserQuestion with three options, "Plava (Google)", "Crvena (OpenStreetMap)" and "Nisam siguran, proveriću sa dilerom". The answer is `google` or `osm`.
-- **yellow with one point**: "Našao sam radnju samo na jednom mestu. Otvorio sam ti sliku, pogledaj da li je tačka dobra. Ako nisi siguran, proveri sa dilerom." Options "Da, dobra je" (the answer is that candidate's key), "Ne, poslaću ti tačnu lokaciju" and "Nisam siguran, proveriću sa dilerom".
-- **"Nisam siguran"**: write nothing and do not guess. Say "Važi, javi mi kad proveriš sa dilerom." and wait; when they come back with the answer, continue from step 4 with the same report.
-- **red**, or "Ne": "Ne mogu da nađem radnju na mapi. Pošalji mi link radnje sa Google mapa (otvori radnju na Google mapama, pa Podeli i Kopiraj link)." Rerun step 3 with `--pin "<link>"` (coordinates also work) and ask the one-point question again; the answer is `manual`.
-- If the image clearly contradicts a green verdict (a ring on a road or a field), do not go on: ask as for yellow.
+What comes back:
+- `ok: true`: written and verified. Show `warnings` (another dealer within 50 m, a similar name, a website switched from http:// to https://) and ask before going on if one of them may mean the dealer is already there.
+- `code: already_on_map`: the same shop is already listed; tell the requester where (`existing`) and stop.
+- `code: name_taken`: another shop with the same name is on the map (a chain). Ask: "Na mapi već postoji <name> na adresi <existing>. Da li je ovo nova radnja istog lanca?" On yes, rerun with `--id <suggestedId>` (the name on the map stays the same).
+- `code: bad_link`, `link_required`, `office_not_found`: pass `error` to the requester and wait for a new link, then rerun.
+- `code: pin_address_mismatch` with `suggestedPlace`: the pin is on the stated street, only the settlement differs (a shop in Borča with "Beograd" in its address). Ask: "Tačka je u naselju <suggestedPlace>. Da li da upišem <suggestedPlace> kao mesto?" On yes, rerun with `--place "<suggestedPlace>"`.
+- `code: pin_address_mismatch` without it: say simply that the point from the link and the address are not the same place, with `reasons` in plain words, and ask which is right. Rerun with the corrected address or link.
+- `Diler ne prolazi pravila`: explain the `errors`. A change to the first 6 dealers on product pages (only an online dealer causes it) is Filip's decision: stop and say so; never pass `--allow-top6-change` on your own.
+- `code: error`: a service did not answer; wait a minute and rerun once.
+- `gateKind: invalid` after a write: do not commit; tell the requester that Filip has to look at it.
 
-**4. Branch.** `git fetch <upstreamRemote> main`, then `git switch -c dealers/<id> <upstreamRemote>/main` (`<id>` is `input.id` in the report). If the switch fails because of local changes, stop and tell the requester.
+**5. Commit.** `git add` exactly the files in `changed`, then `git commit -m "<subject>" -m "<body>"`, written by you in English:
+- subject: `feat(dealers): add <Name> to both sites` (or `to dck`, `to sg-tools`), or `fix(dealers): move <Name> to <address>`;
+- body, one or two short lines: where the pin comes from (the requester's Google Maps link, or OSM for a webshop) and `pin.osmCheck`.
 
-**5. Plan and write.**
-```
-node .claude/skills/add-dealer/scripts/dealers.mjs plan --locate "<report>" --sites dck,sg-tools --category dealer|online --name "<name>" [--phone "0XX/XXX-XXXX"] [--email ...] [--website ...] [--company "<link>"] [--pib ...] [--mb ...] [--choice osm|google|manual]
-node .claude/skills/add-dealer/scripts/dealers.mjs apply --plan "<plan>"
-```
-`--choice` is required for a yellow pin and must be what the requester picked. `--sites`: `dck`, `sg-tools`, or both. `--address` and `--city` default to the street, number and settlement from step 3; the address never contains a postal code. Phone format is `0XX/XXX-XXXX` like the other entries. If the plan fails, fix the input and rerun; do not work around an error. An online entry that would change the first 6 dealers on product pages needs Filip's decision: stop and say so (never pass `--allow-top6-change` on your own). `apply` writes the entry, re-imports both files, checks them and restores everything if anything is off.
+**6. Pull request.** By `route`:
+- `push`: `git push -u <remote> <branch>`, then `gh pr create --repo filiptrivan/stridon-presentational-websites --base main --head <branch> --title "<subject>" --body "<body>"`. The body, in English, short: what was added or moved, the address, the pin with `pin.links` (OSM and Google), the link the requester sent, `pin.osmCheck`, the CompanyWall link if given, `gate`, and "Map data © OpenStreetMap contributors" when the pin came from OSM.
+  - `expected: true`: `gh pr merge <PR url> --auto --squash` (the repo deletes merged branches itself). If it answers that the PR is already mergeable, the checks finished first: run `gh pr merge <PR url> --squash`. If it is refused as not allowed (on the web the GitHub proxy may not offer auto-merge), tell the requester to open the PR link and click "Enable auto-merge". Then: "Gotovo, diler ide na sajt sam za nekoliko minuta, čim prođu provere. Kad se pojavi, pogledaj ga na <livePages> i javi mi ako pin nije na pravom mestu."
+  - `expected: false`: do not turn on auto-merge. Say that it went to Filip for approval and why, in one sentence from `gate`.
+- `dry-run` (`ADD_DEALER_DRY_RUN` is set, for trying the skill out): stop after the commit. Show the commit and the PR text and say that nothing was sent.
 
-**6. Commit.** `node .claude/skills/add-dealer/scripts/dealers.mjs message --plan "<plan>"`, then stage exactly the files `apply` listed (`git add apps/dck/constants/dealers.ts apps/sg-tools/constants/dealers.ts`) and `git commit -F "<commitFile>"`.
-
-**7. Pull request to Filip.** Once the pin is green or the requester has chosen, send it without asking again, by `prRoute`:
-- `upstream`: `git push -u <upstreamRemote> dealers/<id>`, then `gh pr create --repo filiptrivan/stridon-presentational-websites --base main --head dealers/<id> --title "<title>" --body-file "<prFile>"`.
-- `fork`: `git push -u <forkRemote> dealers/<id>`, then the same `gh pr create` with `--head <fork owner>:dealers/<id>`.
-- `local-only`: do not push. Tell the requester the branch name and that someone with access opens the PR.
-- `dry-run` (`ADD_DEALER_DRY_RUN` is set, used for trying the skill out): do not push and do not open a PR. Show the commit and the PR text instead.
-
-Never push to `main`, never merge. Finish with the PR link and two sentences in Serbian: what was added and that it goes live on dcksrbija.rs / sgtools.rs when Filip approves.
+A pin that turns out wrong on the live site is fixed with `move` and a better link.
 
 ## If something goes wrong
 
-- `locate.mjs` fails with an HTTP error: wait a minute and retry once; the public services are shared. Do not switch to other sources.
-- Google search failed (`google_unavailable`): rerun `setup-google.mjs` once; if it still fails, continue, the pin is then yellow and the requester confirms it.
-- Anything outside these steps (logo, moving a dealer, a new category): stop and suggest asking Filip.
-
-Background, measurements and tests: `reference.md` in this folder.
+- OpenStreetMap returns an HTTP error: wait a minute and rerun once; the service is shared. Do not switch to other sources. On the web, a blocked connection means the environment's network access lacks `nominatim.openstreetmap.org` or `maps.app.goo.gl` (see `reference.md`).
+- Anything outside these steps: stop and suggest asking Filip.
