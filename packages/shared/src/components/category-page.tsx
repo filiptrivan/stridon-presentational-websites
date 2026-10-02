@@ -62,6 +62,7 @@ async function CategoryProducts({
     slug,
     offset,
     PRODUCTS_PER_PAGE,
+    "critical",
   );
 
   const totalPages = Math.ceil(products.totalRecords / PRODUCTS_PER_PAGE);

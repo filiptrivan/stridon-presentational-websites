@@ -17,7 +17,7 @@ const SimilarProducts = async ({
   // section has none any more, so a failed read drops it instead of the page.
   let candidates: ProductCardData[] = [];
   try {
-    const result = await getFilteredProductsByCategory(categorySlug, 0, 4 + excludeProductIds.length);
+    const result = await getFilteredProductsByCategory(categorySlug, 0, 4 + excludeProductIds.length, "auxiliary");
     candidates = result.data;
   } catch {
     return null;

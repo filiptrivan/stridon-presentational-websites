@@ -9,6 +9,9 @@
 // 2026-08). On Vercel that cache is shared by the whole team, the webshop
 // included, so it is never purged by hand.
 
+// Server only. In a client bundle this module could only fail: API_URL and the
+// bypass secret are not public env, so they are undefined there.
+import "server-only";
 import { getBrandConfig } from "@brand/config";
 import { cache } from "react";
 import type { Brand, BrandCard } from "../types/brands";
@@ -48,9 +51,11 @@ const BYPASS_HEADERS: Record<string, string> = RATELIMIT_BYPASS_SECRET
   : {};
 const BRAND_SLUG = getBrandConfig().brandSlug;
 
-// The same freshness the `cacheLife` profiles gave these reads under Cache
-// Components: "days" and "hours" both revalidated after one day / one hour. A
-// page revalidates as often as its freshest read.
+// The same revalidate the `cacheLife` profiles gave these reads under Cache
+// Components: one day for "days", one hour for "hours". A page revalidates as
+// often as its freshest read. The profiles' `expire` (one week / one day) has no
+// fetch equivalent, so how long a stale page may still be served is Next's
+// default `expireTime`, one year.
 const DAYS = { revalidate: 86_400 } as const;
 const HOURS = { revalidate: 3_600 } as const;
 
@@ -82,7 +87,11 @@ const requestJson = cache(
       body,
       // A real abort, not just a lost wait: the socket is torn down, so a saturated
       // backend can shed the work instead of the request holding both a lambda and
-      // a connection slot.
+      // a connection slot. On a miss only: Next refreshes an expired entry by
+      // replaying the request without the signal (vercel/next.js#54533), in the
+      // background on a dynamic route, where this code never sees the result.
+      // Accepted, as in pa-storefront (internal-client.ts, 2026-08-10): it costs
+      // something only while the backend is unhealthy.
       signal: AbortSignal.timeout(budgetMs),
       headers: {
         "Content-Type": "application/json",
@@ -102,6 +111,10 @@ const requestJson = cache(
         res.status,
         `API error: ${res.status} ${res.statusText}`,
       );
+      // The Data Cache stores only a 200, so a 404 is not cached here: on the
+      // dynamic category and tag routes every request for a missing slug reads
+      // PACMS once. Left that way, since caching a visitor-chosen slug's absence
+      // would let any crawler fill the team-shared cache.
       if (res.status !== 404) {
         reportError(error, context);
       }
@@ -176,8 +189,9 @@ export async function getAllCatalogs(): Promise<CatalogsResult> {
 // Full fidelity, and heavy: 234 rows carrying their whole htmlDescription, ~848 KB.
 // It is the only brand list that carries `orderNumber`, which is how stridon picks
 // and orders the brands it shows; a page that only needs names and logos can read
-// `getBrandCards()` instead. The Data Cache stores a response whole and silently
-// skips one over 2 MB, so what this returns is what the entry costs.
+// `getBrandCards()` instead. The Data Cache skips an entry over 2 MB (only a
+// warning in the server log), and an entry is the body base64-encoded, so the
+// raw ceiling is about 1.5 MB: ~848 KB makes an entry of ~1.13 MB.
 export async function getBrands(count?: number): Promise<Brand[]> {
   const params = new URLSearchParams();
   if (count !== undefined) params.set("count", String(count));
@@ -275,15 +289,18 @@ export async function getCategoryBySlug(
 
 // The three FilteredProducts fetchers below differ only in how they narrow the
 // query, so this shares the request shape. `tagSlugs: []` sits before the spread
-// so a tag filter overrides it.
+// so a tag filter overrides it. A listing route's grid is what the route is
+// about, so it reads on the critical budget; the similar-products strip on a
+// product page reads the same query as auxiliary.
 function fetchFilteredProducts(
   narrow: { categorySlug?: string; tagSlugs?: string[] },
   offset: number,
   limit: number,
+  tier: FetchTier,
 ): Promise<ProductCardsResult> {
   return apiFetch<ProductCardsResult>(
     "/api/Storefront/FilteredProducts",
-    "auxiliary",
+    tier,
     { ...HOURS, tag: TAGS.products },
     {
       brandSlugs: [BRAND_SLUG],
@@ -299,7 +316,7 @@ export async function getFilteredProducts(
   offset: number,
   limit: number,
 ): Promise<ProductCardsResult> {
-  return fetchFilteredProducts({}, offset, limit);
+  return fetchFilteredProducts({}, offset, limit, "critical");
 }
 
 export async function getTopProductsByBrand(
@@ -316,8 +333,9 @@ export async function getFilteredProductsByCategory(
   categorySlug: string,
   offset: number,
   limit: number,
+  tier: FetchTier,
 ): Promise<ProductCardsResult> {
-  return fetchFilteredProducts({ categorySlug }, offset, limit);
+  return fetchFilteredProducts({ categorySlug }, offset, limit, tier);
 }
 
 export async function getTagBySlug(slug: string): Promise<Tag | null> {
@@ -338,7 +356,7 @@ export async function getFilteredProductsByTag(
   offset: number,
   limit: number,
 ): Promise<ProductCardsResult> {
-  return fetchFilteredProducts({ tagSlugs: [tagSlug] }, offset, limit);
+  return fetchFilteredProducts({ tagSlugs: [tagSlug] }, offset, limit, "critical");
 }
 
 //#endregion
