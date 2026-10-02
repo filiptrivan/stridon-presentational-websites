@@ -67,10 +67,17 @@ const ProductTabs = ({ htmlDescription, specification }: ProductTabsProps) => {
         ))}
       </div>
 
-      <Prose
-        variant="product"
-        dangerouslySetInnerHTML={{ __html: contentMap[activeTab]! }}
-      />
+      {/* Both panels are in the HTML, the inactive one `hidden`, so the
+          specification is there for crawlers and readers even though only
+          one tab shows at a time. */}
+      {availableTabs.map((tab) => (
+        <Prose
+          key={tab.key}
+          variant="product"
+          hidden={tab.key !== activeTab}
+          dangerouslySetInnerHTML={{ __html: contentMap[tab.key]! }}
+        />
+      ))}
     </div>
   );
 };
