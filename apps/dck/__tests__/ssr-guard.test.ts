@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { basename, resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
@@ -8,10 +8,11 @@ import { describe, expect, it } from "vitest";
  * Holds the full-SSR model (repo CLAUDE.md → "Rendering: full SSR, no `cacheComponents`") to the
  * few lines that would quietly undo it. Every one of them builds green and looks fine with
  * JavaScript on; what breaks is the HTML a crawler or a no-JS visitor gets, which no other test
- * reads. That is how all three sites shipped skeletons instead of content until 2026-10.
+ * reads. That is how dck and sg-tools shipped skeletons instead of content until 2026-10.
  *
- * Source-level only, so it runs in the hermetic lane in milliseconds. It cannot see a Suspense
- * boundary around content; the HTML check after `next build` is where that is caught.
+ * Source-level only, so it runs in the hermetic lane in milliseconds. A check of the built HTML
+ * sees only prerendered pages: the dynamic ones (/proizvodi, category and tag pages) have no HTML
+ * after `next build`, so for a Suspense boundary or a client-only render there, this is the guard.
  *
  * Lives in dck for the same reason the API ledger does: it scans the whole monorepo.
  */
@@ -24,12 +25,20 @@ function gitLsFiles(pathspec: string[]): string[] {
     encoding: "utf8",
   })
     .split("\n")
-    .filter(Boolean);
+    .filter(Boolean)
+    // The index still lists a file deleted but not staged; reading it would fail the
+    // whole suite with an ENOENT that says nothing about SSR.
+    .filter((file) => existsSync(resolve(REPO_ROOT, file)));
 }
 
 const read = (file: string) => readFileSync(resolve(REPO_ROOT, file), "utf8");
 
 const nextConfigs = gitLsFiles(["apps/*/next.config.ts"]);
+
+/** App and package source, tests excluded (their messages quote the patterns they ban). */
+const sources = gitLsFiles(["apps/*.ts", "apps/*.tsx", "packages/*.ts", "packages/*.tsx"]).filter(
+  (file) => !/(^|\/)__tests__\/|\.test\.tsx?$/.test(file),
+);
 
 describe("full SSR guard", () => {
   it("finds the three app configs", () => {
@@ -72,6 +81,44 @@ describe("full SSR guard", () => {
       `${offenders.join(", ")}: a loading file wraps the page in Suspense, so its content is ` +
         `sent hidden and only JavaScript reveals it, and a missing entity answers 200.`,
     ).toEqual([]);
+  });
+
+  it("no content waits behind <Suspense> or renders only in the browser", () => {
+    // Suspense may wrap only something with no content (repo CLAUDE.md → Rendering). None
+    // does today; such a file goes here with its reason.
+    const suspenseAllowed: string[] = [];
+    // `dynamic(..., { ssr: false })` leaves its component out of the HTML. These are maps
+    // and the media lightbox, which carry no content.
+    const clientOnlyAllowed = [
+      "packages/shared/src/components/contact/contact-locations.tsx",
+      "packages/shared/src/components/products/product-gallery.tsx",
+      "packages/shared/src/components/where-to-buy/where-to-buy-content.tsx",
+    ];
+    // <Suspense> or <React.Suspense> in JSX, or Suspense imported from react under any name.
+    const usesSuspense =
+      /<(?:React\.)?Suspense\b|import\s+(?:\w+\s*,\s*)?\{[^}]*\bSuspense\b[^}]*\}\s*from\s*["']react["']/;
+    const suspense = sources.filter(
+      (file) => !suspenseAllowed.includes(file) && usesSuspense.test(read(file)),
+    );
+    const clientOnly = sources.filter(
+      (file) => !clientOnlyAllowed.includes(file) && /\bssr:\s*false\b/.test(read(file)),
+    );
+    expect(
+      suspense,
+      `Suspense in ${suspense.join(", ")}. React 19.2 sends a finished boundary over 500 B as a ` +
+        `hidden <div> that only JavaScript reveals, and on a dynamic route no other check sees it.`,
+    ).toEqual([]);
+    expect(
+      clientOnly,
+      `ssr: false in ${clientOnly.join(", ")}: that component is missing from the HTML. Only a ` +
+        `widget with no content, like a map, belongs on the list above.`,
+    ).toEqual([]);
+    const stale = clientOnlyAllowed.filter(
+      (file) => !sources.includes(file) || !/\bssr:\s*false\b/.test(read(file)),
+    );
+    expect(stale, `${stale.join(", ")}: no longer uses ssr: false; take it off the list.`).toEqual(
+      [],
+    );
   });
 
   it("every app keeps metadata in <head> for every user agent", () => {
