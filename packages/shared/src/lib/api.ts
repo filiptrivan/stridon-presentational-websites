@@ -1,11 +1,16 @@
-"use cache";
-
 // Caching strategy: time-based expiry only (days for structural data, hours
 // for product details). No on-demand revalidation endpoint - this is a
 // display-only site so slight staleness is acceptable.
+//
+// The cache is Next's fetch Data Cache (`next: { revalidate, tags }`), not
+// `"use cache"`. Without Cache Components a `"use cache"` entry on Vercel lives
+// in one instance's memory and is gone on the next deploy; a Data Cache entry
+// survives it. pa-storefront moved its reads the same way (cachedFetch,
+// 2026-08). On Vercel that cache is shared by the whole team, the webshop
+// included, so it is never purged by hand.
 
 import { getBrandConfig } from "@brand/config";
-import { cacheLife, cacheTag } from "next/cache";
+import { cache } from "react";
 import type { Brand, BrandCard } from "../types/brands";
 import type { Catalog, CatalogsResult } from "../types/catalogs";
 import type { Category } from "../types/categories";
@@ -43,68 +48,100 @@ const BYPASS_HEADERS: Record<string, string> = RATELIMIT_BYPASS_SECRET
   : {};
 const BRAND_SLUG = getBrandConfig().brandSlug;
 
-async function apiFetch<T>(
+// The same freshness the `cacheLife` profiles gave these reads under Cache
+// Components: "days" and "hours" both revalidated after one day / one hour. A
+// page revalidates as often as its freshest read.
+const DAYS = { revalidate: 86_400 } as const;
+const HOURS = { revalidate: 3_600 } as const;
+
+type CachePolicy = { revalidate: number; tag: string };
+
+// One network read per distinct request per render. Next memoizes a GET fetch
+// across generateMetadata and the page, but only when it carries no `signal`
+// (next/dist/server/lib/dedupe-fetch.js), and every read here carries one: the
+// budget. Without this the product page would read its product twice. `cache`
+// keys on argument identity, hence primitives only and the body as a string.
+const requestJson = cache(
+  async (
+    path: string,
+    tier: FetchTier,
+    revalidate: number,
+    tag: string,
+    body: string | undefined,
+  ): Promise<unknown> => {
+    if (!API_URL) throw new Error("API_URL is required");
+
+    const budgetMs = budgetMsFor(tier);
+    const context = {
+      source: `apiFetch ${path}`,
+      details: `tier=${tier} budgetMs=${budgetMs}`,
+    };
+
+    const res = await fetch(`${API_URL}${path}`, {
+      method: body === undefined ? "GET" : "POST",
+      body,
+      // A real abort, not just a lost wait: the socket is torn down, so a saturated
+      // backend can shed the work instead of the request holding both a lambda and
+      // a connection slot.
+      signal: AbortSignal.timeout(budgetMs),
+      headers: {
+        "Content-Type": "application/json",
+        ...BYPASS_HEADERS,
+      },
+      next: { revalidate, tags: [tag] },
+    }).catch((error: unknown) => {
+      // A timeout or network failure produces no Response, so the `!res.ok` branch
+      // below structurally cannot see it. Rethrown, never swallowed — the 404
+      // guards must not receive an availability failure as a resolved absence.
+      reportError(error, context);
+      throw error;
+    });
+
+    if (!res.ok) {
+      const error = new ApiError(
+        res.status,
+        `API error: ${res.status} ${res.statusText}`,
+      );
+      if (res.status !== 404) {
+        reportError(error, context);
+      }
+      throw error;
+    }
+    return res.json();
+  },
+);
+
+/** GET, or POST with a JSON body when `body` is given. */
+function apiFetch<T>(
   path: string,
   tier: FetchTier,
-  options?: RequestInit,
+  { revalidate, tag }: CachePolicy,
+  body?: unknown,
 ): Promise<T> {
-  if (!API_URL) throw new Error("API_URL is required");
-
-  const budgetMs = budgetMsFor(tier);
-  const context = {
-    source: `apiFetch ${path}`,
-    details: `tier=${tier} budgetMs=${budgetMs}`,
-  };
-
-  const res = await fetch(`${API_URL}${path}`, {
-    ...options,
-    // A real abort, not just a lost wait: the socket is torn down, so a saturated
-    // backend can shed the work instead of the request holding both a lambda and
-    // a connection slot.
-    signal: AbortSignal.timeout(budgetMs),
-    headers: {
-      "Content-Type": "application/json",
-      ...BYPASS_HEADERS,
-      ...(options?.headers as Record<string, string>),
-    },
-  }).catch((error: unknown) => {
-    // A timeout or network failure produces no Response, so the `!res.ok` branch
-    // below structurally cannot see it. Rethrown, never swallowed — the 404
-    // guards must not receive an availability failure as a resolved absence.
-    reportError(error, context);
-    throw error;
-  });
-
-  if (!res.ok) {
-    const error = new ApiError(
-      res.status,
-      `API error: ${res.status} ${res.statusText}`,
-    );
-    if (res.status !== 404) {
-      reportError(error, context);
-    }
-    throw error;
-  }
-  return res.json() as Promise<T>;
+  return requestJson(
+    path,
+    tier,
+    revalidate,
+    tag,
+    body === undefined ? undefined : JSON.stringify(body),
+  ) as Promise<T>;
 }
 
 //#region Days profile - structural/marketing data
 
 export async function getCategories(): Promise<Category[]> {
-  cacheLife("days");
-  cacheTag(TAGS.categories);
   return apiFetch<Category[]>(
     `/api/Storefront/Categories?brandSlug=${BRAND_SLUG}`,
     "auxiliary",
+    { ...DAYS, tag: TAGS.categories },
   );
 }
 
 export async function getFlatCategories(count = 6): Promise<Category[]> {
-  cacheLife("days");
-  cacheTag(TAGS.categories);
   return apiFetch<Category[]>(
     `/api/Storefront/FlatCategories?brandSlug=${BRAND_SLUG}&count=${count}`,
     "auxiliary",
+    { ...DAYS, tag: TAGS.categories },
   );
 }
 
@@ -114,11 +151,10 @@ export async function getAllCategoriesFlat(): Promise<Category[]> {
 }
 
 export async function getCatalogs(): Promise<Catalog[]> {
-  cacheLife("days");
-  cacheTag(TAGS.catalogs);
   return apiFetch<Catalog[]>(
     `/api/Storefront/CatalogsByBrand?brandSlug=${BRAND_SLUG}`,
     "auxiliary",
+    { ...DAYS, tag: TAGS.catalogs },
   );
 }
 
@@ -128,9 +164,10 @@ export async function getCatalogs(): Promise<Catalog[]> {
 // company, not a brand there, so for it that call is structurally always empty and
 // this is the endpoint that has the data.
 export async function getAllCatalogs(): Promise<CatalogsResult> {
-  cacheLife("days");
-  cacheTag(TAGS.catalogs);
-  return apiFetch<CatalogsResult>("/api/Storefront/Catalogs", "auxiliary");
+  return apiFetch<CatalogsResult>("/api/Storefront/Catalogs", "auxiliary", {
+    ...DAYS,
+    tag: TAGS.catalogs,
+  });
 }
 
 // The three brand fetchers below are not brand-scoped either - the CMS brand list is
@@ -139,39 +176,36 @@ export async function getAllCatalogs(): Promise<CatalogsResult> {
 // Full fidelity, and heavy: 234 rows carrying their whole htmlDescription, ~848 KB.
 // It is the only brand list that carries `orderNumber`, which is how stridon picks
 // and orders the brands it shows; a page that only needs names and logos can read
-// `getBrandCards()` instead. A cached value is stored whole, so what you return is
-// what the entry costs.
+// `getBrandCards()` instead. The Data Cache stores a response whole and silently
+// skips one over 2 MB, so what this returns is what the entry costs.
 export async function getBrands(count?: number): Promise<Brand[]> {
-  cacheLife("days");
-  cacheTag(TAGS.brands);
   const params = new URLSearchParams();
   if (count !== undefined) params.set("count", String(count));
   const query = params.toString();
   return apiFetch<Brand[]>(
     `/api/Storefront/Brands${query ? `?${query}` : ""}`,
     "auxiliary",
+    { ...DAYS, tag: TAGS.brands },
   );
 }
 
 export async function getBrandCards(count?: number): Promise<BrandCard[]> {
-  cacheLife("days");
-  cacheTag(TAGS.brands);
   const params = new URLSearchParams();
   if (count !== undefined) params.set("count", String(count));
   const query = params.toString();
   return apiFetch<BrandCard[]>(
     `/api/Storefront/BrandCards${query ? `?${query}` : ""}`,
     "auxiliary",
+    { ...DAYS, tag: TAGS.brands },
   );
 }
 
 export async function getBrandBySlug(slug: string): Promise<Brand | null> {
-  cacheLife("days");
-  cacheTag(TAGS.brands);
   try {
     return await apiFetch<Brand>(
       `/api/Storefront/BrandBySlug?slug=${encodeURIComponent(slug)}`,
       "critical",
+      { ...DAYS, tag: TAGS.brands },
     );
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) return null;
@@ -180,22 +214,20 @@ export async function getBrandBySlug(slug: string): Promise<Brand | null> {
 }
 
 export async function getSitemapProducts(): Promise<SitemapEntry[]> {
-  cacheLife("days");
-  cacheTag(TAGS.products);
   return apiFetch<SitemapEntry[]>(
     `/api/Storefront/SitemapProductsByBrand?brandSlug=${BRAND_SLUG}`,
     "auxiliary",
+    { ...DAYS, tag: TAGS.products },
   );
 }
 
 export async function getTagsByBrand(count?: number): Promise<Tag[]> {
-  cacheLife("days");
-  cacheTag(TAGS.tags);
   const params = new URLSearchParams({ brandSlug: BRAND_SLUG });
   if (count !== undefined) params.set("count", String(count));
   return apiFetch<Tag[]>(
     `/api/Storefront/TagsByBrand?${params.toString()}`,
     "auxiliary",
+    { ...DAYS, tag: TAGS.tags },
   );
 }
 
@@ -203,15 +235,17 @@ export async function getTagsByBrand(count?: number): Promise<Tag[]> {
 // Tag detail pages filter products by BRAND_SLUG, so cross-brand tags render empty grids.
 
 export async function getSitemapTags(): Promise<SitemapEntry[]> {
-  cacheLife("days");
-  cacheTag(TAGS.tags);
-  return apiFetch<SitemapEntry[]>("/api/Storefront/SitemapTags", "auxiliary");
+  return apiFetch<SitemapEntry[]>("/api/Storefront/SitemapTags", "auxiliary", {
+    ...DAYS,
+    tag: TAGS.tags,
+  });
 }
 
 export async function getPrerenderedTagSlugs(): Promise<string[]> {
-  cacheLife("days");
-  cacheTag(TAGS.tags);
-  return apiFetch<string[]>("/api/Storefront/PrerenderedTagSlugs", "auxiliary");
+  return apiFetch<string[]>("/api/Storefront/PrerenderedTagSlugs", "auxiliary", {
+    ...DAYS,
+    tag: TAGS.tags,
+  });
 }
 
 //#endregion
@@ -219,12 +253,11 @@ export async function getPrerenderedTagSlugs(): Promise<string[]> {
 //#region Hours profile - product/detail data
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
-  cacheLife("hours");
-  cacheTag(TAGS.products);
   try {
     return await apiFetch<Product>(
       `/api/Storefront/ProductBySlug?slug=${encodeURIComponent(slug)}`,
       "critical",
+      { ...HOURS, tag: TAGS.products },
     );
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) return null;
@@ -235,12 +268,11 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 export async function getCategoryBySlug(
   slug: string,
 ): Promise<Category | null> {
-  cacheLife("hours");
-  cacheTag(TAGS.categories);
   try {
     return await apiFetch<Category>(
       `/api/Storefront/CategoryBySlug?slug=${encodeURIComponent(slug)}&brandSlug=${BRAND_SLUG}`,
       "critical",
+      { ...HOURS, tag: TAGS.categories },
     );
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) return null;
@@ -249,10 +281,8 @@ export async function getCategoryBySlug(
 }
 
 // The three FilteredProducts fetchers below differ only in how they narrow the
-// query. Deliberately NOT exported and NOT async: the file-level "use cache" makes
-// cache entries out of the exported fetchers, which keep their own cacheLife /
-// cacheTag and stay exactly the cache units they were — this shares the request
-// shape only. `tagSlugs: []` sits before the spread so a tag filter overrides it.
+// query, so this shares the request shape. `tagSlugs: []` sits before the spread
+// so a tag filter overrides it.
 function fetchFilteredProducts(
   narrow: { categorySlug?: string; tagSlugs?: string[] },
   offset: number,
@@ -261,15 +291,13 @@ function fetchFilteredProducts(
   return apiFetch<ProductCardsResult>(
     "/api/Storefront/FilteredProducts",
     "auxiliary",
+    { ...HOURS, tag: TAGS.products },
     {
-      method: "POST",
-      body: JSON.stringify({
-        brandSlugs: [BRAND_SLUG],
-        tagSlugs: [],
-        ...narrow,
-        first: offset,
-        rows: limit,
-      }),
+      brandSlugs: [BRAND_SLUG],
+      tagSlugs: [],
+      ...narrow,
+      first: offset,
+      rows: limit,
     },
   );
 }
@@ -278,19 +306,16 @@ export async function getFilteredProducts(
   offset: number,
   limit: number,
 ): Promise<ProductCardsResult> {
-  cacheLife("hours");
-  cacheTag(TAGS.products);
   return fetchFilteredProducts({}, offset, limit);
 }
 
 export async function getTopProductsByBrand(
   count = 4,
 ): Promise<ProductCardData[]> {
-  cacheLife("hours");
-  cacheTag(TAGS.products);
   return apiFetch<ProductCardData[]>(
     `/api/Storefront/TopProductsByBrand?brandSlug=${BRAND_SLUG}&count=${count}`,
     "auxiliary",
+    { ...HOURS, tag: TAGS.products },
   );
 }
 
@@ -299,18 +324,15 @@ export async function getFilteredProductsByCategory(
   offset: number,
   limit: number,
 ): Promise<ProductCardsResult> {
-  cacheLife("hours");
-  cacheTag(TAGS.products);
   return fetchFilteredProducts({ categorySlug }, offset, limit);
 }
 
 export async function getTagBySlug(slug: string): Promise<Tag | null> {
-  cacheLife("hours");
-  cacheTag(TAGS.tags);
   try {
     return await apiFetch<Tag>(
       `/api/Storefront/TagBySlug?slug=${encodeURIComponent(slug)}`,
       "critical",
+      { ...HOURS, tag: TAGS.tags },
     );
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) return null;
@@ -323,8 +345,6 @@ export async function getFilteredProductsByTag(
   offset: number,
   limit: number,
 ): Promise<ProductCardsResult> {
-  cacheLife("hours");
-  cacheTag(TAGS.products);
   return fetchFilteredProducts({ tagSlugs: [tagSlug] }, offset, limit);
 }
 

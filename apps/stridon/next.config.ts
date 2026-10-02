@@ -8,8 +8,18 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@brand/config", "@brand/ui", "@brand/shared", "@brand/i18n"],
-  cacheComponents: true,
+  // Without Cache Components every route is either fully static (ISR) or fully
+  // dynamic, and nothing is streamed behind a Suspense boundary. On a dynamic
+  // route (the paginated listings) Next still streams metadata into <body> for
+  // any user agent outside its html-limited bot list, and on 16.1 that list has
+  // no Googlebot, GPTBot or ClaudeBot. Google reads rel=canonical only from
+  // <head>, so every agent gets the blocking render. No effect on static routes.
+  htmlLimitedBots: /.*/,
   experimental: {
+    // `next/root-params` (packages/i18n/src/request.ts). Cache Components used to
+    // switch it on implicitly; on Next < 16.3 nothing else does. 16.3 enables it
+    // by default, after which this line can go.
+    rootParams: true,
     // Retry a transient page-prerender failure (e.g. a backend blip) instead of
     // aborting the whole build on the first ETIMEDOUT.
     staticGenerationRetryCount: 2,
