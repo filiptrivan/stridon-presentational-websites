@@ -135,7 +135,7 @@ describe("FilteredProducts narrowing", () => {
 
   it("adds the category without disturbing the empty tag filter", async () => {
     expect(
-      await bodyOf(() => getFilteredProductsByCategory("kutije-za-alat", 24, 24)),
+      await bodyOf(() => getFilteredProductsByCategory("kutije-za-alat", 24, 24, "critical")),
     ).toEqual({
       brandSlugs: ["dck"],
       tagSlugs: [],
