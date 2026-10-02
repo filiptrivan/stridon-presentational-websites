@@ -2,8 +2,8 @@
 // so the numbers can be compared and re-tuned together; nothing structurally
 // enforces the funnel, so a new `fetch` is only bounded if its author comes here.
 // Kept free of Next and brand-config imports so it stays unit-testable on its own,
-// which is the real reason it is a separate module: api.ts drags in @brand/config
-// and a module-load read of API_URL, and needs env stubs and a mock to test.
+// which is the real reason it is a separate module: api.ts drags in next/cache,
+// @brand/config and a module-load read of API_URL, and needs three mocks to test.
 //
 // Covered: the cached catalog reads (budgetMsFor), the autocomplete route handler,
 // and the Brevo calls. ONE deliberate exclusion, documented at the bottom.
