@@ -9,10 +9,11 @@ import { locales, type Locale } from "./config";
  * `i18n/request.ts`.
  *
  * The locale comes from `next/root-params` rather than `cookies()` or
- * `headers()`: under `cacheComponents` either of those turns the whole subtree
- * dynamic, so a translated page could not be prerendered at all. Root params
- * are part of the route, so they are known at build time and every page stays
- * static. `cacheComponents` switches them on by itself in both bundlers.
+ * `headers()`: either of those makes every page that reads it dynamic, so a
+ * translated page could not be prerendered at all. Root params are part of the
+ * route, so they are known at build time and every page stays static. On Next
+ * 16.1 they need `experimental.rootParams` in the app's next.config (16.3 turns
+ * it on by default); `cacheComponents` used to switch it on implicitly.
  *
  * On Next 16.1 root params throw inside a `"use cache"` scope (support landed
  * in 16.3), and `locale()` is untyped. So a cached function must never reach
