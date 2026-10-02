@@ -132,6 +132,25 @@ describe("full SSR guard", () => {
     ).toEqual([]);
   });
 
+  it("content that animates in is still shown without JavaScript", () => {
+    // framer-motion writes `initial` (opacity 0) into the server HTML as an inline
+    // style; only the <noscript> stylesheet lifts it, and only on `data-reveal`.
+    expect(read("packages/shared/src/components/root-layout.tsx")).toMatch(
+      /<noscript>[\s\S]*?<style[\s\S]*?<\/noscript>/,
+    );
+    expect(read("packages/shared/src/components/root-layout.tsx")).toContain(
+      "[data-reveal]{opacity:1!important;transform:none!important}",
+    );
+    const unmarked = [
+      "packages/shared/src/components/container.tsx",
+      "packages/shared/src/components/navbar.tsx",
+    ].filter((file) => !/<motion\.div\s+data-reveal\b/.test(read(file)));
+    expect(
+      unmarked,
+      `${unmarked.join(", ")}: a motion wrapper without data-reveal stays at opacity 0 with JS off.`,
+    ).toEqual([]);
+  });
+
   it("stridon enables root params while Next is below 16.3", () => {
     const { dependencies } = JSON.parse(read("apps/stridon/package.json")) as {
       dependencies: Record<string, string>;

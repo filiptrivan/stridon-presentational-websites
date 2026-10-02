@@ -85,6 +85,7 @@ const Navbar = ({
     >
       <Wrapper className="grid grid-cols-2 md:grid-cols-3 items-center">
         <motion.div
+          data-reveal
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.2 }}

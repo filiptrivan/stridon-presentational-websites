@@ -21,6 +21,14 @@ const brand = getBrandConfig();
 
 export const metadata = createRootMetadata();
 
+// Shown only when JavaScript is off: every entrance animation starts from an
+// inline `opacity: 0` that only framer-motion can lift, so without this the
+// sites rendered as an empty page. With JavaScript on the browser ignores it
+// and the animations run as before. The workaround framer-motion's author
+// points to (motion#1752). Matched by `data-reveal` on the motion wrappers.
+const NO_JS_REVEAL_CSS =
+  "[data-reveal]{opacity:1!important;transform:none!important}";
+
 export const viewport: Viewport = {
   themeColor: brand.themeColor,
   colorScheme: brand.colorScheme,
@@ -76,6 +84,11 @@ export default function RootLayout({
 }: RootLayoutProps) {
   return (
     <html lang={lang}>
+      <head>
+        <noscript>
+          <style dangerouslySetInnerHTML={{ __html: NO_JS_REVEAL_CSS }} />
+        </noscript>
+      </head>
       <body
         className={cn(
           "min-h-screen text-foreground font-base antialiased",

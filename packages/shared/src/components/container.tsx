@@ -34,7 +34,11 @@ const Container = ({
   delay = 0,
 }: Props) => {
   return (
+    // framer-motion writes `initial` into the server HTML as an inline style,
+    // so without JavaScript this would stay invisible forever. `data-reveal`
+    // is what the <noscript> stylesheet in root-layout.tsx overrides.
     <motion.div
+      data-reveal
       className={className}
       initial={getAnimationVariants(animation)}
       whileInView={{
