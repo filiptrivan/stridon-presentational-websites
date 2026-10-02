@@ -141,13 +141,24 @@ describe("full SSR guard", () => {
     expect(read("packages/shared/src/components/root-layout.tsx")).toContain(
       "[data-reveal]{opacity:1!important;transform:none!important}",
     );
-    const unmarked = [
-      "packages/shared/src/components/container.tsx",
-      "packages/shared/src/components/navbar.tsx",
-    ].filter((file) => !/<motion\.div\s+data-reveal\b/.test(read(file)));
+    // Every file that animates something in from `initial` marks it; `initial={false}`
+    // starts at the end state and hides nothing. Per file: the HTML check after the build
+    // sees each element, but only on prerendered pages.
+    const decorative = [
+      // Two aria-hidden tool images behind the sg-tools hero; nothing to read.
+      "apps/sg-tools/components/hero-decorations.tsx",
+    ];
+    const unmarked = sources.filter(
+      (file) =>
+        !decorative.includes(file) &&
+        /from\s+["'](?:framer-motion|motion\/react(?:-client)?)["']/.test(read(file)) &&
+        /\binitial=(?!\{false\})/.test(read(file)) &&
+        !/\bdata-reveal\b/.test(read(file)),
+    );
     expect(
       unmarked,
-      `${unmarked.join(", ")}: a motion wrapper without data-reveal stays at opacity 0 with JS off.`,
+      `${unmarked.join(", ")}: a motion element that starts hidden needs data-reveal, or it stays ` +
+        `at opacity 0 with JS off.`,
     ).toEqual([]);
   });
 
