@@ -32,38 +32,35 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
   }
 
-  const [categoriesResult, productsResult, tagsResult] =
-    await Promise.allSettled([
-      getAllCategoriesFlat(),
-      getSitemapProducts(),
-      getSitemapTags(),
-    ]);
+  // All or nothing. This route is ISR, revalidated daily, so a list that lost a
+  // source to a backend blip would be served until the next day; a throw keeps
+  // the last complete sitemap and the regeneration is retried. At build a throw
+  // fails the build, like any prerender that cannot read PACMS.
+  const [categories, products, tags] = await Promise.all([
+    getAllCategoriesFlat(),
+    getSitemapProducts(),
+    getSitemapTags(),
+  ]);
 
-  if (categoriesResult.status === "fulfilled") {
-    for (const category of categoriesResult.value) {
-      entries.push({
-        url: `${SITE_URL}/proizvodi/kategorije/${category.slug}`,
-        lastModified,
-      });
-    }
+  for (const category of categories) {
+    entries.push({
+      url: `${SITE_URL}/proizvodi/kategorije/${category.slug}`,
+      lastModified,
+    });
   }
 
-  if (productsResult.status === "fulfilled") {
-    for (const entry of productsResult.value) {
-      entries.push({
-        url: `${SITE_URL}/proizvodi/${entry.slug}`,
-        lastModified: new Date(entry.modifiedAt),
-      });
-    }
+  for (const entry of products) {
+    entries.push({
+      url: `${SITE_URL}/proizvodi/${entry.slug}`,
+      lastModified: new Date(entry.modifiedAt),
+    });
   }
 
-  if (tagsResult.status === "fulfilled") {
-    for (const entry of tagsResult.value) {
-      entries.push({
-        url: `${SITE_URL}/proizvodi/tagovi/${entry.slug}`,
-        lastModified: new Date(entry.modifiedAt),
-      });
-    }
+  for (const entry of tags) {
+    entries.push({
+      url: `${SITE_URL}/proizvodi/tagovi/${entry.slug}`,
+      lastModified: new Date(entry.modifiedAt),
+    });
   }
 
   return entries;
