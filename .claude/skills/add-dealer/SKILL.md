@@ -70,6 +70,7 @@ What comes back:
 - `ok: true`: written and verified. Show `warnings` (another dealer within 50 m, a similar name, a website switched from http:// to https://) and ask before going on if one of them may mean the dealer is already there.
 - `code: already_on_map`: the same shop is already listed; tell the requester where (`existing`) and stop.
 - `code: name_taken`: another shop with the same name is on the map (a chain). Ask: "Na mapi već postoji <name> na adresi <existing>. Da li je ovo nova radnja istog lanca?" On yes, rerun with `--id <suggestedId>` (the name on the map stays the same).
+- `code: id_reserved`: the id from the name belongs to a service centre. Rerun with `--id <suggestedId>` without asking (the name on the map stays the same).
 - `code: bad_link`, `link_required`, `office_not_found`: pass `error` to the requester and wait for a new link, then rerun.
 - `code: pin_address_mismatch` with `suggestedPlace`: the pin is on the stated street, only the settlement differs (a shop in Borča with "Beograd" in its address). Ask: "Tačka je u naselju <suggestedPlace>. Da li da upišem <suggestedPlace> kao mesto?" On yes, rerun with `--place "<suggestedPlace>"`.
 - `code: pin_address_mismatch` without it: say simply that the point from the link and the address are not the same place, with `reasons` in plain words, and ask which is right. Rerun with the corrected address or link.
