@@ -80,8 +80,16 @@ const SHORT_HOSTS = /^(maps\.app\.goo\.gl|goo\.gl)$/i;
 // short Google link. Returns { lat, lng, resolved } or { error } with the reason.
 export async function pinFromLink(raw) {
   const text = String(raw ?? "").trim();
-  const plain = text.match(/^(-?\d{1,2}\.\d{4,})\s*,\s*(-?\d{1,3}\.\d{4,})$/);
-  if (plain) return { lat: round7(plain[1]), lng: round7(plain[2]), resolved: text };
+  // Coordinates as Google Maps copies them: decimal degrees with a point, at least 5 decimals
+  // (about 1 m; 4 decimals is about 11 m, another building).
+  const plain = text.match(/^(-?\d{1,2}\.(\d+))\s*,\s*(-?\d{1,3}\.(\d+))$/);
+  if (plain) {
+    if (plain[2].length < 5 || plain[4].length < 5) return { error: "too_few_decimals", resolved: text };
+    return { lat: round7(plain[1]), lng: round7(plain[3]), resolved: text };
+  }
+  if (/^-?\d{1,2},\d+[\s,;]+-?\d{1,3},\d+$/.test(text)) return { error: "decimal_comma", resolved: text };
+  // Degrees typed out; a dropped-pin link has them in its path too, next to the real `!3d!4d`.
+  if (!/^https?:\/\//i.test(text) && /\d\s*°/.test(text)) return { error: "degrees", resolved: text };
 
   let url = text;
   for (let hop = 0; hop < 5; hop++) {

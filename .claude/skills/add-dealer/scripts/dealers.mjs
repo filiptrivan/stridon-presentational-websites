@@ -99,6 +99,9 @@ const LINK_HELP = {
   no_coordinates:
     "Iz tog linka ne mogu da pročitam tačnu lokaciju (linkovi iz aplikacije na telefonu je nemaju). Pošalji mi koordinate radnje: na telefonu drži prst na zgradi radnje dok se ne pojavi crvena oznaka, pa kopiraj brojeve iz polja za pretragu; na računaru desni klik na zgradu radnje, pa klikni na brojeve na vrhu menija (kopiraju se). Izgledaju ovako: 44.80123, 20.46543.",
   unreadable: "Taj link trenutno ne mogu da otvorim. Pošalji ga ponovo ili mi pošalji koordinate radnje (na primer 44.80123, 20.46543).",
+  too_few_decimals: "Te koordinate su previše grube, mogu da promaše zgradu. Pošalji ih sa bar 5 decimala, onako kako ih Google mape kopiraju, na primer 44.80123, 20.46543.",
+  decimal_comma: "U koordinatama ide tačka, a ne zarez, na primer 44.80123, 20.46543. Kopiraj ih ponovo sa Google mapa.",
+  degrees: "Pošalji koordinate kao decimalne brojeve, na primer 44.80123, 20.46543. Na Google mapama klikni na brojeve i oni se kopiraju u tom obliku.",
 };
 
 function addressInput() {
