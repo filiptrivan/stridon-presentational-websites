@@ -1,4 +1,5 @@
 // Paths and the tiny CLI layer shared by the add-dealer scripts.
+import { spawnSync } from "node:child_process";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -40,6 +41,9 @@ export function parseArgs(argv) {
   }
   return args;
 }
+
+// git and gh, from the repo root, without a shell.
+export const run = (cmd, args) => spawnSync(cmd, args, { cwd: REPO_ROOT, encoding: "utf8" });
 
 export function print(obj) {
   process.stdout.write(`${JSON.stringify(obj, null, 2)}\n`);

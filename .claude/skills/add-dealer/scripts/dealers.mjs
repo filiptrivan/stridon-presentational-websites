@@ -15,10 +15,8 @@
 // is "expected" (merges by itself) or waits for Filip, by the same rule the PR check applies.
 import fs from "node:fs";
 import path from "node:path";
-import { spawnSync } from "node:child_process";
-import { parseArgs, print, fail, REPO_ROOT, SITES, SERVICE_FILES, LIVE_PAGES, UPSTREAM_REPO } from "./lib/common.mjs";
+import { parseArgs, print, fail, run, REPO_ROOT, SITES, SERVICE_FILES, LIVE_PAGES, UPSTREAM_REPO } from "./lib/common.mjs";
 import {
-  readText,
   parseDealers,
   entriesOf,
   renderEntry,
@@ -35,10 +33,10 @@ import { normalizeHouseNumber, similarity, simple, slugify } from "./lib/text.mj
 
 const args = parseArgs(process.argv.slice(2));
 const command = args._[0];
-const git = (...a) => spawnSync("git", a, { cwd: REPO_ROOT, encoding: "utf8" });
+const read = (file) => fs.readFileSync(path.join(REPO_ROOT, file), "utf8");
 
 const parseAll = () =>
-  Object.fromEntries(Object.entries(SITES).map(([site, file]) => [site, parseDealers(readText(path.join(REPO_ROOT, file)).text)]));
+  Object.fromEntries(Object.entries(SITES).map(([site, file]) => [site, parseDealers(read(file))]));
 const entriesBySite = (parsed) => Object.fromEntries(Object.entries(parsed).map(([site, p]) => [site, entriesOf(p)]));
 
 // Both lists as the dealer-change check reads them. A file the parser cannot read is not
@@ -53,7 +51,7 @@ function readDealers() {
 // The dck service centres come into its list from service-centers.ts (`...SERVICE_DEALERS`), so
 // their ids are taken although the parsed list does not contain them.
 const reservedIds = () =>
-  Object.fromEntries(Object.entries(SERVICE_FILES).map(([site, file]) => [site, serviceIds(readText(path.join(REPO_ROOT, file)).text)]));
+  Object.fromEntries(Object.entries(SERVICE_FILES).map(([site, file]) => [site, serviceIds(read(file))]));
 
 // `--key` given without a value parses as `true`; never write that into a dealer.
 function str(key, { required = false } = {}) {
@@ -148,7 +146,7 @@ async function pinFor(input, category) {
 }
 
 function refuseOnMain() {
-  const branch = git("branch", "--show-current").stdout.trim();
+  const branch = run("git", ["branch", "--show-current"]).stdout.trim();
   if (branch === "main") fail("Na grani main si. Prvo napravi granu dealers/<id> (korak „Grana“ u SKILL.md).");
   return branch;
 }
@@ -305,7 +303,6 @@ function cmdList() {
 function cmdCheck() {
   const problems = [];
   const notes = [];
-  const run = (cmd, a) => spawnSync(cmd, a, { cwd: REPO_ROOT, encoding: "utf8" });
   const remotes = run("git", ["remote", "-v"]).stdout;
   const remote = remotes.match(new RegExp(`^(\\S+)\\s+\\S*${UPSTREAM_REPO.replace("/", "[/:]")}(?:\\.git)?\\s+\\(fetch\\)`, "im"))?.[1] ?? null;
   if (!remote) problems.push(`Nijedan git remote ne pokazuje na ${UPSTREAM_REPO}.`);
@@ -343,18 +340,18 @@ function cmdCheck() {
 // nothing from the PR is executed (this script itself is checked out from the base commit).
 function cmdDiff() {
   if (!args.base || !args.head) fail("diff traži --base i --head.");
-  const mergeBase = git("merge-base", String(args.base), String(args.head)).stdout.trim();
+  const mergeBase = run("git", ["merge-base", String(args.base), String(args.head)]).stdout.trim();
   if (!mergeBase) fail(`Nema zajedničkog pretka za ${args.base} i ${args.head}.`);
-  const names = git("diff", "--name-only", "--no-renames", mergeBase, String(args.head));
+  const names = run("git", ["diff", "--name-only", "--no-renames", mergeBase, String(args.head)]);
   if (names.status !== 0) fail(`git diff nije uspeo: ${names.stderr}`);
   const changed = names.stdout.split(/\r?\n/).filter(Boolean);
   const at = (ref, file) => {
-    const r = git("show", `${ref}:${file}`);
+    const r = run("git", ["show", `${ref}:${file}`]);
     return r.status === 0 ? parseDealers(r.stdout) : null;
   };
   const base = Object.fromEntries(Object.entries(SITES).map(([s, f]) => [s, at(mergeBase, f)]));
   const head = Object.fromEntries(Object.entries(SITES).map(([s, f]) => [s, at(String(args.head), f)]));
-  const reserved = Object.fromEntries(Object.entries(SERVICE_FILES).map(([s, f]) => [s, serviceIds(git("show", `${args.head}:${f}`).stdout)]));
+  const reserved = Object.fromEntries(Object.entries(SERVICE_FILES).map(([s, f]) => [s, serviceIds(run("git", ["show", `${args.head}:${f}`]).stdout)]));
   let gate;
   try {
     gate = classifyChange(base, head, changed, reserved);

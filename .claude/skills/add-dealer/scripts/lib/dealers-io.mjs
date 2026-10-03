@@ -1,14 +1,8 @@
 // The two dealer lists read as plain text (one reader for the skill and the dealer-change check),
 // writing one entry at a fixed anchor with the file's own line endings, the data rules, and the
 // "expected change" rule.
-import fs from "node:fs";
 import { SITES } from "./common.mjs";
 import { inSerbia } from "./geo.mjs";
-
-export function readText(file) {
-  const text = fs.readFileSync(file, "utf8");
-  return { text, eol: text.includes("\r\n") ? "\r\n" : "\n" };
-}
 
 // Same key order as every existing entry; empty fields are left out.
 export const FIELD_ORDER = ["id", "name", "address", "city", "phone", "email", "website", "logoSrc", "category"];

@@ -13,7 +13,7 @@ import path from "node:path";
 import { createHash } from "node:crypto";
 import { WORK_DIR } from "./common.mjs";
 import { distanceM, distanceToLineM, inSerbia, round7 } from "./geo.mjs";
-import { normalizeHouseNumber, similarity, simple, toLatin } from "./text.mjs";
+import { normalizeHouseNumber, similarity, simple, toLatin, words } from "./text.mjs";
 
 const NOMINATIM = "https://nominatim.openstreetmap.org";
 const USER_AGENT = "StridonAddDealerSkill/2.0 (dealer map of dcksrbija.rs and sgtools.rs)";
@@ -59,14 +59,6 @@ async function nominatim(endpoint, params) {
   return body;
 }
 
-const words = (s) =>
-  toLatin(s)
-    .toLowerCase()
-    .replace(/đ/g, "dj")
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .split(/[^a-z0-9]+/)
-    .filter(Boolean);
 const ADMIN_PREFIX = /^(gradska opština|opština|grad)\s+/i;
 const placeKey = (name) => simple(toLatin(name).replace(ADMIN_PREFIX, ""));
 
