@@ -2,17 +2,12 @@ import HeroHeader from "@brand/shared/components/hero-header";
 import { ListingPagination } from "@brand/shared/components/products/listing-pagination";
 import PageBreadcrumbs from "@brand/shared/components/products/page-breadcrumbs";
 import ProductGrid from "@brand/shared/components/products/product-grid";
-import ProductGridSkeleton from "@brand/shared/components/products/product-grid-skeleton";
 import SectionDivider from "@brand/shared/components/section-divider";
 import { SectionErrorBoundary } from "@brand/ui/section-error-boundary";
 import { Prose } from "@brand/ui/prose";
 import Wrapper from "@brand/shared/components/wrapper";
 import { PRODUCTS_PER_PAGE } from "@brand/shared/lib/cache-tags";
-import {
-  getFilteredProductsByTag,
-  getPrerenderedTagSlugs,
-  getTagBySlug,
-} from "@brand/shared/lib/api";
+import { getFilteredProductsByTag, getTagBySlug } from "@brand/shared/lib/api";
 import {
   TAG_BASE_BREADCRUMBS,
   buildTagBreadcrumbJsonLd,
@@ -21,17 +16,11 @@ import { createTagMetadata } from "@brand/shared/lib/metadata";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
-import { Suspense } from "react";
 
 type Props = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ strana?: string }>;
 };
-
-export async function generateStaticParams() {
-  const slugs = await getPrerenderedTagSlugs();
-  return slugs.map((slug) => ({ slug }));
-}
 
 export async function generateMetadata({
   params,
@@ -79,13 +68,12 @@ async function TagProducts({
         products={products.data}
         totalRecords={products.totalRecords}
       />
-      <Suspense>
-        <ListingPagination
-          currentPage={currentPage}
-          totalRecords={products.totalRecords}
-          pageSize={PRODUCTS_PER_PAGE}
-        />
-      </Suspense>
+      <ListingPagination
+        currentPage={currentPage}
+        totalRecords={products.totalRecords}
+        pageSize={PRODUCTS_PER_PAGE}
+        basePath={`/proizvodi/tagovi/${slug}`}
+      />
     </>
   );
 }
@@ -143,9 +131,7 @@ export default async function TagPage({ params, searchParams }: Props) {
         />
 
         <SectionErrorBoundary>
-          <Suspense fallback={<ProductGridSkeleton />}>
-            <TagProducts slug={slug} searchParams={searchParams} />
-          </Suspense>
+          <TagProducts slug={slug} searchParams={searchParams} />
         </SectionErrorBoundary>
 
         {tag.htmlDescription && (

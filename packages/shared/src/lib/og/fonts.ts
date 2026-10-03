@@ -9,10 +9,8 @@ export type OgFontSpec = {
   weight: 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 };
 
-// Called once at module init of each app's OG route, outside any render path.
-// Cache Components only inspects IO inside render callbacks; doing readFile at
-// module init sidesteps vercel/next.js#88043 (silent "use cache" drop in
-// opengraph-image routes).
+// Called once at module init of each app's OG route, outside any render path,
+// so the font files are read once per instance rather than once per image.
 export const loadFonts = (specs: OgFontSpec[]) => {
   const fontsDir = join(process.cwd(), "public", "fonts");
   return Promise.all(

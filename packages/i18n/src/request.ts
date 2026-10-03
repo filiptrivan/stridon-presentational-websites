@@ -9,15 +9,15 @@ import { locales, type Locale } from "./config";
  * `i18n/request.ts`.
  *
  * The locale comes from `next/root-params` rather than `cookies()` or
- * `headers()`: under `cacheComponents` either of those turns the whole subtree
- * dynamic, so a translated page could not be prerendered at all. Root params
- * are part of the route, so they are known at build time and every page stays
- * static. `cacheComponents` switches them on by itself in both bundlers.
+ * `headers()`: either of those makes every page that reads it dynamic, so a
+ * translated page could not be prerendered at all. Root params are part of the
+ * route, so they are known at build time and every page stays static. On Next
+ * 16.1 they need `experimental.rootParams` in the app's next.config (16.3 turns
+ * it on by default); `cacheComponents` used to switch it on implicitly.
  *
- * On Next 16.1 root params throw inside a `"use cache"` scope (support landed
- * in 16.3), and `locale()` is untyped. So a cached function must never reach
- * this config without a locale: pass `{ locale }` to `getTranslations` there.
- * The `hasLocale` guard below narrows the untyped value.
+ * `locale()` is untyped; the `hasLocale` guard below narrows it. (On Next 16.1
+ * root params also throw inside a `"use cache"` scope. The repo has none, and
+ * apps/dck/__tests__/ssr-guard.test.ts keeps it that way.)
  *
  * There is deliberately no catalog of its own in here. `@brand/shared` takes
  * its text as props from whichever app renders it, because dck and sg-tools

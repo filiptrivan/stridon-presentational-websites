@@ -15,11 +15,19 @@ import { Toaster } from "@brand/ui/sonner";
 import { createRootMetadata } from "@brand/shared/lib/metadata";
 import { cn } from "@brand/shared/lib/utils";
 import type { Viewport } from "next";
-import { Suspense, type ReactNode } from "react";
+import type { ReactNode } from "react";
 
 const brand = getBrandConfig();
 
 export const metadata = createRootMetadata();
+
+// Shown only when JavaScript is off: every entrance animation starts from an
+// inline `opacity: 0` that only framer-motion can lift, so without this the
+// sites rendered as an empty page. With JavaScript on the browser ignores it
+// and the animations run as before. The workaround framer-motion's author
+// points to (motion#1752). Matched by `data-reveal` on the motion wrappers.
+const NO_JS_REVEAL_CSS =
+  "[data-reveal]{opacity:1!important;transform:none!important}";
 
 export const viewport: Viewport = {
   themeColor: brand.themeColor,
@@ -76,6 +84,11 @@ export default function RootLayout({
 }: RootLayoutProps) {
   return (
     <html lang={lang}>
+      <head>
+        <noscript>
+          <style dangerouslySetInnerHTML={{ __html: NO_JS_REVEAL_CSS }} />
+        </noscript>
+      </head>
       <body
         className={cn(
           "min-h-screen text-foreground font-base antialiased",
@@ -100,29 +113,20 @@ export default function RootLayout({
             }),
           }}
         />
+        {/* Never behind a Suspense boundary, here or anywhere content lives:
+            React moves a finished boundary over ~500 B into a hidden
+            `<div hidden id="S:n">` once the page passes ~12.8 KB, static
+            pages included, so without JS the menu would not be there.
+            NavbarWithCategories already falls back to no categories. */}
         {showCategoryMenu ? (
-          <Suspense
-            fallback={
-              <Navbar
-                categories={[]}
-                navLinks={navLinks}
-                languageSwitch={languageSwitch}
-                labels={navbarLabels}
-                mobileLabels={mobileLabels}
-                headerCtaHref={headerCtaHref}
-                homeHref={homeHref}
-              />
-            }
-          >
-            <NavbarWithCategories
-              navLinks={navLinks}
-              languageSwitch={languageSwitch}
-              labels={navbarLabels}
-              mobileLabels={mobileLabels}
-              headerCtaHref={headerCtaHref}
-              homeHref={homeHref}
-            />
-          </Suspense>
+          <NavbarWithCategories
+            navLinks={navLinks}
+            languageSwitch={languageSwitch}
+            labels={navbarLabels}
+            mobileLabels={mobileLabels}
+            headerCtaHref={headerCtaHref}
+            homeHref={homeHref}
+          />
         ) : (
           <Navbar
             categories={[]}

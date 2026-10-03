@@ -47,11 +47,12 @@ const HeroHeader = ({
         <div className="flex flex-col items-center justify-center w-full z-10">
           {pretitle}
 
-          <Container delay={0.1}>
-            <Heading className="text-balance leading-tight! text-center text-4xl md:text-6xl font-semibold tracking-tight w-full">
-              {title}
-            </Heading>
-          </Container>
+          {/* Not animated, so it shows the moment the HTML does instead of
+              waiting for JavaScript: the page's name, and the LCP of a page
+              with no larger picture above the fold. */}
+          <Heading className="text-balance leading-tight! text-center text-4xl md:text-6xl font-semibold tracking-tight w-full">
+            {title}
+          </Heading>
 
           <Container delay={0.2}>
             <p className="text-base md:text-lg font-normal text-center text-balance text-muted-foreground max-w-4xl mx-auto mt-4">

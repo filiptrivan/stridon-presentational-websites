@@ -45,11 +45,10 @@ const Stats = ({ stats, layout, locale = "sr-RS" }: StatsProps) => {
               <div className="flex flex-col items-center justify-center text-center">
                 {/* A figure, not a section heading. As an `h4` this skipped a
                     level under the surrounding `h2` and put four entries into
-                    every page outline whose server-rendered text is "0" - the
-                    count-up only reaches the real number once JS runs. `p`
-                    renders identically: Tailwind's preflight strips heading
-                    font-size, weight and margin, and all three are set by the
-                    classes here. */}
+                    every page outline. `p` renders identically: Tailwind's
+                    preflight strips heading font-size, weight and margin, and
+                    all three are set by the classes here. The server renders
+                    the real figure; the count-up from 0 is JavaScript's. */}
                 <p className="text-4xl lg:text-5xl font-bold font-heading">
                   <AnimatedStatValue
                     value={stat.value}
