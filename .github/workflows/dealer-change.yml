@@ -50,25 +50,14 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           OWNER: ${{ github.repository_owner }}
-          SCRIPT: .claude/skills/add-dealer/scripts/dealers.mjs
+          SCRIPT: .claude/skills/add-dealer/scripts/classify-pr.mjs
         # Actions runs this as `bash -e`: every command whose exit code is read must be guarded.
         run: |
           set -uo pipefail
           git fetch --no-tags --quiet origin "+refs/pull/$PR/head:refs/remotes/pr/head"
 
-          # The PR that introduces this check has no script on its base yet.
-          if [ ! -f "$SCRIPT" ]; then
-            changed=$(git diff --name-only "$BASE_SHA...$HEAD_SHA")
-            if grep -qE '^apps/(dck|sg-tools)/constants/dealers\.ts$' <<< "$changed"; then
-              echo "::error::Dealer files changed before the dealer-change script exists on main."
-              exit 1
-            fi
-            echo "No dealer change."
-            exit 0
-          fi
-
           # Exit 0 pass, 1 invalid, 2 needs the owner.
-          node "$SCRIPT" diff --base "$BASE_SHA" --head "$HEAD_SHA" && code=0 || code=$?
+          node "$SCRIPT" --base "$BASE_SHA" --head "$HEAD_SHA" && code=0 || code=$?
           if [ "$code" -ne 2 ]; then exit "$code"; fi
 
           # Not an expected change: it passes only with the owner's approval of this exact commit.
