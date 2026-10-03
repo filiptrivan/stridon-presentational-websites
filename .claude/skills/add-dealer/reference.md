@@ -69,7 +69,7 @@ Test on 120 shops in Belgrade and Novi Sad (2026-10-02; 95 from OpenStreetMap wi
 - `category: "dealer"` for any physical shop (with `website` when it also sells online); `"online"` only for a webshop without a retail location.
 - New shops go at the end of the dealer block (before `...SERVICE_DEALERS` on dck), so the first 6 non-service entries shown on product pages stay the same. Anything that would change those 6 is refused unless `--allow-top6-change` is passed after Filip decides.
 - Field order `id, name, address, city, phone, email, website, logoSrc, category, coordinates`; empty fields are omitted; `address` without a postal code; `website` as `https://host/` (an http:// site is written as https:// with a warning to check the link); `id` is ASCII kebab-case (`đ` becomes `d`, `&` becomes `and`), and a second shop of a chain gets the street or settlement appended (`doming-zrenjaninski-put`). No `logoSrc`: new entries cannot reach the only place that renders logos.
-- `add` and `move` write the text, parse both files again with the same parser the dealer-change check uses, compare them entry by entry with what was intended and restore the originals on any mismatch.
+- `add` and `move` write the text, parse both files again with the same parser the dealer-change check uses, compare them entry by entry with what was intended and restore the originals on any mismatch or when the change would be `invalid`.
 
 ## Trying it out
 

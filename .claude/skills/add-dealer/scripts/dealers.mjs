@@ -27,7 +27,6 @@ import {
   replaceEntry,
   simulateInsert,
   checkEntry,
-  checkSites,
   classifyChange,
   serviceIds,
   FIELD_ORDER,
@@ -39,7 +38,6 @@ import { normalizeHouseNumber, similarity, simple, slugify } from "./lib/text.mj
 const args = parseArgs(process.argv.slice(2));
 const command = args._[0];
 const git = (...a) => spawnSync("git", a, { cwd: REPO_ROOT, encoding: "utf8" });
-const rel = (file) => path.relative(REPO_ROOT, file).replace(/\\/g, "/");
 
 const parseAll = () =>
   Object.fromEntries(Object.entries(SITES).map(([site, file]) => [site, parseDealers(readText(path.join(REPO_ROOT, file)).text)]));
@@ -159,32 +157,26 @@ function refuseOnMain() {
 
 const fingerprint = (list) => list.map((d) => JSON.stringify([...FIELD_ORDER, "coordinates"].map((k) => d[k] ?? null))).join("\n");
 
-// Writes every site with `edit`, parses the written files again and compares them with
-// `expected`; any mismatch or rule error restores the originals.
+// Writes every site with `edit`, parses the written files again, compares them with `expected`
+// and classifies the change by the same rule as the dealer-change check, so the requester knows
+// what happens next. A write that differs from the plan or is `invalid` is restored.
 function writeVerified(sites, edit, expected) {
-  const originals = {};
+  const before = parseAll();
+  const restore = () => sites.forEach((site) => fs.writeFileSync(path.join(REPO_ROOT, SITES[site]), before[site].text));
+  const changed = sites.map((site) => SITES[site]);
+  let gate;
   try {
-    for (const site of sites) {
-      const file = path.join(REPO_ROOT, SITES[site]);
-      const { text, eol } = readText(file);
-      originals[site] = { file, text };
-      fs.writeFileSync(file, edit(site, text, eol));
-    }
+    for (const site of sites) fs.writeFileSync(path.join(REPO_ROOT, SITES[site]), edit(site, before[site].text, before[site].eol));
     const after = parseAll();
-    for (const site of sites) {
-      if (after[site].errors.length) throw new Error(`${site}: ${after[site].errors.join("; ")}`);
-      if (fingerprint(entriesOf(after[site])) !== fingerprint(expected(site))) throw new Error(`${site}: fajl posle upisa ne odgovara planu`);
-    }
-    const { errors, mismatches } = checkSites(entriesBySite(after));
-    if (errors.length || mismatches.length) throw new Error([...errors, ...mismatches].join("; "));
+    const off = sites.find((site) => fingerprint(entriesOf(after[site])) !== fingerprint(expected(site)));
+    if (off) throw new Error(`${off}: fajl posle upisa ne odgovara planu`);
+    gate = classifyChange(before, after, changed, reservedIds());
+    if (gate.kind === "invalid") throw new Error(gate.errors.join("; "));
   } catch (err) {
-    for (const { file, text } of Object.values(originals)) fs.writeFileSync(file, text);
+    restore();
     fail(`Upis je vraćen na staro stanje: ${err.message}`);
   }
-  // Same rule as the dealer-change check on the PR, so the requester knows what happens next.
-  const before = Object.fromEntries(Object.keys(SITES).map((s) => [s, parseDealers(originals[s]?.text ?? readText(path.join(REPO_ROOT, SITES[s])).text)]));
-  const changed = Object.values(originals).map((o) => rel(o.file));
-  return { changed, gate: classifyChange(before, parseAll(), changed, reservedIds()) };
+  return { changed, gate };
 }
 
 function nearbyWarnings(bySite, point, skipId) {
