@@ -38,7 +38,7 @@ const OPTIONS = {
   move: ["id", "street", "number", "place", "municipality", "link"],
 };
 const command = process.argv[2];
-if (!Object.hasOwn(OPTIONS, command ?? "")) fail(`Nepoznata komanda "${command ?? ""}". Dozvoljeno: ${Object.keys(OPTIONS).join(", ")}.`);
+if (!Object.hasOwn(OPTIONS, command ?? "")) fail(`Nepoznata komanda "${command ?? ""}". Dozvoljeno: ${Object.keys(OPTIONS).join(", ")}.`, { code: "bad_args" });
 const opts = readOptions(process.argv.slice(3), OPTIONS[command]);
 const need = (key) => opts[key] ?? fail(`Nedostaje --${key}.`, { code: "bad_args" });
 const read = (file) => fs.readFileSync(path.join(REPO_ROOT, file), "utf8");
@@ -202,9 +202,9 @@ function report(sites, pin, written, warnings) {
 async function cmdAdd() {
   const name = need("name");
   const category = need("category");
-  if (!["dealer", "online"].includes(category)) fail("--category mora biti dealer (radnja) ili online (webshop bez radnje).");
+  if (!["dealer", "online"].includes(category)) fail("--category mora biti dealer (radnja) ili online (webshop bez radnje).", { code: "bad_args" });
   const wanted = need("sites").split(",").map((s) => s.trim()).filter(Boolean);
-  if (!wanted.length || wanted.some((s) => !Object.hasOwn(SITES, s))) fail(`--sites mora biti ${Object.keys(SITES).join(", ")} ili oba, odvojeno zarezom.`);
+  if (!wanted.length || wanted.some((s) => !Object.hasOwn(SITES, s))) fail(`--sites mora biti ${Object.keys(SITES).join(", ")} ili oba, odvojeno zarezom.`, { code: "bad_args" });
   // Always dck first, so `changed` (and the commit command built from it) has one fixed order.
   const sites = Object.keys(SITES).filter((s) => wanted.includes(s));
   refuseOnMain();

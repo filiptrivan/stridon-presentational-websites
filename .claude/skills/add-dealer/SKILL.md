@@ -72,7 +72,7 @@ What comes back:
 - `code: pin_address_mismatch` without it: say simply that the point from the link and the address are not the same place, with `reasons` in plain words, and ask which is right. Rerun with the corrected address or link.
 - `Diler ne prolazi pravila`: explain the `errors`.
 - `code: error`: a service did not answer; wait a minute and rerun once.
-- `code: bad_args`: the command itself is wrong (an unknown or empty option); fix it from `error` and rerun, without bothering the requester.
+- `code: bad_args`: the command itself is wrong (an unknown command or option, a missing or wrong value); fix it from `error` and rerun, without bothering the requester.
 - `Upis je vraćen na staro stanje`: nothing was written. Tell the requester that Filip has to look at it and stop.
 
 **5. Commit.** `git commit -m "<subject>" -m "<body>" -- <the files in changed>`, no `git add` (a commit with paths takes exactly those files). Write each `-m` as one quoted line, without a heredoc or `$(…)`, so the repo's permission rule for it applies. In English:
