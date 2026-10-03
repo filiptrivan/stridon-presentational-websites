@@ -1,4 +1,4 @@
-// OpenStreetMap (Nominatim) checks for a dealer pin (owner's decisions 2026-10-01):
+// OpenStreetMap (Nominatim) checks for a dealer pin (reference.md, decision 2):
 // - physical shop: the pin comes from the requester's Google Maps link; OSM only checks that it
 //   sits on the stated street and in the stated settlement;
 // - online dealer: the pin is the registered office, geocoded here.
@@ -20,10 +20,9 @@ const USER_AGENT = "StridonAddDealerSkill/2.0 (dealer map of dcksrbija.rs and sg
 
 // How close the pin must be to count as "on the stated street": to the address point of the
 // stated number (the shop can be another building on the same lot or a corner building), or to
-// the street's centre line (a shop set back behind a yard or a parking lot). Tested 2026-10-02 on
-// 120 shops: with 150 m / 100 m, 26 of 40 pins placed 60-300 m from the real shop passed; with
-// 75 m / 50 m every correct pin still passed and only pins on the shop's own street got through,
-// which OSM cannot tell apart (the requester's Google Maps link decides the building).
+// the street's centre line (a shop set back behind a yard or a parking lot). These limits pass
+// every correct pin of the 120-shop test in reference.md; a pin elsewhere on the shop's own
+// street still passes, which OSM cannot tell apart (the requester's link decides the building).
 const NEAR = { addressPoint: 75, streetLine: 50 };
 // Half-size of the box around the pin in which the street's segments are looked up (~400 m).
 const BOX = { lat: 0.0036, lng: 0.005 };
@@ -121,8 +120,8 @@ async function addressPoints(input) {
 }
 
 // The street's mapped segments near the pin, with their geometry. Only a box around the pin:
-// a long street has more segments than Nominatim returns, and without the box all of them came
-// from one end of it (Vojislava Ilića: "884 m away" for a pin 295 m from the shop on that street).
+// a long street has more segments than Nominatim returns, and without the box they could all
+// come from its far end.
 async function streetSegments(input, point) {
   const hits = await nominatim("search", {
     street: input.street,
@@ -163,8 +162,8 @@ export async function checkPin(point, input) {
   const atPin = { road: rv.road, houseNumber: rv.houseNumber, settlement: rv.settlement };
   if (!rv.placeOk) {
     // When the pin is on the stated street of the settlement it is in, only the settlement name
-    // differs (a shop in Borča with "Beograd" in its address, about one in five shops in the
-    // 2026-10-02 test, corner buildings included): that settlement is offered to the requester.
+    // differs (a shop in Borča with "Beograd" in its address, corner buildings included): that
+    // settlement is offered to the requester.
     const there = rv.settlement ? await onStreet(point, { ...input, place: rv.settlement }, rv) : { ok: false };
     return {
       ok: false,

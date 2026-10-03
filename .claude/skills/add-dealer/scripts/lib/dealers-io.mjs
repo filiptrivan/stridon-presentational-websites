@@ -171,19 +171,29 @@ const changedKeys = (a, b) =>
   DATA_KEYS.filter((k) => JSON.stringify(a[k] ?? (k === "comments" ? [] : null)) !== JSON.stringify(b[k] ?? (k === "comments" ? [] : null)));
 const MOVABLE = new Set(["address", "city", "coordinates"]);
 
-// The owner's rule (Filip on PR #20, 2026-10-01): an "expected" change is exactly one dealer
-// added, or one existing dealer's address and pin moved, identical on both sites, nothing else.
-// It merges with no human review; everything else waits for @filiptrivan. Clarified by Luka
-// (2026-10-02): a dealer for one brand only, on one site, is expected too; "identical" applies
-// where the dealer is on both sites. A new dealer, online or a shop, goes at the end of the list,
-// so the first 6 on product pages never change through the skill.
-//
-// `base` and `head` map site -> parseDealers() result (or null for a missing file);
-// `changedFiles` are all files the PR changes, repo-relative with forward slashes;
-// `reservedIds` maps site -> ids already used outside the list (dck service centres).
-// kind: none | mixed | expected | owner | invalid. `ok` says whether the check passes; `owner`
-// can pass after Filip approves, `invalid` (a file that cannot be read, a duplicate id, a pin
-// outside Serbia) only with his bypass.
+/**
+ * The one place that says what an "expected" dealer change is, the kind that merges with no human
+ * review (Filip's decisions on PR #20, reference.md); SKILL.md, reference.md, dealer-change.yml
+ * and CODEOWNERS point here. Expected means all of:
+ * - exactly one dealer added at the end of the list, or one existing dealer's address, city and
+ *   coordinates changed and nothing else of it;
+ * - on one site, or the same on both; a dealer listed on both sites moves on both;
+ * - category `dealer` or `online` (a service centre is Filip's), and the entry passes the format
+ *   rules of `checkEntry` with `strict` (no postal code in the address, an https website, an
+ *   address for a shop);
+ * - every dealer listed on both sites the same on both, across the whole list;
+ * - the first 6 dealers on product pages unchanged, and no logo or comment on a new entry;
+ * - each file otherwise byte for byte the same.
+ * Any other dealer change waits for @filiptrivan.
+ *
+ * `base` and `head` map site -> parseDealers() result (or null for a missing file);
+ * `changedFiles` are all files the PR changes, repo-relative with forward slashes;
+ * `reservedIds` maps site -> ids already used outside the list (dck service centres).
+ * kind: none | mixed | expected | owner | invalid. `ok` says whether the check passes: `none`
+ * and `mixed` pass (CODEOWNERS makes Filip review a mixed PR), `owner` passes after Filip
+ * approves, `invalid` (a file that cannot be read, a duplicate id, a pin outside Serbia) only
+ * with his bypass.
+ */
 export function classifyChange(base, head, changedFiles, reservedIds = {}) {
   const touched = Object.keys(SITES).filter((s) => changedFiles.includes(SITES[s]));
   if (!touched.length) return { kind: "none", ok: true, reasons: ["PR ne menja spisak dilera."] };

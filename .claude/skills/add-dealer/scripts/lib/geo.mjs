@@ -46,8 +46,8 @@ export function mapLinks({ lat, lng }) {
 }
 
 // Coordinates written in a map URL. Google `!3d!4d` is the place itself; `@lat,lng` is only
-// where the map was centred (65 km away from the pin in one tested link), so it never counts as a
-// pin. OSM `mlat/mlon` is a marker. A directions link has several places and is refused.
+// where the map was centred, so it never counts as a pin. OSM `mlat/mlon` is a marker. A
+// directions link has several places and is refused.
 function coordsFromUrl(raw) {
   let url = String(raw);
   try {
@@ -69,11 +69,11 @@ function coordsFromUrl(raw) {
 }
 
 // Hosts that only redirect to a full Google Maps URL. Only the Location header is read, never
-// the page, so this is following a link, not scraping (owner's decision 2026-10-01: no Google
-// scraping, no browser). Tested 2026-10-02 on 12 public maps.app.goo.gl links: every one answers
-// 302 without a browser, but only links shared from a computer carry the place's `!3d!4d`; links
-// shared from the phone app (`g_st=`, `entry=gps`) carry only a place id, so the requester is
-// asked for the coordinates instead. `share.google` answers with an HTML page and is unusable.
+// the page, so this is following a link, not scraping (reference.md, decision 3). A
+// maps.app.goo.gl link answers 302 without a browser, but only one shared from a computer carries
+// the place's `!3d!4d`; one shared from the phone app (`g_st=`, `entry=gps`) carries only a place
+// id, so the requester is asked for the coordinates instead. `share.google` answers with an HTML
+// page and is unusable.
 const SHORT_HOSTS = /^(maps\.app\.goo\.gl|goo\.gl)$/i;
 
 // The pin from what the requester pasted: "lat, lng", an OSM link, a Google Maps place link or a

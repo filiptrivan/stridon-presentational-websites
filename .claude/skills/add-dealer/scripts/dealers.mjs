@@ -61,9 +61,8 @@ function readDealers() {
 const reservedIds = () =>
   Object.fromEntries(Object.entries(SERVICE_FILES).map(([site, file]) => [site, serviceIds(read(file))]));
 
-// Every entry links over https (`https://host/`). A site given as http:// is written as https://
-// (2 of 100 shops in the 2026-10-02 test were blocked on this before); the requester checks the
-// link once the dealer is live, as with the pin.
+// Every entry links over https (`https://host/`). A site given as http:// is written as https://,
+// and the requester checks the link once the dealer is live, as with the pin.
 function normalizeWebsite(w, warnings) {
   if (!w) return undefined;
   try {
@@ -79,7 +78,7 @@ function normalizeWebsite(w, warnings) {
 }
 
 // A second shop of a chain has the same name, so the same id. Offer one with the street (or the
-// settlement), e.g. "doming-zrenjaninski-put"; in the 2026-10-02 test 6 chains had 2 to 5 shops.
+// settlement), e.g. "doming-zrenjaninski-put".
 function freeId(base, input, taken) {
   const [street, place, number] = [input.street, input.place, input.numberRaw].map(slugify);
   for (const parts of [[street], [place], [street, number]]) {
@@ -95,7 +94,7 @@ const LINK_HELP = {
   link_not_found: "Google kaže da taj link ne postoji. Pošalji ponovo link radnje sa Google mapa.",
   map_view_not_place: "Link pokazuje deo mape, a ne samu radnju. Otvori radnju na Google mapama (klikni na njen naziv), pa Podeli i Kopiraj link.",
   directions: "To je link za putanju, a ne za radnju. Otvori samu radnju na Google mapama, pa Podeli i Kopiraj link.",
-  // Links shared from the phone app carry only a place id (tested 2026-10-02), not coordinates.
+  // Links shared from the phone app carry only a place id, not coordinates.
   no_coordinates:
     "Iz tog linka ne mogu da pročitam tačnu lokaciju (linkovi iz aplikacije na telefonu je nemaju). Pošalji mi koordinate radnje: na telefonu drži prst na zgradi radnje dok se ne pojavi crvena oznaka, pa kopiraj brojeve iz polja za pretragu; na računaru desni klik na zgradu radnje, pa klikni na brojeve na vrhu menija (kopiraju se). Izgledaju ovako: 44.80123, 20.46543.",
   unreadable: "Taj link trenutno ne mogu da otvorim. Pošalji ga ponovo ili mi pošalji koordinate radnje (na primer 44.80123, 20.46543).",
@@ -116,7 +115,7 @@ function addressInput() {
   };
 }
 
-// The pin, by the owner's rule (2026-10-01): a physical shop's pin is its Google Maps link and
+// The pin (reference.md, decision 2): a physical shop's pin is its Google Maps link and
 // OSM only checks that it lies on the stated street in the stated settlement; an online dealer
 // is pinned on the registered office from OSM (or a link, checked the same way).
 async function pinFor(input, category) {

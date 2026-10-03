@@ -3,8 +3,8 @@
 # anything else on their own. Later lines win.
 *                                    @filiptrivan
 
-# The two dealer lists have no owner: their gate is the required dealer-change check, which lets
-# an expected change (one dealer added or moved, on one site or identically on both) auto-merge and fails
-# every other dealer change until @filiptrivan approves (.github/workflows/dealer-change.yml).
+# The two dealer lists have no owner: the required dealer-change check gates them instead
+# (.github/workflows/dealer-change.yml), and what it lets through is classifyChange() in
+# .claude/skills/add-dealer/scripts/lib/dealers-io.mjs.
 /apps/dck/constants/dealers.ts
 /apps/sg-tools/constants/dealers.ts
