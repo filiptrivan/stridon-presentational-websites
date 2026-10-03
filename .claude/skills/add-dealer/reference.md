@@ -29,7 +29,7 @@
 - His own Pro, Max or Team plan; the repo connected (the Claude GitHub App may need installing on Filip's account to push to it).
 - The environment's network access set to Custom, with the default list kept, plus `nominatim.openstreetmap.org`, `maps.app.goo.gl` and `goo.gl`. The default trusted list has no OSM or Google Maps hosts. Each environment has its own list, so this is once per person.
 - `git push` works only on the session's own branch, so the skill uses that branch and does one dealer per session. Whether the proxy allows `gh pr merge --auto` is not documented: the skill falls back to the "Enable auto-merge" button.
-- Locally instead: Node 22.18+, git, `gh auth login`, a clone of the repo, then `claude` in it.
+- Locally instead: Node 22 or newer, git, `gh auth login`, a clone of the repo, then `claude` in it.
 
 ## What the research found (2026-10-02, official docs first)
 
@@ -69,7 +69,7 @@ Test on 120 shops in Belgrade and Novi Sad (2026-10-02; 95 from OpenStreetMap wi
 - `category: "dealer"` for any physical shop (with `website` when it also sells online); `"online"` only for a webshop without a retail location.
 - New shops go at the end of the dealer block (before `...SERVICE_DEALERS` on dck), so the first 6 non-service entries shown on product pages stay the same. Anything that would change those 6 is refused unless `--allow-top6-change` is passed after Filip decides.
 - Field order `id, name, address, city, phone, email, website, logoSrc, category, coordinates`; empty fields are omitted; `address` without a postal code; `website` as `https://host/` (an http:// site is written as https:// with a warning to check the link); `id` is ASCII kebab-case (`đ` becomes `d`, `&` becomes `and`), and a second shop of a chain gets the street or settlement appended (`doming-zrenjaninski-put`). No `logoSrc`: new entries cannot reach the only place that renders logos.
-- `add` and `move` write the text, import both files back the way the sites do (Node 22.18+ type stripping), compare them entry by entry with what was intended and restore the originals on any mismatch.
+- `add` and `move` write the text, parse both files again with the same parser the dealer-change check uses, compare them entry by entry with what was intended and restore the originals on any mismatch.
 
 ## Trying it out
 

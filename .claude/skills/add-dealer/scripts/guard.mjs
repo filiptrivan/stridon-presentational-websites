@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // PreToolUse hook registered by the add-dealer skill (see SKILL.md frontmatter): dealer files are
 // written only by `dealers.mjs add|move`, never by Edit/Write, so the pin check and the
-// import-back verification cannot be skipped. Exit code 2 blocks the call and shows stderr to
+// verification after the write cannot be skipped. Exit code 2 blocks the call and shows stderr to
 // Claude. Data rules on commits are enforced in CI by the dealer-change check.
 import fs from "node:fs";
 import path from "node:path";

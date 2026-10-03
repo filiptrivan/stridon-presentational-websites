@@ -1,49 +1,9 @@
-// The two dealer lists: reading them as plain text (what the dealer-change check sees in a PR),
-// importing them exactly as the sites do (to verify a write), writing one entry at a fixed
-// anchor with the file's own line endings, the data rules, and the "expected change" rule.
+// The two dealer lists read as plain text (one reader for the skill and the dealer-change check),
+// writing one entry at a fixed anchor with the file's own line endings, the data rules, and the
+// "expected change" rule.
 import fs from "node:fs";
-import path from "node:path";
-// Namespace import: `registerHooks` exists from Node 22.15, and a named import would crash older
-// Node before `dealers.mjs check` can say which version is needed.
-import * as nodeModule from "node:module";
-import { pathToFileURL } from "node:url";
 import { SITES } from "./common.mjs";
 import { inSerbia, distanceM } from "./geo.mjs";
-
-// Importing the apps' .ts files makes Node warn about type stripping and about app
-// package.json files without "type": "module". Both are expected here; keep output clean.
-const emitWarning = process.emitWarning;
-process.emitWarning = (warning, ...rest) => {
-  if (/type stripping|Module type of .* is not specified/is.test(String(warning?.message ?? warning))) return;
-  return emitWarning.call(process, warning, ...rest);
-};
-
-let hooksRegistered = false;
-function allowExtensionlessTsImports() {
-  if (hooksRegistered) return;
-  hooksRegistered = true;
-  // dck/constants/dealers.ts imports "./service-centers" without an extension (bundler style).
-  nodeModule.registerHooks({
-    resolve(specifier, context, nextResolve) {
-      try {
-        return nextResolve(specifier, context);
-      } catch (err) {
-        if (/^\.\.?\//.test(specifier) && !path.extname(specifier)) return nextResolve(`${specifier}.ts`, context);
-        throw err;
-      }
-    },
-  });
-}
-
-// Imports the file the way the sites do (Node 22.18+ type stripping). Used only to verify a
-// write; the PR check never runs PR code and reads the text instead (parseDealers).
-export async function importDealers(file) {
-  allowExtensionlessTsImports();
-  const url = `${pathToFileURL(path.resolve(file)).href}?v=${Date.now()}-${Math.random()}`;
-  const mod = await import(url);
-  if (!Array.isArray(mod.DEALERS)) throw new Error(`${file} has no exported DEALERS array`);
-  return mod.DEALERS;
-}
 
 export function readText(file) {
   const text = fs.readFileSync(file, "utf8");

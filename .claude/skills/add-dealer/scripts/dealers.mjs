@@ -11,15 +11,14 @@
 //                    [--link <Google Maps link | lat,lng>]
 //   dealers.mjs diff --base <sha> --head <sha>   (CI) classify a PR; exit 0 pass, 2 needs Filip, 1 invalid
 //
-// add and move check the pin, write the file, import it back the way the sites do, compare with
-// what was intended and restore the original on any mismatch. Then they say whether the change
+// add and move check the pin, write the file, read it back with the parser the PR check uses,
+// compare with what was intended and restore the original on any mismatch. Then they say whether the change
 // is "expected" (merges by itself) or waits for Filip, by the same rule the PR check applies.
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { parseArgs, print, fail, REPO_ROOT, SITES, SERVICE_FILES, LIVE_PAGES, UPSTREAM_REPO } from "./lib/common.mjs";
 import {
-  importDealers,
   readText,
   parseDealers,
   entriesOf,
@@ -42,14 +41,23 @@ const command = args._[0];
 const git = (...a) => spawnSync("git", a, { cwd: REPO_ROOT, encoding: "utf8" });
 const rel = (file) => path.relative(REPO_ROOT, file).replace(/\\/g, "/");
 
-async function loadAll() {
-  const bySite = {};
-  for (const [site, file] of Object.entries(SITES)) bySite[site] = await importDealers(path.join(REPO_ROOT, file));
-  return bySite;
-}
-
 const parseAll = () =>
   Object.fromEntries(Object.entries(SITES).map(([site, file]) => [site, parseDealers(readText(path.join(REPO_ROOT, file)).text)]));
+const entriesBySite = (parsed) => Object.fromEntries(Object.entries(parsed).map(([site, p]) => [site, entriesOf(p)]));
+
+// Both lists as the dealer-change check reads them. A file the parser cannot read is not
+// written to: the check would call any change to it invalid.
+function readDealers() {
+  const parsed = parseAll();
+  const errors = Object.entries(parsed).flatMap(([site, p]) => p.errors.map((e) => `${site}: ${e}`));
+  if (errors.length) fail("Spisak dilera ima oblik koji skripta ne ume da pročita; javi Filipu.", { errors });
+  return { parsed, bySite: entriesBySite(parsed) };
+}
+
+// The dck service centres come into its list from service-centers.ts (`...SERVICE_DEALERS`), so
+// their ids are taken although the parsed list does not contain them.
+const reservedIds = () =>
+  Object.fromEntries(Object.entries(SERVICE_FILES).map(([site, file]) => [site, serviceIds(readText(path.join(REPO_ROOT, file)).text)]));
 
 // `--key` given without a value parses as `true`; never write that into a dealer.
 function str(key, { required = false } = {}) {
@@ -81,8 +89,7 @@ function normalizeWebsite(w, warnings) {
 
 // A second shop of a chain has the same name, so the same id. Offer one with the street (or the
 // settlement), e.g. "doming-zrenjaninski-put"; in the 2026-10-02 test 6 chains had 2 to 5 shops.
-function freeId(base, input, bySite) {
-  const taken = new Set(Object.values(bySite).flat().map((d) => d.id));
+function freeId(base, input, taken) {
   for (const candidate of [`${base}-${slugify(input.street)}`, `${base}-${slugify(input.place)}`, `${base}-${slugify(input.street)}-${slugify(input.numberRaw)}`]) {
     if (!taken.has(candidate)) return candidate;
   }
@@ -152,9 +159,9 @@ function refuseOnMain() {
 
 const fingerprint = (list) => list.map((d) => JSON.stringify([...FIELD_ORDER, "coordinates"].map((k) => d[k] ?? null))).join("\n");
 
-// Writes every site with `edit`, imports the files back and compares them with `expected`;
-// any mismatch or rule error restores the originals.
-async function writeVerified(sites, edit, expected) {
+// Writes every site with `edit`, parses the written files again and compares them with
+// `expected`; any mismatch or rule error restores the originals.
+function writeVerified(sites, edit, expected) {
   const originals = {};
   try {
     for (const site of sites) {
@@ -163,9 +170,12 @@ async function writeVerified(sites, edit, expected) {
       originals[site] = { file, text };
       fs.writeFileSync(file, edit(site, text, eol));
     }
-    const after = await loadAll();
-    for (const site of sites) if (fingerprint(after[site]) !== fingerprint(expected(site))) throw new Error(`${site}: fajl posle upisa ne odgovara planu`);
-    const { errors, mismatches } = checkSites(after);
+    const after = parseAll();
+    for (const site of sites) {
+      if (after[site].errors.length) throw new Error(`${site}: ${after[site].errors.join("; ")}`);
+      if (fingerprint(entriesOf(after[site])) !== fingerprint(expected(site))) throw new Error(`${site}: fajl posle upisa ne odgovara planu`);
+    }
+    const { errors, mismatches } = checkSites(entriesBySite(after));
     if (errors.length || mismatches.length) throw new Error([...errors, ...mismatches].join("; "));
   } catch (err) {
     for (const { file, text } of Object.values(originals)) fs.writeFileSync(file, text);
@@ -174,8 +184,7 @@ async function writeVerified(sites, edit, expected) {
   // Same rule as the dealer-change check on the PR, so the requester knows what happens next.
   const before = Object.fromEntries(Object.keys(SITES).map((s) => [s, parseDealers(originals[s]?.text ?? readText(path.join(REPO_ROOT, SITES[s])).text)]));
   const changed = Object.values(originals).map((o) => rel(o.file));
-  const reserved = Object.fromEntries(Object.entries(SERVICE_FILES).map(([s, f]) => [s, serviceIds(readText(path.join(REPO_ROOT, f)).text)]));
-  return { changed, gate: classifyChange(before, parseAll(), changed, reserved) };
+  return { changed, gate: classifyChange(before, parseAll(), changed, reservedIds()) };
 }
 
 function nearbyWarnings(bySite, point, skipId) {
@@ -219,17 +228,23 @@ async function cmdAdd() {
   const address = [input.street, input.numberRaw].filter(Boolean).join(" ");
 
   // The id must be free on both sites (service centres included) before anything is looked up.
-  const bySite = await loadAll();
+  const { bySite } = readDealers();
+  const services = Object.values(reservedIds()).flat();
+  const taken = new Set([...Object.values(bySite).flat().map((d) => d.id), ...services]);
   const holders = Object.entries(bySite).flatMap(([site, list]) => list.filter((d) => d.id === id).map((d) => ({ site, name: d.name, address: d.address ?? "", city: d.city ?? "" })));
   if (holders.length) {
     const sameShop = holders.find((h) => simple(h.address) === simple(address) && simple(h.city) === simple(input.place));
     if (sameShop) fail(`Ova radnja je već na mapi (${sameShop.site}: ${sameShop.address}, ${sameShop.city}).`, { code: "already_on_map", existing: holders });
-    const suggestedId = freeId(id, input, bySite);
+    const suggestedId = freeId(id, input, taken);
     fail(`Već postoji diler „${holders[0].name}“ na drugoj adresi (${holders[0].site}: ${holders[0].address}, ${holders[0].city}). Ako je ovo druga radnja istog lanca, ponovi sa --id ${suggestedId}.`, {
       code: "name_taken",
       suggestedId,
       existing: holders,
     });
+  }
+  if (services.includes(id)) {
+    const suggestedId = freeId(id, input, taken);
+    fail(`Id „${id}“ već ima ovlašćeni servis na DCK mapi. Ponovi sa --id ${suggestedId}.`, { code: "name_taken", suggestedId, existing: [{ site: "dck", service: id }] });
   }
 
   const pin = await pinFor(input, category);
@@ -264,7 +279,7 @@ async function cmdAdd() {
   }
   if (errors.length) fail("Diler ne prolazi pravila.", { errors, warnings });
 
-  const written = await writeVerified(
+  const written = writeVerified(
     sites,
     (site, text, eol) => insertEntry(text, eol, entry, position, bySite[site]),
     (site) => next[site],
@@ -275,8 +290,7 @@ async function cmdAdd() {
 async function cmdMove() {
   const id = str("id", { required: true });
   refuseOnMain();
-  const bySite = await loadAll();
-  const parsed = parseAll();
+  const { parsed, bySite } = readDealers();
   // A dealer listed on both sites moves on both.
   const sites = Object.keys(SITES).filter((s) => bySite[s].some((d) => d.id === id));
   if (!sites.length) fail(`Diler "${id}" ne postoji ni na jednom sajtu.`);
@@ -287,7 +301,7 @@ async function cmdMove() {
   const strict = checkEntry({ ...old, ...changes }, { strict: true });
   if (strict.errors.length) fail("Diler ne prolazi pravila.", { errors: strict.errors });
 
-  const written = await writeVerified(
+  const written = writeVerified(
     sites,
     (site, text, eol) => replaceEntry(text, eol, { ...entriesOf(parsed[site]).find((d) => d.id === id), ...changes }),
     (site) => bySite[site].map((d) => (d.id === id ? { ...d, ...changes } : d)),
@@ -295,8 +309,8 @@ async function cmdMove() {
   report("move", { ...old, ...changes }, sites, pin, written, nearbyWarnings(bySite, pin, id));
 }
 
-async function cmdList() {
-  const bySite = await loadAll();
+function cmdList() {
+  const { bySite } = readDealers();
   const find = args.find ? String(args.find) : null;
   const rows = {};
   for (const [site, dealers] of Object.entries(bySite)) {
@@ -311,10 +325,6 @@ function cmdCheck() {
   const problems = [];
   const notes = [];
   const run = (cmd, a) => spawnSync(cmd, a, { cwd: REPO_ROOT, encoding: "utf8" });
-  // The write is verified by importing the .ts files: Node 22.18+ strips types without flags.
-  const [major, minor] = process.versions.node.split(".").map(Number);
-  if (major < 22 || (major === 22 && minor < 18)) problems.push(`Node ${process.versions.node} je star; treba 22.18 ili noviji (https://nodejs.org, LTS).`);
-
   const remotes = run("git", ["remote", "-v"]).stdout;
   const remote = remotes.match(new RegExp(`^(\\S+)\\s+\\S*${UPSTREAM_REPO.replace("/", "[/:]")}(?:\\.git)?\\s+\\(fetch\\)`, "im"))?.[1] ?? null;
   if (!remote) problems.push(`Nijedan git remote ne pokazuje na ${UPSTREAM_REPO}.`);
@@ -344,7 +354,7 @@ function cmdCheck() {
   const pending = open.status === 0 ? JSON.parse(open.stdout || "[]").filter((p) => skillTitle.test(p.title)) : [];
   if (pending.length) notes.push(`Prethodni diler još nije na sajtu (${pending.map((p) => p.url).join(", ")}). Novi bi se sudario sa njim: sačekaj da se spoji.`);
 
-  print({ ok: problems.length === 0, problems, notes, node: process.versions.node, remote, permission, cloud, branch, route: dryRun ? "dry-run" : "push" });
+  print({ ok: problems.length === 0, problems, notes, remote, permission, cloud, branch, route: dryRun ? "dry-run" : "push" });
   if (problems.length) process.exit(1);
 }
 
