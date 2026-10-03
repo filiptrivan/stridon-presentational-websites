@@ -2,7 +2,6 @@ import { getBrandConfig } from "@brand/config";
 import HeroHeader from "@brand/shared/components/hero-header";
 import { ListingPagination } from "@brand/shared/components/products/listing-pagination";
 import ProductGrid from "@brand/shared/components/products/product-grid";
-import ProductGridSkeleton from "@brand/shared/components/products/product-grid-skeleton";
 import Wrapper from "@brand/shared/components/wrapper";
 import { PRODUCTS_PER_PAGE } from "@brand/shared/lib/cache-tags";
 import { getFilteredProducts } from "@brand/shared/lib/api";
@@ -10,7 +9,6 @@ import { createProductsPageMetadata } from "@brand/shared/lib/metadata";
 import { parsePageParam } from "@brand/shared/lib/utils";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { Suspense } from "react";
 
 const brand = getBrandConfig();
 
@@ -47,13 +45,12 @@ async function ProductsList({
         products={products.data}
         totalRecords={products.totalRecords}
       />
-      <Suspense>
-        <ListingPagination
-          currentPage={currentPage}
-          totalRecords={products.totalRecords}
-          pageSize={PRODUCTS_PER_PAGE}
-        />
-      </Suspense>
+      <ListingPagination
+        currentPage={currentPage}
+        totalRecords={products.totalRecords}
+        pageSize={PRODUCTS_PER_PAGE}
+        basePath="/proizvodi"
+      />
     </>
   );
 }
@@ -67,9 +64,7 @@ export default function ProductsPage({ searchParams }: Props) {
       />
 
       <Wrapper className="pb-16">
-        <Suspense fallback={<ProductGridSkeleton />}>
-          <ProductsList searchParams={searchParams} />
-        </Suspense>
+        <ProductsList searchParams={searchParams} />
       </Wrapper>
     </div>
   );

@@ -1,6 +1,5 @@
 import ProductDetail from "@brand/shared/components/products/product-detail";
 import RelatedProducts from "@brand/shared/components/products/related-products";
-import RelatedProductsSkeleton from "@brand/shared/components/products/related-products-skeleton";
 import SimilarProducts from "@brand/shared/components/products/similar-products";
 import { SectionErrorBoundary } from "@brand/ui/section-error-boundary";
 import { getProductBySlug, getSitemapProducts } from "@brand/shared/lib/api";
@@ -9,7 +8,6 @@ import { createProductMetadata } from "@brand/shared/lib/metadata";
 import type { Dealer } from "@brand/shared/types/dealers";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -67,12 +65,10 @@ export default async function ProductDetailPage({
       )}
       {product.categorySlug && (
         <SectionErrorBoundary>
-          <Suspense fallback={<RelatedProductsSkeleton />}>
-            <SimilarProducts
-              categorySlug={product.categorySlug}
-              excludeProductIds={[product.id, ...relatedProductIds]}
-            />
-          </Suspense>
+          <SimilarProducts
+            categorySlug={product.categorySlug}
+            excludeProductIds={[product.id, ...relatedProductIds]}
+          />
         </SectionErrorBoundary>
       )}
     </div>

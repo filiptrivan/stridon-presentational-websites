@@ -6,7 +6,6 @@ interface TagCardProps {
   tag: Tag;
 }
 
-/** @see ./tag-card-skeleton.tsx — update the skeleton when this card layout changes */
 const TagCard = ({ tag }: TagCardProps) => {
   return (
     <Link

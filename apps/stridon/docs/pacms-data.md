@@ -34,6 +34,6 @@ Everything this site shows about brands and catalogs comes from the PACMS API (`
 
 ## Caching
 
-`packages/shared/src/lib/api.ts` is a file-level `"use cache"` module with `cacheLife("days")` (stale 5 min, revalidate 1 day, expire 1 week). Pages are statically prerendered and revalidate daily, so a CMS edit can take up to 24 hours to show. The `cacheTag` values are in place for a PACMS webhook calling `revalidateTag`, which does not exist yet. The same cached fetcher called from `generateMetadata` and from the page costs one read.
+`packages/shared/src/lib/api.ts` caches every read in Next's fetch Data Cache (`next: { revalidate: 86400, tags }` for everything stridon reads). Pages are statically prerendered and revalidate daily, so a CMS edit can take up to 24 hours to show. The tags are in place for a PACMS webhook calling `revalidateTag`, which does not exist yet. The request is wrapped in React `cache()`, so the same fetcher called from `generateMetadata` and from the page costs one read.
 
 A build reads roughly one request per brand page plus a handful of lists. Without `PACMS_RATELIMIT_BYPASS_SECRET` those are anonymous; the root `CLAUDE.md` has the rate-limit history.
