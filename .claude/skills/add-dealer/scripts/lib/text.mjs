@@ -19,16 +19,17 @@ export function toLatin(s) {
     .join("");
 }
 
-// Comparison key: Latin, lowercase, no diacritics, letters and digits only.
-// "Đ" becomes "dj" so "Đure" and "Djure" compare equal.
-export function simple(s) {
-  return toLatin(s)
-    .toLowerCase()
-    .replace(/đ/g, "dj")
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/[^a-z0-9]/g, "");
+// Latin, lowercase, no diacritics. NFD does not decompose "đ", so it is spelled out: "dj" to
+// compare ("Đure" and "Djure" are equal), "d" in ids (as in the existing "gvozdara-021-plus").
+function fold(s, dj = "dj") {
+  return toLatin(s).toLowerCase().replace(/đ/g, dj).normalize("NFD").replace(/\p{M}/gu, "");
 }
+
+// Comparison key: letters and digits only.
+export const simple = (s) => fold(s).replace(/[^a-z0-9]/g, "");
+
+// Words of letters and digits, for whole-word matching.
+export const words = (s) => fold(s).split(/[^a-z0-9]+/).filter(Boolean);
 
 function levenshtein(a, b) {
   const prev = Array.from({ length: b.length + 1 }, (_, i) => i);
@@ -44,14 +45,18 @@ function levenshtein(a, b) {
   return prev[b.length];
 }
 
-const STREET_PREFIX = /^(ulica|ul\.?)\s+/i;
-// "Bul. oslobođenja" scored 0.79 against "Bulevar oslobođenja", under the 0.8 street threshold.
-const expand = (s) => String(s ?? "").replace(STREET_PREFIX, "").replace(/^bul(\.\s*|\s+)/i, "bulevar ");
+// Without "Ulica"/"Ul." and with "Bul." written out, in either script, so "Bul. oslobođenja"
+// equals "Bulevar oslobođenja".
+const streetKey = (s) =>
+  fold(s)
+    .replace(/^(ulica|ul\.?)\s+/, "")
+    .replace(/^bul(\.\s*|\s+)/, "bulevar ")
+    .replace(/[^a-z0-9]/g, "");
 
 // 0..1. Tolerates spelling variants such as "Mihajla" / "Mihaila".
 export function similarity(a, b) {
-  const x = simple(expand(a));
-  const y = simple(expand(b));
+  const x = streetKey(a);
+  const y = streetKey(b);
   if (!x || !y) return 0;
   if (x === y) return 1;
   return 1 - levenshtein(x, y) / Math.max(x.length, y.length);
@@ -69,12 +74,7 @@ export function normalizeHouseNumber(raw) {
 
 // Same shape as existing ids: "Gvožđara 021 Plus" -> "gvozdara-021-plus", "Fish & Food" -> "fish-and-food".
 export function slugify(name) {
-  return toLatin(name)
-    .toLowerCase()
-    .replace(/&/g, " and ")
-    .replace(/đ/g, "d")
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
+  return fold(String(name ?? "").replace(/&/g, " and "), "d")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 }
