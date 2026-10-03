@@ -3,17 +3,15 @@ name: add-dealer
 description: Adds a DCK or SG TOOLS dealer (diler, prodavac, radnja, online prodavnica) to the /gde-kupiti map of dcksrbija.rs and sgtools.rs, or moves an existing dealer to a new address. The pin comes from the shop's Google Maps link, OpenStreetMap checks that it is on the stated street, and an expected change merges by itself. Use when someone says "dodaj dilera", "novi diler", "ubaci prodavca", "dodaj radnju na mapu", "diler se preselio", "pomeri dilera", or sends a dealer's name, address and Google Maps link.
 argument-hint: "[firma] [adresa] [Google Maps link] [dck|sg|oba]"
 allowed-tools:
-  - Bash(node .claude/skills/add-dealer/scripts/*)
-  - Bash(git status *)
+  - Bash(node .claude/skills/add-dealer/scripts/dealers.mjs *)
   - Bash(git fetch *)
-  - Bash(git switch *)
-  - Bash(git add apps/dck/constants/dealers.ts apps/sg-tools/constants/dealers.ts)
-  - Bash(git add apps/dck/constants/dealers.ts)
-  - Bash(git add apps/sg-tools/constants/dealers.ts)
-  - Bash(git commit *)
-  - Bash(git push -u *)
-  - Bash(gh pr create *)
-  - Bash(gh pr merge *)
+  - Bash(git switch -c dealers/* origin/main)
+  - Bash(git commit -m * -- apps/dck/constants/dealers.ts apps/sg-tools/constants/dealers.ts)
+  - Bash(git commit -m * -- apps/dck/constants/dealers.ts)
+  - Bash(git commit -m * -- apps/sg-tools/constants/dealers.ts)
+  - Bash(git push -u origin dealers/*)
+  - Bash(gh pr create --repo filiptrivan/stridon-presentational-websites --base main --head dealers/*)
+  - Bash(gh pr merge --auto --squash *)
 hooks:
   PreToolUse:
     - matcher: "Edit|Write|MultiEdit"
@@ -57,11 +55,9 @@ Then `node .claude/skills/add-dealer/scripts/dealers.mjs list --find "<name>"`. 
 
 **3. Branch.** `git fetch <remote> main`, then `git switch -c dealers/<id> <remote>/main`; `<branch>` is now `dealers/<id>`. If that fails (local changes), stop and tell the requester. With `cloud: true` (Claude Code on the web) do not create a branch: `git push` works only on the session's own branch, so stay on `branch` (one dealer per session).
 
-**4. Write.** One command:
+**4. Write.** One command, on one line:
 ```
-node .claude/skills/add-dealer/scripts/dealers.mjs add --name "<name>" --sites dck,sg-tools --category dealer|online \
-  --street "<street>" --number "<no>" --place "<settlement>" [--municipality "<municipality>"] \
-  [--link "<Google Maps link>"] [--phone "0XX/XXX-XXXX"] [--email ...] [--website ...]
+node .claude/skills/add-dealer/scripts/dealers.mjs add --name "<name>" --sites dck,sg-tools --category dealer|online --street "<street>" --number "<no>" --place "<settlement>" [--municipality "<municipality>"] [--link "<Google Maps link>"] [--phone "0XX/XXX-XXXX"] [--email ...] [--website ...]
 node .claude/skills/add-dealer/scripts/dealers.mjs move --id <id> --street "<street>" --number "<no>" --place "<settlement>" [--link "<Google Maps link>"]
 ```
 `--sites` is `dck`, `sg-tools` or both. `--link` is required for a radnja, in `add` and in `move`; for a webshop leave it out (the registered office comes from OpenStreetMap) unless the script asks for one. Phone format `0XX/XXX-XXXX` like the other entries; the address never contains a postal code.
@@ -79,13 +75,13 @@ What comes back:
 - `code: bad_args`: the command itself is wrong (an unknown or empty option); fix it from `error` and rerun, without bothering the requester.
 - `Upis je vraćen na staro stanje`: nothing was written. Tell the requester that Filip has to look at it and stop.
 
-**5. Commit.** `git add` exactly the files in `changed`, then `git commit -m "<subject>" -m "<body>"`, written by you in English:
+**5. Commit.** `git commit -m "<subject>" -m "<body>" -- <the files in changed>`, no `git add` (a commit with paths takes exactly those files). Write each `-m` as one quoted line, without a heredoc or `$(…)`, so the repo's permission rule for it applies. In English:
 - subject: `feat(dealers): add <Name> to both sites` (or `to dck`, `to sg-tools`), or `fix(dealers): move <Name> to <address>`;
 - body, one or two short lines: where the pin comes from (the requester's Google Maps link, or OSM for a webshop) and `pin.osmCheck`.
 
 **6. Pull request.** By `route`:
-- `push`: `git push -u <remote> <branch>`, then `gh pr create --repo filiptrivan/stridon-presentational-websites --base main --head <branch> --title "<subject>" --body "<body>"`. The body, in English, short: what was added or moved, the address, the pin with `pin.links` (OSM and Google), the link the requester sent, `pin.osmCheck`, the CompanyWall link if given, `gate`, and "Map data © OpenStreetMap contributors" when the pin came from OSM.
-  - `expected: true`: `gh pr merge <PR url> --auto --squash` (the repo deletes merged branches itself). If it answers that the PR is already mergeable, the checks finished first: run `gh pr merge <PR url> --squash`. If it is refused as not allowed (on the web the GitHub proxy may not offer auto-merge), tell the requester to open the PR link and click "Enable auto-merge". Then: "Gotovo, diler ide na sajt sam čim prođu provere. Kad se pojavi, pogledaj ga na <livePages> i javi mi ako pin nije na pravom mestu."
+- `push`: `git push -u <remote> <branch>`, then `gh pr create --repo filiptrivan/stridon-presentational-websites --base main --head <branch> --title "<subject>" --body "<body>"`, in this order. The body is one quoted argument (no heredoc or `$(…)`), in English, short: what was added or moved, the address, the pin with `pin.links` (OSM and Google), the link the requester sent, `pin.osmCheck`, the CompanyWall link if given, `gate`, and "Map data © OpenStreetMap contributors" when the pin came from OSM.
+  - `expected: true`: `gh pr merge --auto --squash <PR url>` (it merges at once if the checks already passed; the repo deletes merged branches itself). If it is refused as not allowed (on the web the GitHub proxy may not offer auto-merge), tell the requester to open the PR link and click "Enable auto-merge". Then: "Gotovo, diler ide na sajt sam čim prođu provere. Kad se pojavi, pogledaj ga na <livePages> i javi mi ako pin nije na pravom mestu."
   - `expected: false`: do not turn on auto-merge. Say that it went to Filip for approval and why, in one sentence from `gate`.
 - `dry-run` (`ADD_DEALER_DRY_RUN` is set, for trying the skill out): stop after the commit. Show the commit and the PR text and say that nothing was sent.
 
