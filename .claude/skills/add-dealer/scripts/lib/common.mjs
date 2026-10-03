@@ -5,7 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 
-export const SKILL_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
+const SKILL_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 export const REPO_ROOT = path.resolve(SKILL_DIR, "../../..");
 
 // The OSM cache lives outside the repo, so nothing stray can end up in a commit.

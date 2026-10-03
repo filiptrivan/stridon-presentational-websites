@@ -24,7 +24,7 @@ const USER_AGENT = "StridonAddDealerSkill/2.0 (dealer map of dcksrbija.rs and sg
 // 120 shops: with 150 m / 100 m, 26 of 40 pins placed 60-300 m from the real shop passed; with
 // 75 m / 50 m every correct pin still passed and only pins on the shop's own street got through,
 // which OSM cannot tell apart (the requester's Google Maps link decides the building).
-export const NEAR = { addressPoint: 75, streetLine: 50 };
+const NEAR = { addressPoint: 75, streetLine: 50 };
 // Half-size of the box around the pin in which the street's segments are looked up (~400 m).
 const BOX = { lat: 0.0036, lng: 0.005 };
 
@@ -65,7 +65,7 @@ const placeKey = (name) => simple(toLatin(name).replace(ADMIN_PREFIX, ""));
 // "Novi Beograd" matches "Beograd (Novi Beograd)" (OSM and RGZ write Belgrade districts that
 // way) by whole words, so "Bor" never matches "Borča". "Gradska opština Voždovac" is read as
 // "Voždovac", on both sides.
-export function matchesPlace(names, place) {
+function matchesPlace(names, place) {
   if (!place) return false;
   const want = words(toLatin(place).replace(ADMIN_PREFIX, ""));
   const wantKey = want.join("");
@@ -169,7 +169,6 @@ export async function checkPin(point, input) {
     return {
       ok: false,
       reasons: [`Tačka je u naselju „${rv.settlement || "nepoznato"}“, a adresa kaže „${input.place}“.`],
-      how: null,
       atPin,
       suggestedPlace: there.ok ? rv.settlement : null,
     };
@@ -183,7 +182,6 @@ export async function checkPin(point, input) {
         ? `Tačka nije u ulici „${input.street}“: ulica je ${near.d} m daleko, a na mestu tačke OSM ima „${at}“.`
         : `Ulica „${input.street}“ nije u krugu od 400 m od tačke; na mestu tačke OSM ima „${at}“.`,
     ],
-    how: null,
     atPin,
   };
 }
@@ -199,5 +197,5 @@ export async function geocodeOffice(input) {
     return { error: `Ista adresa postoji u više naselja (${[...new Set(points.map((p) => p.settlement))].join(", ")}); navedi tačno naselje.` };
   }
   const p = points[0];
-  return { lat: p.lat, lng: p.lng, osm: p.osm, how: `OSM adresna tačka ${p.osm} („${p.road} ${p.houseNumber}, ${p.settlement}“)` };
+  return { lat: p.lat, lng: p.lng, how: `OSM adresna tačka ${p.osm} („${p.road} ${p.houseNumber}, ${p.settlement}“)` };
 }
