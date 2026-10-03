@@ -75,7 +75,7 @@ What comes back:
 - `code: pin_address_mismatch` without it: say simply that the point from the link and the address are not the same place, with `reasons` in plain words, and ask which is right. Rerun with the corrected address or link.
 - `Diler ne prolazi pravila`: explain the `errors`. A change to the first 6 dealers on product pages (only an online dealer causes it) is Filip's decision: stop and say so; never pass `--allow-top6-change` on your own.
 - `code: error`: a service did not answer; wait a minute and rerun once.
-- `gateKind: invalid` after a write: do not commit; tell the requester that Filip has to look at it.
+- `Upis je vraćen na staro stanje`: nothing was written. Tell the requester that Filip has to look at it and stop.
 
 **5. Commit.** `git add` exactly the files in `changed`, then `git commit -m "<subject>" -m "<body>"`, written by you in English:
 - subject: `feat(dealers): add <Name> to both sites` (or `to dck`, `to sg-tools`), or `fix(dealers): move <Name> to <address>`;

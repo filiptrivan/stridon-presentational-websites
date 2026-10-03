@@ -3,7 +3,7 @@
 // "expected change" rule.
 import fs from "node:fs";
 import { SITES } from "./common.mjs";
-import { inSerbia, distanceM } from "./geo.mjs";
+import { inSerbia } from "./geo.mjs";
 
 export function readText(file) {
   const text = fs.readFileSync(file, "utf8");
@@ -134,7 +134,8 @@ const ID_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const CATEGORIES = new Set(["online", "dealer", "service"]);
 const PHONE_RE = /^0\d{1,2}\/\d{3,4}-\d{3,4}$/;
 
-// Rules for a single entry. `strict` is used for the entry being added or moved.
+// Rules for a single entry. Every entry in the files must pass the first block; the entry being
+// added or moved (`strict`) also the format rules below it.
 export function checkEntry(d, { strict = false } = {}) {
   const errors = [];
   const warnings = [];
@@ -148,21 +149,19 @@ export function checkEntry(d, { strict = false } = {}) {
     if (typeof d[key] === "string" && /[<>\n]/.test(d[key])) errors.push(`${d.id}: ${key} sadrži <, > ili novi red`);
   }
   // Service centres come from service-centers.ts, which has its own address and phone style.
-  if (d.category === "service") return { errors, warnings };
-  const list = strict ? errors : warnings;
-  if (d.address && /\b\d{5}\b/.test(d.address)) list.push(`${d.id}: address sadrži poštanski broj; on ne ide u adresu`);
-  if (d.website && !/^https:\/\/[^/]+\/.*$/.test(d.website)) list.push(`${d.id}: website treba da počinje sa https:// i ima / posle domena`);
+  if (!strict || d.category === "service") return { errors, warnings };
+  if (d.address && /\b\d{5}\b/.test(d.address)) errors.push(`${d.id}: address sadrži poštanski broj; on ne ide u adresu`);
+  if (d.website && !/^https:\/\/[^/]+\/.*$/.test(d.website)) errors.push(`${d.id}: website treba da počinje sa https:// i ima / posle domena`);
+  if (d.category === "dealer" && !d.address) errors.push(`${d.id}: radnja mora imati adresu`);
   if (d.phone && !PHONE_RE.test(d.phone)) warnings.push(`${d.id}: telefon "${d.phone}" nije u obliku 0XX/XXX-XXXX`);
-  if (strict && d.category === "dealer" && !d.address) errors.push(`${d.id}: radnja mora imati adresu`);
   return { errors, warnings };
 }
 
 // Whole-site rules. `bySite` is { dck: Dealer[], "sg-tools": Dealer[] }. `mismatches` (the same
-// dealer differing between the sites) are kept apart: they block a write, but in a PR they are a
-// decision for Filip, not a broken file.
+// dealer differing between the sites) are kept apart: they are a decision for Filip, not a
+// broken file.
 export function checkSites(bySite) {
   const errors = [];
-  const warnings = [];
   const mismatches = [];
   for (const [site, dealers] of Object.entries(bySite)) {
     const seen = new Set();
@@ -170,9 +169,7 @@ export function checkSites(bySite) {
       // A duplicate id makes dealer-map.tsx skip the second marker without any error.
       if (seen.has(d.id)) errors.push(`${site}: id "${d.id}" se ponavlja`);
       seen.add(d.id);
-      const r = checkEntry(d);
-      errors.push(...r.errors.map((e) => `${site}: ${e}`));
-      warnings.push(...r.warnings.map((w) => `${site}: ${w}`));
+      errors.push(...checkEntry(d).errors.map((e) => `${site}: ${e}`));
     }
   }
   // The same dealer must look the same on both sites; only logos differ (SG uses -neutral recolors).
@@ -185,10 +182,12 @@ export function checkSites(bySite) {
       for (const key of FIELD_ORDER.filter((k) => k !== "logoSrc")) {
         if ((d[key] ?? "") !== (o[key] ?? "")) mismatches.push(`${d.id}: ${key} se razlikuje između sajtova ("${d[key] ?? ""}" / "${o[key] ?? ""}")`);
       }
-      if (distanceM(d.coordinates, o.coordinates) > 0) mismatches.push(`${d.id}: koordinate se razlikuju između sajtova`);
+      if (d.coordinates?.lat !== o.coordinates?.lat || d.coordinates?.lng !== o.coordinates?.lng) {
+        mismatches.push(`${d.id}: koordinate se razlikuju između sajtova`);
+      }
     }
   }
-  return { errors, warnings, mismatches };
+  return { errors, mismatches };
 }
 
 // Ids of the dck service centres (service-centers.ts): `...SERVICE_DEALERS` puts them into the
@@ -257,8 +256,6 @@ export function classifyChange(base, head, changedFiles, reservedIds = {}) {
     const id = [...ids][0];
     const versions = d.map((x) => x.after.get(id));
     entry = versions[0];
-    // Logos (SG uses -neutral recolors) and code comments may differ between the sites.
-    if (versions.some((v) => changedKeys(v, entry).filter((k) => k !== "logoSrc" && k !== "comments").length)) why.push(`diler ${id} nije isti na oba sajta`);
     if (entry.category !== "dealer") why.push(`diler ${id} je kategorije „${entry.category}“; online diler menja prvih 6 na stranici proizvoda i čeka Filipa`);
     if (isAdd) {
       if (versions.some((v) => v.logoSrc || v.comments.length)) why.push(`novi diler ${id} ima logo ili komentar`);
