@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// The only writer of apps/*/constants/dealers.ts, and the dealer-change PR check.
+// The only writer of apps/*/constants/dealers.ts.
 //
 //   dealers.mjs check                        can this machine run the skill and push the change?
 //   dealers.mjs list [--find <name>]         existing dealers on both sites (+ the id a new one would get)
@@ -8,11 +8,11 @@
 //                    [--link <Google Maps link | lat,lng>] [--phone] [--email] [--website] [--id]
 //   dealers.mjs move --id <id> --street <s> --number <no> --place <settlement> [--municipality <m>]
 //                    [--link <Google Maps link | lat,lng>]
-//   dealers.mjs diff --base <sha> --head <sha>   (CI) classify a PR; exit 0 pass, 2 needs Filip, 1 invalid
 //
 // add and move check the pin, write the file, read it back with the parser the PR check uses,
-// compare with what was intended and restore the original on any mismatch. Then they say whether the change
-// is "expected" (merges by itself) or waits for Filip, by the same rule the PR check applies.
+// compare with what was intended and restore the original on any mismatch. Then they say whether
+// the change is "expected" (merges by itself) or waits for Filip, by the same rule the PR check
+// applies (classify-pr.mjs).
 import fs from "node:fs";
 import path from "node:path";
 import { readOptions, print, fail, run, REPO_ROOT, SITES, SERVICE_FILES, LIVE_PAGES, UPSTREAM_REPO } from "./lib/common.mjs";
@@ -37,7 +37,6 @@ const OPTIONS = {
   list: ["find"],
   add: ["name", "sites", "category", "street", "number", "place", "municipality", "link", "phone", "email", "website", "id"],
   move: ["id", "street", "number", "place", "municipality", "link"],
-  diff: ["base", "head"],
 };
 const command = process.argv[2];
 if (!Object.hasOwn(OPTIONS, command ?? "")) fail(`Nepoznata komanda "${command ?? ""}". Dozvoljeno: ${Object.keys(OPTIONS).join(", ")}.`);
@@ -335,39 +334,7 @@ function cmdCheck() {
   if (problems.length) process.exit(1);
 }
 
-// CI (.github/workflows/dealer-change.yml): reads the PR's dealer files as text with `git show`;
-// nothing from the PR is executed (this script itself is checked out from the base commit).
-function cmdDiff() {
-  const [baseRef, headRef] = [need("base"), need("head")];
-  const mergeBase = run("git", ["merge-base", baseRef, headRef]).stdout.trim();
-  if (!mergeBase) fail(`Nema zajedničkog pretka za ${baseRef} i ${headRef}.`);
-  const names = run("git", ["diff", "--name-only", "--no-renames", mergeBase, headRef]);
-  if (names.status !== 0) fail(`git diff nije uspeo: ${names.stderr}`);
-  const changed = names.stdout.split(/\r?\n/).filter(Boolean);
-  const at = (ref, file) => {
-    const r = run("git", ["show", `${ref}:${file}`]);
-    return r.status === 0 ? parseDealers(r.stdout) : null;
-  };
-  const base = Object.fromEntries(Object.entries(SITES).map(([s, f]) => [s, at(mergeBase, f)]));
-  const head = Object.fromEntries(Object.entries(SITES).map(([s, f]) => [s, at(headRef, f)]));
-  const reserved = Object.fromEntries(Object.entries(SERVICE_FILES).map(([s, f]) => [s, serviceIds(run("git", ["show", `${headRef}:${f}`]).stdout)]));
-  let gate;
-  try {
-    gate = classifyChange(base, head, changed, reserved);
-  } catch (err) {
-    // An edit the rule did not foresee is never routine; Filip decides.
-    gate = { kind: "owner", ok: false, reasons: [`provera nije mogla da pročita izmenu: ${err.message}`] };
-  }
-  print(gate);
-
-  const lines = gate.reasons ?? gate.errors ?? [];
-  const title = { none: "Nije izmena dilera", mixed: "Izmena dilera uz druge fajlove", expected: "Očekivana izmena dilera", owner: "Čeka @filiptrivan", invalid: "Spisak dilera ne prolazi proveru" }[gate.kind];
-  if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `### dealer-change: ${title}\n\n${lines.map((l) => `- ${l}`).join("\n")}\n`);
-  if (process.env.GITHUB_OUTPUT) fs.appendFileSync(process.env.GITHUB_OUTPUT, `kind=${gate.kind}\nexpected=${gate.kind === "expected"}\n`);
-  process.exit(gate.ok ? 0 : gate.kind === "owner" ? 2 : 1);
-}
-
-const commands = { check: cmdCheck, list: cmdList, add: cmdAdd, move: cmdMove, diff: cmdDiff };
+const commands = { check: cmdCheck, list: cmdList, add: cmdAdd, move: cmdMove };
 try {
   await commands[command]();
 } catch (err) {
