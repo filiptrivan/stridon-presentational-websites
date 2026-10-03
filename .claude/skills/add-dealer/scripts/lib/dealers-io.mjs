@@ -54,7 +54,7 @@ export function parseDealers(text) {
 
 export const entriesOf = (parsed) => parsed.items.filter((d) => !d.spread);
 
-export function renderEntry(entry, eol) {
+function renderEntry(entry, eol) {
   const lines = ["  {"];
   for (const comment of entry.comments ?? []) lines.push(`    // ${comment}`);
   for (const key of FIELD_ORDER) {
@@ -132,7 +132,7 @@ export function checkEntry(d, { strict = false } = {}) {
 // Whole-site rules. `bySite` is { dck: Dealer[], "sg-tools": Dealer[] }. `mismatches` (the same
 // dealer differing between the sites) are kept apart: they are a decision for Filip, not a
 // broken file.
-export function checkSites(bySite) {
+function checkSites(bySite) {
   const errors = [];
   const mismatches = [];
   for (const [site, dealers] of Object.entries(bySite)) {
@@ -257,12 +257,10 @@ export function classifyChange(base, head, changedFiles, reservedIds = {}) {
     why.push(...checkEntry(entry, { strict: true }).errors);
   }
 
-  if (why.length) return { kind: "owner", ok: false, reasons: why, id: entry?.id ?? null };
+  if (why.length) return { kind: "owner", ok: false, reasons: why };
   return {
     kind: "expected",
     ok: true,
-    mode: isAdd ? "add" : "move",
-    id: entry.id,
     reasons: [`${isAdd ? "Dodat" : "Pomeren"} je jedan diler (${entry.id}) na ${touched.length === 2 ? "oba sajta, isto na oba" : `sajtu ${touched[0]}`}.`],
   };
 }

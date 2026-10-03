@@ -16,7 +16,7 @@ try {
   process.exit(0);
 }
 const params = input.tool_input ?? {};
-if (["Edit", "Write", "MultiEdit", "NotebookEdit"].includes(input.tool_name) && DEALER_FILE.test(path.normalize(params.file_path ?? params.notebook_path ?? ""))) {
+if (["Edit", "Write", "MultiEdit"].includes(input.tool_name) && DEALER_FILE.test(path.normalize(params.file_path ?? ""))) {
   process.stderr.write(
     "add-dealer: dealers.ts se ne menja ručno. Upis radi samo " +
       "`node .claude/skills/add-dealer/scripts/dealers.mjs add` ili `move` (pravila iz SKILL.md).\n",

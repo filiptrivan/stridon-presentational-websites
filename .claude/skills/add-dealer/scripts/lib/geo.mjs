@@ -1,7 +1,7 @@
 // Distances, the Serbia bounding box, and reading a pin out of the link the requester sends.
 
 // Serbia with a small margin: catches swapped lat/lng and hits in another country.
-export const SERBIA = { minLat: 42.2, maxLat: 46.2, minLng: 18.8, maxLng: 23.05 };
+const SERBIA = { minLat: 42.2, maxLat: 46.2, minLng: 18.8, maxLng: 23.05 };
 
 export function inSerbia(lat, lng) {
   return lat >= SERBIA.minLat && lat <= SERBIA.maxLat && lng >= SERBIA.minLng && lng <= SERBIA.maxLng;
@@ -48,22 +48,22 @@ export function mapLinks({ lat, lng }) {
 // Coordinates written in a map URL. Google `!3d!4d` is the place itself; `@lat,lng` is only
 // where the map was centred (65 km away from the pin in one tested link), so it never counts as a
 // pin. OSM `mlat/mlon` is a marker. A directions link has several places and is refused.
-export function coordsFromUrl(raw) {
+function coordsFromUrl(raw) {
   let url = String(raw);
   try {
     url = decodeURIComponent(url);
   } catch {}
   if (/\/maps\/dir\//.test(url) || (url.match(/!3d-?\d/g) ?? []).length > 1) return { error: "directions" };
   const patterns = [
-    [/!3d(-?\d{1,2}\.\d+)!4d(-?\d{1,3}\.\d+)/, "place"],
-    [/[?&]mlat=(-?\d+\.\d+)&mlon=(-?\d+\.\d+)/, "marker"],
-    [/\/maps\/search\/(-?\d{1,2}\.\d+),\s*\+?(-?\d{1,3}\.\d+)/, "point"],
+    /!3d(-?\d{1,2}\.\d+)!4d(-?\d{1,3}\.\d+)/,
+    /[?&]mlat=(-?\d+\.\d+)&mlon=(-?\d+\.\d+)/,
+    /\/maps\/search\/(-?\d{1,2}\.\d+),\s*\+?(-?\d{1,3}\.\d+)/,
     // `ll=` is the map centre, like `@lat,lng`, so only `q` and `query` count.
-    [/[?&](?:q|query)=(-?\d{1,2}\.\d+),\s*\+?(-?\d{1,3}\.\d+)/, "point"],
+    /[?&](?:q|query)=(-?\d{1,2}\.\d+),\s*\+?(-?\d{1,3}\.\d+)/,
   ];
-  for (const [re, kind] of patterns) {
+  for (const re of patterns) {
     const m = url.match(re);
-    if (m) return { lat: round7(m[1]), lng: round7(m[2]), kind };
+    if (m) return { lat: round7(m[1]), lng: round7(m[2]) };
   }
   return null;
 }
@@ -77,11 +77,11 @@ export function coordsFromUrl(raw) {
 const SHORT_HOSTS = /^(maps\.app\.goo\.gl|goo\.gl)$/i;
 
 // The pin from what the requester pasted: "lat, lng", an OSM link, a Google Maps place link or a
-// short Google link. Returns { lat, lng, kind, resolved } or { error } with the reason.
+// short Google link. Returns { lat, lng, resolved } or { error } with the reason.
 export async function pinFromLink(raw) {
   const text = String(raw ?? "").trim();
   const plain = text.match(/^(-?\d{1,2}\.\d{4,})\s*,\s*(-?\d{1,3}\.\d{4,})$/);
-  if (plain) return { lat: round7(plain[1]), lng: round7(plain[2]), kind: "coordinates", resolved: text };
+  if (plain) return { lat: round7(plain[1]), lng: round7(plain[2]), resolved: text };
 
   let url = text;
   for (let hop = 0; hop < 5; hop++) {

@@ -19,7 +19,6 @@ import { readOptions, print, fail, run, REPO_ROOT, SITES, SERVICE_FILES, LIVE_PA
 import {
   parseDealers,
   entriesOf,
-  renderEntry,
   insertEntry,
   replaceEntry,
   checkEntry,
@@ -146,7 +145,6 @@ async function pinFor(input, category) {
 function refuseOnMain() {
   const branch = run("git", ["branch", "--show-current"]).stdout.trim();
   if (branch === "main") fail("Na grani main si. Prvo napravi granu dealers/<id> (korak „Grana“ u SKILL.md).");
-  return branch;
 }
 
 const fingerprint = (list) => list.map((d) => JSON.stringify([...FIELD_ORDER, "coordinates"].map((k) => d[k] ?? null))).join("\n");
@@ -185,16 +183,12 @@ function nearbyWarnings(bySite, point, skipId) {
   return [...out.values()];
 }
 
-function report(mode, entry, sites, pin, written, warnings) {
+function report(sites, pin, written, warnings) {
   print({
     ok: true,
-    mode,
-    id: entry.id,
     changed: written.changed,
-    entry: renderEntry(entry, "\n"),
     pin: { ...pin, links: mapLinks(pin) },
     expected: written.gate.kind === "expected",
-    gateKind: written.gate.kind,
     gate: written.gate.reasons ?? written.gate.errors,
     livePages: sites.map((s) => LIVE_PAGES[s]),
     warnings,
@@ -261,7 +255,7 @@ async function cmdAdd() {
     (site, text, eol) => insertEntry(text, eol, entry),
     (site) => [...bySite[site], entry],
   );
-  report("add", entry, sites, pin, written, warnings);
+  report(sites, pin, written, warnings);
 }
 
 async function cmdMove() {
@@ -283,7 +277,7 @@ async function cmdMove() {
     (site, text, eol) => replaceEntry(text, eol, { ...entriesOf(parsed[site]).find((d) => d.id === id), ...changes }),
     (site) => bySite[site].map((d) => (d.id === id ? { ...d, ...changes } : d)),
   );
-  report("move", { ...old, ...changes }, sites, pin, written, nearbyWarnings(bySite, pin, id));
+  report(sites, pin, written, nearbyWarnings(bySite, pin, id));
 }
 
 function cmdList() {
@@ -292,7 +286,7 @@ function cmdList() {
   const rows = {};
   for (const [site, dealers] of Object.entries(bySite)) {
     rows[site] = dealers
-      .map((d, i) => ({ i, id: d.id, name: d.name, address: d.address ?? "", city: d.city ?? "", category: d.category }))
+      .map((d) => ({ id: d.id, name: d.name, address: d.address ?? "", city: d.city ?? "", category: d.category }))
       .filter((d) => !find || similarity(d.name, find) >= 0.6 || d.name.toLowerCase().includes(find.toLowerCase()));
   }
   print({ ...rows, ...(find ? { newId: slugify(find) } : {}) });
@@ -330,7 +324,7 @@ function cmdCheck() {
   const pending = open.status === 0 ? JSON.parse(open.stdout || "[]").filter((p) => skillTitle.test(p.title)) : [];
   if (pending.length) notes.push(`Prethodni diler još nije na sajtu (${pending.map((p) => p.url).join(", ")}). Novi bi se sudario sa njim: sačekaj da se spoji.`);
 
-  print({ ok: problems.length === 0, problems, notes, remote, permission, cloud, branch, route: dryRun ? "dry-run" : "push" });
+  print({ ok: problems.length === 0, problems, notes, remote, cloud, branch, route: dryRun ? "dry-run" : "push" });
   if (problems.length) process.exit(1);
 }
 
