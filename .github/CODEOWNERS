@@ -1,5 +1,10 @@
-# Owner-reserved cross-cutting packages — a change here affects BOTH brand sites
-# (sg-tools + dck) at once. Require @filiptrivan review.
-# Only enforced when branch protection requires Code Owner review.
-/packages/shared/        @filiptrivan
-/packages/brand-config/  @filiptrivan
+# Every change needs @filiptrivan's review (the main ruleset requires Code Owner review), so a
+# collaborator with write access, such as sales running the add-dealer skill, cannot merge
+# anything else on their own. Later lines win.
+*                                    @filiptrivan
+
+# The two dealer lists have no owner: the required dealer-change check gates them instead
+# (.github/workflows/dealer-change.yml), and what it lets through is classifyChange() in
+# .claude/skills/add-dealer/scripts/lib/dealers-io.mjs.
+/apps/dck/constants/dealers.ts
+/apps/sg-tools/constants/dealers.ts
