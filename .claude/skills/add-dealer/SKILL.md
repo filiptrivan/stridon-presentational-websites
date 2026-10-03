@@ -28,7 +28,7 @@ The person running this is usually from sales, not a developer. Talk to them in 
 
 Run every command from the repo root. Scripts print JSON, errors included; messages meant for the requester are already in plain Serbian. If Claude Code asks the requester to allow a git or gh command from the steps below, tell them in one line that it is the skill's own step and safe to allow.
 
-## Rules (owner's decisions, 2026-10-01; background in `reference.md`)
+## Rules (Filip's decisions; background in `reference.md`)
 
 1. **Never edit `apps/*/constants/dealers.ts` yourself.** Only `dealers.mjs add` and `move` write them (a hook blocks Edit/Write on them).
 2. **Coordinates reach `dealers.ts` only through the script**, from the link or from the coordinates the requester sent. Pass what they sent as-is in `--link`; never type, round or "fix" coordinates yourself.
@@ -36,7 +36,7 @@ Run every command from the repo root. Scripts print JSON, errors included; messa
 4. **The printed address is the official one the requester gives** (for example from the dealer's website); the pin sits on the building the shop is actually in. When the script says the two do not describe the same place, ask the requester which is right. Never choose yourself.
 5. **Do not fetch CompanyWall or the dealer's website** with tools; use what the requester wrote. A CompanyWall link goes into the PR text as-is.
 6. One dealer per branch and per PR, one at a time. Removing a dealer, renaming, changing the phone or email, logos and service centres are out of scope: say that Filip handles those.
-7. Never push to `main`. Auto-merge is turned on only when the script says the change is `expected`.
+7. Never push to `main`. Auto-merge is turned on only when the script says the change is `expected` (the rule is `classifyChange()` in `scripts/lib/dealers-io.mjs`).
 8. OpenStreetMap's Nominatim is used only through the script, within its usage policy (https://operations.osmfoundation.org/policies/nominatim/): one dealer at a time, never in a loop.
 
 ## Steps
@@ -45,7 +45,7 @@ Run every command from the repo root. Scripts print JSON, errors included; messa
 
 **2. Facts.** Ask only for what is missing from their message, in one short question:
 - Company name as it should appear on the map.
-- **Which site**: always ask, unless they already said it: "Da li diler ide na oba sajta (DCK i SG TOOLS) ili samo na jedan? Ako na jedan, koji?" A dealer on one site goes live by itself just like one on both.
+- **Which site**: always ask, unless they already said it: "Da li diler ide na oba sajta (DCK i SG TOOLS) ili samo na jedan? Ako na jedan, koji?" Either answer is fine.
 - Type: **radnja** (a physical shop, even if it also sells online; keep its website) or **webshop bez radnje** (online only). A street address with nothing else means radnja.
 - Address: street, house number, settlement.
 - For a radnja: **the shop's Google Maps link** ("otvori radnju na Google mapama, pa Podeli i Kopiraj link"), or its coordinates. A link shared from the phone app has no coordinates in it; the script then says how to copy them.
@@ -62,9 +62,9 @@ Then `node .claude/skills/add-dealer/scripts/dealers.mjs list --find "<name>"`. 
 node .claude/skills/add-dealer/scripts/dealers.mjs add --name "<name>" --sites dck,sg-tools --category dealer|online \
   --street "<street>" --number "<no>" --place "<settlement>" [--municipality "<municipality>"] \
   [--link "<Google Maps link>"] [--phone "0XX/XXX-XXXX"] [--email ...] [--website ...]
-node .claude/skills/add-dealer/scripts/dealers.mjs move --id <id> --street "<street>" --number "<no>" --place "<settlement>" --link "<Google Maps link>"
+node .claude/skills/add-dealer/scripts/dealers.mjs move --id <id> --street "<street>" --number "<no>" --place "<settlement>" [--link "<Google Maps link>"]
 ```
-`--sites` is `dck`, `sg-tools` or both. `--link` is required for a radnja; for a webshop leave it out (the registered office comes from OpenStreetMap) unless the script asks for one. Phone format `0XX/XXX-XXXX` like the other entries; the address never contains a postal code.
+`--sites` is `dck`, `sg-tools` or both. `--link` is required for a radnja, in `add` and in `move`; for a webshop leave it out (the registered office comes from OpenStreetMap) unless the script asks for one. Phone format `0XX/XXX-XXXX` like the other entries; the address never contains a postal code.
 
 What comes back:
 - `ok: true`: written and verified. Show `warnings` (another dealer within 50 m, a similar name, a website switched from http:// to https://) and ask before going on if one of them may mean the dealer is already there.

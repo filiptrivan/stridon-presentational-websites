@@ -1,14 +1,12 @@
 name: Dealer change
 
 # Required check on main (ruleset). It gives every PR a verdict, so the check never sits waiting:
-# a PR that does not touch the two dealer lists passes at once. An "expected" change (the
-# add-dealer skill: exactly one dealer added, or one dealer's address and pin moved, on one site
-# or identically on both, first 6 untouched, nothing else) passes and auto-merges with no human
-# review; CODEOWNERS leaves the two dealers.ts files ownerless for that reason. Any other dealer
-# change fails: @filiptrivan approves
-# the PR and re-runs this job (a re-run keeps the same commit and reads the reviews again), or
-# merges with the ruleset bypass. Owner's decision on PR #20, 2026-10-01; the rule itself is
-# classifyChange() in .claude/skills/add-dealer/scripts/lib/dealers-io.mjs.
+# a PR that does not touch the two dealer lists passes at once. Which dealer change is "expected"
+# is classifyChange() in .claude/skills/add-dealer/scripts/lib/dealers-io.mjs: an expected one
+# passes and auto-merge takes it. Any other PR that changes only the dealer lists fails until
+# @filiptrivan approves its latest commit and re-runs this job (a re-run keeps the same commit
+# and reads the reviews again), or merges with the ruleset bypass. A PR that also changes other
+# files passes here and waits for his review through CODEOWNERS.
 #
 # No paths filter on purpose: a required check whose workflow is filtered out stays "Expected"
 # and blocks the merge. GitHub runs no workflow on a PR with a merge conflict, so two dealer PRs
