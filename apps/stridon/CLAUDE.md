@@ -17,7 +17,7 @@ Root `../../CLAUDE.md` applies. This file holds only what is specific to `apps/s
 - Every path handed to a shared component goes through `lib/nav.ts` (`pathFor`, `brandPath`). Shared components link with plain `next/link`, so an unconverted `/brendovi` sends English readers to Serbian.
 - A new client-side `useTranslations("X")` means adding `X` to `clientMessages` in `app/[locale]/layout.tsx`, or it throws at runtime.
 - Messages are typed against `messages/sr.json` (`global.ts`). A key built at runtime needs a literal-union type, not `string`. `__tests__/messages-parity.test.ts` holds `en.json` to the same keys.
-- Root params (`next/root-params`, read by `packages/i18n`) never work in a Server Action, so actions take `locale` as an argument and validate it. On Next 16.1 they also throw inside `"use cache"`: code there must pass `{ locale }` to next-intl explicitly.
+- Root params (`next/root-params`, read by `packages/i18n`) never work in a Server Action, so actions take `locale` as an argument and validate it.
 - `*.meta.*` copy carried over from the live site keeps its wording verbatim, even where it uses formal "Vi". Everything written here, meta included, uses "ti" (`docs/seo.md` lists which is which). No em-dash in Serbian copy.
 - The homepage title and description, OG card included, come from `Site.*` in `messages/*.json`. `defaultTitle`/`siteDescription` in `packages/brand-config/src/stridon.ts` only mirror the Serbian pair because the type requires them; nothing renders them.
 - A Serbian route keeps the live site's URL (`/onama`, `/politikaprivatnosti`, `/podacizaidentifikaciju`). An old live URL this app spells differently gets a 308 from `constants/legacy-urls.ts`.

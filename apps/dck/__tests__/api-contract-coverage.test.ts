@@ -36,7 +36,6 @@ const ENDPOINT_PATTERN = /api\/Storefront\/([A-Za-z]+)/g;
 const ACKNOWLEDGED_UNCOVERED = new Set([
   "CategoryBySlug",
   "FlatCategories",
-  "PrerenderedTagSlugs",
   "ProductsAutocompleteByBrand",
   "SitemapProductsByBrand",
   "SitemapTags",

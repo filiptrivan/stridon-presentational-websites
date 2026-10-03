@@ -1,10 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { reportError } from "../src/lib/report-error";
 
-vi.mock("next/cache", () => ({
-  cacheLife: () => undefined,
-  cacheTag: () => undefined,
-}));
 vi.mock("../src/lib/report-error", () => ({ reportError: vi.fn() }));
 
 // api.ts reads API_URL and the brand slug at module load, so both must be set
@@ -47,6 +43,29 @@ describe("apiFetch availability failures", () => {
     const init = fetchMock.mock.calls[0][1] as RequestInit;
     expect(init.signal).toBeInstanceOf(AbortSignal);
   });
+
+  // The cache is the fetch Data Cache now, so the policy travels on the request.
+  // A read that lost it would be fetched on every request, with nothing failing.
+  it.each([
+    ["a days read", () => getCategories(), 86_400, "categories"],
+    ["an hours read", () => getProductBySlug("whatever"), 3_600, "products"],
+    ["an hours POST", () => getFilteredProducts(0, 12), 3_600, "products"],
+  ] as const)(
+    "caches %s with its revalidate and tag",
+    async (_label, call, revalidate, tag) => {
+      const fetchMock = vi
+        .fn()
+        .mockResolvedValue(jsonResponse({ data: [], totalRecords: 0 }));
+      vi.stubGlobal("fetch", fetchMock);
+
+      await call();
+
+      const init = fetchMock.mock.calls[0][1] as RequestInit & {
+        next?: { revalidate?: number; tags?: string[] };
+      };
+      expect(init.next).toEqual({ revalidate, tags: [tag] });
+    },
+  );
 
   // Reporting used to hang entirely off `!res.ok`, and neither of these produces a
   // Response — without the catch, adding the budget would have made backend stalls
@@ -116,7 +135,7 @@ describe("FilteredProducts narrowing", () => {
 
   it("adds the category without disturbing the empty tag filter", async () => {
     expect(
-      await bodyOf(() => getFilteredProductsByCategory("kutije-za-alat", 24, 24)),
+      await bodyOf(() => getFilteredProductsByCategory("kutije-za-alat", 24, 24, "critical")),
     ).toEqual({
       brandSlugs: ["dck"],
       tagSlugs: [],

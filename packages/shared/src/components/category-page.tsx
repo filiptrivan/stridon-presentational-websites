@@ -2,7 +2,6 @@ import HeroHeader from "@brand/shared/components/hero-header";
 import { ListingPagination } from "@brand/shared/components/products/listing-pagination";
 import PageBreadcrumbs from "@brand/shared/components/products/page-breadcrumbs";
 import ProductGrid from "@brand/shared/components/products/product-grid";
-import ProductGridSkeleton from "@brand/shared/components/products/product-grid-skeleton";
 import SubcategoriesGrid from "@brand/shared/components/products/subcategories-grid";
 import SectionDivider from "@brand/shared/components/section-divider";
 import { SectionErrorBoundary } from "@brand/ui/section-error-boundary";
@@ -10,7 +9,6 @@ import { Prose } from "@brand/ui/prose";
 import Wrapper from "@brand/shared/components/wrapper";
 import { PRODUCTS_PER_PAGE } from "@brand/shared/lib/cache-tags";
 import {
-  getAllCategoriesFlat,
   getCategoryBySlug,
   getFilteredProductsByCategory,
 } from "@brand/shared/lib/api";
@@ -22,17 +20,11 @@ import { createCategoryMetadata } from "@brand/shared/lib/metadata";
 import { parsePageParam } from "@brand/shared/lib/utils";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
-import { Suspense } from "react";
 
 type Props = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ strana?: string }>;
 };
-
-export async function generateStaticParams() {
-  const categories = await getAllCategoriesFlat();
-  return categories.map((c) => ({ slug: c.slug }));
-}
 
 export async function generateMetadata({
   params,
@@ -70,6 +62,7 @@ async function CategoryProducts({
     slug,
     offset,
     PRODUCTS_PER_PAGE,
+    "critical",
   );
 
   const totalPages = Math.ceil(products.totalRecords / PRODUCTS_PER_PAGE);
@@ -84,26 +77,23 @@ async function CategoryProducts({
         totalRecords={products.totalRecords}
         variant="section"
       />
-      <Suspense>
-        <ListingPagination
-          currentPage={currentPage}
-          totalRecords={products.totalRecords}
-          pageSize={PRODUCTS_PER_PAGE}
-        />
-      </Suspense>
+      <ListingPagination
+        currentPage={currentPage}
+        totalRecords={products.totalRecords}
+        pageSize={PRODUCTS_PER_PAGE}
+        basePath={`/proizvodi/kategorije/${slug}`}
+      />
     </>
   );
 }
 
 export default async function CategoryPage({ params, searchParams }: Props) {
   const { slug } = await params;
-  // Category and products are fetched sequentially on purpose. Parallelizing
-  // them (productsPromise kickoff at page level) would require reading
-  // searchParams outside a Suspense boundary, which Cache Components forbids.
-  // The alternative — two Suspense boundaries with a shared categoryPromise —
-  // was evaluated and rejected: most routes are static-prerendered (cache hit,
-  // no benefit), and splitting the hero into its own Suspense risks worse LCP
-  // from a skeleton flash. Revisit if telemetry shows a category-page bottleneck.
+  // Dynamic (it reads `?strana=`), so this renders per request from the Data
+  // Cache, and the whole page arrives in one piece: no Suspense, which would
+  // hide the grid from anything that does not run JS. Category and products
+  // are fetched sequentially so an unknown slug reaches notFound() without a
+  // product read. Revisit if telemetry shows a category-page bottleneck.
   const category = await getCategoryBySlug(slug);
   if (!category) notFound();
 
@@ -131,9 +121,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         {category.subCategories.length > 0 && <SectionDivider />}
 
         <SectionErrorBoundary>
-          <Suspense fallback={<ProductGridSkeleton variant="section" />}>
-            <CategoryProducts slug={slug} searchParams={searchParams} />
-          </Suspense>
+          <CategoryProducts slug={slug} searchParams={searchParams} />
         </SectionErrorBoundary>
 
         {category.htmlDescription && (

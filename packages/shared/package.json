@@ -14,7 +14,8 @@
   },
   "dependencies": {
     "@brand/config": "workspace:*",
-    "@brand/ui": "workspace:*"
+    "@brand/ui": "workspace:*",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "vitest": "^4.1.4"

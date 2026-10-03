@@ -5,7 +5,6 @@ import Wrapper from "./wrapper";
 import { getTagsByBrand } from "@brand/shared/lib/api";
 import type { Tag } from "@brand/shared/types/tags";
 
-/** @see ./tags-skeleton.tsx — update the skeleton when this layout changes */
 const Tags = async () => {
   let tags: Tag[] = [];
   try {
