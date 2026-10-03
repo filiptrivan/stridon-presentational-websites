@@ -31,7 +31,7 @@ Run every command from the repo root. Scripts print JSON, errors included; messa
 ## Rules (owner's decisions, 2026-10-01; background in `reference.md`)
 
 1. **Never edit `apps/*/constants/dealers.ts` yourself.** Only `dealers.mjs add` and `move` write them (a hook blocks Edit/Write on them).
-2. **Coordinates come only from the script.** Never type, round or "fix" them.
+2. **Coordinates reach `dealers.ts` only through the script**, from the link or from the coordinates the requester sent. Pass what they sent as-is in `--link`; never type, round or "fix" coordinates yourself.
 3. **A physical shop's pin is the Google Maps link the requester sends.** Do not search Google, open Google in a browser or look the shop up anywhere; OpenStreetMap only checks that the link's point is on the stated street in the stated settlement. An online dealer (webshop without a shop) is pinned on its registered office from OpenStreetMap.
 4. **The printed address is the official one the requester gives** (for example from the dealer's website); the pin sits on the building the shop is actually in. When the script says the two do not describe the same place, ask the requester which is right. Never choose yourself.
 5. **Do not fetch CompanyWall or the dealer's website** with tools; use what the requester wrote. A CompanyWall link goes into the PR text as-is.
