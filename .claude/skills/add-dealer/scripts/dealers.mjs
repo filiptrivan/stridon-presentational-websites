@@ -81,8 +81,10 @@ function normalizeWebsite(w, warnings) {
 // A second shop of a chain has the same name, so the same id. Offer one with the street (or the
 // settlement), e.g. "doming-zrenjaninski-put"; in the 2026-10-02 test 6 chains had 2 to 5 shops.
 function freeId(base, input, taken) {
-  for (const candidate of [`${base}-${slugify(input.street)}`, `${base}-${slugify(input.place)}`, `${base}-${slugify(input.street)}-${slugify(input.numberRaw)}`]) {
-    if (!taken.has(candidate)) return candidate;
+  const [street, place, number] = [input.street, input.place, input.numberRaw].map(slugify);
+  for (const parts of [[street], [place], [street, number]]) {
+    const candidate = [base, ...parts].join("-");
+    if (parts.every(Boolean) && !taken.has(candidate)) return candidate;
   }
   for (let n = 2; ; n++) if (!taken.has(`${base}-${n}`)) return `${base}-${n}`;
 }
@@ -224,7 +226,7 @@ async function cmdAdd() {
   }
   if (services.includes(id)) {
     const suggestedId = freeId(id, input, taken);
-    fail(`Id „${id}“ već ima ovlašćeni servis na DCK mapi. Ponovi sa --id ${suggestedId}.`, { code: "name_taken", suggestedId, existing: [{ site: "dck", service: id }] });
+    fail(`Id „${id}“ već ima ovlašćeni servis na DCK mapi. Ponovi sa --id ${suggestedId}.`, { code: "id_reserved", suggestedId });
   }
 
   const pin = await pinFor(input, category);
@@ -296,7 +298,7 @@ function cmdCheck() {
   const problems = [];
   const notes = [];
   const remotes = run("git", ["remote", "-v"]).stdout;
-  const remote = remotes.match(new RegExp(`^(\\S+)\\s+\\S*${UPSTREAM_REPO.replace("/", "[/:]")}(?:\\.git)?\\s+\\(fetch\\)`, "im"))?.[1] ?? null;
+  const remote = remotes.match(new RegExp(`^(\\S+)\\s+\\S*[/:]${UPSTREAM_REPO}(?:\\.git)?\\s+\\(fetch\\)`, "im"))?.[1] ?? null;
   if (!remote) problems.push(`Nijedan git remote ne pokazuje na ${UPSTREAM_REPO}.`);
   const dirty = run("git", ["status", "--porcelain", "--", ...Object.values(SITES)]).stdout.trim();
   if (dirty) problems.push(`U fajlovima dilera već ima nesačuvanih izmena:\n${dirty}\nSačuvaj ih ili vrati pre novog dilera.`);
@@ -321,7 +323,10 @@ function cmdCheck() {
   const open = run("gh", ["pr", "list", "--repo", UPSTREAM_REPO, "--state", "open", "--search", "(dealers) in:title", "--json", "url,title"]);
   // Titles this skill writes (SKILL.md step 5): "feat(dealers): add X to both sites", "fix(dealers): move X to ...".
   const skillTitle = /^(feat\(dealers\): add .+ to (both sites|dck|sg-tools)|fix\(dealers\): move .+ to .+)$/;
-  const pending = open.status === 0 ? JSON.parse(open.stdout || "[]").filter((p) => skillTitle.test(p.title)) : [];
+  let pending = [];
+  try {
+    if (open.status === 0) pending = JSON.parse(open.stdout || "[]").filter((p) => skillTitle.test(p.title));
+  } catch {} // advisory only; an odd gh answer must not stop the skill
   if (pending.length) notes.push(`Prethodni diler još nije na sajtu (${pending.map((p) => p.url).join(", ")}). Novi bi se sudario sa njim: sačekaj da se spoji.`);
 
   print({ ok: problems.length === 0, problems, notes, remote, cloud, branch, route: dryRun ? "dry-run" : "push" });
