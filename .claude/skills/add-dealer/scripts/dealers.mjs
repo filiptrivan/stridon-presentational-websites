@@ -15,7 +15,7 @@
 // is "expected" (merges by itself) or waits for Filip, by the same rule the PR check applies.
 import fs from "node:fs";
 import path from "node:path";
-import { parseArgs, print, fail, run, REPO_ROOT, SITES, SERVICE_FILES, LIVE_PAGES, UPSTREAM_REPO } from "./lib/common.mjs";
+import { readOptions, print, fail, run, REPO_ROOT, SITES, SERVICE_FILES, LIVE_PAGES, UPSTREAM_REPO } from "./lib/common.mjs";
 import {
   parseDealers,
   entriesOf,
@@ -31,8 +31,18 @@ import { distanceM, mapLinks, pinFromLink } from "./lib/geo.mjs";
 import { checkPin, geocodeOffice } from "./lib/osm.mjs";
 import { normalizeHouseNumber, similarity, simple, slugify } from "./lib/text.mjs";
 
-const args = parseArgs(process.argv.slice(2));
-const command = args._[0];
+// Options each command takes; anything else is refused.
+const OPTIONS = {
+  check: [],
+  list: ["find"],
+  add: ["name", "sites", "category", "street", "number", "place", "municipality", "link", "phone", "email", "website", "id"],
+  move: ["id", "street", "number", "place", "municipality", "link"],
+  diff: ["base", "head"],
+};
+const command = process.argv[2];
+if (!Object.hasOwn(OPTIONS, command ?? "")) fail(`Nepoznata komanda "${command ?? ""}". Dozvoljeno: ${Object.keys(OPTIONS).join(", ")}.`);
+const opts = readOptions(process.argv.slice(3), OPTIONS[command]);
+const need = (key) => opts[key] ?? fail(`Nedostaje --${key}.`, { code: "bad_args" });
 const read = (file) => fs.readFileSync(path.join(REPO_ROOT, file), "utf8");
 
 const parseAll = () =>
@@ -52,17 +62,6 @@ function readDealers() {
 // their ids are taken although the parsed list does not contain them.
 const reservedIds = () =>
   Object.fromEntries(Object.entries(SERVICE_FILES).map(([site, file]) => [site, serviceIds(read(file))]));
-
-// `--key` given without a value parses as `true`; never write that into a dealer.
-function str(key, { required = false } = {}) {
-  const v = args[key];
-  if (v === undefined) {
-    if (required) fail(`Nedostaje --${key}.`);
-    return undefined;
-  }
-  if (typeof v !== "string" || !v.trim()) fail(`--${key} je bez vrednosti.`);
-  return v.trim();
-}
 
 // Every entry links over https (`https://host/`). A site given as http:// is written as https://
 // (2 of 100 shops in the 2026-10-02 test were blocked on this before); the requester checks the
@@ -103,14 +102,14 @@ const LINK_HELP = {
 };
 
 function addressInput() {
-  const number = str("number");
+  const number = opts.number;
   return {
-    street: str("street", { required: true }),
+    street: need("street"),
     numberRaw: number ?? "",
     hn: normalizeHouseNumber(number),
-    place: str("place", { required: true }),
+    place: need("place"),
     // Only a search hint for the office address: the pin's settlement must match --place itself.
-    municipality: str("municipality") ?? "",
+    municipality: opts.municipality ?? "",
   };
 }
 
@@ -118,7 +117,7 @@ function addressInput() {
 // OSM only checks that it lies on the stated street in the stated settlement; an online dealer
 // is pinned on the registered office from OSM (or a link, checked the same way).
 async function pinFor(input, category) {
-  const link = str("link");
+  const link = opts.link;
   if (link) {
     const pin = await pinFromLink(link);
     if (pin.error) fail(LINK_HELP[pin.error] ?? LINK_HELP.unreadable, { code: "bad_link", detail: pin.error, resolved: pin.resolved ?? null });
@@ -204,14 +203,14 @@ function report(mode, entry, sites, pin, written, warnings) {
 }
 
 async function cmdAdd() {
-  const name = str("name", { required: true });
-  const category = str("category", { required: true });
+  const name = need("name");
+  const category = need("category");
   if (!["dealer", "online"].includes(category)) fail("--category mora biti dealer (radnja) ili online (webshop bez radnje).");
-  const sites = [...new Set((str("sites", { required: true })).split(",").map((s) => s.trim()).filter(Boolean))];
+  const sites = [...new Set(need("sites").split(",").map((s) => s.trim()).filter(Boolean))];
   if (!sites.length || sites.some((s) => !SITES[s])) fail(`--sites mora biti ${Object.keys(SITES).join(", ")} ili oba, odvojeno zarezom.`);
   refuseOnMain();
   const input = addressInput();
-  const contact = { id: str("id"), phone: str("phone"), email: str("email"), website: str("website") };
+  const contact = { id: opts.id, phone: opts.phone, email: opts.email, website: opts.website };
   const id = contact.id ?? slugify(name);
   const address = [input.street, input.numberRaw].filter(Boolean).join(" ");
 
@@ -267,7 +266,7 @@ async function cmdAdd() {
 }
 
 async function cmdMove() {
-  const id = str("id", { required: true });
+  const id = need("id");
   refuseOnMain();
   const { parsed, bySite } = readDealers();
   // A dealer listed on both sites moves on both.
@@ -290,7 +289,7 @@ async function cmdMove() {
 
 function cmdList() {
   const { bySite } = readDealers();
-  const find = args.find ? String(args.find) : null;
+  const find = opts.find ?? null;
   const rows = {};
   for (const [site, dealers] of Object.entries(bySite)) {
     rows[site] = dealers
@@ -339,10 +338,10 @@ function cmdCheck() {
 // CI (.github/workflows/dealer-change.yml): reads the PR's dealer files as text with `git show`;
 // nothing from the PR is executed (this script itself is checked out from the base commit).
 function cmdDiff() {
-  if (!args.base || !args.head) fail("diff traži --base i --head.");
-  const mergeBase = run("git", ["merge-base", String(args.base), String(args.head)]).stdout.trim();
-  if (!mergeBase) fail(`Nema zajedničkog pretka za ${args.base} i ${args.head}.`);
-  const names = run("git", ["diff", "--name-only", "--no-renames", mergeBase, String(args.head)]);
+  const [baseRef, headRef] = [need("base"), need("head")];
+  const mergeBase = run("git", ["merge-base", baseRef, headRef]).stdout.trim();
+  if (!mergeBase) fail(`Nema zajedničkog pretka za ${baseRef} i ${headRef}.`);
+  const names = run("git", ["diff", "--name-only", "--no-renames", mergeBase, headRef]);
   if (names.status !== 0) fail(`git diff nije uspeo: ${names.stderr}`);
   const changed = names.stdout.split(/\r?\n/).filter(Boolean);
   const at = (ref, file) => {
@@ -350,8 +349,8 @@ function cmdDiff() {
     return r.status === 0 ? parseDealers(r.stdout) : null;
   };
   const base = Object.fromEntries(Object.entries(SITES).map(([s, f]) => [s, at(mergeBase, f)]));
-  const head = Object.fromEntries(Object.entries(SITES).map(([s, f]) => [s, at(String(args.head), f)]));
-  const reserved = Object.fromEntries(Object.entries(SERVICE_FILES).map(([s, f]) => [s, serviceIds(run("git", ["show", `${args.head}:${f}`]).stdout)]));
+  const head = Object.fromEntries(Object.entries(SITES).map(([s, f]) => [s, at(headRef, f)]));
+  const reserved = Object.fromEntries(Object.entries(SERVICE_FILES).map(([s, f]) => [s, serviceIds(run("git", ["show", `${headRef}:${f}`]).stdout)]));
   let gate;
   try {
     gate = classifyChange(base, head, changed, reserved);
@@ -369,7 +368,6 @@ function cmdDiff() {
 }
 
 const commands = { check: cmdCheck, list: cmdList, add: cmdAdd, move: cmdMove, diff: cmdDiff };
-if (!commands[command]) fail(`Nepoznata komanda "${command ?? ""}". Dozvoljeno: ${Object.keys(commands).join(", ")}.`);
 try {
   await commands[command]();
 } catch (err) {

@@ -3,6 +3,7 @@ import { spawnSync } from "node:child_process";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { parseArgs } from "node:util";
 
 export const SKILL_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 export const REPO_ROOT = path.resolve(SKILL_DIR, "../../..");
@@ -25,21 +26,21 @@ export const LIVE_PAGES = {
 
 export const UPSTREAM_REPO = "filiptrivan/stridon-presentational-websites";
 
-// `--key value`, `--key=value` and bare `--flag` arguments.
-export function parseArgs(argv) {
-  const args = { _: [] };
-  for (let i = 0; i < argv.length; i++) {
-    const a = argv[i];
-    if (!a.startsWith("--")) {
-      args._.push(a);
-      continue;
-    }
-    const eq = a.indexOf("=");
-    if (eq > 0) args[a.slice(2, eq)] = a.slice(eq + 1);
-    else if (i + 1 < argv.length && !argv[i + 1].startsWith("--")) args[a.slice(2)] = argv[++i];
-    else args[a.slice(2)] = true;
+// The options of one command, all `--name value` strings. An unknown option or one without a
+// value is an error, so a typo such as `--webiste` is never dropped silently. Values are trimmed
+// and may not be empty.
+export function readOptions(argv, names) {
+  let values;
+  try {
+    ({ values } = parseArgs({ args: argv, options: Object.fromEntries(names.map((n) => [n, { type: "string" }])), strict: true }));
+  } catch (err) {
+    fail(`${err.message.replace(/\.?$/, ".")} Opcije: ${names.map((n) => `--${n}`).join(", ") || "nema ih"}.`, { code: "bad_args" });
   }
-  return args;
+  for (const [key, value] of Object.entries(values)) {
+    if (!value.trim()) fail(`--${key} je bez vrednosti.`, { code: "bad_args" });
+    values[key] = value.trim();
+  }
+  return values;
 }
 
 // git and gh, from the repo root, without a shell.
