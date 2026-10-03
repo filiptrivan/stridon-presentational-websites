@@ -9,57 +9,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # An expected dealer change (the add-dealer skill: exactly one dealer added or moved, on one site
-  # or identically on both, nothing else) skips the Claude review: the required dealer-change check is its
-  # gate (owner's decision on PR #20, 2026-10-01). The ruleset requires a `claude-gate` check and
-  # the reusable workflow is what posts it, so the skip posts it here, or the PR would wait forever.
-  # Same classifier as dealer-change.yml, run from the base commit; nothing from the PR is executed.
-  dealer-scope:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    permissions:
-      contents: read
-      checks: write
-    outputs:
-      expected: ${{ steps.classify.outputs.expected }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.base.sha }}
-          fetch-depth: 0
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - id: classify
-        env:
-          PR: ${{ github.event.pull_request.number }}
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-          SCRIPT: .claude/skills/add-dealer/scripts/dealers.mjs
-        run: |
-          git fetch --no-tags --quiet origin "+refs/pull/$PR/head:refs/remotes/pr/head"
-          if [ -f "$SCRIPT" ]; then node "$SCRIPT" diff --base "$BASE_SHA" --head "$HEAD_SHA" || true; fi
-      - name: Post claude-gate for an expected dealer change
-        # Fork PRs get a read-only token and no review anyway (same_repo_only).
-        if: steps.classify.outputs.expected == 'true' && github.event.pull_request.head.repo.full_name == github.repository
-        env:
-          GH_TOKEN: ${{ github.token }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-        run: |
-          gh api -X POST "repos/$GITHUB_REPOSITORY/check-runs" \
-            -f name=claude-gate \
-            -f head_sha="$HEAD_SHA" \
-            -f status=completed \
-            -f conclusion=success \
-            -f "output[title]=Skipped: expected dealer change" \
-            -f "output[summary]=One dealer added or moved, on one site or identically on both, nothing else. Gated by the required dealer-change check instead of the Claude review."
-
   review:
-    needs: dealer-scope
-    # Runs unless the change is an expected dealer change; also when dealer-scope failed, so a
-    # broken classifier falls back to the normal review instead of skipping it.
-    if: ${{ !cancelled() && needs.dealer-scope.outputs.expected != 'true' }}
     permissions:
       contents: read
       pull-requests: write

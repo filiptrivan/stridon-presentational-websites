@@ -7,11 +7,10 @@
    - Physical shop: the requester (sales, Aleksa) always sends the shop's Google Maps link. OpenStreetMap only checks that the point is on the stated street and in the stated settlement. If it is not, Claude asks the requester to sort out which is right, because the pin and the printed address must describe the same place.
    - Online dealer: the pin is the registered office, from OpenStreetMap.
 3. **No Google scraping.** The hidden browser, the user-agent edit, the 10 m rule, Photon, the judge()/decide() grading, the blue-or-red picture page, the map image and the PNG code are gone. A short `maps.app.goo.gl` link is resolved by reading the HTTP redirect only (the `Location` header), never the page.
-4. **"Expected" change** = exactly one dealer added, or one existing dealer's address and pin moved, identical on both sites, nothing else. It goes live with no review from Filip and without claude-gate. An online dealer (adding one changes the first 6 on product pages) and anything else wait for Filip.
+4. **"Expected" change** = exactly one dealer added, or one existing dealer's address and pin moved, identical on both sites, nothing else. It goes live with no review from Filip. An online dealer (adding one changes the first 6 on product pages) and anything else wait for Filip.
    Clarified by Luka on 2026-10-02: a dealer for one brand only, on one site, is expected too (6 of the 20 dck dealers are dck-only); "identical" applies where the dealer is on both sites, and a dealer listed on both moves on both. The skill always asks which site. Anything that changes the first 6 dealers on product pages waits for Filip.
 5. **How GitHub enforces it.**
    - A required `dealer-change` check (`.github/workflows/dealer-change.yml`). It reads the diff as plain data and runs the data checks; it replaced the `node --test` files in this folder and the commit check in `guard.mjs`.
-   - claude-gate is skipped for expected dealer PRs in `claude-review.yml`, which posts the required `claude-gate` check itself.
    - `CODEOWNERS`: `* @filiptrivan`, with the two `dealers.ts` files exempt.
    - Auto-merge turned on for the repo.
 6. **The requester has write access.** The skill pushes a `dealers/<id>` branch to the repo and turns on auto-merge. The fork and local-only routes are gone; the dry-run mode stays for trying the skill out.
@@ -22,7 +21,7 @@
 **Filip (repo settings, in this order).** PRs use the base branch's CODEOWNERS, so the new owners apply once this PR is on `main`; the dealer-change workflow already runs on this PR (no dealer file changes, so it passes), and a check must have run once before the ruleset can require it.
 1. Merge this PR.
 2. Settings → General: "Allow auto-merge" and "Automatically delete head branches" (`gh pr merge --auto` ignores `--delete-branch`).
-3. Ruleset "main — claude-gate + code owners": add `dealer-change` to the required checks, keep `strict` off, and pin both `claude-gate` and `dealer-change` to the GitHub Actions app, so a commit status set with a personal token cannot stand in for them (both are posted with `github.token`). Make sure Repository admin is a bypass actor: with `* @filiptrivan` every PR of Filip's own needs a code-owner review he cannot give himself.
+3. Ruleset on `main`: add `dealer-change` to the required checks, keep `strict` off, and pin it to the GitHub Actions app, so a commit status set with a personal token cannot stand in for it. Make sure Repository admin is a bypass actor: with `* @filiptrivan` every PR of Filip's own needs a code-owner review he cannot give himself.
 4. Invite Aleksa with write access.
 5. Decide how Aleksa's Claude may run git: the skill's `allowed-tools` cover only the turn that starts the skill, so after his first answer `git switch`, `git commit`, `git push` and `gh pr create/merge` ask him for permission. Either he clicks "Allow" (it can be remembered per session), or those commands go into `.claude/settings.json` for everyone working in this repo.
 
@@ -34,7 +33,7 @@
 
 ## What the research found (2026-10-02, official docs first)
 
-- A required check whose workflow is filtered out (paths) stays "Expected" and blocks the merge, so `dealer-change` runs on every PR and passes at once when no dealer file changed. A job skipped by `if:` reports success, but `claude-gate` is posted by a step inside the reusable workflow, so skipping its caller would leave the required `claude-gate` missing forever; `claude-review.yml` posts it for an expected change instead (any source may post a required check when no app is pinned, as here).
+- A required check whose workflow is filtered out (paths) stays "Expected" and blocks the merge, so `dealer-change` runs on every PR and passes at once when no dealer file changed.
 - With 0 required approvals and code-owner review on, a PR touching only ownerless files needs no review. A CODEOWNERS line with a path and no owner makes that path ownerless; the last match wins; exact paths, since a bare `dealers.ts` would also exempt `packages/shared/src/types/dealers.ts`.
 - `require_extra_approval_for_unattributed_changes` in the ruleset concerns Copilot pull requests and has no effect with 0 required approvals.
 - `gh pr merge --auto` merges at once when the PR is already mergeable; right after `gh pr create` the required checks are pending, so auto-merge is enabled normally.
