@@ -203,8 +203,10 @@ async function cmdAdd() {
   const name = need("name");
   const category = need("category");
   if (!["dealer", "online"].includes(category)) fail("--category mora biti dealer (radnja) ili online (webshop bez radnje).");
-  const sites = [...new Set(need("sites").split(",").map((s) => s.trim()).filter(Boolean))];
-  if (!sites.length || sites.some((s) => !SITES[s])) fail(`--sites mora biti ${Object.keys(SITES).join(", ")} ili oba, odvojeno zarezom.`);
+  const wanted = need("sites").split(",").map((s) => s.trim()).filter(Boolean);
+  if (!wanted.length || wanted.some((s) => !Object.hasOwn(SITES, s))) fail(`--sites mora biti ${Object.keys(SITES).join(", ")} ili oba, odvojeno zarezom.`);
+  // Always dck first, so `changed` (and the commit command built from it) has one fixed order.
+  const sites = Object.keys(SITES).filter((s) => wanted.includes(s));
   refuseOnMain();
   const input = addressInput();
   const contact = { id: opts.id, phone: opts.phone, email: opts.email, website: opts.website };

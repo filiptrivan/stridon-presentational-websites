@@ -21,6 +21,7 @@ What counts as an "expected" change, one that merges with no review, is `classif
 8. **A dealer on only one site counts as expected.** The skill always asks which site; a dealer listed on both sites moves on both.
 9. **Coordinates when a phone link has none:** the requester may send them. They reach `dealers.ts` only through the script; Claude never types, rounds or fixes them.
 10. **One placement rule for every new dealer, online or a shop: the end of the list**, before the service centres. The six dealers on product pages never change through the skill; putting a shop into the six, with a logo, stays Filip's manual edit.
+11. **Permission prompts:** narrow allow rules in `.claude/settings.json` for exactly the commands the skill runs: committing the two `dealers.ts` files, pushing a `dealers/…` branch, `gh pr create` and `gh pr merge --auto`. Nothing broader, because that file applies to every session in this repo. The skill also creates the branch with `git switch -c dealers/<id> origin/main`, so that command got the same kind of rule (added by Luka, not on Filip's list). The rules are a convenience, not a gate: the gate is the dealer-change check, CODEOWNERS and the ruleset.
 
 ## Setup
 
@@ -28,7 +29,8 @@ What counts as an "expected" change, one that merges with no review, is `classif
 1. Settings → General: "Allow auto-merge" and "Automatically delete head branches" (`gh pr merge --auto` ignores `--delete-branch`).
 2. Once `dealer-change` has run on a PR (GitHub offers a check for a ruleset after it has run in the last seven days), Ruleset on `main`: add `dealer-change` to the required checks, keep `strict` off, and pin it to the GitHub Actions app, so a commit status set with a personal token cannot stand in for it. Make sure Repository admin is a bypass actor: with `* @filiptrivan` every PR of Filip's own needs a code-owner review he cannot give himself.
 3. Invite Aleksa with write access.
-4. Decide how Aleksa's Claude may run git: the skill's `allowed-tools` cover only the turn that starts the skill, so after his first answer `git switch`, `git commit`, `git push` and `gh pr create/merge` ask him for permission. Either he clicks "Allow" (it can be remembered per session), or those commands go into `.claude/settings.json` for everyone working in this repo.
+
+The skill's `allowed-tools` cover only the turn that starts it; after that the allow rules in `.claude/settings.json` (decision 11) cover its git and gh steps, once the requester has accepted Claude Code's workspace trust dialog for the repo. A clone whose remote is not `origin` gets a prompt for the branch and the push, which the skill tells the requester is safe to allow; `allowed-tools` use the same forms as the rules.
 
 **Aleksa, on Claude Code on the web** (Filip's direction in Slack, 2026-10-01; docs: https://code.claude.com/docs/en/claude-code-on-the-web):
 - His own Pro, Max or Team plan; the repo connected (the Claude GitHub App may need installing on Filip's account to push to it).
