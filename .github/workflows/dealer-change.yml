@@ -12,7 +12,7 @@ name: Dealer change
 #
 # No paths filter on purpose: a required check whose workflow is filtered out stays "Expected"
 # and blocks the merge. GitHub runs no workflow on a PR with a merge conflict, so two dealer PRs
-# that both append at the end of the shop block wait for each other (the skill warns about it).
+# that both append at the end of the list wait for each other (the skill warns about it).
 #
 # Nothing from the PR is executed: the script is checked out from the base commit and reads the
 # PR's dealer files as text with `git show`.
