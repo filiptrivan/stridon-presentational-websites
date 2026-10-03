@@ -7,7 +7,7 @@
    - Physical shop: the requester (sales, Aleksa) always sends the shop's Google Maps link. OpenStreetMap only checks that the point is on the stated street and in the stated settlement. If it is not, Claude asks the requester to sort out which is right, because the pin and the printed address must describe the same place.
    - Online dealer: the pin is the registered office, from OpenStreetMap.
 3. **No Google scraping.** The hidden browser, the user-agent edit, the 10 m rule, Photon, the judge()/decide() grading, the blue-or-red picture page, the map image and the PNG code are gone. A short `maps.app.goo.gl` link is resolved by reading the HTTP redirect only (the `Location` header), never the page.
-4. **"Expected" change** = exactly one dealer added, or one existing dealer's address and pin moved, identical on both sites, nothing else. It goes live with no review from Filip. An online dealer (adding one changes the first 6 on product pages) and anything else wait for Filip.
+4. **"Expected" change** = exactly one dealer added, or one existing dealer's address and pin moved, identical on both sites, nothing else. It goes live with no review from Filip. Anything else waits for Filip.
    Clarified by Luka on 2026-10-02: a dealer for one brand only, on one site, is expected too (6 of the 20 dck dealers are dck-only); "identical" applies where the dealer is on both sites, and a dealer listed on both moves on both. The skill always asks which site. Anything that changes the first 6 dealers on product pages waits for Filip.
 5. **How GitHub enforces it.**
    - A required `dealer-change` check (`.github/workflows/dealer-change.yml`). It reads the diff as plain data and runs the data checks; it replaced the `node --test` files in this folder and the commit check in `guard.mjs`.
@@ -48,8 +48,8 @@ The same function runs in the skill (so the requester is told what happens next)
 |---|---|---|
 | none | no dealer file changed | pass |
 | mixed | dealer files and other files changed | pass if the files parse and the ids are unique; CODEOWNERS makes Filip review the PR |
-| expected | one dealer added at the end of the shop block, or one dealer's address, city and coordinates changed, on one site or on both (identical on both); category `dealer`; none of the first 6 changed; no logo or comment on a new entry; the rest of each file byte-identical | pass, auto-merge |
-| owner | any other dealer-only change: two dealers, an online dealer, one of the first 6 moved or reordered, a phone change, a dealer differing between the sites (one listed on both but moved on one), a postal code or bad website, an edit the rule cannot read | fail until Filip approves the PR's latest commit and re-runs the job, or merges with the ruleset bypass |
+| expected | one dealer added at the end of the list, or one dealer's address, city and coordinates changed, on one site or on both (identical on both); category `dealer` or `online`; none of the first 6 changed; no logo or comment on a new entry; the rest of each file byte-identical | pass, auto-merge |
+| owner | any other dealer-only change: two dealers, a service centre, one of the first 6 moved or reordered, a phone change, a dealer differing between the sites (one listed on both but moved on one), a postal code or bad website, an edit the rule cannot read | fail until Filip approves the PR's latest commit and re-runs the job, or merges with the ruleset bypass |
 | invalid | a dealer file that cannot be parsed or is missing, a duplicate id (service centre ids included), coordinates outside Serbia | fail; only the bypass merges it |
 
 ## The pin check (`scripts/lib/osm.mjs`)
@@ -67,7 +67,7 @@ Test on 120 shops in Belgrade and Novi Sad (2026-10-02; 95 from OpenStreetMap wi
 ## Placement and format
 
 - `category: "dealer"` for any physical shop (with `website` when it also sells online); `"online"` only for a webshop without a retail location.
-- New shops go at the end of the dealer block (before `...SERVICE_DEALERS` on dck), so the first 6 non-service entries shown on product pages stay the same. Anything that would change those 6 is refused unless `--allow-top6-change` is passed after Filip decides.
+- Every new dealer, online or a shop, goes at the end of the list (before `...SERVICE_DEALERS` on dck), so the first 6 non-service entries shown on product pages never change through the skill. Putting a dealer into those 6, with a logo, is Filip's manual edit.
 - Field order `id, name, address, city, phone, email, website, logoSrc, category, coordinates`; empty fields are omitted; `address` without a postal code; `website` as `https://host/` (an http:// site is written as https:// with a warning to check the link); `id` is ASCII kebab-case (`đ` becomes `d`, `&` becomes `and`), and a second shop of a chain gets the street or settlement appended (`doming-zrenjaninski-put`). No `logoSrc`: new entries cannot reach the only place that renders logos.
 - `add` and `move` write the text, parse both files again with the same parser the dealer-change check uses, compare them entry by entry with what was intended and restore the originals on any mismatch or when the change would be `invalid`.
 

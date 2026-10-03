@@ -73,7 +73,7 @@ What comes back:
 - `code: bad_link`, `link_required`, `office_not_found`: pass `error` to the requester and wait for a new link, then rerun.
 - `code: pin_address_mismatch` with `suggestedPlace`: the pin is on the stated street, only the settlement differs (a shop in Borča with "Beograd" in its address). Ask: "Tačka je u naselju <suggestedPlace>. Da li da upišem <suggestedPlace> kao mesto?" On yes, rerun with `--place "<suggestedPlace>"`.
 - `code: pin_address_mismatch` without it: say simply that the point from the link and the address are not the same place, with `reasons` in plain words, and ask which is right. Rerun with the corrected address or link.
-- `Diler ne prolazi pravila`: explain the `errors`. A change to the first 6 dealers on product pages (only an online dealer causes it) is Filip's decision: stop and say so; never pass `--allow-top6-change` on your own.
+- `Diler ne prolazi pravila`: explain the `errors`.
 - `code: error`: a service did not answer; wait a minute and rerun once.
 - `Upis je vraćen na staro stanje`: nothing was written. Tell the requester that Filip has to look at it and stop.
 

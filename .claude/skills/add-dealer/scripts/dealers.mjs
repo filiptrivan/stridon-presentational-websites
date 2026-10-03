@@ -6,7 +6,6 @@
 //   dealers.mjs add  --name <n> --sites dck,sg-tools --category dealer|online
 //                    --street <s> --number <no> --place <settlement> [--municipality <m>]
 //                    [--link <Google Maps link | lat,lng>] [--phone] [--email] [--website] [--id]
-//                    [--allow-top6-change]
 //   dealers.mjs move --id <id> --street <s> --number <no> --place <settlement> [--municipality <m>]
 //                    [--link <Google Maps link | lat,lng>]
 //   dealers.mjs diff --base <sha> --head <sha>   (CI) classify a PR; exit 0 pass, 2 needs Filip, 1 invalid
@@ -25,7 +24,6 @@ import {
   renderEntry,
   insertEntry,
   replaceEntry,
-  simulateInsert,
   checkEntry,
   classifyChange,
   serviceIds,
@@ -255,26 +253,17 @@ async function cmdAdd() {
   for (const k of Object.keys(entry)) if (entry[k] === undefined) delete entry[k];
 
   const own = checkEntry(entry, { strict: true });
-  const errors = [...own.errors];
   warnings.push(...own.warnings, ...nearbyWarnings(bySite, pin));
-  const position = entry.category === "online" ? "online" : "dealers";
-  const next = {};
   for (const site of sites) {
     const same = bySite[site].find((d) => d.id !== entry.id && similarity(d.name, entry.name) >= 0.85);
     if (same) warnings.push(`${site}: postoji sličan diler „${same.name}“ (${same.address ?? ""}, ${same.city ?? ""}); proveri da nije isti`);
-    const sim = simulateInsert(bySite[site], entry, position);
-    next[site] = sim.next;
-    // The first 6 dealers on product pages are a business decision: only with Filip's yes.
-    if (sim.top6Before.join() !== sim.top6After.join() && !args["allow-top6-change"]) {
-      errors.push(`${site}: unos menja prvih 6 dilera na stranici proizvoda (${sim.top6Before.join(", ")} → ${sim.top6After.join(", ")}); to odlučuje Filip`);
-    }
   }
-  if (errors.length) fail("Diler ne prolazi pravila.", { errors, warnings });
+  if (own.errors.length) fail("Diler ne prolazi pravila.", { errors: own.errors, warnings });
 
   const written = writeVerified(
     sites,
-    (site, text, eol) => insertEntry(text, eol, entry, position, bySite[site]),
-    (site) => next[site],
+    (site, text, eol) => insertEntry(text, eol, entry),
+    (site) => [...bySite[site], entry],
   );
   report("add", entry, sites, pin, written, warnings);
 }
@@ -338,7 +327,7 @@ function cmdCheck() {
   if (!cloud && !dryRun && !gh.length && !["ADMIN", "MAINTAIN", "WRITE"].includes(permission)) gh.push("Tvoj GitHub nalog nema pravo pisanja na repo; Filip treba da ti ga da.");
   if (dryRun) notes.push("Probni režim (ADD_DEALER_DRY_RUN): sve se radi lokalno, ništa se ne šalje na GitHub.");
 
-  // Two open dealer PRs both append at the end of the shop block, so the second one conflicts,
+  // Two open dealer PRs both append at the end of the list, so the second one conflicts,
   // and GitHub runs no checks on a conflicting PR.
   const open = run("gh", ["pr", "list", "--repo", UPSTREAM_REPO, "--state", "open", "--search", "(dealers) in:title", "--json", "url,title"]);
   // Titles this skill writes (SKILL.md step 5): "feat(dealers): add X to both sites", "fix(dealers): move X to ...".

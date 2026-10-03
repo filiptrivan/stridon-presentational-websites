@@ -89,21 +89,13 @@ function blockOf(lines, id, start, end) {
   return { open, close };
 }
 
-// position "dealers": end of the physical-shop block (before `...SERVICE_DEALERS` on dck,
-// before the closing `];` otherwise). position "online": right after the last online entry.
-export function insertEntry(text, eol, entry, position, dealers) {
+// Every new dealer, online or a shop, goes at the end of the list: before `...SERVICE_DEALERS`
+// on dck, before the closing `];` otherwise.
+export function insertEntry(text, eol, entry) {
   const lines = text.split(eol);
   const { start, end } = arrayBounds(lines);
-  let at;
-  if (position === "online") {
-    const lastOnline = [...dealers].reverse().find((d) => d.category === "online");
-    if (!lastOnline) throw new Error("no online entry to insert after");
-    at = blockOf(lines, lastOnline.id, start, end).close + 1;
-  } else {
-    const spread = lines.findIndex((l, i) => i > start && i < end && /^\s*\.\.\.\w+,\s*$/.test(l));
-    at = spread >= 0 ? spread : end;
-  }
-  lines.splice(at, 0, ...renderEntry(entry, eol).slice(0, -eol.length).split(eol));
+  const spread = lines.findIndex((l, i) => i > start && i < end && /^\s*\.\.\.\w+,\s*$/.test(l));
+  lines.splice(spread >= 0 ? spread : end, 0, ...renderEntry(entry, eol).slice(0, -eol.length).split(eol));
   return lines.join(eol);
 }
 
@@ -114,20 +106,6 @@ export function replaceEntry(text, eol, entry) {
   const { open, close } = blockOf(lines, entry.id, start, end);
   lines.splice(open, close - open + 1, ...renderEntry(entry, eol).slice(0, -eol.length).split(eol));
   return lines.join(eol);
-}
-
-const firstSix = (dealers) => dealers.filter((d) => d.category !== "service").slice(0, 6).map((d) => d.id);
-
-export function simulateInsert(dealers, entry, position) {
-  const next = [...dealers];
-  if (position === "online") {
-    const idx = next.map((d) => d.category).lastIndexOf("online");
-    next.splice(idx + 1, 0, entry);
-  } else {
-    const firstService = next.findIndex((d) => d.category === "service");
-    next.splice(firstService >= 0 ? firstService : next.length, 0, entry);
-  }
-  return { next, top6Before: firstSix(dealers), top6After: firstSix(next) };
 }
 
 const ID_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
@@ -203,8 +181,8 @@ const MOVABLE = new Set(["address", "city", "coordinates"]);
 // added, or one existing dealer's address and pin moved, identical on both sites, nothing else.
 // It merges with no human review; everything else waits for @filiptrivan. Clarified by Luka
 // (2026-10-02): a dealer for one brand only, on one site, is expected too; "identical" applies
-// where the dealer is on both sites. Anything that changes the first 6 dealers on product pages
-// waits, so an online dealer always does.
+// where the dealer is on both sites. A new dealer, online or a shop, goes at the end of the list,
+// so the first 6 on product pages never change through the skill.
 //
 // `base` and `head` map site -> parseDealers() result (or null for a missing file);
 // `changedFiles` are all files the PR changes, repo-relative with forward slashes;
@@ -256,7 +234,7 @@ export function classifyChange(base, head, changedFiles, reservedIds = {}) {
     const id = [...ids][0];
     const versions = d.map((x) => x.after.get(id));
     entry = versions[0];
-    if (entry.category !== "dealer") why.push(`diler ${id} je kategorije „${entry.category}“; online diler menja prvih 6 na stranici proizvoda i čeka Filipa`);
+    if (entry.category === "service") why.push(`${id} je ovlašćeni servis; servise menja Filip`);
     if (isAdd) {
       if (versions.some((v) => v.logoSrc || v.comments.length)) why.push(`novi diler ${id} ima logo ili komentar`);
     } else {
@@ -265,20 +243,20 @@ export function classifyChange(base, head, changedFiles, reservedIds = {}) {
       if (extra.length) why.push(`kod dilera ${id} menja se i ${extra.join(", ")}, a pomeranje sme da menja samo adresu, mesto i koordinate`);
       // A dealer listed on both sites but moved on one shows up above as a cross-site mismatch.
     }
-    // The first 6 dealers on product pages are Filip's call (owner, 2026-10-02: anything that
-    // changes them goes through him), including moving one of them, not only reordering.
+    // The first 6 dealers on product pages never change through the skill (a new one goes at the
+    // end), so this catches moving one of them or a reorder.
     for (const site of touched) {
       const six = (p) => JSON.stringify(entriesOf(p).filter((x) => x.category !== "service").slice(0, 6));
       if (six(base[site]) !== six(head[site])) why.push(`${site}: menja se neki od prvih 6 dilera na stranici proizvoda`);
     }
     // "Nothing else", byte for byte: the PR's file must equal the base file with exactly this one
-    // block written by this skill's own writer (end of the shop block for an add, in place for a
-    // move). Catches edits outside the array, reordering, comments, formatting and line endings.
-    if (entry.category === "dealer" && !why.length) {
+    // block written by this skill's own writer (end of the list for an add, in place for a move).
+    // Catches edits outside the array, reordering, comments, formatting and line endings.
+    if (!why.length) {
       for (const site of touched) {
         const { text, eol } = base[site];
         const own = d[touched.indexOf(site)].after.get(id);
-        const want = isAdd ? insertEntry(text, eol, own, "dealers", entriesOf(base[site])) : replaceEntry(text, eol, own);
+        const want = isAdd ? insertEntry(text, eol, own) : replaceEntry(text, eol, own);
         if (want !== head[site].text) why.push(`${site}: osim jednog dilera menja se još nešto u fajlu (redosled, komentari, razmaci ili drugi kod)`);
       }
     }
