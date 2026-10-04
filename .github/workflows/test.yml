@@ -15,10 +15,24 @@ on:
     - cron: '0 4 * * *'
 
 jobs:
+  # No AI review gate since 2026-10-05. The deleted `.github/workflows/claude-review.yml` called
+  # filiptrivan/ci-workflows' `claude-gate.yml` and reviewed 0 PRs after its own setup PRs of
+  # 2026-06-16 (`gh run list --workflow claude-review.yml`, read at the job level): a public repo
+  # gives fork PRs no secrets, so `same_repo_only` skipped them, and Dependabot PRs had no
+  # `CLAUDE_CODE_OAUTH_TOKEN` and failed closed. A person's PR gets an owner review instead
+  # (pacms-workspace ADR 0049, an owner review is a claude.ai routine fired per pull request).
+  # The gate's secret-exposure rule got no `import "server-only"` in
+  # `packages/shared/src/lib/api.ts`: Next.js already replaces a non-NEXT_PUBLIC_ env var with ""
+  # in the client bundle (docs: "Preventing environment poisoning"), so that import guards a
+  # client import that cannot work, not a leak. A leak still takes an explicit hand-off: a
+  # NEXT_PUBLIC_ rename, or the value passed as a client prop or returned from an action.
+  #
   # Why lint is gated here and not only in the pre-push hook: CLAUDE.md → Preflight. Parallel to
   # `unit` rather than folded into it, because `pnpm preflight` (turbo) halts on the first failing
   # task, and a lint error must not hide the test result.
   lint:
+    # Required check of ruleset 17743804 ("main — tests + code owners"): renaming it leaves the
+    # check "Expected" and blocks every PR.
     name: Lint
     runs-on: ubuntu-latest
     steps:
@@ -34,6 +48,7 @@ jobs:
       - run: pnpm lint
 
   unit:
+    # Required check of ruleset 17743804, like `Lint`.
     name: Unit tests
     runs-on: ubuntu-latest
     steps:
