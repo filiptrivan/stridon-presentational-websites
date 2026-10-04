@@ -13,7 +13,9 @@ const SERVICE_DEALERS: Dealer[] = SERVICE_CENTERS.map((sc) => ({
 
 // Array order IS display order: /gde-kupiti lists it as-is, and product pages show
 // only the first 6 non-service entries (product-detail-page.tsx filters, then
-// product-detail.tsx slices). Ours first, then online shops by reach, then dealers.
+// product-detail.tsx slices). The first 6 are placed by hand (ours, then online
+// shops by reach); add-dealer appends every new dealer at the end
+// (classifyChange in .claude/skills/add-dealer/scripts/lib/dealers-io.mjs).
 export const DEALERS: Dealer[] = [
   {
     id: "prodavnica-alata",
