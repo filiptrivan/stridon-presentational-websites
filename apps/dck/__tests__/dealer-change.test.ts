@@ -150,8 +150,45 @@ describe("classifyChange", () => {
       reserved: { dck: ["service-1"] },
       kind: "invalid",
     },
-  ])("$name: $kind", ({ head, files, reserved, kind }) => {
-    const result = classifyChange(base, { ...base, ...head }, files, reserved);
+    {
+      name: "a removal from both sites",
+      head: both(BASE.slice(0, -1)),
+      files: [DCK, SG],
+      kind: "expected",
+    },
+    {
+      name: "a removal of a dealer listed on one site",
+      from: { ...base, dck: dck([...BASE, NEW]) },
+      head: { dck: dck(BASE) },
+      files: [DCK],
+      kind: "expected",
+    },
+    {
+      name: "a removal from one site of a dealer on both",
+      head: { dck: dck(BASE.slice(0, -1)) },
+      files: [DCK],
+      kind: "owner",
+    },
+    {
+      name: "a removal of one of the first 6",
+      head: both(BASE.filter((entry) => entry.id !== "shop-1")),
+      files: [DCK, SG],
+      kind: "owner",
+    },
+    {
+      name: "a removal plus code outside the list",
+      head: both(BASE.slice(0, -1), CODE),
+      files: [DCK, SG],
+      kind: "owner",
+    },
+    {
+      name: "two dealers removed",
+      head: both(BASE.slice(0, -2)),
+      files: [DCK, SG],
+      kind: "owner",
+    },
+  ])("$name: $kind", ({ from = base, head, files, reserved, kind }) => {
+    const result = classifyChange(from, { ...from, ...head }, files, reserved);
     expect(result.kind, JSON.stringify(result.reasons ?? result.errors)).toBe(kind);
     expect(result.ok).toBe(kind !== "owner" && kind !== "invalid");
   });
