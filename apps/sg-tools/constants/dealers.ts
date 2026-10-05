@@ -165,15 +165,4 @@ export const DEALERS: Dealer[] = [
     category: "dealer",
     coordinates: { lat: 45.67155, lng: 18.986675 },
   },
-  {
-    id: "uradi-sam",
-    name: "Uradi sam",
-    address: "Đorđa Stanojevića 35",
-    city: "Beograd",
-    phone: "011/228-4686",
-    email: "korisnickiservis@uradi-sam.rs",
-    website: "https://uradi-sam.rs/",
-    category: "dealer",
-    coordinates: { lat: 44.8100938, lng: 20.3966734 },
-  },
 ];
