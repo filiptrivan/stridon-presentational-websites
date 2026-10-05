@@ -102,6 +102,15 @@ export function replaceEntry(text, eol, entry) {
   return lines.join(eol);
 }
 
+// Takes one existing block out (remove mode), comments inside it included.
+export function removeEntry(text, eol, id) {
+  const lines = text.split(eol);
+  const { start, end } = arrayBounds(lines);
+  const { open, close } = blockOf(lines, id, start, end);
+  lines.splice(open, close - open + 1);
+  return lines.join(eol);
+}
+
 const ID_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const CATEGORIES = new Set(["online", "dealer", "service"]);
 const PHONE_RE = /^0\d{1,2}\/\d{3,4}-\d{3,4}$/;
@@ -175,12 +184,13 @@ const MOVABLE = new Set(["address", "city", "coordinates"]);
  * The one place that says what an "expected" dealer change is, the kind that merges with no human
  * review (Filip's decisions on PR #20, reference.md); SKILL.md, reference.md, dealer-change.yml
  * and CODEOWNERS point here. Expected means all of:
- * - exactly one dealer added at the end of the list, or one existing dealer's address, city and
- *   coordinates changed and nothing else of it;
- * - on one site, or the same on both; a dealer listed on both sites moves on both;
- * - category `dealer` or `online` (a service centre is Filip's), and the entry passes the format
- *   rules of `checkEntry` with `strict` (no postal code in the address, an https website, an
- *   address for a shop);
+ * - exactly one dealer added at the end of the list, one existing dealer's address, city and
+ *   coordinates changed and nothing else of it, or one dealer removed;
+ * - on one site, or the same on both; a dealer listed on both sites moves on both and is removed
+ *   from both;
+ * - category `dealer` or `online` (a service centre is Filip's), and an added or moved entry passes
+ *   the format rules of `checkEntry` with `strict` (no postal code in the address, an https
+ *   website, an address for a shop);
  * - every dealer listed on both sites the same on both, across the whole list;
  * - the first 6 dealers on product pages unchanged, and no logo or comment on a new entry;
  * - each file otherwise byte for byte the same.
@@ -224,23 +234,29 @@ export function classifyChange(base, head, changedFiles, reservedIds = {}) {
       added: [...after.keys()].filter((id) => !before.has(id)),
       removed: [...before.keys()].filter((id) => !after.has(id)),
       changed: [...after.keys()].filter((id) => before.has(id)).map((id) => ({ id, keys: changedKeys(before.get(id), after.get(id)) })).filter((c) => c.keys.length),
+      before,
       after,
     };
   }
   const d = Object.values(deltas);
   const isAdd = d.every((x) => x.added.length === 1 && !x.removed.length && !x.changed.length);
   const isMove = d.every((x) => !x.added.length && !x.removed.length && x.changed.length === 1);
-  const ids = new Set(d.map((x) => (isAdd ? x.added[0] : x.changed[0]?.id)));
+  const isRemove = d.every((x) => !x.added.length && x.removed.length === 1 && !x.changed.length);
+  const ids = new Set(d.map((x) => (isAdd ? x.added[0] : isRemove ? x.removed[0] : x.changed[0]?.id)));
   let entry = null;
-  if (!isAdd && !isMove) why.push("nije tačno jedan dodat ili jedan pomeren diler (dodato, obrisano ili menjano je više stavki)");
+  if (!isAdd && !isMove && !isRemove) why.push("nije tačno jedan dodat, pomeren ili uklonjen diler (dodato, obrisano ili menjano je više stavki)");
   else if (ids.size !== 1) why.push("na dva sajta su izmenjeni različiti dileri");
   else {
     const id = [...ids][0];
-    const versions = d.map((x) => x.after.get(id));
+    const versions = d.map((x) => (isRemove ? x.before : x.after).get(id));
     entry = versions[0];
     if (entry.category === "service") why.push(`${id} je ovlašćeni servis; servise menja Filip`);
     if (isAdd) {
       if (versions.some((v) => v.logoSrc || v.comments.length)) why.push(`novi diler ${id} ima logo ili komentar`);
+    } else if (isRemove) {
+      // checkSites compares only dealers still on both sites, so a removal from one of two is caught here.
+      const untouched = Object.keys(SITES).filter((s) => !touched.includes(s));
+      if (untouched.some((s) => entriesOf(head[s]).some((x) => x.id === id))) why.push(`${id} ostaje na drugom sajtu; diler se uklanja sa svih sajtova na kojima je`);
     } else {
       const keys = new Set(d.flatMap((x) => x.changed[0].keys));
       const extra = [...keys].filter((k) => !MOVABLE.has(k));
@@ -254,23 +270,28 @@ export function classifyChange(base, head, changedFiles, reservedIds = {}) {
       if (six(base[site]) !== six(head[site])) why.push(`${site}: menja se neki od prvih 6 dilera na stranici proizvoda`);
     }
     // "Nothing else", byte for byte: the PR's file must equal the base file with exactly this one
-    // block written by this skill's own writer (end of the list for an add, in place for a move).
-    // Catches edits outside the array, reordering, comments, formatting and line endings.
+    // block written by this skill's own writer (end of the list for an add, in place for a move,
+    // taken out for a remove). Catches edits outside the array, reordering, comments, formatting
+    // and line endings.
     if (!why.length) {
       for (const site of touched) {
         const { text, eol } = base[site];
         const own = d[touched.indexOf(site)].after.get(id);
-        const want = isAdd ? insertEntry(text, eol, own) : replaceEntry(text, eol, own);
+        const want = isAdd ? insertEntry(text, eol, own) : isRemove ? removeEntry(text, eol, id) : replaceEntry(text, eol, own);
         if (want !== head[site].text) why.push(`${site}: osim jednog dilera menja se još nešto u fajlu (redosled, komentari, razmaci ili drugi kod)`);
       }
     }
-    why.push(...checkEntry(entry, { strict: true }).errors);
+    // An entry that is going away need not meet the format rules.
+    if (!isRemove) why.push(...checkEntry(entry, { strict: true }).errors);
   }
 
   if (why.length) return { kind: "owner", ok: false, reasons: why };
+  const where = isRemove
+    ? (touched.length === 2 ? "sa oba sajta" : `sa sajta ${touched[0]}`)
+    : (touched.length === 2 ? "na oba sajta, isto na oba" : `na sajtu ${touched[0]}`);
   return {
     kind: "expected",
     ok: true,
-    reasons: [`${isAdd ? "Dodat" : "Pomeren"} je jedan diler (${entry.id}) na ${touched.length === 2 ? "oba sajta, isto na oba" : `sajtu ${touched[0]}`}.`],
+    reasons: [`${isAdd ? "Dodat" : isRemove ? "Uklonjen" : "Pomeren"} je jedan diler (${entry.id}) ${where}.`],
   };
 }
