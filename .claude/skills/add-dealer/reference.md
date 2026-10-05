@@ -23,6 +23,10 @@ What counts as an "expected" change, one that merges with no review, is `classif
 10. **One placement rule for every new dealer, online or a shop: the end of the list**, before the service centres. The six dealers on product pages never change through the skill; putting a shop into the six, with a logo, stays Filip's manual edit.
 11. **Permission prompts:** narrow allow rules in `.claude/settings.json` for exactly the commands the skill runs: committing the two `dealers.ts` files, pushing a `dealers/…` branch, `gh pr create` and `gh pr merge --auto`. Nothing broader, because that file applies to every session in this repo. The skill also creates the branch with `git switch -c dealers/<id> origin/main`, so that command got the same kind of rule (added by Luka, not on Filip's list). The rules are a convenience, not a gate: the gate is the dealer-change check, CODEOWNERS and the ruleset.
 
+2026-10-05 (proposed by Luka):
+
+12. **Removing a dealer works like adding one:** one per PR, only through `dealers.mjs remove --id` after the requester confirms the exact entry, from every site it is on. It is expected unless the dealer is one of the six on product pages or a service centre. A dealer added with a wrong name, phone or site is removed and then added again.
+
 ## Setup
 
 **Filip, once this PR is on `main`.** PRs use the base branch's CODEOWNERS and the dealer-change script from the base commit, so both apply from the first PR after the merge.
@@ -68,7 +72,7 @@ Test on 120 shops in Belgrade and Novi Sad (2026-10-02; 95 from OpenStreetMap wi
 - `category: "dealer"` for any physical shop (with `website` when it also sells online); `"online"` only for a webshop without a retail location.
 - Every new dealer goes at the end of the list (before `...SERVICE_DEALERS` on dck).
 - Field order `id, name, address, city, phone, email, website, logoSrc, category, coordinates`; empty fields are omitted; `address` without a postal code; `website` as `https://host/` (an http:// site is written as https:// with a warning to check the link); `id` is ASCII kebab-case (`đ` becomes `d`, `&` becomes `and`), and a second shop of a chain gets the street or settlement appended (`doming-zrenjaninski-put`). No `logoSrc`: new entries cannot reach the only place that renders logos.
-- `add` and `move` write the text, parse both files again with the same parser the dealer-change check uses, compare them entry by entry with what was intended and restore the originals on any mismatch or when the change would be `invalid`.
+- `add`, `move` and `remove` write the text, parse both files again with the same parser the dealer-change check uses, compare them entry by entry with what was intended and restore the originals on any mismatch or when the change would be `invalid`.
 
 ## Trying it out
 

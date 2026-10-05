@@ -8,11 +8,12 @@
 //                    [--link <Google Maps link | lat,lng>] [--phone] [--email] [--website] [--id]
 //   dealers.mjs move --id <id> --street <s> --number <no> --place <settlement> [--municipality <m>]
 //                    [--link <Google Maps link | lat,lng>]
+//   dealers.mjs remove --id <id>
 //
 // add and move check the pin, write the file, read it back with the parser the PR check uses,
-// compare with what was intended and restore the original on any mismatch. Then they say whether
-// the change is "expected" (merges by itself) or waits for Filip, by the same rule the PR check
-// applies (classify-pr.mjs).
+// compare with what was intended and restore the original on any mismatch; remove takes one
+// dealer out the same way. Then they say whether the change is "expected" (merges by itself) or
+// waits for Filip, by the same rule the PR check applies (classify-pr.mjs).
 import fs from "node:fs";
 import path from "node:path";
 import { readOptions, print, fail, run, REPO_ROOT, SITES, SERVICE_FILES, LIVE_PAGES, UPSTREAM_REPO } from "./lib/common.mjs";
@@ -21,6 +22,7 @@ import {
   entriesOf,
   insertEntry,
   replaceEntry,
+  removeEntry,
   checkEntry,
   classifyChange,
   serviceIds,
@@ -36,6 +38,7 @@ const OPTIONS = {
   list: ["find"],
   add: ["name", "sites", "category", "street", "number", "place", "municipality", "link", "phone", "email", "website", "id"],
   move: ["id", "street", "number", "place", "municipality", "link"],
+  remove: ["id"],
 };
 const command = process.argv[2];
 if (!Object.hasOwn(OPTIONS, command ?? "")) fail(`Nepoznata komanda "${command ?? ""}". Dozvoljeno: ${Object.keys(OPTIONS).join(", ")}.`, { code: "bad_args" });
@@ -286,6 +289,30 @@ async function cmdMove() {
   report(sites, pin, written, nearbyWarnings(bySite, pin, id));
 }
 
+// A dealer listed on both sites is removed from both. The removed entry is printed in full, so the
+// PR shows it and `add` can put it back.
+function cmdRemove() {
+  const id = need("id");
+  refuseOnMain();
+  const { bySite } = readDealers();
+  const sites = Object.keys(SITES).filter((s) => bySite[s].some((d) => d.id === id));
+  if (!sites.length) fail(`Diler "${id}" ne postoji ni na jednom sajtu. Tačan id daje list --find "<ime>".`, { code: "not_found" });
+  const { comments, ...removed } = bySite[sites[0]].find((d) => d.id === id);
+  const written = writeVerified(
+    sites,
+    (site, text, eol) => removeEntry(text, eol, id),
+    (site) => bySite[site].filter((d) => d.id !== id),
+  );
+  print({
+    ok: true,
+    changed: written.changed,
+    removed,
+    expected: written.gate.kind === "expected",
+    gate: written.gate.reasons ?? written.gate.errors,
+    livePages: sites.map((s) => LIVE_PAGES[s]),
+  });
+}
+
 function cmdList() {
   const { bySite } = readDealers();
   const find = opts.find ?? null;
@@ -325,8 +352,9 @@ function cmdCheck() {
   // Two open dealer PRs both append at the end of the list, so the second one conflicts,
   // and GitHub runs no checks on a conflicting PR.
   const open = run("gh", ["pr", "list", "--repo", UPSTREAM_REPO, "--state", "open", "--search", "(dealers) in:title", "--json", "url,title"]);
-  // Titles this skill writes (SKILL.md step 5): "feat(dealers): add X to both sites", "fix(dealers): move X to ...".
-  const skillTitle = /^(feat\(dealers\): add .+ to (both sites|dck|sg-tools)|fix\(dealers\): move .+ to .+)$/;
+  // Titles this skill writes (SKILL.md step 5): "feat(dealers): add X to both sites", "fix(dealers): move X to ...",
+  // "fix(dealers): remove X from both sites".
+  const skillTitle = /^(feat\(dealers\): add .+ to (both sites|dck|sg-tools)|fix\(dealers\): move .+ to .+|fix\(dealers\): remove .+ from (both sites|dck|sg-tools))$/;
   let pending = [];
   try {
     if (open.status === 0) pending = JSON.parse(open.stdout || "[]").filter((p) => skillTitle.test(p.title));
@@ -337,7 +365,7 @@ function cmdCheck() {
   if (problems.length) process.exit(1);
 }
 
-const commands = { check: cmdCheck, list: cmdList, add: cmdAdd, move: cmdMove };
+const commands = { check: cmdCheck, list: cmdList, add: cmdAdd, move: cmdMove, remove: cmdRemove };
 try {
   await commands[command]();
 } catch (err) {
