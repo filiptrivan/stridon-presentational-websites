@@ -1,7 +1,6 @@
 import ProductDetail from "@brand/shared/components/products/product-detail";
 import RelatedProducts from "@brand/shared/components/products/related-products";
 import SimilarProducts from "@brand/shared/components/products/similar-products";
-import { SectionErrorBoundary } from "@brand/ui/section-error-boundary";
 import { getProductBySlug, getSitemapProducts } from "@brand/shared/lib/api";
 import { mapCategoryBreadcrumbs } from "@brand/shared/lib/categories";
 import { createProductMetadata } from "@brand/shared/lib/metadata";
@@ -64,12 +63,10 @@ export default async function ProductDetailPage({
         <RelatedProducts products={relatedProducts} />
       )}
       {product.categorySlug && (
-        <SectionErrorBoundary>
-          <SimilarProducts
-            categorySlug={product.categorySlug}
-            excludeProductIds={[product.id, ...relatedProductIds]}
-          />
-        </SectionErrorBoundary>
+        <SimilarProducts
+          categorySlug={product.categorySlug}
+          excludeProductIds={[product.id, ...relatedProductIds]}
+        />
       )}
     </div>
   );
