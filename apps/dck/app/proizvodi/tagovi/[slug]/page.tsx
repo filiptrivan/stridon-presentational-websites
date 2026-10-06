@@ -3,7 +3,6 @@ import { ListingPagination } from "@brand/shared/components/products/listing-pag
 import PageBreadcrumbs from "@brand/shared/components/products/page-breadcrumbs";
 import ProductGrid from "@brand/shared/components/products/product-grid";
 import SectionDivider from "@brand/shared/components/section-divider";
-import { SectionErrorBoundary } from "@brand/ui/section-error-boundary";
 import { Prose } from "@brand/ui/prose";
 import Wrapper from "@brand/shared/components/wrapper";
 import { PRODUCTS_PER_PAGE } from "@brand/shared/lib/cache-tags";
@@ -132,9 +131,7 @@ export default async function TagPage({ params, searchParams }: Props) {
           baseBreadcrumbs={TAG_BASE_BREADCRUMBS}
         />
 
-        <SectionErrorBoundary>
-          <TagProducts slug={slug} searchParams={searchParams} />
-        </SectionErrorBoundary>
+        <TagProducts slug={slug} searchParams={searchParams} />
 
         {tag.htmlDescription && (
           <>

@@ -4,7 +4,6 @@ import PageBreadcrumbs from "@brand/shared/components/products/page-breadcrumbs"
 import ProductGrid from "@brand/shared/components/products/product-grid";
 import SubcategoriesGrid from "@brand/shared/components/products/subcategories-grid";
 import SectionDivider from "@brand/shared/components/section-divider";
-import { SectionErrorBoundary } from "@brand/ui/section-error-boundary";
 import { Prose } from "@brand/ui/prose";
 import Wrapper from "@brand/shared/components/wrapper";
 import { PRODUCTS_PER_PAGE } from "@brand/shared/lib/cache-tags";
@@ -120,9 +119,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
         {category.subCategories.length > 0 && <SectionDivider />}
 
-        <SectionErrorBoundary>
-          <CategoryProducts slug={slug} searchParams={searchParams} />
-        </SectionErrorBoundary>
+        <CategoryProducts slug={slug} searchParams={searchParams} />
 
         {category.htmlDescription && (
           <>
