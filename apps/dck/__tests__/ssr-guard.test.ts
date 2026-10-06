@@ -49,8 +49,9 @@ describe("full SSR guard", () => {
   });
 
   it("no app turns cacheComponents back on", () => {
-    const offenders = nextConfigs.filter((file) =>
-      /^\s*cacheComponents\s*:/m.test(read(file)),
+    // `cacheComponents: true`, the `cacheComponents,` shorthand, or nested under experimental.
+    const offenders = [...nextConfigs, BASE_NEXT_CONFIG].filter((file) =>
+      /\bcacheComponents\s*[:,}]/.test(read(file)),
     );
     expect(
       offenders,
@@ -99,11 +100,16 @@ describe("full SSR guard", () => {
     // <Suspense> or <React.Suspense> in JSX, or Suspense imported from react under any name.
     const usesSuspense =
       /<(?:React\.)?Suspense\b|import\s+(?:\w+\s*,\s*)?\{[^}]*\bSuspense\b[^}]*\}\s*from\s*["']react["']/;
+    // next/dynamic, or React.lazy called or imported under any name. With `ssr: false` the
+    // component is missing from the HTML, and next/dynamic with a `loading` fallback wraps it
+    // in Suspense even with SSR on (next/dist/shared/lib/lazy-dynamic/loadable.js).
+    const defersRender =
+      /from\s*["']next\/dynamic["']|\blazy\s*\(|import\s+(?:\w+\s*,\s*)?\{[^}]*\blazy\b[^}]*\}\s*from\s*["']react["']/;
     const suspense = sources.filter(
       (file) => !suspenseAllowed.includes(file) && usesSuspense.test(read(file)),
     );
-    const clientOnly = sources.filter(
-      (file) => !clientOnlyAllowed.includes(file) && /\bssr:\s*false\b/.test(read(file)),
+    const deferred = sources.filter(
+      (file) => !clientOnlyAllowed.includes(file) && defersRender.test(read(file)),
     );
     expect(
       suspense,
@@ -111,8 +117,9 @@ describe("full SSR guard", () => {
         `hidden <div> that only JavaScript reveals, and on a dynamic route no other check sees it.`,
     ).toEqual([]);
     expect(
-      clientOnly,
-      `ssr: false in ${clientOnly.join(", ")}: that component is missing from the HTML. Only a ` +
+      deferred,
+      `next/dynamic or React.lazy in ${deferred.join(", ")}: with ssr: false that component is ` +
+        `missing from the HTML, and with a loading fallback it waits behind Suspense. Only a ` +
         `widget with no content, like a map, belongs on the list above.`,
     ).toEqual([]);
     const stale = clientOnlyAllowed.filter(
