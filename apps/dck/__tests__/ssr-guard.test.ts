@@ -4,6 +4,8 @@ import { basename, resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { CLIENT_ONLY_ALLOWED } from "../../../scripts/client-only-allowed.mjs";
+
 /**
  * Holds the full-SSR model (repo CLAUDE.md → "Rendering: full SSR, no `cacheComponents`") to the
  * few lines that would quietly undo it. Every one of them builds green and looks fine with
@@ -90,13 +92,9 @@ describe("full SSR guard", () => {
     // Suspense may wrap only something with no content (repo CLAUDE.md → Rendering). None
     // does today; such a file goes here with its reason.
     const suspenseAllowed: string[] = [];
-    // `dynamic(..., { ssr: false })` leaves its component out of the HTML. These are maps
-    // and the media lightbox, which carry no content.
-    const clientOnlyAllowed = [
-      "packages/shared/src/components/contact/contact-locations.tsx",
-      "packages/shared/src/components/products/product-gallery.tsx",
-      "packages/shared/src/components/where-to-buy/where-to-buy-content.tsx",
-    ];
+    // `dynamic(..., { ssr: false })` leaves its component out of the HTML. The files that may,
+    // each with its reason, are listed once for this test and the HTML check after the build.
+    const clientOnlyAllowed = Object.keys(CLIENT_ONLY_ALLOWED);
     // <Suspense> or <React.Suspense> in JSX, or Suspense imported from react under any name.
     const usesSuspense =
       /<(?:React\.)?Suspense\b|import\s+(?:\w+\s*,\s*)?\{[^}]*\bSuspense\b[^}]*\}\s*from\s*["']react["']/;
@@ -121,14 +119,16 @@ describe("full SSR guard", () => {
       deferred,
       `next/dynamic or React.lazy in ${deferred.join(", ")}: with ssr: false that component is ` +
         `missing from the HTML, and with a loading fallback it waits behind Suspense. Only a ` +
-        `widget with no content, like a map, belongs on the list above.`,
+        `widget with no content, like a map, belongs on CLIENT_ONLY_ALLOWED in ` +
+        `scripts/client-only-allowed.mjs.`,
     ).toEqual([]);
     const stale = clientOnlyAllowed.filter(
       (file) => !sources.includes(file) || !/\bssr:\s*false\b/.test(read(file)),
     );
-    expect(stale, `${stale.join(", ")}: no longer uses ssr: false; take it off the list.`).toEqual(
-      [],
-    );
+    expect(
+      stale,
+      `${stale.join(", ")}: no longer uses ssr: false; take it off CLIENT_ONLY_ALLOWED.`,
+    ).toEqual([]);
   });
 
   it("every app keeps metadata in <head> for every user agent", () => {

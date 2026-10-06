@@ -1,10 +1,10 @@
 {
   "$schema": "https://turborepo.com/schema.json",
-  // Each app's `build` ends in this root script, which sits in no package, so turbo would
-  // hash it into nothing: a change to the check alone replays the old .next and the old log
-  // (local cache, or Vercel's Remote Cache when Vercel builds through turbo). Listed here, a
-  // change to it misses every task once; only build and lint are cached anyway.
-  "globalDependencies": ["scripts/assert-static-html.mjs"],
+  // Each app's `build` ends in this root script and the list it reads, which sit in no
+  // package, so turbo would hash them into nothing: a change to the check alone would replay
+  // the old .next and the old log from the cache. Listed here, a change to either misses every
+  // task once; only build and lint are cached anyway.
+  "globalDependencies": ["scripts/assert-static-html.mjs", "scripts/client-only-allowed.mjs"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
