@@ -214,7 +214,7 @@ export default function WhereToBuyContent({
 
   return (
     <Wrapper className="py-6 sm:py-8">
-      <Container delay={0.2}>
+      <Container>
         {/* Filters */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
           <div className="flex flex-1 gap-2">

@@ -36,7 +36,7 @@ const Brands = async ({ locale }: { locale: Locale }) => {
           </div>
         </Container>
 
-        <Container delay={0.5}>
+        <Container>
           <div className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 lg:gap-4">
             {featured.map((card) => (
               <Link

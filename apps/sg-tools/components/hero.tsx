@@ -16,7 +16,7 @@ const Hero = () => {
       description="SG TOOLS je brend nastao iz višedecenijskog iskustva porodične firme koja poznaje potrebe majstora, servisa i kompanija koje se oslanjaju na alat svaki dan."
       showSvgGrid={true}
     >
-      <Container delay={0.3}>
+      <Container>
         <div className="flex gap-3 mt-6">
           <Button asChild>
             <Link href="/kontakt">Postani distributer</Link>

@@ -30,16 +30,12 @@ export interface FooterSocialLink {
 function FooterLinkColumn({
   title,
   links,
-  animation,
-  delay,
 }: {
   title: string;
   links: readonly FooterNavLink[];
-  animation: "fadeUp" | "fadeLeft" | "fadeRight";
-  delay: number;
 }) {
   return (
-    <Container animation={animation} delay={delay}>
+    <Container>
       <div>
         {/* `h2`, not `h3`: these label the footer's nav regions, and on a
             page whose body has no `h2` of its own - the contact page is the
@@ -121,7 +117,7 @@ const Footer = ({
     <footer className="relative pt-16 w-full overflow-hidden">
       <Glow />
       <Wrapper>
-        <Container animation="scaleUp" delay={0.3}>
+        <Container>
           <div
             className="absolute top-0 w-4/5 mx-auto inset-x-0 h-px"
             style={{
@@ -131,7 +127,7 @@ const Footer = ({
         </Container>
 
         {/* Newsletter */}
-        <Container animation="fadeUp" delay={0.4}>
+        <Container>
           <div>
             <h2 className="text-base font-medium">{t.newsletterTitle}</h2>
             <p className="mt-2 mb-4 text-sm text-muted-foreground">
@@ -145,11 +141,7 @@ const Footer = ({
 
         <div className="mt-10 border-t border-border/80 pt-8 grid gap-10 grid-cols-2 md:grid-cols-3 xl:gap-8">
           {/* Brand column */}
-          <Container
-            animation="fadeLeft"
-            delay={0.5}
-            className="col-span-2 md:col-span-1"
-          >
+          <Container className="col-span-2 md:col-span-1">
             <div className="flex flex-col items-start justify-start">
               <div className="flex items-center gap-2">
                 <Image
@@ -195,22 +187,12 @@ const Footer = ({
           </Container>
 
           {/* Link columns */}
-          <FooterLinkColumn
-            title={t.products}
-            links={productLinks}
-            animation="fadeUp"
-            delay={0.6}
-          />
-          <FooterLinkColumn
-            title={t.company}
-            links={companyLinks}
-            animation="fadeUp"
-            delay={0.7}
-          />
+          <FooterLinkColumn title={t.products} links={productLinks} />
+          <FooterLinkColumn title={t.company} links={companyLinks} />
         </div>
 
         {/* Copyright bar */}
-        <Container animation="fadeUp" delay={0.9}>
+        <Container>
           <div className="mt-10 border-t border-border/80 py-8 flex flex-col md:flex-row items-center justify-center gap-2 text-sm text-muted-foreground">
             <p>{`\u00A9 ${year} ${siteName}`}</p>
             <span className="hidden md:inline">&middot;</span>

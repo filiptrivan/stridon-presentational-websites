@@ -22,13 +22,9 @@ On Next 16.1, a catch-all that throws `notFound()` without reading its params is
 
 Every 404 here comes from `notFound()` (an unknown brand, and every unknown URL through `[...rest]`). Next answers it with status 404 and `noindex`, but the HTML is its empty error document, `<html id="__next_error__">` with nothing in `<body>`, and the localized not-found page is drawn by JavaScript. That is Next, not this app (vercel/next.js#62228, still open on the 16.4 canary); search engines only need the status. Do not wrap the page in Suspense to get the 404 into the HTML: a streamed `notFound()` answers 200.
 
-## The dev server shows a blank page on a phone
+## The dev server shows an unstyled page on a phone
 
-`next dev` refuses `/_next/*` to an origin that is not in `allowedDevOrigins`, which is unset in all three apps, so from the LAN the HTML loads and every JS and CSS chunk answers 403. Production has no such check. The page is blank rather than unstyled because of the `Container` note below. The owner has not taken `allowedDevOrigins`.
-
-## The shared `Container` renders at `opacity: 0`
-
-`packages/shared/src/components/container.tsx` gives `motion.div` `initial={{ opacity: 0, y: 20 }}`, which framer-motion writes into the server HTML, and it wraps nearly every section on all three sites. With `whileInView` and `once: true`, a section outside the first viewport stays invisible until scrolled to, and with no JavaScript nothing ever shows. The text is in the HTML either way. A fix (hidden state behind a `js` class set by an inline script, `initial={false}`) touches every section of all three sites; the owner chose research only. Before a visual check or a screenshot, scroll the whole page once so every section has animated in.
+`next dev` refuses `/_next/*` to an origin that is not in `allowedDevOrigins`, which is unset in all three apps, so from the LAN the HTML loads and every JS and CSS chunk answers 403. Production has no such check. The owner has not taken `allowedDevOrigins`.
 
 ## Building without touching the owner's dev server
 

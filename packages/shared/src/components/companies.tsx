@@ -32,7 +32,7 @@ const Companies = ({
           />
         </Container>
 
-        <Container delay={0.1}>
+        <Container>
           <CompaniesCarousel companies={companies} />
         </Container>
       </Wrapper>

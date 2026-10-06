@@ -41,7 +41,7 @@ function ContactLocations({
     <Section className={sectionClassName} showDivider={showDivider}>
       <Wrapper>
         {title && (
-          <Container delay={0.1}>
+          <Container>
             <SectionHeader
               title={title}
               description={description}
@@ -53,8 +53,8 @@ function ContactLocations({
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {locations.map((location, index) => (
-            <Container key={location.name} delay={0.2 + index * 0.1}>
+          {locations.map((location) => (
+            <Container key={location.name}>
               <div className="relative rounded-2xl border border-border/50 overflow-hidden">
                 <div className="aspect-[16/10] w-full isolate">
                   <LocationMap

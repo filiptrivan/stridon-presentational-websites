@@ -26,7 +26,7 @@ const Hero = async ({ locale }: { locale: Locale }) => {
       description={t("description")}
       showSvgGrid={true}
     >
-      <Container delay={0.3}>
+      <Container>
         <div className="flex gap-3 mt-6">
           <Button asChild>
             <a href={SHOP_URL} target="_blank" rel="noopener noreferrer">

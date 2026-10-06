@@ -74,7 +74,7 @@ const B2bPage = async ({ params }: Props) => {
 
           {/* The form is already `max-w-3xl w-full`, same as the shared contact
               page; it only needed a parent that centres it. */}
-          <Container delay={0.3} className="mt-8 flex justify-center">
+          <Container className="mt-8 flex justify-center">
             <B2bForm locale={locale as Locale} />
           </Container>
         </Wrapper>

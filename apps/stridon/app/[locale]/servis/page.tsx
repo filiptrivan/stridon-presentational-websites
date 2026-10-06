@@ -65,7 +65,7 @@ const ServisPage = async ({ params }: Props) => {
             </h2>
           </Container>
 
-          <Container delay={0.5}>
+          <Container>
             {/* Same card as the homepage brand wall and /brendovi: separated,
                 rounded, hairline border. The serviced-only brands get the
                 identical card without the hover, since they link nowhere. */}
@@ -101,7 +101,7 @@ const ServisPage = async ({ params }: Props) => {
             </h2>
           </Container>
 
-          <Container delay={0.5}>
+          <Container>
             {/* Dashed like every other rule on the site, including the vertical
                 one, so the block does not introduce a second line style. */}
             <div className="mt-10 grid border-t border-dashed border-border/70 md:grid-cols-2">

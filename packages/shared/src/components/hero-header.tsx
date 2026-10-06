@@ -47,13 +47,13 @@ const HeroHeader = ({
         <div className="flex flex-col items-center justify-center w-full z-10">
           {pretitle}
 
-          <Container delay={0.1}>
+          <Container>
             <Heading className="text-balance leading-tight! text-center text-4xl md:text-6xl font-semibold tracking-tight w-full">
               {title}
             </Heading>
           </Container>
 
-          <Container delay={0.2}>
+          <Container>
             <p className="text-base md:text-lg font-normal text-center text-balance text-muted-foreground max-w-4xl mx-auto mt-4">
               {description}
             </p>

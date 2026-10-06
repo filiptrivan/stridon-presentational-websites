@@ -40,7 +40,7 @@ const Hero = () => {
       description="DCK električni i aku alati sa zvaničnom distribucijom, servisom i produženom garancijom uz registraciju u Srbiji."
       showSvgGrid={true}
     >
-      <Container delay={0.3}>
+      <Container>
         <div className="flex gap-3 mt-6">
           <Button asChild>
             <Link href="/kontakt">Postani distributer</Link>

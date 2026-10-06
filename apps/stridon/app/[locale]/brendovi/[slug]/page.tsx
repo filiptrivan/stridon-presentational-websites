@@ -134,7 +134,7 @@ const BrandPage = async ({ params }: Props) => {
           brand: brand.name,
         })}
       >
-        <Container delay={0.3}>
+        <Container>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             {brandHasCatalogs ? (
               <Button asChild size="lg">

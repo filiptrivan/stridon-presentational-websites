@@ -63,7 +63,7 @@ const BrandSpotlight = async ({ brand, locale }: BrandSpotlightProps) => {
             </div>
           </Container>
 
-          <Container delay={0.5}>
+          <Container>
             {/* The matted frame dck uses for its homepage hero image: a soft grey
                 outer plate, a hairline inner box, and the photo rounded inside
                 it. Tokens rather than dck's raw `neutral-*`, so it picks up this

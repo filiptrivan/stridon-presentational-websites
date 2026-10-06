@@ -36,14 +36,14 @@ function ContactHero({
   return (
     <HeroHeader title={t.title} description={t.description}>
       <div className="w-full mt-12 max-w-3xl mx-auto">
-        <Container delay={0.3}>
+        <Container>
           <ContactForm
             submitContact={submitContact}
             labels={formLabels}
             errorMessages={formErrors}
           />
         </Container>
-        <Container delay={0.4} className="mt-6 text-center">
+        <Container className="mt-6 text-center">
           <p className="text-sm text-muted-foreground">
             {t.directMail}{" "}
             <a

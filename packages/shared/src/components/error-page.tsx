@@ -38,7 +38,7 @@ const ErrorPage = ({
       title={title ?? t.title}
       description={description ?? t.description}
     >
-      <Container delay={0.3}>
+      <Container>
         <div className="flex items-center gap-3 mt-6">
           <Button variant="outline" size="sm" onClick={reset}>
             <RotateCcw className="size-4" />

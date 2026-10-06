@@ -71,7 +71,7 @@ const ProductDetail = ({
         </Container>
 
         {/* Right: Product info */}
-        <Container delay={1}>
+        <Container>
           <div className="flex flex-col">
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
               {product.title}
@@ -117,7 +117,7 @@ const ProductDetail = ({
 
       {/* Product details / specification */}
       {(product.htmlDescription || product.specification) && (
-        <Container delay={2} className="mt-12 lg:mt-16">
+        <Container className="mt-12 lg:mt-16">
           <ProductTabs
             htmlDescription={product.htmlDescription}
             specification={product.specification}

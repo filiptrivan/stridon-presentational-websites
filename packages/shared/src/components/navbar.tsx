@@ -12,7 +12,7 @@ import { Button } from "@brand/ui/button";
 import { cn } from "../lib/utils";
 import type { Category } from "../types/categories";
 import { getBrandConfig } from "@brand/config";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { ExternalLinkIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -84,11 +84,7 @@ const Navbar = ({
       )}
     >
       <Wrapper className="grid grid-cols-2 md:grid-cols-3 items-center">
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.2 }}
-        >
+        <div>
           <Link href={homeHref} className="inline-flex items-center gap-2">
             <Image
               src={logoSrc}
@@ -100,18 +96,14 @@ const Navbar = ({
               height={logoHeight ?? 20}
             />
           </Link>
-        </motion.div>
+        </div>
 
         <div className="hidden md:flex justify-center">
           <NavigationMenu>
             <NavigationMenuList className="gap-x-1 flex-nowrap">
               <AnimatePresence>
                 {navLinks.map((link, index) => (
-                  <Container
-                    key={index}
-                    animation="fadeDown"
-                    delay={0.1 * index}
-                  >
+                  <Container key={index}>
                     <NavigationMenuItem>
                       {link.href === "/proizvodi/kategorije" ? (
                         <>
@@ -174,7 +166,7 @@ const Navbar = ({
             tightMobile ? "gap-x-2 md:gap-x-4" : "gap-x-4",
           )}
         >
-          <Container animation="fadeLeft" delay={0.1}>
+          <Container>
             <Button asChild size="sm" variant="outline" className="hidden md:inline-flex">
               {headerCta.external ? (
                 <a href={ctaHref} target="_blank" rel="noopener noreferrer">
@@ -187,12 +179,12 @@ const Navbar = ({
             </Button>
           </Container>
           {languageSwitch ? (
-            <Container animation="fadeLeft" delay={0.15}>
+            <Container>
               {languageSwitch}
             </Container>
           ) : null}
           <div className={cn("md:hidden", tightMobile && "-mr-1.5 md:mr-0")}>
-            <Container animation="fadeLeft" delay={0.1}>
+            <Container>
               <MobileMenu
                 categories={categories}
                 navLinks={navLinks}

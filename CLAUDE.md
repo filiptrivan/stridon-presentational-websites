@@ -138,7 +138,7 @@ DCK also has: `app/produzetak-garancije/` → `/produzetak-garancije` (with 308 
 
 ### Key Patterns
 
-**Server vs Client components**: Most section components are plain server components. Client components (`"use client"`) are used only where interactivity is needed: Navbar, MobileMenu, Container (Framer Motion animations), WhereToBuyContent, DealerList, WarrantyForm.
+**Server vs Client components**: Most section components are plain server components; a component is a client component (`"use client"`) only where it needs interactivity.
 
 **Rendering: full SSR, no `cacheComponents`**: every page shows its content with JavaScript off, the way prodavnicaalata.rs does. One rule per line, each with the check that enforces it.
 
@@ -155,7 +155,6 @@ DCK also has: `app/produzetak-garancije/` → `/produzetak-garancije` (with 308 
 **Layout wrapper components** (in `@brand/shared`):
 
 - `Wrapper` - Max-width container (`lg:max-w-7xl`) with responsive padding
-- `Container` - Framer Motion animation wrapper with preset animations
 
 **Serbian content**:
 

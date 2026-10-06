@@ -29,7 +29,7 @@ const NotFoundPage = ({
 
   return (
     <HeroHeader title={t.title} description={t.description}>
-      <Container delay={0.3}>
+      <Container>
         <div className="flex items-center gap-3 mt-6">
           <Button variant="outline" size="sm" asChild>
             <Link href={homeHref}>
