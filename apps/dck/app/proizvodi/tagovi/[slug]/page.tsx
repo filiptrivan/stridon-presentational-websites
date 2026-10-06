@@ -13,6 +13,7 @@ import {
   buildTagBreadcrumbJsonLd,
 } from "@brand/shared/lib/categories";
 import { createTagMetadata } from "@brand/shared/lib/metadata";
+import { parsePageParam } from "@brand/shared/lib/utils";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
@@ -28,7 +29,7 @@ export async function generateMetadata({
 }: Props): Promise<Metadata> {
   const { slug } = await params;
   const { strana } = await searchParams;
-  const currentPage = Math.max(1, parseInt(strana ?? "1", 10) || 1);
+  const currentPage = parsePageParam(strana);
 
   const tag = await getTagBySlug(slug);
   if (!tag) return { title: "Tag nije pronađen" };
@@ -49,7 +50,7 @@ async function TagProducts({
   searchParams: Promise<{ strana?: string }>;
 }) {
   const { strana } = await searchParams;
-  const currentPage = Math.max(1, parseInt(strana ?? "1", 10) || 1);
+  const currentPage = parsePageParam(strana);
   const offset = (currentPage - 1) * PRODUCTS_PER_PAGE;
   const products = await getFilteredProductsByTag(
     slug,

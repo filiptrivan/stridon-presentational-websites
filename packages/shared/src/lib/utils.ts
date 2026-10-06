@@ -20,6 +20,12 @@ export function formatTelHref(number: string): string {
     : `tel:+381${compact.replace(/^0/, "")}`;
 }
 
+// Abuse guard, not a ceiling: at 12 per page it clears 1.2M products, so a
+// clamped page is past the last one and redirects to page 1 like any other.
+// Unclamped, a page above 178,956,971 overflows PACMS's int32 `first`: a 400
+// there, a 500 here. Same value as pa-storefront's MAX_ADDRESSABLE_PAGE.
+const MAX_PAGE = 100_000;
+
 export function parsePageParam(strana: string | undefined): number {
-  return Math.max(1, parseInt(strana ?? "1", 10) || 1);
+  return Math.min(MAX_PAGE, Math.max(1, parseInt(strana ?? "1", 10) || 1));
 }
