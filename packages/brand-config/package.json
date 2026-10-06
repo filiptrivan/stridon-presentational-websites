@@ -5,5 +5,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./*": "./src/*"
+  },
+  "peerDependencies": {
+    "next": "^16"
   }
 }

@@ -34,6 +34,8 @@ function gitLsFiles(pathspec: string[]): string[] {
 const read = (file: string) => readFileSync(resolve(REPO_ROOT, file), "utf8");
 
 const nextConfigs = gitLsFiles(["apps/*/next.config.ts"]);
+/** The base every config spreads (repo CLAUDE.md → Rendering). */
+const BASE_NEXT_CONFIG = "packages/brand-config/src/next-config.ts";
 
 /** App and package source, tests excluded (their messages quote the patterns they ban). */
 const sources = gitLsFiles(["apps/*.ts", "apps/*.tsx", "packages/*.ts", "packages/*.tsx"]).filter(
@@ -122,13 +124,18 @@ describe("full SSR guard", () => {
   });
 
   it("every app keeps metadata in <head> for every user agent", () => {
+    const why =
+      "On a dynamic route Next then streams metadata into <body> for Googlebot, and Google " +
+      "reads canonical only from <head>.";
+    expect(read(BASE_NEXT_CONFIG), `${BASE_NEXT_CONFIG} lacks htmlLimitedBots: /.*/. ${why}`).toMatch(
+      /^\s*htmlLimitedBots:\s*\/\.\*\/,/m,
+    );
     const offenders = nextConfigs.filter(
-      (file) => !/^\s*htmlLimitedBots:\s*\/\.\*\/,/m.test(read(file)),
+      (file) => !/\bbaseNextConfig\b/.test(read(file)) || /\bhtmlLimitedBots\b/.test(read(file)),
     );
     expect(
       offenders,
-      `${offenders.join(", ")} lacks htmlLimitedBots: /.*/. On a dynamic route Next then streams ` +
-        `metadata into <body> for Googlebot, and Google reads canonical only from <head>.`,
+      `${offenders.join(", ")} does not build on baseNextConfig or sets its own htmlLimitedBots. ${why}`,
     ).toEqual([]);
   });
 
