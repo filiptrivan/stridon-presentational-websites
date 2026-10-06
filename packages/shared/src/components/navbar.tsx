@@ -16,7 +16,6 @@ import { AnimatePresence } from "framer-motion";
 import { ExternalLinkIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import Container from "./container";
 import MobileMenu, {
@@ -65,7 +64,6 @@ const Navbar = ({
   headerCtaHref,
   homeHref = "/",
 }: NavbarProps) => {
-  const router = useRouter();
   const t = { ...DEFAULT_LABELS, ...labels };
   const ctaHref = headerCtaHref ?? headerCta.href;
 
@@ -108,12 +106,10 @@ const Navbar = ({
                       {link.href === "/proizvodi/kategorije" ? (
                         <>
                           <NavigationMenuTrigger
+                            asChild
                             className="text-sm font-medium cursor-pointer"
-                            onClick={() => {
-                              router.push("/proizvodi/kategorije");
-                            }}
                           >
-                            {link.label}
+                            <Link href={link.href}>{link.label}</Link>
                           </NavigationMenuTrigger>
                           <NavigationMenuContent className="min-w-[420px]">
                             <ul className="grid grid-cols-2 gap-0.5 p-1">
