@@ -9,9 +9,6 @@
 // 2026-08). On Vercel that cache is shared by the whole team, the webshop
 // included, so it is never purged by hand.
 
-// Server only. In a client bundle this module could only fail: API_URL and the
-// bypass secret are not public env, so they are undefined there.
-import "server-only";
 import { getBrandConfig } from "@brand/config";
 import { cache } from "react";
 import type { Brand, BrandCard } from "../types/brands";
