@@ -60,9 +60,6 @@ importers:
       embla-carousel-wheel-gestures:
         specifier: ^8.1.0
         version: 8.1.0(embla-carousel@8.6.0)
-      framer-motion:
-        specifier: ^12.34.3
-        version: 12.38.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       leaflet:
         specifier: ^1.9.4
         version: 1.9.4
@@ -278,9 +275,6 @@ importers:
       embla-carousel-wheel-gestures:
         specifier: ^8.1.0
         version: 8.1.0(embla-carousel@8.6.0)
-      framer-motion:
-        specifier: ^12.34.3
-        version: 12.38.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       leaflet:
         specifier: ^1.9.4
         version: 1.9.4
@@ -393,9 +387,6 @@ importers:
       embla-carousel-wheel-gestures:
         specifier: ^8
         version: 8.1.0(embla-carousel@8.6.0)
-      framer-motion:
-        specifier: ^12
-        version: 12.38.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       leaflet:
         specifier: ^1
         version: 1.9.4

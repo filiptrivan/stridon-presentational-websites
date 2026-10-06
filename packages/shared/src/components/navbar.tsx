@@ -12,7 +12,6 @@ import { Button } from "@brand/ui/button";
 import { cn } from "../lib/utils";
 import type { Category } from "../types/categories";
 import { getBrandConfig } from "@brand/config";
-import { AnimatePresence } from "framer-motion";
 import { ExternalLinkIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -99,59 +98,55 @@ const Navbar = ({
         <div className="hidden md:flex justify-center">
           <NavigationMenu>
             <NavigationMenuList className="gap-x-1 flex-nowrap">
-              <AnimatePresence>
-                {navLinks.map((link, index) => (
-                  <Container key={index}>
-                    <NavigationMenuItem>
-                      {link.href === "/proizvodi/kategorije" ? (
-                        <>
-                          <NavigationMenuTrigger
-                            asChild
-                            className="text-sm font-medium cursor-pointer"
-                          >
-                            <Link href={link.href}>{link.label}</Link>
-                          </NavigationMenuTrigger>
-                          <NavigationMenuContent className="min-w-[420px]">
-                            <ul className="grid grid-cols-2 gap-0.5 p-1">
-                              {categories.slice(0, 4).map((cat) => (
-                                <li key={cat.slug}>
-                                  <NavigationMenuLink asChild>
-                                    <Link
-                                      href={`/proizvodi/kategorije/${cat.slug}`}
-                                      className="flex select-none rounded-sm px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-                                    >
-                                      {cat.name}
-                                    </Link>
-                                  </NavigationMenuLink>
-                                </li>
-                              ))}
-                            </ul>
-                            <div className="border-t border-border mx-1 mb-1">
+              {navLinks.map((link) => (
+                <NavigationMenuItem key={link.href}>
+                  {link.href === "/proizvodi/kategorije" ? (
+                    <>
+                      <NavigationMenuTrigger
+                        asChild
+                        className="text-sm font-medium cursor-pointer"
+                      >
+                        <Link href={link.href}>{link.label}</Link>
+                      </NavigationMenuTrigger>
+                      <NavigationMenuContent className="min-w-[420px]">
+                        <ul className="grid grid-cols-2 gap-0.5 p-1">
+                          {categories.slice(0, 4).map((cat) => (
+                            <li key={cat.slug}>
                               <NavigationMenuLink asChild>
                                 <Link
-                                  href="/proizvodi/kategorije"
-                                  className="flex select-none rounded-sm px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                                  href={`/proizvodi/kategorije/${cat.slug}`}
+                                  className="flex select-none rounded-sm px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
                                 >
-                                  {t.allCategories}
+                                  {cat.name}
                                 </Link>
                               </NavigationMenuLink>
-                            </div>
-                          </NavigationMenuContent>
-                        </>
-                      ) : (
-                        <NavigationMenuLink asChild>
-                          <Link
-                            href={link.href}
-                            className="hover:text-foreground transition-all duration-500 px-1.5 text-sm font-medium text-muted-foreground whitespace-nowrap"
-                          >
-                            {link.label}
-                          </Link>
-                        </NavigationMenuLink>
-                      )}
-                    </NavigationMenuItem>
-                  </Container>
-                ))}
-              </AnimatePresence>
+                            </li>
+                          ))}
+                        </ul>
+                        <div className="border-t border-border mx-1 mb-1">
+                          <NavigationMenuLink asChild>
+                            <Link
+                              href="/proizvodi/kategorije"
+                              className="flex select-none rounded-sm px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                            >
+                              {t.allCategories}
+                            </Link>
+                          </NavigationMenuLink>
+                        </div>
+                      </NavigationMenuContent>
+                    </>
+                  ) : (
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href={link.href}
+                        className="hover:text-foreground transition-all duration-500 px-1.5 text-sm font-medium text-muted-foreground whitespace-nowrap"
+                      >
+                        {link.label}
+                      </Link>
+                    </NavigationMenuLink>
+                  )}
+                </NavigationMenuItem>
+              ))}
             </NavigationMenuList>
           </NavigationMenu>
         </div>

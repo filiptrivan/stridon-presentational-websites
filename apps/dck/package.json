@@ -25,7 +25,6 @@
     "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.6.0",
     "embla-carousel-wheel-gestures": "^8.1.0",
-    "framer-motion": "^12.34.3",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.575.0",
     "next": "16.1.6",
