@@ -289,9 +289,9 @@ export async function getCategoryBySlug(
 
 // The three FilteredProducts fetchers below differ only in how they narrow the
 // query, so this shares the request shape. `tagSlugs: []` sits before the spread
-// so a tag filter overrides it. A listing route's grid is what the route is
-// about, so it reads on the critical budget; the similar-products strip on a
-// product page reads the same query as auxiliary.
+// so a tag filter overrides it. Each takes the tier from its caller: the same
+// query is a listing route's grid (critical) and a product page's
+// similar-products strip (auxiliary).
 function fetchFilteredProducts(
   narrow: { categorySlug?: string; tagSlugs?: string[] },
   offset: number,
@@ -315,8 +315,9 @@ function fetchFilteredProducts(
 export async function getFilteredProducts(
   offset: number,
   limit: number,
+  tier: FetchTier,
 ): Promise<ProductCardsResult> {
-  return fetchFilteredProducts({}, offset, limit, "critical");
+  return fetchFilteredProducts({}, offset, limit, tier);
 }
 
 export async function getTopProductsByBrand(
@@ -355,8 +356,9 @@ export async function getFilteredProductsByTag(
   tagSlug: string,
   offset: number,
   limit: number,
+  tier: FetchTier,
 ): Promise<ProductCardsResult> {
-  return fetchFilteredProducts({ tagSlugs: [tagSlug] }, offset, limit, "critical");
+  return fetchFilteredProducts({ tagSlugs: [tagSlug] }, offset, limit, tier);
 }
 
 //#endregion

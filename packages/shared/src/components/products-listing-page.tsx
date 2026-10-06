@@ -32,7 +32,11 @@ async function ProductsList({
   const currentPage = parsePageParam(strana);
   const offset = (currentPage - 1) * PRODUCTS_PER_PAGE;
 
-  const products = await getFilteredProducts(offset, PRODUCTS_PER_PAGE);
+  const products = await getFilteredProducts(
+    offset,
+    PRODUCTS_PER_PAGE,
+    "critical",
+  );
 
   const totalPages = Math.ceil(products.totalRecords / PRODUCTS_PER_PAGE);
   if (totalPages > 0 && currentPage > totalPages) {

@@ -49,7 +49,7 @@ describe("apiFetch availability failures", () => {
   it.each([
     ["a days read", () => getCategories(), 86_400, "categories"],
     ["an hours read", () => getProductBySlug("whatever"), 3_600, "products"],
-    ["an hours POST", () => getFilteredProducts(0, 12), 3_600, "products"],
+    ["an hours POST", () => getFilteredProducts(0, 12, "critical"), 3_600, "products"],
   ] as const)(
     "caches %s with its revalidate and tag",
     async (_label, call, revalidate, tag) => {
@@ -125,7 +125,7 @@ describe("FilteredProducts narrowing", () => {
   });
 
   it("sends no category and no tag for the unfiltered listing", async () => {
-    expect(await bodyOf(() => getFilteredProducts(0, 24))).toEqual({
+    expect(await bodyOf(() => getFilteredProducts(0, 24, "critical"))).toEqual({
       brandSlugs: ["dck"],
       tagSlugs: [],
       first: 0,
@@ -146,7 +146,7 @@ describe("FilteredProducts narrowing", () => {
   });
 
   it("replaces the empty tag filter rather than sending both", async () => {
-    expect(await bodyOf(() => getFilteredProductsByTag("dck-58", 0, 12))).toEqual({
+    expect(await bodyOf(() => getFilteredProductsByTag("dck-58", 0, 12, "critical"))).toEqual({
       brandSlugs: ["dck"],
       tagSlugs: ["dck-58"],
       first: 0,
