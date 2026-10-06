@@ -9,7 +9,7 @@ import Wrapper from "../wrapper";
 import PageBreadcrumbs from "./page-breadcrumbs";
 import ProductDistributors from "./product-distributors";
 import ProductGallery from "./product-gallery";
-import ProductTabs from "./product-tabs";
+import ProductSections from "./product-sections";
 
 interface ProductDetailProps {
   product: Product;
@@ -118,7 +118,7 @@ const ProductDetail = ({
       {/* Product details / specification */}
       {(product.htmlDescription || product.specification) && (
         <Container className="mt-12 lg:mt-16">
-          <ProductTabs
+          <ProductSections
             htmlDescription={product.htmlDescription}
             specification={product.specification}
           />
