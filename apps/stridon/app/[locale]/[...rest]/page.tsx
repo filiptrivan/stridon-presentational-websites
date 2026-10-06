@@ -21,11 +21,10 @@ import { notFound } from "next/navigation";
  * the real path, the way `/brendovi/[slug]` does. Next fixed the underlying
  * notFound prerender in 16.3.0-canary.30 (vercel/next.js#94037).
  *
- * Reading params under Cache Components needs `generateStaticParams` to return
- * at least one value. There is no real one here, so it returns a placeholder,
- * which is the pattern the Next docs give for exactly this case ("return a
- * placeholder param ... then handle it in your page with notFound()",
- * generate-static-params, "With Cache Components").
+ * `generateStaticParams` returns a placeholder because there is no real value:
+ * it keeps the route prerendered, so the build check needs no DYNAMIC_PAGES
+ * entry for it (scripts/assert-static-html.mjs), and an unknown URL still
+ * renders on demand with `dynamicParams` at its default.
  */
 export function generateStaticParams() {
   return [{ rest: ["__placeholder__"] }];

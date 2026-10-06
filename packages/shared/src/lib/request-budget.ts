@@ -82,9 +82,9 @@ export const THIRD_PARTY_BUDGET_MS = 5_000;
 
 // Deliberately NOT copied from pa-storefront: its per-tier retry (critical retries
 // once, auxiliary never). It buys riding out a sub-second blip, at the cost of a
-// backoff loop and a retry-storm vector; these sites are almost entirely prerendered
-// and ISR-served, so a failed revalidation already degrades to serving the previous
-// complete page. Add it only with a measured reason.
+// backoff loop and a retry-storm vector; every PACMS read here goes through the fetch
+// Data Cache, which keeps serving its stale entry when a refresh fails, so a retry
+// would only help a cold miss. Add it only with a measured reason.
 
 // DO NOT add a budget to the warranty POST (apps/dck/.../produzetak-garancije/
 // actions.ts). Aborting the client side does not stop the server: that flow uploads
