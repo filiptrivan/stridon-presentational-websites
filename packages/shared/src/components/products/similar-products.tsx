@@ -14,7 +14,7 @@ const SimilarProducts = async ({
   excludeProductIds,
 }: SimilarProductsProps) => {
   // On the server only a Suspense boundary catches a thrown render, and this
-  // section has none any more, so a failed read drops it instead of the page.
+  // section has none, so a failed read drops the section instead of the page.
   let candidates: ProductCardData[] = [];
   try {
     const result = await getFilteredProductsByCategory(categorySlug, 0, 4 + excludeProductIds.length, "auxiliary");

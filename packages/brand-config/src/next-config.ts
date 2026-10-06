@@ -8,8 +8,8 @@ import { TRUSTED_IMAGE_HOSTS } from "./public-assets";
 // app folder, which points the wrong way from a file in packages/.
 export const baseNextConfig = {
   transpilePackages: ["@brand/config", "@brand/ui", "@brand/shared"],
-  // Without Cache Components every route is either fully static (ISR) or fully
-  // dynamic, and nothing is streamed behind a Suspense boundary. On a dynamic
+  // Every route is either fully static (ISR) or fully dynamic, and no content
+  // sits behind a Suspense boundary (repo CLAUDE.md, Rendering). On a dynamic
   // route Next still streams metadata into <body> for any user agent outside
   // its html-limited bot list, and on 16.1 that list has no Googlebot, GPTBot or
   // ClaudeBot. Google reads rel=canonical only from <head>, so every agent gets

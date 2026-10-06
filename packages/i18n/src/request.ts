@@ -13,7 +13,7 @@ import { locales, type Locale } from "./config";
  * translated page could not be prerendered at all. Root params are part of the
  * route, so they are known at build time and every page stays static. On Next
  * 16.1 they need `experimental.rootParams` in the app's next.config (16.3 turns
- * it on by default); `cacheComponents` used to switch it on implicitly.
+ * it on by default).
  *
  * `locale()` is untyped; the `hasLocale` guard below narrows it. (On Next 16.1
  * root params also throw inside a `"use cache"` scope. The repo has none, and

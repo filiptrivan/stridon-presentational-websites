@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest";
  * Holds the full-SSR model (repo CLAUDE.md → "Rendering: full SSR, no `cacheComponents`") to the
  * few lines that would quietly undo it. Every one of them builds green and looks fine with
  * JavaScript on; what breaks is the HTML a crawler or a no-JS visitor gets, which no other test
- * reads. That is how dck and sg-tools shipped skeletons instead of content until 2026-10.
+ * reads.
  *
  * Source-level only, so it runs in the hermetic lane in milliseconds. A check of the built HTML
  * sees only prerendered pages: the dynamic ones (/proizvodi, category and tag pages) have no HTML
@@ -113,8 +113,9 @@ describe("full SSR guard", () => {
     );
     expect(
       suspense,
-      `Suspense in ${suspense.join(", ")}. React 19.2 sends a finished boundary over 500 B as a ` +
-        `hidden <div> that only JavaScript reveals, and on a dynamic route no other check sees it.`,
+      `Suspense in ${suspense.join(", ")}. On a page past ~12.8 KB, React 19.2 sends a ` +
+        `finished boundary over ~500 B as a hidden <div> that only JavaScript reveals, and ` +
+        `on a dynamic route no other check sees it.`,
     ).toEqual([]);
     expect(
       deferred,
@@ -159,7 +160,7 @@ describe("full SSR guard", () => {
     expect(
       read("apps/stridon/next.config.ts"),
       "packages/i18n reads the locale through next/root-params, which on Next < 16.3 needs " +
-        "experimental.rootParams now that cacheComponents no longer switches it on.",
+        "experimental.rootParams.",
     ).toMatch(/^\s*rootParams:\s*true,/m);
   });
 });

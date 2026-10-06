@@ -232,7 +232,8 @@ const WarrantyForm = () => {
               <div className="space-y-2">
                 <Label id="purchaseDate-label">Datum kupovine</Label>
                 <Popover
-                  // Lazy on open — `new Date()` in the render path would bake the build date into the prerendered HTML and mismatch on hydration.
+                  // Lazy on open: `new Date()` in the render path would bake the
+                  // build date into the prerendered HTML and mismatch on hydration.
                   onOpenChange={(open) => {
                     if (!open || bounds) return;
                     const today = startOfDay(new Date());

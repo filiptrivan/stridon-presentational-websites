@@ -11,9 +11,8 @@ const nextConfig: NextConfig = {
   transpilePackages: [...baseNextConfig.transpilePackages, "@brand/i18n"],
   experimental: {
     ...baseNextConfig.experimental,
-    // `next/root-params` (packages/i18n/src/request.ts). Cache Components used to
-    // switch it on implicitly; on Next < 16.3 nothing else does. 16.3 enables it
-    // by default, after which this line can go.
+    // `next/root-params` (packages/i18n/src/request.ts) needs it on Next < 16.3.
+    // 16.3 enables it by default, after which this line can go.
     rootParams: true,
   },
   // Live stridon.rs URLs this app spells differently (constants/legacy-urls.ts).

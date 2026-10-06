@@ -5,8 +5,7 @@
 // The cache is Next's fetch Data Cache (`next: { revalidate, tags }`), not
 // `"use cache"`. Without Cache Components a `"use cache"` entry on Vercel lives
 // in one instance's memory and is gone on the next deploy; a Data Cache entry
-// survives it. pa-storefront moved its reads the same way (cachedFetch,
-// 2026-08). On Vercel that cache is shared by the whole team, the webshop
+// survives it. On Vercel that cache is shared by the whole team, the webshop
 // included, so it is never purged by hand.
 
 import { getBrandConfig } from "@brand/config";
@@ -48,11 +47,9 @@ const BYPASS_HEADERS: Record<string, string> = RATELIMIT_BYPASS_SECRET
   : {};
 const BRAND_SLUG = getBrandConfig().brandSlug;
 
-// The same revalidate the `cacheLife` profiles gave these reads under Cache
-// Components: one day for "days", one hour for "hours". A page revalidates as
-// often as its freshest read. The profiles' `expire` (one week / one day) has no
-// fetch equivalent, so how long a stale page may still be served is Next's
-// default `expireTime`, one year.
+// One day for structural reads, one hour for product reads. A page revalidates
+// as often as its freshest read. A fetch has no `expire` of its own, so how long
+// a stale page may still be served is Next's default `expireTime`, one year.
 const DAYS = { revalidate: 86_400 } as const;
 const HOURS = { revalidate: 3_600 } as const;
 
@@ -61,8 +58,10 @@ type CachePolicy = { revalidate: number; tag: string };
 // One network read per distinct request per render. Next memoizes a GET fetch
 // across generateMetadata and the page, but only when it carries no `signal`
 // (next/dist/server/lib/dedupe-fetch.js), and every read here carries one: the
-// budget. Without this the product page would read its product twice. `cache`
-// keys on argument identity, hence primitives only and the body as a string.
+// budget. Without this, the page's second identical read (generateMetadata,
+// then the page) waits on the first one's Data Cache entry, and a read that is
+// never cached, such as a 404, goes to the network twice. `cache` keys on
+// argument identity, hence primitives only and the body as a string.
 const requestJson = cache(
   async (
     path: string,

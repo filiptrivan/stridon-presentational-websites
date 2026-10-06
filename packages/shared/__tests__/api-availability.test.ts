@@ -44,7 +44,7 @@ describe("apiFetch availability failures", () => {
     expect(init.signal).toBeInstanceOf(AbortSignal);
   });
 
-  // The cache is the fetch Data Cache now, so the policy travels on the request.
+  // The cache is the fetch Data Cache, so the policy travels on the request.
   // A read that lost it would be fetched on every request, with nothing failing.
   it.each([
     ["a days read", () => getCategories(), 86_400, "categories"],
