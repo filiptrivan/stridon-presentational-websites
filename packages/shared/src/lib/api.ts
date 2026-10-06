@@ -38,9 +38,9 @@ class ApiError extends Error {
 
 const API_URL = process.env.API_URL;
 // Trusted first-party caller secret, sent as X-Internal-Bypass on every apiFetch. The Cloudflare
-// edge fronting api.pacms.in.rs validates + strips it and injects the trusted marker, so SSG build
-// reads aren't rate-limited as anonymous. Absent ⇒ not sent (local/dev); never touches auth.
-// See PACMS docs/trusted-first-party-caller.md.
+// edge fronting api.prodavnicaalata.rs validates + strips it and injects the trusted marker, so
+// SSG build reads aren't rate-limited as anonymous. Absent ⇒ not sent (local/dev); never touches
+// auth. See PACMS docs/trusted-first-party-caller.md.
 const RATELIMIT_BYPASS_SECRET = process.env.PACMS_RATELIMIT_BYPASS_SECRET;
 // Built once at module load, not per request.
 const BYPASS_HEADERS: Record<string, string> = RATELIMIT_BYPASS_SECRET
@@ -86,9 +86,11 @@ const requestJson = cache(
       // backend can shed the work instead of the request holding both a lambda and
       // a connection slot. On a miss only: Next refreshes an expired entry by
       // replaying the request without the signal (vercel/next.js#54533), in the
-      // background on a dynamic route, where this code never sees the result.
-      // Accepted, as in pa-storefront (internal-client.ts, 2026-08-10): it costs
-      // something only while the backend is unhealthy.
+      // background on a dynamic route, where this code never sees the result, and
+      // in the foreground when a static page is prerendered or regenerated (ISR),
+      // which then waits on it unbounded. Accepted, as in pa-storefront
+      // (internal-client.ts, 2026-08-10): it costs something only while the
+      // backend is unhealthy.
       signal: AbortSignal.timeout(budgetMs),
       headers: {
         "Content-Type": "application/json",

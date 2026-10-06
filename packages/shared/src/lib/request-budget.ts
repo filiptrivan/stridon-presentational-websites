@@ -2,11 +2,13 @@
 // so the numbers can be compared and re-tuned together; nothing structurally
 // enforces the funnel, so a new `fetch` is only bounded if its author comes here.
 // Kept free of Next and brand-config imports so it stays unit-testable on its own,
-// which is the real reason it is a separate module: api.ts drags in next/cache,
-// @brand/config and a module-load read of API_URL, and needs three mocks to test.
+// which is the real reason it is a separate module: api.ts drags in @brand/config
+// and a module-load read of API_URL, and needs env stubs and a mock to test.
 //
 // Covered: the cached catalog reads (budgetMsFor), the autocomplete route handler,
-// and the Brevo calls. ONE deliberate exclusion, documented at the bottom.
+// and the Brevo calls. Not covered: Next's own refresh of an expired Data Cache
+// entry, which replays the read without our signal (see `signal` in api.ts), and
+// ONE deliberate exclusion, documented at the bottom.
 //
 // Why this exists: apiFetch had no timeout at all, so a stalled backend held the
 // Vercel lambda until Cloudflare gave up at ~100s. That is the shape of every
@@ -19,11 +21,13 @@
 // Two tiers, and apiFetch takes the tier as a REQUIRED argument — an optional one
 // with a default would quietly make every new fetcher critical.
 //
-// - "critical": the entity a route is about (product / category / tag by slug).
-//   Without it the page cannot render, so failing is honest — but bounded.
-// - "auxiliary": everything else — listings, chrome taxonomy, sitemap rows, build
-//   inputs. Never allowed to hang a render; the section degrades into its
-//   SectionErrorBoundary instead of the whole page waiting.
+// - "critical": the entity a route is about (product / category / tag by slug) and
+//   a listing route's grid. Without it the page cannot render, so failing is honest
+//   — but bounded.
+// - "auxiliary": everything else — chrome taxonomy, home sections, similar products,
+//   sitemap rows, build inputs. Never allowed to hang a render; its reader decides
+//   what a failure means (a section renders without it, see repo CLAUDE.md →
+//   Rendering).
 export type FetchTier = "critical" | "auxiliary";
 
 // Inherited from pa-storefront's measured policy rather than re-derived: it is the
@@ -36,12 +40,13 @@ const TIER_BUDGET_MS: Record<FetchTier, number> = {
   auxiliary: 2_500,
 };
 
-// A build prerenders every category and tag against a possibly-cold backend, and a
+// A build prerenders every product page against a possibly-cold backend, and a
 // dev machine reaches the same EU API over a home connection with no CDN in front.
 // Both legitimately outrun a serve budget, and a false timeout in either place is
 // worse than no timeout: it reds a build or sends a developer chasing a phantom.
-// apps/*/next.config.ts already carries staticGenerationRetryCount for the build
-// case, which is the same blip seen from the other side.
+// packages/brand-config/src/next-config.ts already carries
+// staticGenerationRetryCount for the build case, which is the same blip seen from
+// the other side.
 const LIFTED_BUDGET_MS = 60_000;
 
 // Read at call time, never captured at module load: a build and a serve run the
