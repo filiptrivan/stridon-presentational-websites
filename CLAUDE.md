@@ -149,6 +149,9 @@ DCK also has: `app/produzetak-garancije/` → `/produzetak-garancije` (with 308 
 - The Data Cache is never purged by hand. Guard: none.
 - A section the route is not about catches its own PACMS read and renders without it (`top-products.tsx`); the entity and a listing's grid let it throw. Guard: none.
 - A client component reads nothing during render that differs between server and browser and never sets state in an effect; defer it to an event handler or `useSyncExternalStore`. Guard: `pnpm lint` (`react-hooks/purity`, `react-hooks/set-state-in-effect`), apps only, since `packages/` have no lint yet (see Preflight).
+- Every page is prerendered whole, except the ones on `DYNAMIC_PAGES`. Guard: `scripts/assert-static-html.mjs`, after each app's `pnpm run build`.
+- Prerendered HTML holds all its content without JavaScript: no Suspense fallback, no client-rendered boundary beyond `CLIENT_ONLY_ALLOWED` (`scripts/client-only-allowed.mjs`), no inline `opacity:0` except on an `aria-hidden` decoration, and `<title>` in `<head>`. Guard: `scripts/assert-static-html.mjs`.
+- On Vercel each app builds with `pnpm run build` (`buildCommand` in its `vercel.json`). Guard: `apps/dck/__tests__/assert-static-html.test.ts`.
 
 **OpenGraph images**: served on demand from a single per-app route handler (`app/api/og/route.tsx`) that reads title/type/image from query params — not the per-route `opengraph-image.tsx` file convention (removed; it prerendered one image per entity at build, fanning out backend fetches until they timed out). Pages declare their OG URL via the metadata helpers (`buildOgImageUrl` in `metadata.ts`). Product images are passed as raw URLs from trusted hosts (R2 + the legacy `media.prodavnicaalata.rs`, enforced by `isTrustedImageUrl`); satori fetches them at request time and the result is CDN-cached for a year.
 
