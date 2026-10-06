@@ -17,7 +17,7 @@
     "@brand/ui": "workspace:*"
   },
   "devDependencies": {
-    "vitest": "^4.1.4"
+    "vitest": "^4.1.11"
   },
   "peerDependencies": {
     "@sentry/nextjs": "*",
