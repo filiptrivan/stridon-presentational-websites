@@ -1159,6 +1159,127 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/Storefront/DeliveryPromiseTable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The delivery-promise table (the typed tier pairs, the supplier overrides, the
+         *     working-day list) the storefront resolves "najranije … najkasnije do …" from. A document
+         *     with a body even when nothing is typed yet. pa-cms docs/adr/0002-…
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontDeliveryPromiseTableDTO"];
+                        "application/json": components["schemas"]["StorefrontDeliveryPromiseTableDTO"];
+                        "text/json": components["schemas"]["StorefrontDeliveryPromiseTableDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/DispatchTier": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The dispatch tier of ONE variant at ONE quantity, live — what the product page asks once
+         *     its buy box moves above a unit, so the date beside the button is the date the cart shows
+         *     one click later (pa-storefront docs/adr/0010). Answers from the cart's own oracle; the
+         *     storefront resolves the working-day pair itself off M:PACMS.WebAPI.Controllers.StorefrontController.DeliveryPromiseTable.
+         *     <br>
+         *     Anonymous like the table above, and NOT output-cached: the answer turns on live stock and
+         *     on other orders' open claims, so a cached one would be exactly the stale promise this
+         *     route exists to replace. The client fetches it `no-store`.
+         *     <br>
+         *     Rate-limited because a stepper is a button a customer can hold down, and because the read
+         *     is a per-variant stock probe — Moderate, like M:PACMS.WebAPI.Controllers.StorefrontController.Search(System.String), the other anonymous
+         *     read a customer can fire off repeatedly without meaning to. Not Strict: no argument here
+         *     is a secret, so a call is not a guess (`EnumerableSecretRateLimitTests`), and it
+         *     exposes no new class of fact either — `GetCart` already answers the tier of a
+         *     single-line basket at any quantity, so this makes that probe one call instead of two.
+         *     <br>
+         *     Always 200 with a body. An unknown or unsellable variant answers a null tier rather than
+         *     a 404, because the storefront reads a body as an answer and an error as a failure and
+         *     falls back differently for each.
+         */
+        get: {
+            parameters: {
+                query?: {
+                    productVariantId?: number;
+                    quantity?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontDispatchTierDTO"];
+                        "application/json": components["schemas"]["StorefrontDispatchTierDTO"];
+                        "text/json": components["schemas"]["StorefrontDispatchTierDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/Storefront/FilteredProducts": {
         parameters: {
             query?: never;
@@ -1268,7 +1389,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Homepage "Paket ponude" row — featured bundles sorted by admin-set OrderNumber. */
+        /** Homepage "Paket ponuda" row — featured bundles sorted by admin-set OrderNumber. */
         get: {
             parameters: {
                 query?: {
@@ -1317,7 +1438,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** PDP "Uzmi u setu i uštedi" — bundles that contain any variant of the given product. */
+        /** PDP bundles section ("Paket ponuda") — bundles that contain any variant of the given product. */
         get: {
             parameters: {
                 query?: {
@@ -1462,7 +1583,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Lightweight brand list (id, name, slug, imageUrl only). Use for carousels and listing pages. */
+        /**
+         * Lightweight brand list (id, name, slug, imageUrl, hasProducts). Use for carousels and listing pages.
+         *     Every listed brand, empty ones included: hiding them is each consumer's call.
+         */
         get: {
             parameters: {
                 query?: {
@@ -2270,56 +2394,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Storefront/SlugExists": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Live slug-existence check used by the storefront proxy when the build-time bloom
-         *     reports a miss. Returns 200 if the slug exists, 404 if it does not. Empty body either
-         *     way — only the status code is read.
-         */
-        get: {
-            parameters: {
-                query?: {
-                    type?: string;
-                    slug?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/Storefront/Catalogs": {
         parameters: {
             query?: never;
@@ -2421,7 +2495,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Full-text search across products, categories, and brands via Meilisearch. Also logs the query. */
+        /** Full-text search across products, categories, and brands via Meilisearch. */
         get: {
             parameters: {
                 query?: {
@@ -2463,14 +2537,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Storefront/SearchHighlights": {
+    "/api/Storefront/SearchSuggestions": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Lightweight search returning only highlighted text snippets for autocomplete UI. */
+        /** The search box's suggestions: categories and brands matching what is typed. */
         get: {
             parameters: {
                 query?: {
@@ -2488,9 +2562,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["StorefrontSearchHighlightsDTO"];
-                        "application/json": components["schemas"]["StorefrontSearchHighlightsDTO"];
-                        "text/json": components["schemas"]["StorefrontSearchHighlightsDTO"];
+                        "text/plain": components["schemas"]["StorefrontSearchSuggestionsDTO"];
+                        "application/json": components["schemas"]["StorefrontSearchSuggestionsDTO"];
+                        "text/json": components["schemas"]["StorefrontSearchSuggestionsDTO"];
                     };
                 };
                 /** @description Error */
@@ -2521,8 +2595,7 @@ export interface paths {
         };
         /**
          * Brand-scoped product autocomplete. Returns a slim payload (slug, title, sku, image)
-         *     for pickers on brand presentation sites (e.g., DCK warranty form). Also logs the query —
-         *     zero-result queries are the "customer owns a product we don't list" signal.
+         *     for pickers on brand presentation sites (e.g., DCK warranty form).
          */
         get: {
             parameters: {
@@ -2943,6 +3016,79 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/Storefront/ReleaseAbandonedCardHolds": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Fired by the cancel landing page after a customer backs out on the bank's hosted page.
+         *     Releases THIS caller's abandoned card holds so the stock goes back on sale and their
+         *     retry is not refused — see M:PACMS.Business.Services.DomainServices.OrderLifecycle.ReleaseAbandonedCardHoldsAsync(System.Nullable{System.Int64},System.String,PACMS.Business.Services.DomainServices.CardHoldReleaseTrigger,System.String)
+         *     for why this exists and why the bank, not this request, decides what is released.
+         *
+         *     Anonymous and scoped by `GetCartIdentity`, which is the whole security model: a
+         *     caller can only ever act on orders under their own (user, visitor) identity — the same
+         *     trust boundary the guest cart already runs on — so there is nothing to forge by
+         *     guessing another customer's sequential OrderNumber.
+         *
+         *     orderNumber is the cancel page's own (it is in that page's URL) and
+         *     is intersected with the identity scope, never trusted on its own — identity stays the
+         *     security boundary, so a guessed sequential OrderNumber grants nothing. It closes the
+         *     gap the bank gate cannot: that gate tells authorized from not-authorized, not cancelled
+         *     from mid-3DS. Optional so a caller that genuinely doesn't know (a future generic
+         *     "clean up my dead holds") still works.
+         *
+         *     POST, not the GET landing itself, on purpose. The cancel page is reachable by a link
+         *     on the bank's HPP, and a link-prefetching browser issuing a speculative GET must not
+         *     be able to abandon an order the customer is still paying for. It also keeps the
+         *     landing route non-mutating, which it has always been.
+         *
+         *     Returns the count for the caller's own logging; the page renders the same either way.
+         */
+        post: {
+            parameters: {
+                query?: {
+                    orderNumber?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": number;
+                        "application/json": number;
+                        "text/json": number;
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/Storefront/SetShippingPostalCode": {
         parameters: {
             query?: never;
@@ -2978,6 +3124,58 @@ export interface paths {
                         "application/json": components["schemas"]["StorefrontCartDTO"];
                         "text/json": components["schemas"]["StorefrontCartDTO"];
                     };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/SetCartEmail": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Stores the checkout's typed email as cart state (SetShippingPostalCode's sibling) — the
+         *     abandoned-cart sequence's recipient key for guest carts. Fired on field blur, so it
+         *     returns nothing: an email reprices nothing, and the caller is fire-and-forget.
+         *     Rate-limited per IP (Strict): an anonymous endpoint that writes a PII field is an
+         *     email-injection surface — the per-address send cap in AbandonedCartService is the
+         *     deeper bound, this just makes bulk spraying expensive.
+         */
+        post: {
+            parameters: {
+                query?: {
+                    email?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
                 };
                 /** @description Error */
                 default: {
@@ -3055,8 +3253,8 @@ export interface paths {
         /**
          * Recovers the cart behind an abandoned-cart email link into the current session. Anonymous and
          *     token-gated: the signed {cartId, exp} token is verified here. On any invalid/expired/forged token
-         *     the current session's cart is returned unchanged — the storefront then shows the login-nudge empty
-         *     state. GetCartIdentity mints a visitor_id for a first-time (cookie-less) session so there is a guest
+         *     the current session's cart is returned unchanged, with StorefrontCartDTO.DeadRecoveryLink saying
+         *     why. GetCartIdentity mints a visitor_id for a first-time (cookie-less) session so there is a guest
          *     cart to recover into.
          */
         post: {
@@ -3065,6 +3263,8 @@ export interface paths {
                     cartId?: number;
                     exp?: number;
                     sig?: string;
+                    msid?: number;
+                    code?: string;
                 };
                 header?: never;
                 path?: never;
@@ -3456,8 +3656,10 @@ export interface paths {
         post: {
             parameters: {
                 query?: {
+                    /** @description Courier or in-store pickup. */
                     deliveryMethodId?: number;
-                    pickupWarehouseId?: number;
+                    /** @description Where a pickup order is collected. */
+                    pickupLocationId?: number;
                 };
                 header?: never;
                 path?: never;
@@ -4071,6 +4273,170 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/Storefront/ReviewRequestContext": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * What the review-invitation page renders. No `[AuthGuard]` deliberately: 92,3% of
+         *     orders are guests, and the signed token in the path IS the authorisation — requiring a
+         *     session here would put a login wall in front of the one thing we are asking a customer
+         *     to do us a favour by doing.
+         */
+        get: {
+            parameters: {
+                query?: {
+                    token?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontReviewRequestContextDTO"];
+                        "application/json": components["schemas"]["StorefrontReviewRequestContextDTO"];
+                        "text/json": components["schemas"]["StorefrontReviewRequestContextDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/SubmitReviewByToken": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Leaves a review on the strength of the e-mail invitation. Anonymous for the same reason
+         *     as the read above; the token names the order and the product, so nothing the caller
+         *     sends can retarget it.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["StorefrontSubmitReviewByTokenDTO"];
+                    "text/json": components["schemas"]["StorefrontSubmitReviewByTokenDTO"];
+                    "application/*+json": components["schemas"]["StorefrontSubmitReviewByTokenDTO"];
+                };
+            };
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontSubmitReviewResultDTO"];
+                        "application/json": components["schemas"]["StorefrontSubmitReviewResultDTO"];
+                        "text/json": components["schemas"]["StorefrontSubmitReviewResultDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/SubmitServiceReviewByToken": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Rates the purchase experience (delivery, service) for the invitation's order — the ask
+         *     chained after a product review on the same page. Anonymous like its siblings: the signed
+         *     token proves the order.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["StorefrontSubmitServiceReviewByTokenDTO"];
+                    "text/json": components["schemas"]["StorefrontSubmitServiceReviewByTokenDTO"];
+                    "application/*+json": components["schemas"]["StorefrontSubmitServiceReviewByTokenDTO"];
+                };
+            };
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/Storefront/CurrentUserReviewForProduct": {
         parameters: {
             query?: never;
@@ -4199,6 +4565,59 @@ export interface paths {
                         "application/json": components["schemas"]["StorefrontPlaceOrderResultDTO"];
                         "text/json": components["schemas"]["StorefrontPlaceOrderResultDTO"];
                     };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/ReportPurchaseTracked": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * The confirmation page reporting that it fired the client-side GA4 purchase. Its
+         *     ABSENCE is what the Measurement Protocol backfill acts on, so this is the one
+         *     precise answer to "did GA4 see this order" — every alternative (payment state, a
+         *     rendered page) is a guess that an ad blocker defeats.
+         *
+         *     Identity-scoped, because the stamp SUPPRESSES a later server-side send: unscoped, it
+         *     would let anyone silence another customer's backfill by order number.
+         */
+        post: {
+            parameters: {
+                query?: {
+                    orderNumber?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
                 };
                 /** @description Error */
                 default: {
@@ -4501,54 +4920,6 @@ export interface paths {
         };
         put?: never;
         post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/SubscribeToStockNotification": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["StorefrontStockNotificationDTO"];
-                    "text/json": components["schemas"]["StorefrontStockNotificationDTO"];
-                    "application/*+json": components["schemas"]["StorefrontStockNotificationDTO"];
-                };
-            };
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
         delete?: never;
         options?: never;
         head?: never;
@@ -5464,6 +5835,59 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/Storefront/ProductSlugByRetiredSlug": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The current slug of the live product a retired slug resolves to, or null (umbrella ADR 0038).
+         *     pa-storefront asks it only after `ProductBySlug` found no product, and answers a hit
+         *     with one permanent redirect; a slug a live product holds is never answered. Same envelope as
+         *     `ProductSlugByReadyCmsId` above, for the same reasons (JSON forced, absence is
+         *     200-with-null so the storefront's fetch cache can hold it).
+         */
+        get: {
+            parameters: {
+                query?: {
+                    slug?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": string;
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/User/GetCurrentUser": {
         parameters: {
             query?: never;
@@ -5549,7 +5973,7 @@ export interface components {
          *     shared budget, and it carries two slugs where items carry one. The storefront links it to
          *     the canonical combo page (`/proizvodjaci/{brandSlug}/{categorySlug}/`).
          */
-        BrandCategorySuggestionDTO: {
+        BrandCategoryShortcutDTO: {
             brandSlug: string;
             brandName: string;
             categorySlug: string;
@@ -5588,13 +6012,13 @@ export interface components {
             slug?: string | null;
             imageUrl?: string | null;
             /** Format: double */
-            displayPrice?: number | null;
+            effectivePrice?: number | null;
             /** Format: double */
-            originalPrice?: number | null;
+            regularPrice?: number | null;
             hasDiscount?: boolean | null;
             /** Format: int32 */
             discountPercentage?: number | null;
-            inStock?: boolean | null;
+            isOrderable?: boolean | null;
             parentName?: string | null;
         };
         SendLoginVerificationEmailResultDTO: {
@@ -5628,6 +6052,72 @@ export interface components {
             linkUrl?: string | null;
             linkLabel?: string | null;
         };
+        /**
+         * @description One attribute facet on a listing response: the group the panel renders under <i>Filteri</i>, after
+         *     Kategorije, Brend and Cena, in the resolved category's effective order.
+         *     <br>
+         *     A RESPONSE-FIELD WIDENING (backend-first, CLAUDE.md multi-repo rules): a consumer that has not deployed
+         *     yet sees no field, and a consumer on an older backend must read a missing collection as "no facets",
+         *     never as an error.
+         */
+        StorefrontAttributeFacetDTO: {
+            code: string;
+            /** @description Customer-facing label (Serbian, formal register) — the group's title. */
+            name: string;
+            /** @description decimal | range | boolean | select (lower-case AttributeValueTypeCodes name); text is never a facet. */
+            type: string;
+            /** @description Canonical unit for decimal and range values; the storefront appends it in the market's number locale. */
+            unit?: string | null;
+            /** @description discrete (multi-select checkboxes) | range (single-select bands). */
+            facetMode: string;
+            /**
+             * @description Values with their in-context counts, ascending for numbers and in dictionary order for options. A
+             *     zero-count value is omitted unless it is selected (so a customer can always un-tick).
+             */
+            values: components["schemas"]["StorefrontAttributeFacetValueDTO"][];
+        };
+        /** @description One value (or band) of an attribute facet, with the count the customer would get by ticking it. */
+        StorefrontAttributeFacetValueDTO: {
+            /** @description What rides in the URL: an option code, a printed decimal, "da"/"ne", or a bucket id. */
+            id: string;
+            /**
+             * @description The option's Serbian name for a select. NULL for decimals, booleans and range bands, which the
+             *     storefront formats itself (number locale + unit, "Da"/"Ne", "do 40 Nm") — the same formatter the
+             *     PDP spec table uses, so the filter reads like the specification.
+             */
+            label?: string | null;
+            /** Format: int32 */
+            count: number;
+            selected: boolean;
+            /**
+             * Format: double
+             * @description Range band only: inclusive lower bound, null when the band is unbounded below ("do 40 Nm").
+             */
+            min?: number | null;
+            /**
+             * Format: double
+             * @description Range band only: exclusive upper bound, null when the band is unbounded above ("preko 80 Nm").
+             */
+            max?: number | null;
+        };
+        /**
+         * @description One selected attribute filter on a listing request: the dictionary code and the value ids the customer
+         *     ticked. Reaches the backend from one `atr-<code>` query parameter per attribute
+         *     (workspace docs/adr/0007-attribute-filter-urls-carry-the-dictionary-code-under-an-atr-prefix.md), so the
+         *     storefront forwards every `atr-` parameter it sees without knowing the dictionary.
+         *     <br>
+         *     An unknown code and an unknown value are IGNORED, never an error: a shared link naming an attribute the
+         *     category no longer carries must still render the listing.
+         */
+        StorefrontAttributeFilterDTO: {
+            /** @description Mirrors AttributeDefinition.Code (varchar(100)); a longer value can never name an attribute. */
+            code: string;
+            /**
+             * @description Option codes, decimal values as `RangeBuckets.Print` writes them ("18", "1.5"), "da"/"ne" for a
+             *     boolean, or exactly one bucket id ("40-60") for a range facet. OR-ed within the attribute.
+             */
+            values: string[];
+        };
         StorefrontBannerDTO: {
             /** Format: int32 */
             id: number;
@@ -5657,6 +6147,7 @@ export interface components {
             slug: string;
             /** @description Null when the brand has no image. See Backend/CLAUDE.md → "Image absence is null". */
             imageUrl?: string | null;
+            hasProducts?: boolean | null;
         };
         StorefrontBrandDTO: {
             /** Format: int32 */
@@ -5670,6 +6161,7 @@ export interface components {
             htmlDescription?: string | null;
             metaTitle: string;
             metaDescription: string;
+            hasProducts?: boolean | null;
         };
         StorefrontBrandFilterOptionsDTO: {
             categorySlug?: string | null;
@@ -5678,8 +6170,13 @@ export interface components {
             minPrice?: number | null;
             /** Format: double */
             maxPrice?: number | null;
-            inStock?: boolean | null;
+            isOrderable?: boolean | null;
             productSearchTerm?: string | null;
+            /**
+             * @description The listing's attribute facets, so the expander and the brand search answer in the same context as
+             *     the sidebar's initial list. Same semantics as StorefrontProductsFilterDTO.AttributeFilters.
+             */
+            attributeFilters: components["schemas"]["StorefrontAttributeFilterDTO"][];
             selectedBrandSlugs: string[];
             /**
              * Format: int32
@@ -5692,7 +6189,7 @@ export interface components {
             selectedBrands: components["schemas"]["StorefrontBrandWithCountDTO"][];
             brands: components["schemas"]["StorefrontBrandWithCountDTO"][];
         };
-        StorefrontBrandHighlightDTO: {
+        StorefrontBrandSuggestionDTO: {
             /** Format: int32 */
             id: number;
             name: string;
@@ -5730,10 +6227,10 @@ export interface components {
              * @description Sum of member variants' effective price × quantity. Used for the strikethrough price.
              *     Null if we couldn't compute it (shouldn't happen in practice for a saved bundle).
              */
-            originalPrice?: number | null;
+            regularPrice?: number | null;
             /** Format: int32 */
             discountPercentage?: number | null;
-            inStock: boolean;
+            isOrderable: boolean;
             heroImageUrl: string;
             /**
              * Format: int32
@@ -5751,15 +6248,15 @@ export interface components {
             title: string;
             slug: string;
             subtitle?: string | null;
-            description: string;
+            summary: string;
             htmlDescription: string;
             /** Format: double */
             price: number;
             /** Format: double */
-            originalPrice?: number | null;
+            regularPrice?: number | null;
             /** Format: int32 */
             discountPercentage?: number | null;
-            inStock: boolean;
+            isOrderable: boolean;
             heroImageUrl: string;
             items: components["schemas"]["StorefrontBundleItemDTO"][];
             metaTitle: string;
@@ -5789,11 +6286,16 @@ export interface components {
             quantity: number;
             /**
              * Format: double
-             * @description Effective per-unit regular price (SalePrice ?? Price) — used to show "regular" price
-             *     of this member alongside the bundle total.
+             * @description The member's effective price per unit (`SalePrice ?? Price`): what it sells for alone,
+             *     shown beside the bundle's price.
              */
-            regularUnitPrice: number;
-            inStock: boolean;
+            effectiveUnitPrice: number;
+            isOrderable: boolean;
+            /**
+             * @description Whether the member's variant has a live stock source, which tells "Nije u ponudi" from
+             *     "Trenutno nema na stanju" (PACMS.Business.DTO.Storefront.Product.StorefrontProductVariantDTO.HasLiveStockSource).
+             */
+            hasLiveStockSource: boolean;
         };
         /**
          * @description A Paket ponuda entry in the cart. The member products are rendered read-only: the only
@@ -5815,11 +6317,16 @@ export interface components {
              *     Null means "no stock limit" (every member is IsAvailableWhenOutOfStock).
              */
             maxOrderQuantity?: number | null;
-            inStock: boolean;
+            isOrderable: boolean;
             /** Format: double */
             unitPrice: number;
-            /** Format: double */
-            originalUnitPrice?: number | null;
+            /**
+             * Format: double
+             * @description The bundle's regular price: what its members cost bought separately
+             *     (`ProductBundle.OriginalPrice`), before the bundle's discount. The bundle's struck-through
+             *     price; a member's own price is its PACMS.Business.DTO.Storefront.Checkout.StorefrontCartBundleMemberDTO.EffectiveUnitPrice.
+             */
+            regularUnitPrice?: number | null;
             /** Format: int32 */
             discountPercentage?: number | null;
             members: components["schemas"]["StorefrontCartBundleMemberDTO"][];
@@ -5840,10 +6347,11 @@ export interface components {
             quantityPerBundle: number;
             /**
              * Format: double
-             * @description Effective regular unit price (SalePrice ?? Price) at the time the DTO was built, shown
-             *     in the cart UI next to each member as the "was" line through price.
+             * @description The member's effective price per unit (`SalePrice ?? Price`, through
+             *     `SalePriceSanitizer`) when the DTO was built: what it sells for alone, shown in the cart
+             *     beside each member, struck through against the bundle's price.
              */
-            regularUnitPrice: number;
+            effectiveUnitPrice: number;
         };
         StorefrontCartDTO: {
             items: components["schemas"]["StorefrontCartItemDTO"][];
@@ -5878,12 +6386,29 @@ export interface components {
              *                 tier classification (ShippingTier.IsBulky), not derived from a null threshold.
              */
             isBulky: boolean;
+            courierDeliveryPromise?: components["schemas"]["StorefrontDeliveryPromiseDTO"];
             /**
              * @description Cart-owned zone-pricing context: the checkout's last picked place postal code
              *                 (see Cart.ShippingPostalCode). Render-only echo so the checkout can skip a no-op
              *                 SetShippingPostalCode when the picked value already matches.
              */
             shippingPostalCode?: string | null;
+            /**
+             * @description Contact snapshot for the checkout prefill: what the customer typed before a card
+             *                 payment was declined (Cart.FullName and siblings, stamped by OrderIntake's card branch).
+             *                 The storefront reads it after a recovery-link fold or a plain return. FullName through
+             *                 CompanyPib are absent until a card order stamped them or a recovery link folded them in;
+             *                 Email also comes from the checkout's blur capture (SetCartEmail), so it alone is not a
+             *                 snapshot. A non-null CompanyPib IS the company-order flag. Render-only, so no
+             *                 [StringLength] (Backend/CLAUDE.md).
+             */
+            email?: string | null;
+            fullName?: string | null;
+            phoneNumber?: string | null;
+            shippingAddress?: string | null;
+            shippingCity?: string | null;
+            customerNote?: string | null;
+            companyPib?: string | null;
             /**
              * Format: double
              * @description Final customer-facing total (post discount). The single number to display and charge.
@@ -5900,12 +6425,20 @@ export interface components {
             deliveryMethodId: number;
             /**
              * Format: int32
-             * @description Chosen pickup store when the delivery method is in-store pickup; null until picked.
+             * @description The chosen customer pickup location when the delivery method is in-store pickup; null until picked.
              */
-            pickupWarehouseId?: number | null;
-            /** @description Render-only display name of the chosen pickup store. */
-            pickupWarehouseName?: string | null;
+            pickupLocationId?: number | null;
+            /** @description Render-only display name of the chosen customer pickup location. */
+            pickupLocationName?: string | null;
             discount?: components["schemas"]["StorefrontCartDiscountDTO"];
+            /**
+             * @description Set only on RecoverCart's answer, when the link restored nothing: why, as a
+             *     PACMS.Business.DTO.Storefront.Checkout.DeadRecoveryLinkReasons value. The cart beside it is then the session's
+             *     own, never the mailed one, and the storefront says so instead of passing it off as the
+             *     recovery (workspace docs/plans/dead-recovery-link.md). Null on every other endpoint, on a
+             *     fold, and for a source cart a sign-in merged away (CartService.RecoverCart says why).
+             */
+            deadRecoveryLink?: string | null;
         };
         StorefrontCartDiscountDTO: {
             code: string;
@@ -5928,20 +6461,33 @@ export interface components {
             maxOrderQuantity?: number | null;
             /**
              * Format: int32
-             * @description Per-line minimum order quantity (1 = no minimum). Out-of-stock backorder lines carry
+             * @description Per-line minimum order quantity (1 = no minimum). Out-of-stock AOOSO lines carry
              *     the supplier-pack minimum (per-variant override or price tier). A quantity below this
              *     blocks checkout; the UI offers a bump-to-minimum fix. See CartService.MinOrderQuantityFloor.
              */
             minOrderQuantity: number;
-            inStock: boolean;
+            isOrderable: boolean;
             /**
              * @description True when the line is orderable only because the variant is available-when-out-of-stock
              *     (physical stock 0) — the storefront shows a "Za poručivanje" signal and, for mixed carts,
              *     distinguishes it from ship-now lines. Twin of StorefrontProductService.ComputeAvailability.
              */
-            isBackorder: boolean;
+            isAooso: boolean;
+            /**
+             * @description Whether the line's variant has a live stock source, which tells "Nije u ponudi" from
+             *     "Trenutno nema na stanju" (PACMS.Business.DTO.Storefront.Product.StorefrontProductVariantDTO.HasLiveStockSource).
+             */
+            hasLiveStockSource: boolean;
             /** Format: int32 */
             productId: number;
+            /**
+             * @description ROOT-FIRST category name chain ("Elektro alati" → … → leaf) for GA4's
+             *     `item_category..item_category5` slots on every cart-fired event. Empty (never
+             *     null) when unresolvable — the storefront then omits the category keys rather than
+             *     inventing a level. Source: CategoryCatalog.GetAncestorNamesBySlug (precomputed map,
+             *     one lookup per line).
+             */
+            categoryPath: string[];
             /**
              * @description The variant's business key, 1:1 with the Wings `Šifra`. Carried so every GA4
              *     event keys its `item_id` on the same value: the cart previously had no SKU, so
@@ -5960,9 +6506,9 @@ export interface components {
             brandName: string;
             imageUrl: string;
             /** Format: double */
-            displayPrice: number;
+            effectivePrice: number;
             /** Format: double */
-            originalPrice?: number | null;
+            regularPrice?: number | null;
             hasDiscount: boolean;
             /** Format: int32 */
             discountPercentage?: number | null;
@@ -5970,7 +6516,7 @@ export interface components {
             /**
              * @description This line's product alone resolves to a bulky tier — the per-line "Kabasta
              *                 roba" chip (drawer, cart page, checkout items), so a mixed cart can point at which
-             *                 item raised the delivery bracket. Sibling of PACMS.Business.DTO.Storefront.Checkout.StorefrontCartItemDTO.IsBackorder.
+             *                 item raised the delivery bracket. Sibling of PACMS.Business.DTO.Storefront.Checkout.StorefrontCartItemDTO.IsAooso.
              */
             isBulky: boolean;
             /** Format: double */
@@ -6021,7 +6567,7 @@ export interface components {
             subCategories: components["schemas"]["StorefrontCategoryDTO"][];
             categoryBreadcrumbs: components["schemas"]["CategoryBreadcrumbDTO"][];
         };
-        StorefrontCategoryHighlightDTO: {
+        StorefrontCategorySuggestionDTO: {
             /** Format: int32 */
             id: number;
             name: string;
@@ -6037,6 +6583,127 @@ export interface components {
             slug: string;
             /** Format: int32 */
             productCount: number;
+        };
+        /**
+         * @description The cart's delivery promise (workspace docs/plans/delivery-promise-plan.md → D3/D6):
+         *     dates in the market zone as "yyyy-MM-dd" plus the working-day counts they came from, so
+         *     checkout can render "od uplate" for a prepay rail without a second call.
+         *     <br>
+         *     It does not say WHICH typed pair answered (a supplier's own, or the market default).
+         *     Nothing renders that, and a public cart response is the wrong place to publish whose number
+         *     a promise came from; that diagnosis lives per order in `Order.DeliveryPromiseInputs`.
+         */
+        StorefrontDeliveryPromiseDTO: {
+            earliestDate: string;
+            latestDate: string;
+            /** Format: int32 */
+            earliestWorkingDays?: number;
+            /** Format: int32 */
+            latestWorkingDays?: number;
+            /** @description The order's tier — the slowest line's. */
+            dispatchTier: string;
+            /** Format: int32 */
+            supplierId?: number | null;
+        };
+        /** @description One promise slot's rows: the same two lists the table's top level carries for `any`. */
+        StorefrontDeliveryPromiseSlotDTO: {
+            tiers?: components["schemas"]["StorefrontDeliveryPromiseTierDTO"][] | null;
+            suppliers?: components["schemas"]["StorefrontDeliveryPromiseSupplierDTO"][] | null;
+        };
+        StorefrontDeliveryPromiseSupplierDTO: {
+            /** Format: int32 */
+            supplierId?: number;
+            /** Format: int32 */
+            earliestWorkingDays?: number;
+            /** Format: int32 */
+            latestWorkingDays?: number;
+        };
+        /**
+         * @description The delivery-promise table (docs/adr/0002-…, 0007-…): the typed tier pairs, the suppliers
+         *     that carry a pair of their own, the cut-off hour, and PACMS.Business.DTO.Storefront.Catalog.StorefrontDeliveryPromiseTableDTO.WorkingDays — the
+         *     storefront picks a row the way `DeliveryPromiseResolver` does and turns working days
+         *     into dates by stepping the list, holding no calendar and no copy of the cut-off of its own.
+         *     A few dozen integers in total, so every PDP carries it whole. Every tier name is the
+         *     lowercase wire vocabulary mirrored in pa-storefront
+         *     packages/shared/src/constants/delivery-promise.ts.
+         *     <br>PACMS.Business.DTO.Storefront.Catalog.StorefrontDeliveryPromiseTableDTO.Tiers and PACMS.Business.DTO.Storefront.Catalog.StorefrontDeliveryPromiseTableDTO.Suppliers are the `any`-slot rows and keep their
+         *     exact pre-slot shape and meaning: this contract WIDENED (2026-09-16), backend first, so a
+         *     storefront that has never heard of PACMS.Business.DTO.Storefront.Catalog.StorefrontDeliveryPromiseTableDTO.Morning renders today's promise against the
+         *     new backend with no dark window.
+         */
+        StorefrontDeliveryPromiseTableDTO: {
+            /** @description The next working days in the market zone ("yyyy-MM-dd"), holidays and firm closures applied, starting a few days before today. */
+            workingDays?: string[] | null;
+            /** @description One row per dispatch tier for the `any` slot; the supplier row is the market default an AOOSO falls to. */
+            tiers?: components["schemas"]["StorefrontDeliveryPromiseTierDTO"][] | null;
+            /** @description Only the suppliers that have typed an `any` pair; everything else uses the supplier tier's row above. */
+            suppliers?: components["schemas"]["StorefrontDeliveryPromiseSupplierDTO"][] | null;
+            /**
+             * @description The cut-off as an hour in the market zone, "HH:mm" (`PromiseCutoff`). Travels here
+             *     rather than being typed in TypeScript so no copy of it can drift — the
+             *     PACMS.Business.DTO.Storefront.Catalog.StorefrontDeliveryPromiseTableDTO.WorkingDays move. A measured fact of our picking and the 13:00 batch, never
+             *     an operator field, so it is the same string for every store that has one.
+             */
+            cutoffHour?: string | null;
+            morning: components["schemas"]["StorefrontDeliveryPromiseSlotDTO"];
+        };
+        StorefrontDeliveryPromiseTierDTO: {
+            dispatchTier: string;
+            /** Format: int32 */
+            earliestWorkingDays?: number;
+            /** Format: int32 */
+            latestWorkingDays?: number;
+        };
+        /**
+         * @description The LIVE dispatch tier of one variant at one quantity — what the product page asks once its
+         *     stepper moves above one unit (pa-storefront docs/adr/0010). The cached page's own tier
+         *     (PACMS.Business.DTO.Storefront.Product.StorefrontProductVariantDTO.DispatchTier) answers for one unit off a snapshot;
+         *     this answers for the quantity the customer has actually chosen, against live stock and the
+         *     open claims of other orders, so the date beside the button is the date the cart shows one
+         *     click later.
+         *     <br>
+         *     The tier and the supplier key, and nothing else. The PAIR — the working-day numbers behind
+         *     "najranije … najkasnije do …" — is deliberately absent: the storefront resolves it off the
+         *     promise table it already holds, so `resolveTierPair` and
+         *     `DeliveryPromiseResolver.PairFor` stay the only two implementations of that lookup,
+         *     pinned as twins by the parity fixture. An endpoint returning the pair would be a third.
+         *     <br>
+         *     A null PACMS.Business.DTO.Storefront.Product.StorefrontDispatchTierDTO.DispatchTier is an ANSWER, not an absence: it says the store has nothing
+         *     to promise for this line, and the page falls back to the bounding range. That is why the
+         *     route carrying this never answers 204 or 404 — see `StorefrontController.DispatchTier`,
+         *     which owns the status-code half of the contract.
+         */
+        StorefrontDispatchTierDTO: {
+            /**
+             * @description Where the goods for this quantity are — "onshelf" | "transfer" | "supplier"
+             *     (`DispatchTierCodes.WireName`, the names the storefront mirrors in
+             *     packages/shared/src/constants/delivery-promise.ts). Null when there is nothing to
+             *     promise: the variant is unknown, or nobody can buy it.
+             */
+            dispatchTier?: string | null;
+            /**
+             * Format: int32
+             * @description The supplier the promise keys its supplier-tier cell on:
+             *     `Product.SupplierId ?? Brand.SupplierId`, the same resolution order and the same
+             *     `int?` as PACMS.Business.DTO.Storefront.Product.StorefrontProductDTO.DeliverySupplierId and
+             *     `StorefrontDeliveryPromiseDTO.SupplierId` — every supplier id on the storefront wire
+             *     is one width, whatever a ticket says. Null when neither is mapped (7.880 listed products,
+             *     measured 2026-09-14) — the storefront then reads the tier's own row. Carried on every
+             *     tier, not just the supplier one, because off that tier it is simply noise the client
+             *     already ignores.
+             */
+            supplierId?: number | null;
+        };
+        /**
+         * @description A day range the firm does not dispatch on, as "yyyy-MM-dd" market-zone dates, inclusive.
+         *     Rides PACMS.Business.DTO.Storefront.Catalog.StorefrontSiteSettingsDTO.UpcomingClosures so it shares that
+         *     document's cache tags and invalidation event; the storefront never computes holidays, it
+         *     reads the backend's working-day list, and this is the only calendar fact it sees directly
+         *     (to tell the customer, not to count).
+         */
+        StorefrontFirmClosureDTO: {
+            fromDate: string;
+            toDate: string;
         };
         StorefrontLoyaltyBalanceDTO: {
             /** Format: double */
@@ -6069,13 +6736,31 @@ export interface components {
             orderNumber: string;
             /** Format: date-time */
             createdAt: string;
-            email: string;
+            /**
+             * @description Optional, and NOT because the storefront can place an order without one — its checkout
+             *     still requires it. This is step 1 of retiring the placeholder address the team types
+             *     into a phone order when the customer has no email.
+             *     <br>
+             *     That placeholder is the shop's own mailbox, so it is not merely a false value: order
+             *     access matches a guest order to an account BY EMAIL (`OrderAccessPolicy`), which
+             *     makes every such order readable by anyone who signs in with it — 462 orders as of
+             *     2026-08-11. The fix is for absence to be absence, which means
+             *     `Order.Email` becomes nullable and those rows are cleared.
+             *     <br>
+             *     Widened HERE FIRST, ahead of any of that, and deliberately while the backend still
+             *     always sends a value: pa-storefront renders this field on the order-detail page, and its
+             *     generated schema would otherwise call a null impossible. Splitting the widening from the
+             *     change that produces nulls is what makes consumer-first a compiler error rather than a
+             *     discipline. Do not clear the placeholder rows until this has DEPLOYED and pa-storefront
+             *     has deployed on top of it.
+             */
+            email?: string | null;
             fullName: string;
             phoneNumber: string;
             shippingAddress?: string | null;
             shippingCity?: string | null;
             shippingPostalCode?: string | null;
-            note?: string | null;
+            customerNote?: string | null;
             /** Format: double */
             subtotal: number;
             /** Format: double */
@@ -6090,6 +6775,12 @@ export interface components {
             /** Format: int32 */
             orderStatusId: number;
             orderStatusName: string;
+            /**
+             * @description The order is in a reversing status — `OrderStatusPolicy.IsReversing`, shipped rather
+             *     than re-derived, so the storefront stops hand-copying which ids those are. What it
+             *     replaced and why that copy was dangerous: pa-storefront's order timeline input.
+             */
+            isReversing: boolean;
             /** Format: int32 */
             paymentMethodId: number;
             paymentMethodName: string;
@@ -6099,13 +6790,13 @@ export interface components {
             /** Format: int32 */
             deliveryMethodId: number;
             deliveryMethodName: string;
-            pickupWarehouseName?: string | null;
-            pickupWarehouseAddress?: string | null;
-            pickupWarehouseCity?: string | null;
-            pickupWarehousePostalCode?: string | null;
-            pickupWarehouseOpeningHoursWeekdays?: string | null;
-            pickupWarehouseOpeningHoursSaturday?: string | null;
-            pickupWarehouseOpeningHoursSunday?: string | null;
+            pickupLocationName?: string | null;
+            pickupLocationAddress?: string | null;
+            pickupLocationCity?: string | null;
+            pickupLocationPostalCode?: string | null;
+            pickupLocationOpeningHoursWeekdays?: string | null;
+            pickupLocationOpeningHoursSaturday?: string | null;
+            pickupLocationOpeningHoursSunday?: string | null;
             shippingTierName?: string | null;
             /**
              * @description The order priced in a bulky ("kabasta roba") tier — confirmation/detail render
@@ -6114,12 +6805,17 @@ export interface components {
             isBulky: boolean;
             trackingNumber?: string | null;
             trackingUrl?: string | null;
+            /**
+             * @description Who carried the package, in the customer's words — "D Express", or the whole sentence
+             *     "Isporuku vrši naše vozilo" when our own van did and there is no number to show.
+             */
+            courierLabel?: string | null;
             /** Format: date-time */
             confirmedAt?: string | null;
             /** Format: date-time */
             shippedAt?: string | null;
             /** Format: date-time */
-            deliveredAt?: string | null;
+            completedAt?: string | null;
             /** Format: date-time */
             readyForPickupAt?: string | null;
             /** Format: date-time */
@@ -6128,7 +6824,66 @@ export interface components {
             returnedAt?: string | null;
             isCompanyOrder?: boolean;
             companyPib?: string | null;
+            /**
+             * Format: date
+             * @description The promise as stamped at placement (or at payment on a prepay rail) and the operator's
+             *     revision after a call (workspace docs/plans/delivery-promise-plan.md → D7/D8).
+             *     Calendar dates in the market zone; absent on an unpaid prepay order and on every order
+             *     placed before the promise existed. The order page shows the revised date when set, else
+             *     the range.
+             *     <br>
+             *     POPULATED ON A PICKUP ORDER since 2026-09-17, where it is the day the goods are ready at
+             *     the chosen store rather than the day the parcel arrives (docs/adr/0010). Which sentence
+             *     says it is the consumer's own choice, off PACMS.Business.DTO.Storefront.Order.StorefrontOrderDTO.DeliveryMethodId — the fields are
+             *     the same three and a consumer that has not switched renders its courier copy only on the
+             *     courier leg, as it always did.
+             */
+            promisedDeliveryEarliest?: string | null;
+            /** Format: date */
+            promisedDeliveryLatest?: string | null;
+            /** Format: date */
+            promisedDeliveryRevisedLatest?: string | null;
+            /**
+             * @description The order's tier as STAMPED (`DispatchTierCodes` wire name), for the ONE decision a
+             *     consumer cannot make from the dates: a pickup order whose goods were already on the
+             *     chosen store's shelf carries dates but says no date, because the mail is the go signal
+             *     and "spremno sutra" beside "dostupno odmah" would read as an invitation to come
+             *     (docs/adr/0010).
+             *     <br>
+             *     Null on a stamp written before the tier was recorded, and on an unstamped order. A
+             *     consumer that cannot read it shows no date on that leg, which is today's behaviour.
+             */
+            dispatchTier?: string | null;
+            /**
+             * Format: int32
+             * @description The promised working-day window for an order whose clock has not started yet: a courier
+             *     order on a rail that wants the money before dispatch, unstamped and still alive. The
+             *     order page renders it as the sentence every other pre-payment surface shows, "Isporuka
+             *     za 2 do 4 radna dana od evidentiranja uplate" (pa-storefront #117); the dates above stay
+             *     null until the operator records the payment, and these two go null the moment they are
+             *     set (docs/adr/0004-…).
+             *     <br>
+             *     Null everywhere else. Which orders qualify, and what each exclusion buys:
+             *     `OrderQueries.PopulateUnstartedPromiseWindow`, the guard that decides. A consumer
+             *     that has not deployed the sentence yet renders today's blank line, which is why this
+             *     widening ships first.
+             */
+            promisedDeliveryEarliestWorkingDays?: number | null;
+            /** Format: int32 */
+            promisedDeliveryLatestWorkingDays?: number | null;
             items: components["schemas"]["StorefrontOrderItemDTO"][];
+            /**
+             * @description Order-level invitation to rate the purchase EXPERIENCE (`ServiceReview`) — a
+             *     `/recenzija/{token}` link. Non-null ⇔ the customer may rate the service now AND
+             *     this link lands on a screen that shows the question: goods delivered, order has an
+             *     e-mail, no service review yet, and at least one product of the order already reviewed
+             *     (the ticket names a reviewed product — see the minting comment in OrderQueries; with
+             *     nothing reviewed the per-item PACMS.Business.DTO.Storefront.Order.StorefrontOrderItemDTO.ReviewToken links
+             *     own the path). The storefront gates purely on presence — absent means no ask — and the
+             *     reason this outlives the item links: once every product is reviewed those are rightly
+             *     gone, while the service question can still be open.
+             */
+            serviceReviewToken?: string | null;
             paymentTransaction?: components["schemas"]["StorefrontPaymentTransactionDTO"];
         };
         StorefrontOrderItemDTO: {
@@ -6149,12 +6904,24 @@ export interface components {
             metaCatalogId?: string | null;
             imageUrl?: string | null;
             productSlug?: string | null;
+            /**
+             * @description ROOT-FIRST category name chain for GA4's `item_category..5` on `purchase` —
+             *     see PACMS.Business.DTO.Storefront.Checkout.StorefrontCartItemDTO.CategoryPath for the contract.
+             *     Empty (never null) for an orphaned line or when no catalog is available.
+             */
+            categoryPath: string[];
             /** Format: int32 */
             quantity: number;
             /** Format: double */
             unitPrice: number;
             /** Format: double */
             total: number;
+            /**
+             * @description A ready-to-follow review invitation for this line, or null when the customer cannot or
+             *     need not review it — the order has not been delivered, the product is already reviewed,
+             *     or the line lost its variant so there is no product to point at.
+             */
+            reviewToken?: string | null;
         };
         StorefrontOrderSummaryDTO: {
             /** Format: int64 */
@@ -6214,8 +6981,35 @@ export interface components {
              * @description True when every line of the caller's active cart (bundles expanded to member variants)
              *     has warehouse stock >= the required quantity at this store — "available today".
              *     False means the daily morning transfer fulfills it (usually next working day).
+             *     <br>
+             *     DELETE-AFTER-STOREFRONT-DEPLOY: superseded by PACMS.Business.DTO.Storefront.Checkout.StorefrontPickupLocationDTO.PickupPromise's tier, which
+             *     answers the same question and the date question with it (docs/adr/0010). Kept for one
+             *     release so the storefront can switch at its own pace; the narrowing that removes it is
+             *     its own consumer-first change.
              */
             allItemsAvailableNow: boolean;
+            pickupPromise?: components["schemas"]["StorefrontPickupPromiseDTO"];
+        };
+        /**
+         * @description When a basket can be collected at ONE store (docs/adr/0010): the day the shop can have the
+         *     goods on its floor, resolved against that store's own shelf. Dates in the market zone as
+         *     "yyyy-MM-dd", the spelling PACMS.Business.DTO.Storefront.Checkout.StorefrontDeliveryPromiseDTO uses.
+         *     <br>
+         *     NO WORKING-DAY WINDOW, which is the one field it does not share with the courier promise:
+         *     the van's leg is counted in receiving days (Saturday included), so "za N radnih dana" would
+         *     be a second, wrong arithmetic — and nothing renders it, because a store picker is read with
+         *     a clock and answers in dates.
+         *     <br>
+         *     The TIER is what the picker renders from, not a boolean: "on shelf" means this store's own
+         *     shelf and is the badge ("Dostupno odmah"), anything else is the date. It replaces
+         *     PACMS.Business.DTO.Storefront.Checkout.StorefrontPickupLocationDTO.AllItemsAvailableNow, which is kept for one release
+         *     while the storefront switches.
+         */
+        StorefrontPickupPromiseDTO: {
+            earliestDate: string;
+            latestDate: string;
+            /** @description The basket's tier at THIS store — the slowest line's (`DispatchTierCodes` wire name). */
+            dispatchTier: string;
         };
         /**
          * @description One courier-deliverable settlement for the checkout/address place picker. The full list
@@ -6235,7 +7029,7 @@ export interface components {
             shippingAddress?: string | null;
             shippingCity?: string | null;
             shippingPostalCode?: string | null;
-            note?: string | null;
+            customerNote?: string | null;
             /** Format: int32 */
             paymentMethodId: number;
             useLoyaltyCredit?: boolean;
@@ -6262,6 +7056,37 @@ export interface components {
             /** Format: int32 */
             count: number;
         };
+        /**
+         * @description One attribute value on the PDP; the list order IS the category's effective order. Typed rather than
+         *     pre-formatted: the storefront formats "1,5 – 13 mm" from Value/Max + Unit with its own locale rules,
+         *     and a facet later reads the same shape.
+         */
+        StorefrontProductAttributeDTO: {
+            code: string;
+            /** @description Customer-facing label (Serbian, formal register). */
+            name: string;
+            /** @description decimal | range | boolean | select | text (lower-case AttributeValueTypeCodes name). */
+            type: string;
+            unit?: string | null;
+            /**
+             * Format: double
+             * @description Decimal value, or the range minimum.
+             */
+            value?: number | null;
+            /**
+             * Format: double
+             * @description Range maximum; equals Value when the source printed one number.
+             */
+            max?: number | null;
+            bool?: boolean | null;
+            text?: string | null;
+            /** @description Select: option display names, in the dictionary's option order. */
+            options: string[];
+            /** @description Select: the matching option codes, same order as Options. */
+            optionCodes: string[];
+            /** @description The category's facet intent for this attribute (an activation decision, not a promise the facet is live). */
+            isFacet?: boolean;
+        };
         StorefrontProductAutocompleteDTO: {
             slug?: string | null;
             title?: string | null;
@@ -6277,18 +7102,30 @@ export interface components {
             id: number;
             /** Format: int64 */
             defaultProductVariantId: number;
+            /**
+             * @description The DEFAULT variant's business key (Wings `Šifra`) — the GA4 `item_id` for
+             *     events fired off a card (add_to_wishlist today; view_item_list/select_item when they
+             *     land). NULL when the product has no variants; never an empty string — the storefront
+             *     sink drops unkeyable items rather than grouping them under a blank id.
+             */
+            sku?: string | null;
+            /**
+             * @description Product-level Meta catalogue id — see PACMS.Business.DTO.Storefront.Product.StorefrontProductDTO.MetaCatalogId
+             *     for the id-space contract (never recomputed on the client, must byte-match the feed).
+             */
+            metaCatalogId: string;
             title: string;
             slug: string;
             /**
              * Format: double
              * @description The final price shown to the customer (after any discount).
              */
-            displayPrice: number;
+            effectivePrice: number;
             /**
              * Format: double
              * @description Pre-discount price. Null if no discount is active.
              */
-            originalPrice?: number | null;
+            regularPrice?: number | null;
             /** Format: int32 */
             discountPercentage?: number | null;
             hasDiscount: boolean;
@@ -6297,13 +7134,20 @@ export interface components {
             brandName: string;
             /** @description Null when the brand has no image. See Backend/CLAUDE.md → "Image absence is null". */
             brandImageUrl?: string | null;
-            inStock: boolean;
-            isBackorder: boolean;
+            isOrderable: boolean;
+            isAooso: boolean;
+            /**
+             * @description Whether the card's variant has a live stock source: the fact that tells "Nije u ponudi"
+             *     from "Trenutno nema na stanju" while the card is not orderable (the full telling is on
+             *     PACMS.Business.DTO.Storefront.Product.StorefrontProductVariantDTO.HasLiveStockSource). A widening, so the
+             *     backend deploys first (pacms-workspace#107 redraft row R30).
+             */
+            hasLiveStockSource: boolean;
             /**
              * @description True when this product ALONE earns free delivery (its cheapest variant meets a courier
              *     tier's free-delivery threshold). Drives the static "Besplatna dostava" card line.
              *     Computed server-side against current shipping tiers — see
-             *     ShippingService.QualifiesForFreeDelivery / docs/free-delivery-indicators.md.
+             *     ShippingService.QualifiesForFreeDelivery / umbrella docs/free-delivery-indicators.md.
              */
             hasFreeDelivery: boolean;
             /** Format: double */
@@ -6341,10 +7185,22 @@ export interface components {
              */
             defaultProductVariantId: number;
             title: string;
-            description?: string | null;
+            /**
+             * @description The product summary (workspace `GLOSSARY.md`). Its old name, !:Description,
+             *     is the product description's word, which PACMS.Business.DTO.Storefront.Product.StorefrontProductDTO.HtmlDescription takes once the old
+             *     name is gone: two steps, never one, so no consumer reads one field under the other's
+             *     meaning (pacms-workspace#107 redraft row R36).
+             */
+            summary?: string | null;
             slug: string;
             htmlDescription?: string | null;
             specification?: string | null;
+            /**
+             * @description Zemlja porekla for the PDP declaration (čl. 34), resolved product-first with the
+             *     brand as fallback — the same resolution legacy prodavnicaalata.rs performs, so the
+             *     row appears wherever the site we're replacing shows it. Null when neither level has
+             *     a value; the storefront then omits the row entirely (never "N/A").
+             */
             countryName?: string | null;
             metaTitle: string;
             metaDescription: string;
@@ -6352,12 +7208,12 @@ export interface components {
              * Format: double
              * @description The final price shown to the customer (after any discount).
              */
-            displayPrice: number;
+            effectivePrice: number;
             /**
              * Format: double
              * @description Pre-discount price. Null if no discount is active.
              */
-            originalPrice?: number | null;
+            regularPrice?: number | null;
             /** Format: int32 */
             discountPercentage?: number | null;
             hasDiscount: boolean;
@@ -6389,9 +7245,31 @@ export interface components {
             warrantyImageWidth?: number | null;
             /** Format: int32 */
             warrantyImageHeight?: number | null;
-            inStock: boolean;
+            isOrderable: boolean;
             /** @description True if the product is out of stock but can still be ordered for later delivery. */
-            isBackorder: boolean;
+            isAooso: boolean;
+            /**
+             * @description The default variant's PACMS.Business.DTO.Storefront.Product.StorefrontProductVariantDTO.HasLiveStockSource, as the
+             *     product card carries it: the storefront renders a product as a card where it keeps one
+             *     (wishlist, recently viewed). pacms-workspace#107 redraft row R30.
+             */
+            hasLiveStockSource: boolean;
+            /**
+             * @description Where the goods are when the promise is made — "onshelf" | "transfer" | "supplier"
+             *     (DispatchTierCodes.WireName; the storefront mirrors these names in
+             *     packages/shared/src/constants/delivery-promise.ts). Null when nothing can be promised:
+             *     the default variant is not purchasable, or the fact is unknown. The storefront treats null and
+             *     an unknown name alike (its generic delivery copy), so this field is a pure widening.
+             *     Workspace docs/plans/delivery-promise-plan.md → D3.
+             */
+            dispatchTier?: string | null;
+            /**
+             * Format: int32
+             * @description The supplier the delivery promise keys its supplier-tier cell on:
+             *     `Product.SupplierId ?? Brand.SupplierId` (the ordering page's resolution order).
+             *     Null when neither is mapped; the storefront then reads the tier pool.
+             */
+            deliverySupplierId?: number | null;
             /**
              * @description True when this product ALONE earns free delivery (its cheapest variant meets a courier
              *     tier's free-delivery threshold). Drives the "Besplatna dostava" card line on the surfaces
@@ -6399,7 +7277,7 @@ export interface components {
              *     recently-viewed). The PDP itself does not read this flag — its cart-aware delivery-line
              *     swap is driven by the live cart, not this per-product flag. Computed server-side against
              *     current shipping tiers — see ShippingService.QualifiesForFreeDelivery /
-             *     docs/free-delivery-indicators.md.
+             *     umbrella docs/free-delivery-indicators.md.
              */
             hasFreeDelivery: boolean;
             categoryName: string;
@@ -6410,16 +7288,37 @@ export interface components {
             files: components["schemas"]["StorefrontProductFileDTO"][];
             variants: components["schemas"]["StorefrontProductVariantDTO"][];
             optionGroups: components["schemas"]["StorefrontProductOptionGroupDTO"][];
+            /**
+             * @description Typed attribute values in the category's effective order (workspace docs/product-attribution.md).
+             *     Added 2026-09-08 as a response-field widening (backend-first): empty until the product is attributed.
+             */
+            attributes: components["schemas"]["StorefrontProductAttributeDTO"][];
             /** Format: double */
             averageRating?: number | null;
-            /** Format: int32 */
+            /**
+             * Format: int32
+             * @description Every approved review, written or bare — ships as schema.org `ratingCount`.
+             */
             reviewCount: number;
+            /**
+             * Format: int32
+             * @description The written subset of PACMS.Business.DTO.Storefront.Product.StorefrontProductDTO.ReviewCount — ships as schema.org `reviewCount`.
+             *     Why the two differ: PACMS.Business.Entities.Product.CommentedReviewCount.
+             */
+            commentedReviewCount: number;
+            /**
+             * @description True iff any variant belongs to a LISTED bundle — the PDP's gate for the
+             *     BundlesForProduct fetch, same presence-gate role ReviewCount plays for reviews.
+             *     Deliberately broader than bundle availability (stock/window/price excluded):
+             *     predicate rationale on StorefrontProductHasBundlesTests.
+             */
+            hasBundles: boolean;
             /** Format: int32 */
             maxOrderQuantity?: number | null;
             /**
              * Format: int32
              * @description Minimum order quantity for the default variant (1 = no minimum) — the
-             *                 supplier-pack rule for out-of-stock backorders. See CartService.MinOrderQuantityFloor.
+             *                 supplier-pack rule for out-of-stock AOOSO lines. See CartService.MinOrderQuantityFloor.
              */
             minOrderQuantity: number;
             /** Format: double */
@@ -6464,6 +7363,11 @@ export interface components {
             name: string;
             /** Format: int32 */
             orderNumber: number;
+            /**
+             * @description "size" | "color" | "other" — EnumWire.Name(ProductOptionGroupKindCodes). The storefront
+             *                 picks the combobox placeholder and the schema.org variant property from this, never from Name.
+             */
+            kind: string;
             values: components["schemas"]["StorefrontProductOptionValueDTO"][];
         };
         StorefrontProductOptionValueDTO: {
@@ -6485,7 +7389,13 @@ export interface components {
             id: number;
             /** Format: int32 */
             rating: number;
-            comment: string;
+            /**
+             * @description Null for a bare rating, which is what most reviews are once the invitation e-mail runs:
+             *     its stars are clickable, so the whole interaction can be one click. Such a review still
+             *     counts toward the average and the count — it just renders as stars and a date rather
+             *     than as a card with text.
+             */
+            comment?: string | null;
             reviewerName: string;
             /** Format: date-time */
             createdAt: string;
@@ -6508,14 +7418,35 @@ export interface components {
             /** Format: int64 */
             id: number;
             /** Format: double */
-            displayPrice: number;
+            effectivePrice: number;
             /** Format: double */
-            originalPrice?: number | null;
+            regularPrice?: number | null;
             /** Format: int32 */
             discountPercentage?: number | null;
             hasDiscount: boolean;
-            inStock: boolean;
-            isBackorder: boolean;
+            isOrderable: boolean;
+            isAooso: boolean;
+            /**
+             * @description Whether this variant's stock has a LIVE source of truth — today, that it is linked to
+             *     the ERP (`WingsArticleId != null`). It is the second fact behind the product page's
+             *     two non-orderable states (umbrella ADR 0004, GLOSSARY.md → Availability): a variant with
+             *     no live source is NOT ON OFFER (it returns only by an operator's decision — 0,7% a
+             *     month), one with a live source is TEMPORARILY OUT OF STOCK (7,9% a month, as goods
+             *     arrive). Says nothing while the variant is orderable.
+             *
+             *     A widening, so the backend deploys FIRST: a storefront that does not yet read it treats
+             *     every non-orderable variant as temporarily out, which is the less assertive claim.
+             */
+            hasLiveStockSource: boolean;
+            /**
+             * @description Where the goods are when the promise is made — "onshelf" | "transfer" | "supplier"
+             *     (DispatchTierCodes.WireName; the storefront mirrors these names in
+             *     packages/shared/src/constants/delivery-promise.ts). Null when nothing can be promised:
+             *     the variant is not purchasable, or the fact is unknown. The storefront treats null and
+             *     an unknown name alike (its generic delivery copy), so this field is a pure widening.
+             *     Workspace docs/plans/delivery-promise-plan.md → D3.
+             */
+            dispatchTier?: string | null;
             optionValueIds: number[];
             sku: string;
             barcode?: string | null;
@@ -6525,7 +7456,7 @@ export interface components {
             /**
              * Format: int32
              * @description Minimum order quantity (1 = no minimum) — the supplier-pack rule for
-             *                 out-of-stock backorders. See CartService.MinOrderQuantityFloor.
+             *                 out-of-stock AOOSO lines. See CartService.MinOrderQuantityFloor.
              */
             minOrderQuantity: number;
             warehouseAvailability: components["schemas"]["StorefrontWarehouseAvailabilityDTO"][];
@@ -6534,11 +7465,18 @@ export interface components {
             categorySlug?: string | null;
             brandSlugs: string[];
             tagSlugs: string[];
+            /**
+             * @description Attribute facets the customer ticked, one entry per attribute code (workspace
+             *     docs/product-attribution.md §10, spec pacms-workspace#10). OR within an entry, AND across entries. Unknown codes and unknown values
+             *     are ignored, so a stale shared link renders the listing rather than an error. A REQUEST-FIELD
+             *     widening: an older backend ignores it, which is harmless.
+             */
+            attributeFilters: components["schemas"]["StorefrontAttributeFilterDTO"][];
             /** Format: double */
             minPrice?: number | null;
             /** Format: double */
             maxPrice?: number | null;
-            inStock?: boolean | null;
+            isOrderable?: boolean | null;
             sortBy?: string | null;
             searchTerm?: string | null;
             /**
@@ -6564,19 +7502,28 @@ export interface components {
             data: components["schemas"]["StorefrontProductCardDTO"][];
             /** Format: int32 */
             totalRecords: number;
-            /** @description Brands that have products matching the current filter, with product counts per brand. */
+            /** @description Brands that have products matching the current filter, with product counts per brand. Truncated to the top BrandCount non-selected brands by count; selected brands always ride along. */
             brands: components["schemas"]["StorefrontBrandWithCountDTO"][];
-            /** @description Tags that have products matching the current filter, with product counts per tag. */
-            tags: components["schemas"]["StorefrontTagWithCountDTO"][];
+            /**
+             * Format: int32
+             * @description Total number of non-selected brands with at least one product in the current filter context, before the BrandCount truncation. Lets the client detect truncation and offer the full list.
+             */
+            totalBrandCount: number;
             /** @description Subcategories of the current category that have products matching the current filter, with product counts. */
             categories: components["schemas"]["StorefrontCategoryWithCountDTO"][];
             /** @description Product counts per price range bucket for the price filter UI. */
             priceRangeCounts: components["schemas"]["StorefrontPriceRangeCountDTO"][];
             /**
              * Format: int32
-             * @description Total number of in-stock products matching the current filter (excluding InStock filter itself).
+             * @description Total number of orderable products matching the current filter (excluding the IsOrderable filter itself).
              */
-            inStockCount: number;
+            orderableCount: number;
+            /**
+             * @description Attribute facets for the listing's resolved category, in that category's effective order — empty
+             *     when the listing resolves no single category, when the dictionary binds nothing filterable, or when
+             *     every candidate is under the coverage gate. Semantics: StorefrontProductService.GetAttributeFacets.
+             */
+            attributeFacets: components["schemas"]["StorefrontAttributeFacetDTO"][];
         };
         StorefrontReferralInfoDTO: {
             referralCode: string;
@@ -6589,6 +7536,41 @@ export interface components {
             /** Format: int32 */
             addedCount: number;
         };
+        /** @description What the review page renders before the customer has done anything. */
+        StorefrontReviewRequestContextDTO: {
+            /** @description False for a token that is forged, expired, or points at a vanished order. */
+            isValid: boolean;
+            productName?: string | null;
+            productSlug?: string | null;
+            productImageUrl?: string | null;
+            /**
+             * @description The byline a submission would publish — the form pre-fills its editable name field
+             *     (dictionary key review.nameLabel) with it, which is the consent mechanism for showing
+             *     a name on a public page (grilled 2026-09-06; the full telling sits on
+             *     ProductReview.ReviewerName). Null only on the invalid shape.
+             */
+            reviewerDisplayName?: string | null;
+            /** @description True once this order+product already carries a review, so the form is not offered twice. */
+            alreadyReviewed: boolean;
+            /**
+             * @description The other products on the same order that still have no review, so the thank-you screen
+             *     can offer the next one. Empty for the 79% of orders holding a single product.
+             */
+            otherItems: components["schemas"]["StorefrontReviewableItemDTO"][];
+            /**
+             * @description True once the order carries a PACMS.Business.Entities.ServiceReview, so the page's
+             *     service-rating ask renders only while the question is still open.
+             */
+            hasServiceReview: boolean;
+        };
+        StorefrontReviewableItemDTO: {
+            /** Format: int32 */
+            productId: number;
+            productName: string;
+            productImageUrl?: string | null;
+            /** @description A ready-to-follow token for this item, so the page never mints links itself. */
+            token: string;
+        };
         StorefrontSaveAddressDTO: {
             /** Format: int64 */
             id?: number | null;
@@ -6598,16 +7580,16 @@ export interface components {
             postalCode: string;
             isDefault?: boolean;
         };
-        StorefrontSearchHighlightsDTO: {
-            categories: components["schemas"]["StorefrontCategoryHighlightDTO"][];
-            brands: components["schemas"]["StorefrontBrandHighlightDTO"][];
-        };
         StorefrontSearchResultDTO: {
             results: components["schemas"]["SearchResultItem"][];
             exactSkuMatch: boolean;
             matchedSku?: string | null;
             searchUnavailable: boolean;
-            brandCategory?: components["schemas"]["BrandCategorySuggestionDTO"];
+            brandCategory?: components["schemas"]["BrandCategoryShortcutDTO"];
+        };
+        StorefrontSearchSuggestionsDTO: {
+            categories: components["schemas"]["StorefrontCategorySuggestionDTO"][];
+            brands: components["schemas"]["StorefrontBrandSuggestionDTO"][];
         };
         StorefrontShippingTierDTO: {
             /** Format: int32 */
@@ -6628,12 +7610,37 @@ export interface components {
         };
         StorefrontSiteSettingsDTO: {
             displayedPhone: string;
+            activeAnnouncement?: components["schemas"]["StorefrontAnnouncementDTO"];
+            /**
+             * @description The firm's closures that have not ended yet, oldest first, as market-zone dates
+             *     (workspace docs/plans/delivery-promise-plan.md → D5). Empty list, never null: this is a
+             *     field on the same always-bodied document as the announcement, for the same 204 reason.
+             *     Deliberately no [Required]: it would generate NotEmpty() and refuse the common empty list.
+             */
+            upcomingClosures?: components["schemas"]["StorefrontFirmClosureDTO"][] | null;
         };
-        StorefrontStockNotificationDTO: {
-            /** Format: email */
-            email: string;
-            /** Format: int64 */
-            productVariantId: number;
+        /**
+         * @description A review left through the e-mail invitation's signed link. The token carries WHO and WHICH
+         *     PRODUCT, so neither is a field here — a client-supplied product id would be exactly the
+         *     retargeting the signature exists to prevent.
+         */
+        StorefrontSubmitReviewByTokenDTO: {
+            token: string;
+            /** Format: int32 */
+            rating: number;
+            /**
+             * @description Optional, and the empty string an unfilled textarea posts means the same as absent —
+             *     hence PACMS.Business.ValidationRules.OptionalStringLengthAttribute, not a raw StringLength whose
+             *     MinimumLength would reject "" at the ModelState filter before the action runs.
+             */
+            comment?: string | null;
+            /**
+             * @description The public byline, pre-filled by the form from the context's ReviewerDisplayName and
+             *     editable. Optional for the same deploy reason as Comment's attribute choice: an older
+             *     storefront build simply omits it, and the display chain then serves the order's name.
+             *     Length ceiling matches ProductReview.ReviewerName.
+             */
+            reviewerName?: string | null;
         };
         StorefrontSubmitReviewDTO: {
             /** Format: int32 */
@@ -6641,6 +7648,34 @@ export interface components {
             /** Format: int32 */
             rating: number;
             comment: string;
+        };
+        /**
+         * @description What happened to a submitted review. PACMS.Business.DTO.Storefront.Reviews.StorefrontSubmitReviewResultDTO.IsPublished is the whole point: a
+         *     customer told nothing returns to the product page, finds no review, and concludes we deleted
+         *     it. Which reviews publish themselves is
+         *     M:PACMS.Business.Services.DomainServices.ProductReviewQueries.AutoPublishes(System.Int32,System.String,System.Boolean).
+         */
+        StorefrontSubmitReviewResultDTO: {
+            isPublished: boolean;
+            otherItems: components["schemas"]["StorefrontReviewableItemDTO"][];
+            hasServiceReview: boolean;
+        };
+        /**
+         * @description A rating of the purchase experience, on the strength of the same invitation token — the
+         *     token proves the order, and the product it names is irrelevant here, so ANY of the order's
+         *     line tokens authorises this write.
+         */
+        StorefrontSubmitServiceReviewByTokenDTO: {
+            token: string;
+            /** Format: int32 */
+            rating: number;
+            /**
+             * @description Null means "no comment provided", never "clear the comment": the page submits the star
+             *     click alone first and offers the comment as a follow-up write, so a later rating-only
+             *     submit must not erase an earlier comment (same silence-is-not-an-instruction rule the
+             *     bulk updates follow).
+             */
+            comment?: string | null;
         };
         StorefrontTagCardDTO: {
             /** Format: int32 */
@@ -6666,26 +7701,15 @@ export interface components {
             bannerImageWidth?: number | null;
             /** Format: int32 */
             bannerImageHeight?: number | null;
-            bannerVideoThumbnailUrl?: string | null;
-            /** Format: int32 */
-            bannerVideoDurationSeconds?: number | null;
             isPromotion: boolean;
             /** Format: int32 */
             discountPercentage?: number | null;
+            /** @description Plain-text lead-in under the H1; see Tag.ShortDescription. */
+            shortDescription?: string | null;
             htmlDescription?: string | null;
             brandImageUrl?: string | null;
             brandSlug?: string | null;
-        };
-        StorefrontTagWithCountDTO: {
-            /** Format: int64 */
-            id: number;
-            name: string;
-            slug: string;
-            color: string;
-            /** Format: int32 */
-            orderNumber?: number | null;
-            /** Format: int32 */
-            productCount: number;
+            hasProducts?: boolean | null;
         };
         StorefrontUnsubscribeDTO: {
             type: string;
@@ -6701,6 +7725,11 @@ export interface components {
             hasOptedOutOfCartEmails?: boolean | null;
             hasOptedOutOfPriceDropEmails?: boolean | null;
             hasOptedOutOfLoyaltyEmails?: boolean | null;
+            /**
+             * @description Nullable like its siblings: an omitted toggle must leave the setting alone,
+             *                 never silently re-subscribe someone.
+             */
+            hasOptedOutOfReviewEmails?: boolean | null;
         };
         StorefrontUserProfileDTO: {
             email: string;
@@ -6710,6 +7739,12 @@ export interface components {
             hasOptedOutOfCartEmails?: boolean;
             hasOptedOutOfPriceDropEmails?: boolean;
             hasOptedOutOfLoyaltyEmails?: boolean;
+            /**
+             * @description Read from PACMS.Business.Entities.EmailOptOut, not from a User column: the review stream
+             *     postdates that entity, which is the single source of truth for new streams. The three
+             *     flags above are legacy parallel authority, not a pattern to copy.
+             */
+            hasOptedOutOfReviewEmails?: boolean;
             /** Format: double */
             loyaltyBalance: number;
         };
@@ -6761,9 +7796,9 @@ export interface components {
             hasOptedOutOfPriceDropEmails?: boolean | null;
             hasOptedOutOfLoyaltyEmails?: boolean | null;
             referralCode?: string | null;
-            referredByUserDisplayName?: string | null;
             /** Format: int64 */
             referredByUserId?: number | null;
+            referredByUserDisplayName?: string | null;
         };
         VerificationTokenRequestDTO: {
             verificationCode: string;

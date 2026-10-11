@@ -26,7 +26,7 @@ const ProductDetail = ({
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.title,
-    description: product.description,
+    description: product.summary,
     // Omitted rather than null when the product has no image: `"image": null`
     // is invalid schema.org and Google reads the whole Product block as
     // malformed. TypeScript can't catch it here (the literal is untyped).
@@ -77,10 +77,10 @@ const ProductDetail = ({
               {product.title}
             </h1>
 
-            {product.description && (
+            {product.summary && (
               <div
                 className="text-muted-foreground mt-3 leading-relaxed whitespace-pre-line"
-                dangerouslySetInnerHTML={{ __html: product.description }}
+                dangerouslySetInnerHTML={{ __html: product.summary }}
               />
             )}
 
