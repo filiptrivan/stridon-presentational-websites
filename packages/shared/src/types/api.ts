@@ -7186,10 +7186,11 @@ export interface components {
             defaultProductVariantId: number;
             title: string;
             /**
-             * @description The product summary (workspace `GLOSSARY.md`). Its old name, !:Description,
-             *     is the product description's word, which PACMS.Business.DTO.Storefront.Product.StorefrontProductDTO.HtmlDescription takes once the old
-             *     name is gone: two steps, never one, so no consumer reads one field under the other's
-             *     meaning (pacms-workspace#107 redraft row R36).
+             * @description The product summary (workspace `GLOSSARY.md`). Its old name, `description`, is
+             *     the product description's word, which PACMS.Business.DTO.Storefront.Product.StorefrontProductDTO.HtmlDescription takes in a later push
+             *     than the one that dropped it (PA Board 7746311, "Seven pa-cms entities take their glossary
+             *     names…"), so no consumer reads one field under the other's meaning (pacms-workspace#107
+             *     redraft row R36).
              */
             summary?: string | null;
             slug: string;
