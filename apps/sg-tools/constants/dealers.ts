@@ -225,4 +225,14 @@ export const DEALERS: Dealer[] = [
     category: "dealer",
     coordinates: { lat: 43.9260388, lng: 21.3749161 },
   },
+  {
+    id: "stridon-group-ugrinovacka",
+    name: "Stridon Group D.O.O.",
+    address: "Ugrinovačka 212",
+    city: "Beograd",
+    email: "office@stridon.rs",
+    website: "https://www.stridon.rs/",
+    category: "dealer",
+    coordinates: { lat: 44.8479396, lng: 20.3710667 },
+  },
 ];
