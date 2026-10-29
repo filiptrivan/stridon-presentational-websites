@@ -281,5 +281,15 @@ export const DEALERS: Dealer[] = [
     category: "dealer",
     coordinates: { lat: 44.7833373, lng: 20.4815355 },
   },
+  {
+    id: "retro-style",
+    name: "Retro Style",
+    address: "Ruzmarina 24",
+    city: "Donja Vrežina",
+    phone: "069/653-665",
+    email: "retrostylenis@gmail.com",
+    category: "dealer",
+    coordinates: { lat: 43.3283518, lng: 21.956733 },
+  },
   ...SERVICE_DEALERS,
 ];
