@@ -235,16 +235,6 @@ export const DEALERS: Dealer[] = [
     coordinates: { lat: 45.67155, lng: 18.986675 },
   },
   {
-    id: "sraf-sop",
-    name: "Šraf Šop",
-    address: "Đure Daničića 83",
-    city: "Smederevo",
-    phone: "060/333-7520",
-    email: "srafsop@gmail.com",
-    category: "dealer",
-    coordinates: { lat: 44.6571172, lng: 20.9327995 },
-  },
-  {
     id: "central-h",
     name: "Central-H",
     address: "Bulevar patrijarha Germana 2a",
