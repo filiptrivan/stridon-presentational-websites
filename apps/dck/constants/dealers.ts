@@ -234,5 +234,15 @@ export const DEALERS: Dealer[] = [
     category: "dealer",
     coordinates: { lat: 45.67155, lng: 18.986675 },
   },
+  {
+    id: "master-alati",
+    name: "Master Alati",
+    address: "Nikole Pašića 24",
+    city: "Zrenjanin",
+    phone: "023/603-110",
+    email: "masteralati@gmail.com",
+    category: "dealer",
+    coordinates: { lat: 45.377845, lng: 20.4029825 },
+  },
   ...SERVICE_DEALERS,
 ];
