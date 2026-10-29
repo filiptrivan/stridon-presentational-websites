@@ -283,5 +283,13 @@ export const DEALERS: Dealer[] = [
     category: "dealer",
     coordinates: { lat: 44.6571172, lng: 20.9327995 },
   },
+  {
+    id: "central-h",
+    name: "Central-H",
+    address: "Bulevar patrijarha Germana 2a",
+    city: "Beograd",
+    category: "dealer",
+    coordinates: { lat: 44.720971, lng: 20.5032196 },
+  },
   ...SERVICE_DEALERS,
 ];
