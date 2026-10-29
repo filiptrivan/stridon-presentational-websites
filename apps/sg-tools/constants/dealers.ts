@@ -214,4 +214,15 @@ export const DEALERS: Dealer[] = [
     category: "dealer",
     coordinates: { lat: 44.6571172, lng: 20.9327995 },
   },
+  {
+    id: "alati-i-oprema-kneza-mihajla",
+    name: "Alati i Oprema",
+    address: "Kneza Mihajla 39",
+    city: "Ćuprija",
+    phone: "061/243-4739",
+    email: "info@alati-i-oprema.rs",
+    website: "https://alati-i-oprema.rs/",
+    category: "dealer",
+    coordinates: { lat: 43.9260388, lng: 21.3749161 },
+  },
 ];
