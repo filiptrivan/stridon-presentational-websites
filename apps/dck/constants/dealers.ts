@@ -282,5 +282,14 @@ export const DEALERS: Dealer[] = [
     category: "dealer",
     coordinates: { lat: 45.377845, lng: 20.4029825 },
   },
+  {
+    id: "sam-svoj-majstor",
+    name: "Sam Svoj Majstor",
+    address: "Miška Jovanovića 16",
+    city: "Beograd",
+    phone: "011/2473-913",
+    category: "dealer",
+    coordinates: { lat: 44.7833373, lng: 20.4815355 },
+  },
   ...SERVICE_DEALERS,
 ];
