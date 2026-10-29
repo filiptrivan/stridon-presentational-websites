@@ -235,16 +235,6 @@ export const DEALERS: Dealer[] = [
     coordinates: { lat: 45.67155, lng: 18.986675 },
   },
   {
-    id: "stator",
-    name: "Stator",
-    address: "Šabački put 6",
-    city: "Lozničko Polje",
-    phone: "015/889-158",
-    email: "statordoo@gmail.com",
-    category: "dealer",
-    coordinates: { lat: 44.5495008, lng: 19.2319999 },
-  },
-  {
     id: "sraf-sop",
     name: "Šraf Šop",
     address: "Đure Daničića 83",
