@@ -7224,28 +7224,6 @@ export interface components {
             brandSlug: string;
             /** @description Null when the brand has no image. See Backend/CLAUDE.md → "Image absence is null". */
             brandImageUrl?: string | null;
-            warrantyName?: string | null;
-            /**
-             * Format: int32
-             * @description Null or >= 1 — 0 is not a legal Warranty.DurationMonths value.
-             */
-            warrantyDurationMonths?: number | null;
-            /**
-             * @description True = the program is the statutory conformity period (saobraznost), not a
-             *     voluntary warranty — the storefront relabels the duration and hides the
-             *     extension-guide link.
-             */
-            warrantyIsStatutoryConformity: boolean;
-            /**
-             * @description Storefront warranty-extension guide slug (null = no guide; the storefront
-             *     links the badge and shows the extension link only when this resolves).
-             */
-            warrantyGuideSlug?: string | null;
-            warrantyImageUrl?: string | null;
-            /** Format: int32 */
-            warrantyImageWidth?: number | null;
-            /** Format: int32 */
-            warrantyImageHeight?: number | null;
             isOrderable: boolean;
             /** @description True if the product is out of stock but can still be ordered for later delivery. */
             isAooso: boolean;
