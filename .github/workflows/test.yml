@@ -75,7 +75,7 @@ jobs:
     env:
       API_URL: ${{ secrets.API_URL }}
       PACMS_API_KEY: ${{ secrets.PACMS_API_KEY }}
-      # apiFetch sends it, so the suite's Storefront reads pass the gate (pacms-workspace#2144).
+      # read() in dto-shape.integration.test.ts sends it, so its reads pass the gate (pacms-workspace#2144).
       PACMS_SCRIPTS_API_KEY: ${{ secrets.PACMS_SCRIPTS_API_KEY }}
     steps:
       - uses: actions/checkout@v4

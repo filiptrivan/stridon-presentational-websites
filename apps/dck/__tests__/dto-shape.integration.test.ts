@@ -102,7 +102,7 @@ function requiredFields(schemaName: string): string[] {
 }
 
 // The scripts' key, a key with no role. A Storefront action that is not
-// browser-callable answers only our servers, and an API key counts as one
+// Browser-callable answers only our servers, and an API key counts as one
 // (pa-cms ADR 0173). pa-cms's deploy gate runs this suite on a loopback with no
 // Cloudflare edge, so only a key passes there (pacms-workspace#2144).
 const SCRIPTS_API_KEY = process.env.PACMS_SCRIPTS_API_KEY;
