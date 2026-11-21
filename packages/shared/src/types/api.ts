@@ -7056,37 +7056,6 @@ export interface components {
             /** Format: int32 */
             count: number;
         };
-        /**
-         * @description One attribute value on the PDP; the list order IS the category's effective order. Typed rather than
-         *     pre-formatted: the storefront formats "1,5 – 13 mm" from Value/Max + Unit with its own locale rules,
-         *     and a facet later reads the same shape.
-         */
-        StorefrontProductAttributeDTO: {
-            code: string;
-            /** @description Customer-facing label (Serbian, formal register). */
-            name: string;
-            /** @description decimal | range | boolean | select | text (lower-case AttributeValueTypeCodes name). */
-            type: string;
-            unit?: string | null;
-            /**
-             * Format: double
-             * @description Decimal value, or the range minimum.
-             */
-            value?: number | null;
-            /**
-             * Format: double
-             * @description Range maximum; equals Value when the source printed one number.
-             */
-            max?: number | null;
-            bool?: boolean | null;
-            text?: string | null;
-            /** @description Select: option display names, in the dictionary's option order. */
-            options: string[];
-            /** @description Select: the matching option codes, same order as Options. */
-            optionCodes: string[];
-            /** @description The category's facet intent for this attribute (an activation decision, not a promise the facet is live). */
-            isFacet?: boolean;
-        };
         StorefrontProductAutocompleteDTO: {
             slug?: string | null;
             title?: string | null;
@@ -7267,11 +7236,6 @@ export interface components {
             files: components["schemas"]["StorefrontProductFileDTO"][];
             variants: components["schemas"]["StorefrontProductVariantDTO"][];
             optionGroups: components["schemas"]["StorefrontProductOptionGroupDTO"][];
-            /**
-             * @description Typed attribute values in the category's effective order (workspace docs/product-attribution.md).
-             *     Added 2026-09-08 as a response-field widening (backend-first): empty until the product is attributed.
-             */
-            attributes: components["schemas"]["StorefrontProductAttributeDTO"][];
             /** Format: double */
             averageRating?: number | null;
             /**
