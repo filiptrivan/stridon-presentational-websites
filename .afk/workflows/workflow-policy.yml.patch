@@ -1,0 +1,50 @@
+diff --git a/.github/workflows/workflow-policy.yml b/.github/workflows/workflow-policy.yml
+new file mode 100644
+index 0000000..3c40fb5
+--- /dev/null
++++ b/.github/workflows/workflow-policy.yml
+@@ -0,0 +1,44 @@
++# Holds this repo's workflows to the shared workflow policy of filiptrivan/ci-workflows: no job runs
++# on `ubuntu-latest`, every package a job fetches from npm at run time names a version, and every
++# setup-node step reads its Node from the root `.nvmrc` (pacms-workspace#693).
++#
++# No paths filter: the check takes seconds, and it then also catches a rule ci-workflows' `main`
++# gains after this repo's workflows last changed. Not a required check of the ruleset.
++
++name: Workflow policy
++
++on:
++  push:
++    branches: [main]
++  pull_request:
++
++concurrency:
++  group: workflow-policy-${{ github.ref }}
++  cancel-in-progress: true
++
++permissions:
++  contents: read
++
++jobs:
++  pins:
++    name: Workflow policy
++    # No run on a Software factory afk/ pull request or a session/ one: such a pull request's CI decides nothing, and main's push runs this job on the merged tree.
++    if: github.event_name != 'pull_request' || !(startsWith(github.head_ref, 'afk/') || startsWith(github.head_ref, 'session/'))
++    runs-on: ubuntu-24.04
++    timeout-minutes: 5
++    steps:
++      - uses: actions/checkout@v4
++        with:
++          persist-credentials: false
++
++      # ci-workflows' `main`, which a push sends before this repo's.
++      - uses: actions/checkout@v4
++        with:
++          repository: filiptrivan/ci-workflows
++          ref: main
++          path: ci-workflows
++          persist-credentials: false
++
++      # The runner image's own Node, with no setup-node step: the checker imports only Node's built-ins.
++      - name: No job on ubuntu-latest, no unversioned npm package, Node from .nvmrc
++        run: node ci-workflows/workflow-policy/pins.mjs --root .
