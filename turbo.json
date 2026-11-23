@@ -31,7 +31,7 @@
     },
     "test:integration": {
       "cache": false,
-      "env": ["API_URL", "PACMS_API_KEY"]
+      "env": ["API_URL", "PACMS_API_KEY", "PACMS_SCRIPTS_API_KEY"]
     }
   }
 }

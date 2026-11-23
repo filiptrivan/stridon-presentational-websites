@@ -101,12 +101,22 @@ function requiredFields(schemaName: string): string[] {
   );
 }
 
+// The scripts' key, a key with no role. A Storefront action that is not
+// Browser-callable answers only our servers, and an API key counts as one
+// (pa-cms ADR 0173). pa-cms's deploy gate runs this suite on a loopback with no
+// Cloudflare edge, so only a key passes there (pacms-workspace#2144).
+const SCRIPTS_API_KEY = process.env.PACMS_SCRIPTS_API_KEY;
+
 async function read<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
     ...init,
-    headers: { "Content-Type": "application/json", ...init?.headers },
+    headers: {
+      "Content-Type": "application/json",
+      ...(SCRIPTS_API_KEY ? { "X-Api-Key": SCRIPTS_API_KEY } : {}),
+      ...init?.headers,
+    },
   });
-  expect(res.status, `${path} should be readable anonymously`).toBe(200);
+  expect(res.status, `${path} should answer our servers`).toBe(200);
   return (await res.json()) as T;
 }
 
