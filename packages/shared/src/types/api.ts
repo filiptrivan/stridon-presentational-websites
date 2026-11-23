@@ -6463,7 +6463,7 @@ export interface components {
              * Format: int32
              * @description Per-line minimum order quantity (1 = no minimum). Out-of-stock AOOSO lines carry
              *     the supplier-pack minimum (per-variant override or price tier). A quantity below this
-             *     blocks checkout; the UI offers a bump-to-minimum fix. See CartService.MinOrderQuantityFloor.
+             *     blocks checkout; the UI offers a bump-to-minimum fix. See OrderQuantityLimits.MinOrderQuantityFloor.
              */
             minOrderQuantity: number;
             isOrderable: boolean;
@@ -7131,7 +7131,7 @@ export interface components {
             /**
              * Format: int32
              * @description Minimum order quantity for the default variant (1 = no minimum) — lets the
-             *                 card's add-to-cart start at the minimum. See CartService.MinOrderQuantityFloor.
+             *                 card's add-to-cart start at the minimum. See OrderQuantityLimits.MinOrderQuantityFloor.
              */
             minOrderQuantity: number;
         };
@@ -7261,7 +7261,7 @@ export interface components {
             /**
              * Format: int32
              * @description Minimum order quantity for the default variant (1 = no minimum) — the
-             *                 supplier-pack rule for out-of-stock AOOSO lines. See CartService.MinOrderQuantityFloor.
+             *                 supplier-pack rule for out-of-stock AOOSO lines. See OrderQuantityLimits.MinOrderQuantityFloor.
              */
             minOrderQuantity: number;
             /** Format: double */
@@ -7274,7 +7274,7 @@ export interface components {
              *                 by ShippingWeight so the per-product delivery display (PDP + JSON-LD) brackets on the same
              *                 value the cart charges — the storefront must never reimplement the volumetric formula.
              *                 Always set (0 for a dimensionless product, never null). Cart-level tier selection stays
-             *                 fully server-side (BuildCartDTO).
+             *                 fully server-side (CartView.BuildAsync).
              */
             chargeableWeightKg: number;
             /** @description SKU of the default variant. */
@@ -7399,7 +7399,7 @@ export interface components {
             /**
              * Format: int32
              * @description Minimum order quantity (1 = no minimum) — the supplier-pack rule for
-             *                 out-of-stock AOOSO lines. See CartService.MinOrderQuantityFloor.
+             *                 out-of-stock AOOSO lines. See OrderQuantityLimits.MinOrderQuantityFloor.
              */
             minOrderQuantity: number;
             warehouseAvailability: components["schemas"]["StorefrontWarehouseAvailabilityDTO"][];
