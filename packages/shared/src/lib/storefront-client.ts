@@ -1,10 +1,9 @@
-// The one place a server of these sites sends a Storefront API request (umbrella ADR 0241,
-// every server-side Storefront API caller carries a credential, and its client throws without
-// one). The lint rule in `packages/shared/eslint/storefront-address.mjs` refuses a Storefront
-// API address in any other file, except a test suite.
+// The one place a server of these sites sends a Storefront API request (umbrella ADR 0241).
+// The lint rule `packages/shared/eslint/storefront-address.mjs` refuses a Storefront API address
+// in any other file, except a test.
 //
-// The Storefront gate in pa-cms answers an action that is not Browser-callable only for "our
-// server": a call carrying the Cloudflare edge marker, or an authenticated API key.
+// The Storefront gate in pa-cms serves an action that is not Browser-callable only to "our
+// server". That is a call with the Cloudflare edge marker, or a call with an API key.
 // - STOREFRONT_SERVER_SECRET goes as X-Internal-Bypass. Only a deployed storefront holds it,
 //   and Cloudflare turns it into the edge marker, so it means nothing on loopback or a local
 //   backend.
@@ -19,8 +18,8 @@
 // Kept free of React and @brand/config, so a dck route handler or server action can import it
 // without a brand slug at module load.
 
-export const STOREFRONT_SERVER_SECRET_ENV = "STOREFRONT_SERVER_SECRET";
-export const SCRIPTS_API_KEY_ENV = "PACMS_SCRIPTS_API_KEY";
+const STOREFRONT_SERVER_SECRET_ENV = "STOREFRONT_SERVER_SECRET";
+const SCRIPTS_API_KEY_ENV = "PACMS_SCRIPTS_API_KEY";
 
 export class MissingStorefrontCredentialError extends Error {
   constructor() {
@@ -96,8 +95,9 @@ export function fetchProductsAutocompleteByBrand(
 }
 
 /**
- * dck's warranty registration. The action's `[AuthGuard]` authorizes an API key itself, beyond
- * the gate, and the edge marker is no authentication, so dck sends its own key (`PACMS_API_KEY`).
+ * dck's warranty registration, with DCK's own key (`PACMS_API_KEY`). The action has
+ * `[AuthGuard]`, which needs an authenticated API key beyond the gate. The edge marker
+ * authenticates nobody, and DCK's key will get the action's permission (PA Board 7699169).
  * No timeout: see the end of request-budget.ts.
  */
 export function postWarrantyRegistration(

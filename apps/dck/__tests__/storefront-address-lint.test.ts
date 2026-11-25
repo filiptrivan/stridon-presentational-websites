@@ -55,32 +55,30 @@ describe("the Storefront address lint rule", () => {
   it.each([
     "packages/shared/src/lib/storefront-client.ts",
     "packages/shared/src/lib/api.ts",
+    "packages/shared/src/types/api.ts",
   ])("allows the shared library file %s", (libraryFile) => {
-    const path = resolve(REPO_ROOT, libraryFile);
-    const source = readFileSync(path, "utf8");
+    const source = readFileSync(resolve(REPO_ROOT, libraryFile), "utf8");
     expect(source).toContain("/api/Storefront");
 
-    const linter = new Linter({ cwd: REPO_ROOT });
-    const messages = linter.verify(
-      source,
-      [{ files: ["**/*.ts"], languageOptions: { parser: tsParser() } }, ...storefrontAddressConfig],
-      path,
-    );
+    const messages = lintWithRuleBlock(libraryFile, source);
     expect(messages.map((message) => message.ruleId)).not.toContain(RULE_ID);
     expect(messages.filter((message) => message.fatal)).toEqual([]);
   });
 
   it("refuses the same fixture under the rule's own config block", () => {
-    const path = resolve(REPO_ROOT, "packages/shared/src/lib/other.ts");
-    const linter = new Linter({ cwd: REPO_ROOT });
-    const messages = linter.verify(
-      OWN_FETCH,
-      [{ files: ["**/*.ts"], languageOptions: { parser: tsParser() } }, ...storefrontAddressConfig],
-      path,
-    );
+    const messages = lintWithRuleBlock("packages/shared/src/lib/other.ts", OWN_FETCH);
     expect(messages.map((message) => message.ruleId)).toContain(RULE_ID);
   });
 });
+
+/** Lints `source` as the repo file `relativePath` under the rule's config block alone. */
+function lintWithRuleBlock(relativePath: string, source: string) {
+  return new Linter({ cwd: REPO_ROOT }).verify(
+    source,
+    [{ files: ["**/*.ts"], languageOptions: { parser: tsParser() } }, ...storefrontAddressConfig],
+    resolve(REPO_ROOT, relativePath),
+  );
+}
 
 function tsParser(): Linter.Parser {
   // eslint-config-next brings typescript-eslint; its parser reads the library's TypeScript.

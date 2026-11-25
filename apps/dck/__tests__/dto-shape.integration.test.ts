@@ -102,11 +102,10 @@ function requiredFields(schemaName: string): string[] {
   );
 }
 
-// The Storefront gate answers an action that is not Browser-callable only for our servers, and
-// pa-cms's deploy gate runs this suite on a loopback with no Cloudflare edge, so only a key passes
-// there (pacms-workspace#2144). The shared credential function picks it: the Scripts' key in CI.
-// It throws when this machine holds no credential, so the suite fails at once and never reads a
-// refusal as a shape break (umbrella ADR 0241).
+// pa-cms's deploy check runs this suite on a loopback with no Cloudflare edge. There, only an
+// API key passes the Storefront gate (pacms-workspace#2144). The shared credential function picks
+// the credential: in CI, the Scripts' key. With no credential it throws, so the suite fails at
+// once (umbrella ADR 0241).
 async function read<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
     ...init,

@@ -1,15 +1,15 @@
-// Refuses a Storefront API address (the text `/api/Storefront`) outside the shared API library,
-// so that no server caller builds its own request and forgets the credential (umbrella ADR 0241,
-// every server-side Storefront API caller carries a credential, and its client throws without one).
+// Refuses a Storefront API address (the text `/api/Storefront`) outside the shared API library.
+// Thus no server caller builds its own request and forgets the credential (umbrella ADR 0241).
 //
 // Each app's eslint.config.mjs spreads `storefrontAddressConfig`. Allowed:
 // - the shared API library: packages/shared/src/lib/storefront-client.ts and api.ts;
+// - the generated OpenAPI types, packages/shared/src/types/api.ts, which name each route;
 // - a test file: an integration suite keeps its own `fetch`, to see what crosses HTTP, and takes
 //   its headers from `storefrontCredentialHeaders()`; a unit test mocks `fetch`.
-// `turbo lint` reaches only the apps, so the library files are named here for the day packages
-// lint too; the check `apps/dck/__tests__/storefront-address-lint.test.ts` holds both cases.
+// `turbo lint` reaches only the apps. The library files are named here for the day packages lint
+// too. `apps/dck/__tests__/storefront-address-lint.test.ts` checks both cases.
 
-const ADDRESS = "/api/Storefront";
+const STOREFRONT_ADDRESS = "/api/Storefront";
 
 const MESSAGE =
   "A Storefront API address belongs only in packages/shared/src/lib/storefront-client.ts or " +
@@ -24,7 +24,7 @@ const noStorefrontAddress = {
   },
   create(context) {
     const check = (node, text) => {
-      if (typeof text === "string" && text.includes(ADDRESS)) {
+      if (typeof text === "string" && text.includes(STOREFRONT_ADDRESS)) {
         context.report({ node, messageId: "address" });
       }
     };
@@ -35,7 +35,7 @@ const noStorefrontAddress = {
   },
 };
 
-export const storefrontAddressPlugin = {
+const storefrontAddressPlugin = {
   meta: { name: "storefront-address" },
   rules: { "no-storefront-address": noStorefrontAddress },
 };
@@ -46,6 +46,7 @@ export const storefrontAddressConfig = [
     ignores: [
       "**/packages/shared/src/lib/storefront-client.ts",
       "**/packages/shared/src/lib/api.ts",
+      "**/packages/shared/src/types/api.ts",
       "**/*.test.{ts,tsx}",
     ],
     plugins: { "storefront-address": storefrontAddressPlugin },

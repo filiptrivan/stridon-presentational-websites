@@ -80,8 +80,7 @@ export async function submitWarrantyRegistration(
     return { success: false, error: FILE_TYPE_ERROR };
   }
 
-  // DCK's own key, not the Scripts' key: the action's [AuthGuard] authorizes the key itself,
-  // beyond the Storefront gate, and the edge marker the server secret earns authenticates nobody.
+  // DCK's own key, not the Scripts' key: see postWarrantyRegistration.
   const apiUrl = process.env.API_URL;
   const apiKey = process.env.PACMS_API_KEY;
   if (!apiUrl || !apiKey) {
