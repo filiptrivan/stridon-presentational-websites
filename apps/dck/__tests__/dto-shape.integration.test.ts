@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 
 import ts from "typescript";
 import { describe, expect, it } from "vitest";
+import { storefrontCredentialHeaders } from "@brand/shared/lib/storefront-client";
 
 /**
  * The backend's own `[Required]` declarations, checked against what it really sends.
@@ -101,18 +102,17 @@ function requiredFields(schemaName: string): string[] {
   );
 }
 
-// The scripts' key, a key with no role. A Storefront action that is not
-// Browser-callable answers only our servers, and an API key counts as one
-// (pa-cms ADR 0173). pa-cms's deploy gate runs this suite on a loopback with no
-// Cloudflare edge, so only a key passes there (pacms-workspace#2144).
-const SCRIPTS_API_KEY = process.env.PACMS_SCRIPTS_API_KEY;
-
+// The Storefront gate answers an action that is not Browser-callable only for our servers, and
+// pa-cms's deploy gate runs this suite on a loopback with no Cloudflare edge, so only a key passes
+// there (pacms-workspace#2144). The shared credential function picks it: the Scripts' key in CI.
+// It throws when this machine holds no credential, so the suite fails at once and never reads a
+// refusal as a shape break (umbrella ADR 0241).
 async function read<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
     ...init,
     headers: {
       "Content-Type": "application/json",
-      ...(SCRIPTS_API_KEY ? { "X-Api-Key": SCRIPTS_API_KEY } : {}),
+      ...storefrontCredentialHeaders(),
       ...init?.headers,
     },
   });

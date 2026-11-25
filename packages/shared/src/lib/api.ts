@@ -23,6 +23,7 @@ import type { Tag } from "../types/tags";
 import { TAGS } from "./cache-tags";
 import { reportError } from "./report-error";
 import { type FetchTier, budgetMsFor } from "./request-budget";
+import { storefrontFetch } from "./storefront-client";
 
 class ApiError extends Error {
   constructor(
@@ -35,16 +36,6 @@ class ApiError extends Error {
   }
 }
 
-const API_URL = process.env.API_URL;
-// Trusted first-party caller secret, sent as X-Internal-Bypass on every apiFetch. The Cloudflare
-// edge fronting api.prodavnicaalata.rs validates + strips it and injects the trusted marker, so
-// SSG build reads aren't rate-limited as anonymous. Absent ⇒ not sent (local/dev); never touches
-// auth. See PACMS docs/trusted-first-party-caller.md.
-const RATELIMIT_BYPASS_SECRET = process.env.PACMS_RATELIMIT_BYPASS_SECRET;
-// Built once at module load, not per request.
-const BYPASS_HEADERS: Record<string, string> = RATELIMIT_BYPASS_SECRET
-  ? { "X-Internal-Bypass": RATELIMIT_BYPASS_SECRET }
-  : {};
 const BRAND_SLUG = getBrandConfig().brandSlug;
 
 // One day for structural reads, one hour for product reads. A page revalidates
@@ -70,15 +61,15 @@ const requestJson = cache(
     tag: string,
     body: string | undefined,
   ): Promise<unknown> => {
-    if (!API_URL) throw new Error("API_URL is required");
-
     const budgetMs = budgetMsFor(tier);
     const context = {
       source: `apiFetch ${path}`,
       details: `tier=${tier} budgetMs=${budgetMs}`,
     };
 
-    const res = await fetch(`${API_URL}${path}`, {
+    // storefrontFetch carries the credential, and rejects with no request sent when API_URL or
+    // the credential is missing. That rejection is reported below like any other.
+    const res = await storefrontFetch(path, {
       method: body === undefined ? "GET" : "POST",
       body,
       // A real abort, not just a lost wait: the socket is torn down, so a saturated
@@ -91,10 +82,7 @@ const requestJson = cache(
       // (internal-client.ts, 2026-08-10): it costs something only while the
       // backend is unhealthy.
       signal: AbortSignal.timeout(budgetMs),
-      headers: {
-        "Content-Type": "application/json",
-        ...BYPASS_HEADERS,
-      },
+      headers: { "Content-Type": "application/json" },
       next: { revalidate, tags: [tag] },
     }).catch((error: unknown) => {
       // A timeout or network failure produces no Response, so the `!res.ok` branch

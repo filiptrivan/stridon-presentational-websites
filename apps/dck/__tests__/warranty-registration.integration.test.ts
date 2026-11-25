@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { storefrontCredentialHeaders } from "@brand/shared/lib/storefront-client";
 import { PNG_1X1 } from "./fixtures/png";
 import { TEST_SERIAL_PREFIX } from "./fixtures/warranty";
 
@@ -61,7 +62,8 @@ describe("Warranty Registration Integration", () => {
 
     const response = await fetch(ENDPOINT, {
       method: "POST",
-      headers: { "X-Api-Key": API_KEY },
+      // DCK's own key: the action's [AuthGuard] authorizes it beyond the gate.
+      headers: storefrontCredentialHeaders({ apiKey: API_KEY }),
       body: buildWarrantyFormData(),
     });
 
@@ -86,7 +88,8 @@ describe("Warranty Registration Integration", () => {
 
     const response = await fetch(ENDPOINT, {
       method: "POST",
-      headers: { "X-Api-Key": API_KEY },
+      // DCK's own key: the action's [AuthGuard] authorizes it beyond the gate.
+      headers: storefrontCredentialHeaders({ apiKey: API_KEY }),
       body: buildWarrantyFormData({ companyPib: "123456789" }),
     });
 
@@ -102,7 +105,8 @@ describe("Warranty Registration Integration", () => {
 
     const response = await fetch(ENDPOINT, {
       method: "POST",
-      headers: { "X-Api-Key": API_KEY },
+      // DCK's own key: the action's [AuthGuard] authorizes it beyond the gate.
+      headers: storefrontCredentialHeaders({ apiKey: API_KEY }),
       body: buildWarrantyFormData({ companyPib: "12345" }),
     });
 

@@ -8,6 +8,7 @@
   },
   "exports": {
     "./components/*": "./src/components/*",
+    "./eslint/*": "./eslint/*",
     "./lib/*": "./src/lib/*",
     "./types/*": "./src/types/*",
     "./styles/*": "./src/styles/*"
