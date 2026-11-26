@@ -1,10 +1,12 @@
 import { describe, expect, it } from "vitest";
+import { storefrontCredentialHeaders } from "@brand/shared/lib/storefront-client";
 import { PNG_1X1 } from "./fixtures/png";
 import { TEST_SERIAL_PREFIX } from "./fixtures/warranty";
 
 const API_URL = process.env.API_URL || "http://localhost:5000";
 const API_KEY = process.env.PACMS_API_KEY;
 const ENDPOINT = `${API_URL}/api/Storefront/SubmitWarrantyRegistration`;
+// DCK's own key, not the Scripts' key: see postWarrantyRegistration in storefront-client.ts.
 
 // A real inbox: each successful run sends an actual DCK confirmation e-mail with the receipt
 // attached, and that delivery is itself part of what the suite proves. It is deliberately NOT the
@@ -61,7 +63,7 @@ describe("Warranty Registration Integration", () => {
 
     const response = await fetch(ENDPOINT, {
       method: "POST",
-      headers: { "X-Api-Key": API_KEY },
+      headers: storefrontCredentialHeaders({ apiKey: API_KEY }),
       body: buildWarrantyFormData(),
     });
 
@@ -86,7 +88,7 @@ describe("Warranty Registration Integration", () => {
 
     const response = await fetch(ENDPOINT, {
       method: "POST",
-      headers: { "X-Api-Key": API_KEY },
+      headers: storefrontCredentialHeaders({ apiKey: API_KEY }),
       body: buildWarrantyFormData({ companyPib: "123456789" }),
     });
 
@@ -102,7 +104,7 @@ describe("Warranty Registration Integration", () => {
 
     const response = await fetch(ENDPOINT, {
       method: "POST",
-      headers: { "X-Api-Key": API_KEY },
+      headers: storefrontCredentialHeaders({ apiKey: API_KEY }),
       body: buildWarrantyFormData({ companyPib: "12345" }),
     });
 

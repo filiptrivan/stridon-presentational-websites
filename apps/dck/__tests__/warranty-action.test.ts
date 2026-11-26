@@ -293,6 +293,16 @@ describe("submitWarrantyRegistration - DCK", () => {
     expect(body.has("companyPib")).toBe(false);
   });
 
+  // The action's [AuthGuard] authorizes the key itself, so the Scripts' key must never replace
+  // DCK's own key, even on a machine that holds both.
+  it("sends DCK's own key, not the Scripts' key, when both are set", async () => {
+    vi.stubEnv("PACMS_SCRIPTS_API_KEY", "test-scripts-key");
+
+    await submitWarrantyRegistration(buildWarrantyFormData());
+
+    expect(mockFetch.mock.calls[0][1].headers["X-Api-Key"]).toBe("test-pacms-key");
+  });
+
   it("includes companyPib in payload when valid 9-digit value provided", async () => {
     await submitWarrantyRegistration(
       buildWarrantyFormData({ companyPib: "123456789" }),

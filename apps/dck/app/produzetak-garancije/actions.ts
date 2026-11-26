@@ -12,6 +12,7 @@ import {
   WARRANTY_SUBMISSION_FAILED_ERROR,
 } from "@/lib/schemas/warranty";
 import { reportError } from "@brand/shared/lib/report-error";
+import { postWarrantyRegistration } from "@brand/shared/lib/storefront-client";
 
 const BRAND_SLUG = "dck";
 
@@ -79,6 +80,7 @@ export async function submitWarrantyRegistration(
     return { success: false, error: FILE_TYPE_ERROR };
   }
 
+  // DCK's own key, not the Scripts' key: see postWarrantyRegistration.
   const apiUrl = process.env.API_URL;
   const apiKey = process.env.PACMS_API_KEY;
   if (!apiUrl || !apiKey) {
@@ -109,14 +111,7 @@ export async function submitWarrantyRegistration(
     }
     apiFormData.append("receiptImage", receiptFile);
 
-    const response = await fetch(
-      `${apiUrl}/api/Storefront/SubmitWarrantyRegistration`,
-      {
-        method: "POST",
-        headers: { "X-Api-Key": apiKey },
-        body: apiFormData,
-      },
-    );
+    const response = await postWarrantyRegistration(apiFormData, apiKey);
 
     if (!response.ok) {
       const body = await response.text();

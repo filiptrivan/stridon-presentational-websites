@@ -8,6 +8,8 @@ vi.mock("../src/lib/report-error", () => ({ reportError: vi.fn() }));
 // so the test also proves the real module is reachable from api.ts.
 vi.stubEnv("API_URL", "https://api.example.test");
 vi.stubEnv("NEXT_PUBLIC_BRAND_SLUG", "dck");
+// apiFetch throws with no credential (api-credential.test.ts), so these cases carry one.
+vi.stubEnv("PACMS_SCRIPTS_API_KEY", "scripts-key");
 
 const {
   getCategories,
