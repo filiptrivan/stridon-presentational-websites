@@ -103,12 +103,12 @@ const ProductDetail = ({
         </Container>
       </div>
 
-      {/* Product details / specification */}
-      {(product.htmlDescription || product.specification) && (
+      {/* Details and spec sheet */}
+      {(product.htmlDescription || product.specRows.length > 0) && (
         <Container className="mt-12 lg:mt-16">
           <ProductSections
             htmlDescription={product.htmlDescription}
-            specification={product.specification}
+            specRows={product.specRows}
           />
         </Container>
       )}

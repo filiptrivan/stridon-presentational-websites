@@ -727,301 +727,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Storefront/Health": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Catalog-read liveness probe for the D6 blackbox-catalog job. Returns 200 on any successful read
-         *     (NOT gated on the catalog being non-empty) and is anonymous by design — the probe carries no
-         *     credentials. See PACMS.Business.Services.Infrastructure.StorefrontHealthService for the rationale (why a code-owned read,
-         *     not a hardcoded product slug).
-         */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/Categories": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Returns the full category tree. Optionally filters to categories that have products from the given brand. */
-        get: {
-            parameters: {
-                query?: {
-                    brandSlug?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontCategoryDTO"][];
-                        "application/json": components["schemas"]["StorefrontCategoryDTO"][];
-                        "text/json": components["schemas"]["StorefrontCategoryDTO"][];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/FlatCategories": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: {
-                    brandSlug?: string;
-                    count?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontCategoryDTO"][];
-                        "application/json": components["schemas"]["StorefrontCategoryDTO"][];
-                        "text/json": components["schemas"]["StorefrontCategoryDTO"][];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/CategoryCards": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Lightweight category tree (id, name, slug, imageUrl only). Use for navigation menus and listing pages. */
-        get: {
-            parameters: {
-                query?: {
-                    brandSlug?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontCategoryCardDTO"][];
-                        "application/json": components["schemas"]["StorefrontCategoryCardDTO"][];
-                        "text/json": components["schemas"]["StorefrontCategoryCardDTO"][];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/FlatCategoryCards": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Lightweight flat category list (id, name, slug, imageUrl only). Use for carousels. */
-        get: {
-            parameters: {
-                query?: {
-                    brandSlug?: string;
-                    count?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontCategoryCardDTO"][];
-                        "application/json": components["schemas"]["StorefrontCategoryCardDTO"][];
-                        "text/json": components["schemas"]["StorefrontCategoryCardDTO"][];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/CategoryBySlug": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: {
-                    slug?: string;
-                    brandSlug?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontCategoryDTO"];
-                        "application/json": components["schemas"]["StorefrontCategoryDTO"];
-                        "text/json": components["schemas"]["StorefrontCategoryDTO"];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/Banners": {
+    "/api/Storefront/GetProfile": {
         parameters: {
             query?: never;
             header?: never;
@@ -1043,9 +749,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["StorefrontBannerDTO"][];
-                        "application/json": components["schemas"]["StorefrontBannerDTO"][];
-                        "text/json": components["schemas"]["StorefrontBannerDTO"][];
+                        "text/plain": components["schemas"]["StorefrontUserProfileDTO"];
+                        "application/json": components["schemas"]["StorefrontUserProfileDTO"];
+                        "text/json": components["schemas"]["StorefrontUserProfileDTO"];
                     };
                 };
                 /** @description Error */
@@ -1067,568 +773,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Storefront/ActiveAnnouncement": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontAnnouncementDTO"];
-                        "application/json": components["schemas"]["StorefrontAnnouncementDTO"];
-                        "text/json": components["schemas"]["StorefrontAnnouncementDTO"];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/SiteSettings": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontSiteSettingsDTO"];
-                        "application/json": components["schemas"]["StorefrontSiteSettingsDTO"];
-                        "text/json": components["schemas"]["StorefrontSiteSettingsDTO"];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/DeliveryPromiseTable": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * The delivery-promise table (the typed tier pairs, the supplier overrides, the
-         *     working-day list) the storefront resolves "najranije … najkasnije do …" from. A document
-         *     with a body even when nothing is typed yet. pa-cms docs/adr/0002-…
-         */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontDeliveryPromiseTableDTO"];
-                        "application/json": components["schemas"]["StorefrontDeliveryPromiseTableDTO"];
-                        "text/json": components["schemas"]["StorefrontDeliveryPromiseTableDTO"];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/DispatchTier": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * The dispatch tier of ONE variant at ONE quantity, live — what the product page asks once
-         *     its buy box moves above a unit, so the date beside the button is the date the cart shows
-         *     one click later (pa-storefront docs/adr/0010). Answers from the cart's own oracle; the
-         *     storefront resolves the working-day pair itself off M:PACMS.WebAPI.Controllers.StorefrontController.DeliveryPromiseTable.
-         *     <br>
-         *     Anonymous like the table above, and NOT output-cached: the answer turns on live stock and
-         *     on other orders' open claims, so a cached one would be exactly the stale promise this
-         *     route exists to replace. The client fetches it `no-store`.
-         *     <br>
-         *     Rate-limited because a stepper is a button a customer can hold down, and because the read
-         *     is a per-variant stock probe — Moderate, like M:PACMS.WebAPI.Controllers.StorefrontController.Search(System.String), the other anonymous
-         *     read a customer can fire off repeatedly without meaning to. Not Strict: no argument here
-         *     is a secret, so a call is not a guess (`EnumerableSecretRateLimitTests`), and it
-         *     exposes no new class of fact either — `GetCart` already answers the tier of a
-         *     single-line basket at any quantity, so this makes that probe one call instead of two.
-         *     <br>
-         *     Always 200 with a body. An unknown or unsellable variant answers a null tier rather than
-         *     a 404, because the storefront reads a body as an answer and an error as a failure and
-         *     falls back differently for each.
-         */
-        get: {
-            parameters: {
-                query?: {
-                    productVariantId?: number;
-                    quantity?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontDispatchTierDTO"];
-                        "application/json": components["schemas"]["StorefrontDispatchTierDTO"];
-                        "text/json": components["schemas"]["StorefrontDispatchTierDTO"];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/FilteredProducts": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Returns filtered products (as card DTOs) with facet counts (brands, tags, categories, price ranges) for the catalog page. */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["StorefrontProductsFilterDTO"];
-                    "text/json": components["schemas"]["StorefrontProductsFilterDTO"];
-                    "application/*+json": components["schemas"]["StorefrontProductsFilterDTO"];
-                };
-            };
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontProductsResultDTO"];
-                        "application/json": components["schemas"]["StorefrontProductsResultDTO"];
-                        "text/json": components["schemas"]["StorefrontProductsResultDTO"];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/BundleBySlug": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Returns a single bundle by slug or 404 if the bundle does not exist or is outside its active window. */
-        get: {
-            parameters: {
-                query?: {
-                    slug?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontBundleDTO"];
-                        "application/json": components["schemas"]["StorefrontBundleDTO"];
-                        "text/json": components["schemas"]["StorefrontBundleDTO"];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/FeaturedBundles": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Homepage "Paket ponuda" row — featured bundles sorted by admin-set OrderNumber. */
-        get: {
-            parameters: {
-                query?: {
-                    take?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontBundleCardDTO"][];
-                        "application/json": components["schemas"]["StorefrontBundleCardDTO"][];
-                        "text/json": components["schemas"]["StorefrontBundleCardDTO"][];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/BundlesForProduct": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** PDP bundles section ("Paket ponuda") — bundles that contain any variant of the given product. */
-        get: {
-            parameters: {
-                query?: {
-                    productId?: number;
-                    take?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontBundleCardDTO"][];
-                        "application/json": components["schemas"]["StorefrontBundleCardDTO"][];
-                        "text/json": components["schemas"]["StorefrontBundleCardDTO"][];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/Bundles": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** All publicly available bundles — used by the /paket-ponude listing page. */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontBundleCardDTO"][];
-                        "application/json": components["schemas"]["StorefrontBundleCardDTO"][];
-                        "text/json": components["schemas"]["StorefrontBundleCardDTO"][];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/Brands": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: {
-                    count?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontBrandDTO"][];
-                        "application/json": components["schemas"]["StorefrontBrandDTO"][];
-                        "text/json": components["schemas"]["StorefrontBrandDTO"][];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/BrandCards": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Lightweight brand list (id, name, slug, imageUrl, hasProducts). Use for carousels and listing pages.
-         *     Every listed brand, empty ones included: hiding them is each consumer's call.
-         */
-        get: {
-            parameters: {
-                query?: {
-                    count?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontBrandCardDTO"][];
-                        "application/json": components["schemas"]["StorefrontBrandCardDTO"][];
-                        "text/json": components["schemas"]["StorefrontBrandCardDTO"][];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/BrandFilterOptions": {
+    "/api/Storefront/UpdateProfile": {
         parameters: {
             query?: never;
             header?: never;
@@ -1646,1172 +791,11 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    "application/json": components["schemas"]["StorefrontBrandFilterOptionsDTO"];
-                    "text/json": components["schemas"]["StorefrontBrandFilterOptionsDTO"];
-                    "application/*+json": components["schemas"]["StorefrontBrandFilterOptionsDTO"];
+                    "application/json": components["schemas"]["StorefrontUpdateProfileDTO"];
+                    "text/json": components["schemas"]["StorefrontUpdateProfileDTO"];
+                    "application/*+json": components["schemas"]["StorefrontUpdateProfileDTO"];
                 };
             };
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontBrandFilterResultDTO"];
-                        "application/json": components["schemas"]["StorefrontBrandFilterResultDTO"];
-                        "text/json": components["schemas"]["StorefrontBrandFilterResultDTO"];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/BrandBySlug": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: {
-                    slug?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontBrandDTO"];
-                        "application/json": components["schemas"]["StorefrontBrandDTO"];
-                        "text/json": components["schemas"]["StorefrontBrandDTO"];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/TopProductsByCategory": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: {
-                    categorySlug?: string;
-                    count?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontProductCardDTO"][];
-                        "application/json": components["schemas"]["StorefrontProductCardDTO"][];
-                        "text/json": components["schemas"]["StorefrontProductCardDTO"][];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/TopProductsByBrand": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: {
-                    brandSlug?: string;
-                    count?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontProductCardDTO"][];
-                        "application/json": components["schemas"]["StorefrontProductCardDTO"][];
-                        "text/json": components["schemas"]["StorefrontProductCardDTO"][];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/BestSellingProducts": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: {
-                    count?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontProductCardDTO"][];
-                        "application/json": components["schemas"]["StorefrontProductCardDTO"][];
-                        "text/json": components["schemas"]["StorefrontProductCardDTO"][];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/BestSellingProductsRecent": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Returns best-selling products within a recent time window (default: last 7 days). */
-        get: {
-            parameters: {
-                query?: {
-                    count?: number;
-                    days?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontProductCardDTO"][];
-                        "application/json": components["schemas"]["StorefrontProductCardDTO"][];
-                        "text/json": components["schemas"]["StorefrontProductCardDTO"][];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/Tags": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontTagDTO"][];
-                        "application/json": components["schemas"]["StorefrontTagDTO"][];
-                        "text/json": components["schemas"]["StorefrontTagDTO"][];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/TagCards": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Lightweight tag list (id, name, slug, imageUrl, color only). Use for listing pages and carousels. */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontTagCardDTO"][];
-                        "application/json": components["schemas"]["StorefrontTagCardDTO"][];
-                        "text/json": components["schemas"]["StorefrontTagCardDTO"][];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/TagCardsByBrand": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Lightweight tags for a brand (id, name, slug, imageUrl, color only). */
-        get: {
-            parameters: {
-                query?: {
-                    brandSlug?: string;
-                    count?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontTagCardDTO"][];
-                        "application/json": components["schemas"]["StorefrontTagCardDTO"][];
-                        "text/json": components["schemas"]["StorefrontTagCardDTO"][];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/TagBySlug": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: {
-                    slug?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontTagDTO"];
-                        "application/json": components["schemas"]["StorefrontTagDTO"];
-                        "text/json": components["schemas"]["StorefrontTagDTO"];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/TagsByBrand": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: {
-                    brandSlug?: string;
-                    count?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontTagDTO"][];
-                        "application/json": components["schemas"]["StorefrontTagDTO"][];
-                        "text/json": components["schemas"]["StorefrontTagDTO"][];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/SlugIndex/Products": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": string[];
-                        "application/json": string[];
-                        "text/json": string[];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/SlugIndex/Categories": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": string[];
-                        "application/json": string[];
-                        "text/json": string[];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/SlugIndex/Brands": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": string[];
-                        "application/json": string[];
-                        "text/json": string[];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/SlugIndex/Tags": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": string[];
-                        "application/json": string[];
-                        "text/json": string[];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/SlugIndex/Bundles": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": string[];
-                        "application/json": string[];
-                        "text/json": string[];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/Catalogs": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontCatalogsResultDTO"];
-                        "application/json": components["schemas"]["StorefrontCatalogsResultDTO"];
-                        "text/json": components["schemas"]["StorefrontCatalogsResultDTO"];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/CatalogsByBrand": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: {
-                    brandSlug?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontCatalogDTO"][];
-                        "application/json": components["schemas"]["StorefrontCatalogDTO"][];
-                        "text/json": components["schemas"]["StorefrontCatalogDTO"][];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/Search": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Full-text search across products, categories, and brands via Meilisearch. */
-        get: {
-            parameters: {
-                query?: {
-                    q?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontSearchResultDTO"];
-                        "application/json": components["schemas"]["StorefrontSearchResultDTO"];
-                        "text/json": components["schemas"]["StorefrontSearchResultDTO"];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/SearchSuggestions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** The search box's suggestions: categories and brands matching what is typed. */
-        get: {
-            parameters: {
-                query?: {
-                    q?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontSearchSuggestionsDTO"];
-                        "application/json": components["schemas"]["StorefrontSearchSuggestionsDTO"];
-                        "text/json": components["schemas"]["StorefrontSearchSuggestionsDTO"];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/ProductsAutocompleteByBrand": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Brand-scoped product autocomplete. Returns a slim payload (slug, title, sku, image)
-         *     for pickers on brand presentation sites (e.g., DCK warranty form).
-         */
-        get: {
-            parameters: {
-                query?: {
-                    q?: string;
-                    brandSlug?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontProductAutocompleteDTO"][];
-                        "application/json": components["schemas"]["StorefrontProductAutocompleteDTO"][];
-                        "text/json": components["schemas"]["StorefrontProductAutocompleteDTO"][];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/ProductBySlug": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: {
-                    slug?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontProductDTO"];
-                        "application/json": components["schemas"]["StorefrontProductDTO"];
-                        "text/json": components["schemas"]["StorefrontProductDTO"];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/ProductsByVariantIds": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Returns products for the given variant IDs. Used by cart and wishlist to hydrate product data. */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": number[];
-                    "text/json": number[];
-                    "application/*+json": number[];
-                };
-            };
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontProductDTO"][];
-                        "application/json": components["schemas"]["StorefrontProductDTO"][];
-                        "text/json": components["schemas"]["StorefrontProductDTO"][];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/MergeWishlist": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Merges visitor wishlist items into the authenticated user's wishlist (called after login). */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["StorefrontWishlistMergeRequestDTO"];
-                    "text/json": components["schemas"]["StorefrontWishlistMergeRequestDTO"];
-                    "application/*+json": components["schemas"]["StorefrontWishlistMergeRequestDTO"];
-                };
-            };
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": number[];
-                        "application/json": number[];
-                        "text/json": number[];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/AddToWishlist": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: {
-            parameters: {
-                query?: {
-                    productVariantId?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
             responses: {
                 /** @description Success */
                 200: {
@@ -2837,7 +821,105 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Storefront/RemoveFromWishlist": {
+    "/api/Storefront/GetAddresses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontAddressDTO"][];
+                        "application/json": components["schemas"]["StorefrontAddressDTO"][];
+                        "text/json": components["schemas"]["StorefrontAddressDTO"][];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/SaveAddress": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["StorefrontSaveAddressDTO"];
+                    "text/json": components["schemas"]["StorefrontSaveAddressDTO"];
+                    "application/*+json": components["schemas"]["StorefrontSaveAddressDTO"];
+                };
+            };
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontAddressDTO"];
+                        "application/json": components["schemas"]["StorefrontAddressDTO"];
+                        "text/json": components["schemas"]["StorefrontAddressDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/DeleteAddress": {
         parameters: {
             query?: never;
             header?: never;
@@ -2850,7 +932,7 @@ export interface paths {
         delete: {
             parameters: {
                 query?: {
-                    productVariantId?: number;
+                    addressId?: number;
                 };
                 header?: never;
                 path?: never;
@@ -2881,7 +963,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Storefront/ClearWishlist": {
+    "/api/Storefront/Unsubscribe": {
         parameters: {
             query?: never;
             header?: never;
@@ -2890,8 +972,62 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post?: never;
-        delete: {
+        /** Unsubscribes a user from notifications. Requires a signed URL (sig param) for verification. */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["StorefrontUnsubscribeDTO"];
+                    "text/json": components["schemas"]["StorefrontUnsubscribeDTO"];
+                    "application/*+json": components["schemas"]["StorefrontUnsubscribeDTO"];
+                };
+            };
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/RecordCardPageStep": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * One Card page step, as `navigator.sendBeacon` sends it from the bank's page. Its plain-text body holds one
+         *     JSON object (M:PACMS.Business.Services.DomainServices.CardPageSteps.RecordAsync(System.IO.Stream)). Plain text needs no CORS preflight, so the bank's origins
+         *     stay off our CORS list. The page sends no cookie of ours. The page reads no answer, and a dropped step gets the
+         *     stored step's answer.
+         */
+        post: {
             parameters: {
                 query?: never;
                 header?: never;
@@ -2918,52 +1054,6 @@ export interface paths {
                 };
             };
         };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/WishlistPriceSnapshot": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Returns the user's wishlist with current prices, used for price drop notifications. */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontWishlistPriceSnapshotDTO"][];
-                        "application/json": components["schemas"]["StorefrontWishlistPriceSnapshotDTO"][];
-                        "text/json": components["schemas"]["StorefrontWishlistPriceSnapshotDTO"][];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -3010,79 +1100,6 @@ export interface paths {
         };
         put?: never;
         post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/ReleaseAbandonedCardHolds": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Fired by the cancel landing page after a customer backs out on the bank's hosted page.
-         *     Releases THIS caller's abandoned card holds so the stock goes back on sale and their
-         *     retry is not refused — see M:PACMS.Business.Services.DomainServices.OrderLifecycle.ReleaseAbandonedCardHoldsAsync(System.Nullable{System.Int64},System.String,PACMS.Business.Services.DomainServices.CardHoldReleaseTrigger,System.String)
-         *     for why this exists and why the bank, not this request, decides what is released.
-         *
-         *     Anonymous and scoped by `GetCartIdentity`, which is the whole security model: a
-         *     caller can only ever act on orders under their own (user, visitor) identity — the same
-         *     trust boundary the guest cart already runs on — so there is nothing to forge by
-         *     guessing another customer's sequential OrderNumber.
-         *
-         *     orderNumber is the cancel page's own (it is in that page's URL) and
-         *     is intersected with the identity scope, never trusted on its own — identity stays the
-         *     security boundary, so a guessed sequential OrderNumber grants nothing. It closes the
-         *     gap the bank gate cannot: that gate tells authorized from not-authorized, not cancelled
-         *     from mid-3DS. Optional so a caller that genuinely doesn't know (a future generic
-         *     "clean up my dead holds") still works.
-         *
-         *     POST, not the GET landing itself, on purpose. The cancel page is reachable by a link
-         *     on the bank's HPP, and a link-prefetching browser issuing a speculative GET must not
-         *     be able to abandon an order the customer is still paying for. It also keeps the
-         *     landing route non-mutating, which it has always been.
-         *
-         *     Returns the count for the caller's own logging; the page renders the same either way.
-         */
-        post: {
-            parameters: {
-                query?: {
-                    orderNumber?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": number;
-                        "application/json": number;
-                        "text/json": number;
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
         delete?: never;
         options?: never;
         head?: never;
@@ -3155,7 +1172,7 @@ export interface paths {
          * Stores the checkout's typed email as cart state (SetShippingPostalCode's sibling) — the
          *     abandoned-cart sequence's recipient key for guest carts. Fired on field blur, so it
          *     returns nothing: an email reprices nothing, and the caller is fire-and-forget.
-         *     Rate-limited per IP (Strict): an anonymous endpoint that writes a PII field is an
+         *     Rate-limited per caller key (Strict): an anonymous endpoint that writes a PII field is an
          *     email-injection surface — the per-address send cap in AbandonedCartService is the
          *     deeper bound, this just makes bulk spraying expensive.
          */
@@ -3446,152 +1463,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Storefront/AddBundleToCart": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: {
-            parameters: {
-                query?: {
-                    bundleId?: number;
-                    quantity?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontCartDTO"];
-                        "application/json": components["schemas"]["StorefrontCartDTO"];
-                        "text/json": components["schemas"]["StorefrontCartDTO"];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/UpdateBundleQuantity": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: {
-            parameters: {
-                query?: {
-                    bundleId?: number;
-                    quantity?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontCartDTO"];
-                        "application/json": components["schemas"]["StorefrontCartDTO"];
-                        "text/json": components["schemas"]["StorefrontCartDTO"];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/RemoveBundleFromCart": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: {
-            parameters: {
-                query?: {
-                    bundleId?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontCartDTO"];
-                        "application/json": components["schemas"]["StorefrontCartDTO"];
-                        "text/json": components["schemas"]["StorefrontCartDTO"];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/Storefront/ReorderToCart": {
         parameters: {
             query?: never;
@@ -3689,6 +1560,791 @@ export interface paths {
                 };
             };
         };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/ApplyDiscountToCart": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: {
+                    code?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontCartDTO"];
+                        "application/json": components["schemas"]["StorefrontCartDTO"];
+                        "text/json": components["schemas"]["StorefrontCartDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/RemoveDiscountFromCart": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontCartDTO"];
+                        "application/json": components["schemas"]["StorefrontCartDTO"];
+                        "text/json": components["schemas"]["StorefrontCartDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/Categories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Returns the full category tree. Optionally filters to categories that have products from the given brand. */
+        get: {
+            parameters: {
+                query?: {
+                    brandSlug?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontCategoryDTO"][];
+                        "application/json": components["schemas"]["StorefrontCategoryDTO"][];
+                        "text/json": components["schemas"]["StorefrontCategoryDTO"][];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/FlatCategories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    brandSlug?: string;
+                    count?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontCategoryDTO"][];
+                        "application/json": components["schemas"]["StorefrontCategoryDTO"][];
+                        "text/json": components["schemas"]["StorefrontCategoryDTO"][];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/CategoryCards": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lightweight category tree (id, name, slug, imageUrl only). Use for navigation menus and listing pages. */
+        get: {
+            parameters: {
+                query?: {
+                    brandSlug?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontCategoryCardDTO"][];
+                        "application/json": components["schemas"]["StorefrontCategoryCardDTO"][];
+                        "text/json": components["schemas"]["StorefrontCategoryCardDTO"][];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/FlatCategoryCards": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lightweight flat category list (id, name, slug, imageUrl only). Use for carousels. */
+        get: {
+            parameters: {
+                query?: {
+                    brandSlug?: string;
+                    count?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontCategoryCardDTO"][];
+                        "application/json": components["schemas"]["StorefrontCategoryCardDTO"][];
+                        "text/json": components["schemas"]["StorefrontCategoryCardDTO"][];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/CategoryBySlug": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    slug?: string;
+                    brandSlug?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontCategoryDTO"];
+                        "application/json": components["schemas"]["StorefrontCategoryDTO"];
+                        "text/json": components["schemas"]["StorefrontCategoryDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/RowPreviewCategory": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The category page that a run's row keeps as its Row preview (spec pacms-workspace#2429): the page as Primeni will leave it. The
+         *     storefront's preview route draws it in Draft Mode, uncached and noindex. t is the link's token
+         *     (PACMS.Business.Services.AiCrons.Apply.RowPreviewLinks). The store checks it before any read, so a guess reads nothing. The answer is Not found for a
+         *     token that the store did not sign, and for a row with no category page.
+         */
+        get: {
+            parameters: {
+                query: {
+                    cron: string;
+                    run: string;
+                    key: string;
+                    t: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontCategoryDTO"];
+                        "application/json": components["schemas"]["StorefrontCategoryDTO"];
+                        "text/json": components["schemas"]["StorefrontCategoryDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/Brands": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    count?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontBrandDTO"][];
+                        "application/json": components["schemas"]["StorefrontBrandDTO"][];
+                        "text/json": components["schemas"]["StorefrontBrandDTO"][];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/BrandCards": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Lightweight brand list (id, name, slug, imageUrl, hasProducts). Use for carousels and listing pages.
+         *     Every listed brand, empty ones included: hiding them is each consumer's call.
+         */
+        get: {
+            parameters: {
+                query?: {
+                    count?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontBrandCardDTO"][];
+                        "application/json": components["schemas"]["StorefrontBrandCardDTO"][];
+                        "text/json": components["schemas"]["StorefrontBrandCardDTO"][];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/BrandBySlug": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    slug?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontBrandDTO"];
+                        "application/json": components["schemas"]["StorefrontBrandDTO"];
+                        "text/json": components["schemas"]["StorefrontBrandDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/Tags": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontTagDTO"][];
+                        "application/json": components["schemas"]["StorefrontTagDTO"][];
+                        "text/json": components["schemas"]["StorefrontTagDTO"][];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/TagCards": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lightweight tag list (id, name, slug, imageUrl, color only). Use for listing pages and carousels. */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontTagCardDTO"][];
+                        "application/json": components["schemas"]["StorefrontTagCardDTO"][];
+                        "text/json": components["schemas"]["StorefrontTagCardDTO"][];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/TagCardsByBrand": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lightweight tags for a brand (id, name, slug, imageUrl, color only). */
+        get: {
+            parameters: {
+                query?: {
+                    brandSlug?: string;
+                    count?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontTagCardDTO"][];
+                        "application/json": components["schemas"]["StorefrontTagCardDTO"][];
+                        "text/json": components["schemas"]["StorefrontTagCardDTO"][];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/TagBySlug": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    slug?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontTagDTO"];
+                        "application/json": components["schemas"]["StorefrontTagDTO"];
+                        "text/json": components["schemas"]["StorefrontTagDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/TagsByBrand": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    brandSlug?: string;
+                    count?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontTagDTO"][];
+                        "application/json": components["schemas"]["StorefrontTagDTO"][];
+                        "text/json": components["schemas"]["StorefrontTagDTO"][];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -3797,147 +2453,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Storefront/ApplyDiscountToCart": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: {
-            parameters: {
-                query?: {
-                    code?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontCartDTO"];
-                        "application/json": components["schemas"]["StorefrontCartDTO"];
-                        "text/json": components["schemas"]["StorefrontCartDTO"];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/RemoveDiscountFromCart": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontCartDTO"];
-                        "application/json": components["schemas"]["StorefrontCartDTO"];
-                        "text/json": components["schemas"]["StorefrontCartDTO"];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/GetProfile": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontUserProfileDTO"];
-                        "application/json": components["schemas"]["StorefrontUserProfileDTO"];
-                        "text/json": components["schemas"]["StorefrontUserProfileDTO"];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/UpdateProfile": {
+    "/api/Storefront/PlaceOrder": {
         parameters: {
             query?: never;
             header?: never;
@@ -3955,103 +2471,9 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    "application/json": components["schemas"]["StorefrontUpdateProfileDTO"];
-                    "text/json": components["schemas"]["StorefrontUpdateProfileDTO"];
-                    "application/*+json": components["schemas"]["StorefrontUpdateProfileDTO"];
-                };
-            };
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/GetAddresses": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontAddressDTO"][];
-                        "application/json": components["schemas"]["StorefrontAddressDTO"][];
-                        "text/json": components["schemas"]["StorefrontAddressDTO"][];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/SaveAddress": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["StorefrontSaveAddressDTO"];
-                    "text/json": components["schemas"]["StorefrontSaveAddressDTO"];
-                    "application/*+json": components["schemas"]["StorefrontSaveAddressDTO"];
+                    "application/json": components["schemas"]["StorefrontPlaceOrderDTO"];
+                    "text/json": components["schemas"]["StorefrontPlaceOrderDTO"];
+                    "application/*+json": components["schemas"]["StorefrontPlaceOrderDTO"];
                 };
             };
             responses: {
@@ -4061,9 +2483,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["StorefrontAddressDTO"];
-                        "application/json": components["schemas"]["StorefrontAddressDTO"];
-                        "text/json": components["schemas"]["StorefrontAddressDTO"];
+                        "text/plain": components["schemas"]["StorefrontPlaceOrderResultDTO"];
+                        "application/json": components["schemas"]["StorefrontPlaceOrderResultDTO"];
+                        "text/json": components["schemas"]["StorefrontPlaceOrderResultDTO"];
                     };
                 };
                 /** @description Error */
@@ -4083,251 +2505,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Storefront/DeleteAddress": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: {
-            parameters: {
-                query?: {
-                    addressId?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/ProductOptionGroups": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: {
-                    productId?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontProductOptionGroupDTO"][];
-                        "application/json": components["schemas"]["StorefrontProductOptionGroupDTO"][];
-                        "text/json": components["schemas"]["StorefrontProductOptionGroupDTO"][];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/ProductReviews": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: {
-                    productId?: number;
-                    first?: number;
-                    rows?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontProductReviewsPaginatedResultDTO"];
-                        "application/json": components["schemas"]["StorefrontProductReviewsPaginatedResultDTO"];
-                        "text/json": components["schemas"]["StorefrontProductReviewsPaginatedResultDTO"];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/SubmitReview": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["StorefrontSubmitReviewDTO"];
-                    "text/json": components["schemas"]["StorefrontSubmitReviewDTO"];
-                    "application/*+json": components["schemas"]["StorefrontSubmitReviewDTO"];
-                };
-            };
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/ReviewRequestContext": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * What the review-invitation page renders. No `[AuthGuard]` deliberately: 92,3% of
-         *     orders are guests, and the signed token in the path IS the authorisation — requiring a
-         *     session here would put a login wall in front of the one thing we are asking a customer
-         *     to do us a favour by doing.
-         */
-        get: {
-            parameters: {
-                query?: {
-                    token?: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontReviewRequestContextDTO"];
-                        "application/json": components["schemas"]["StorefrontReviewRequestContextDTO"];
-                        "text/json": components["schemas"]["StorefrontReviewRequestContextDTO"];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/SubmitReviewByToken": {
+    "/api/Storefront/ReportPurchaseTracked": {
         parameters: {
             query?: never;
             header?: never;
@@ -4337,81 +2515,24 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Leaves a review on the strength of the e-mail invitation. Anonymous for the same reason
-         *     as the read above; the token names the order and the product, so nothing the caller
-         *     sends can retarget it.
+         * The confirmation page reporting that gtag.js sent its client-side GA4 purchase. Its
+         *     ABSENCE is what the Measurement Protocol backfill acts on. The stamp records that
+         *     gtag.js sent the hit, never that GA4 received it (pa-storefront `ga4Purchase`).
+         *     Every alternative (payment state, a rendered page) is a guess that an ad blocker defeats.
+         *
+         *     Identity-scoped, because the stamp SUPPRESSES a later server-side send: unscoped, it
+         *     would let anyone silence another customer's backfill by order number.
          */
         post: {
             parameters: {
-                query?: never;
+                query?: {
+                    orderNumber?: string;
+                };
                 header?: never;
                 path?: never;
                 cookie?: never;
             };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["StorefrontSubmitReviewByTokenDTO"];
-                    "text/json": components["schemas"]["StorefrontSubmitReviewByTokenDTO"];
-                    "application/*+json": components["schemas"]["StorefrontSubmitReviewByTokenDTO"];
-                };
-            };
-            responses: {
-                /** @description Success */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["StorefrontSubmitReviewResultDTO"];
-                        "application/json": components["schemas"]["StorefrontSubmitReviewResultDTO"];
-                        "text/json": components["schemas"]["StorefrontSubmitReviewResultDTO"];
-                    };
-                };
-                /** @description Error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ApiErrorDTO"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/Storefront/SubmitServiceReviewByToken": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Rates the purchase experience (delivery, service) for the invitation's order — the ask
-         *     chained after a product review on the same page. Anonymous like its siblings: the signed
-         *     token proves the order.
-         */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["StorefrontSubmitServiceReviewByTokenDTO"];
-                    "text/json": components["schemas"]["StorefrontSubmitServiceReviewByTokenDTO"];
-                    "application/*+json": components["schemas"]["StorefrontSubmitServiceReviewByTokenDTO"];
-                };
-            };
+            requestBody?: never;
             responses: {
                 /** @description Success */
                 200: {
@@ -4437,17 +2558,44 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Storefront/CurrentUserReviewForProduct": {
+    "/api/Storefront/ReleaseAbandonedCardHolds": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: {
+        get?: never;
+        put?: never;
+        /**
+         * Fired by the cancel landing page after a customer backs out on the bank's hosted page.
+         *     Releases THIS caller's abandoned card holds so the stock goes back on sale and their
+         *     retry is not refused — see M:PACMS.Business.Services.DomainServices.OrderLifecycle.ReleaseAbandonedCardHoldsAsync(System.Nullable{System.Int64},System.String,PACMS.Business.Services.DomainServices.CardHoldReleaseTrigger,System.String)
+         *     for why this exists and why the bank, not this request, decides what is released.
+         *
+         *     Anonymous and scoped by `GetCartIdentity`, which is the whole security model: a
+         *     caller can only ever act on orders under their own (user, visitor) identity — the same
+         *     trust boundary the guest cart already runs on — so there is nothing to forge by
+         *     guessing another customer's sequential OrderNumber.
+         *
+         *     orderNumber is the cancel page's own (it is in that page's URL) and
+         *     is intersected with the identity scope, never trusted on its own — identity stays the
+         *     security boundary, so a guessed sequential OrderNumber grants nothing. It closes the
+         *     gap the bank gate cannot: that gate tells authorized from not-authorized, not cancelled
+         *     from mid-3DS. Optional so a caller that genuinely doesn't know (a future generic
+         *     "clean up my dead holds") still works.
+         *
+         *     POST, not the GET landing itself, on purpose. The cancel page is reachable by a link
+         *     on the bank's HPP, and a link-prefetching browser issuing a speculative GET must not
+         *     be able to abandon an order the customer is still paying for. It also keeps the
+         *     landing route non-mutating, which it has always been.
+         *
+         *     Returns the count for the caller's own logging; the page renders the same either way.
+         */
+        post: {
             parameters: {
                 query?: {
-                    productId?: number;
+                    orderNumber?: string;
                 };
                 header?: never;
                 path?: never;
@@ -4461,9 +2609,196 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["StorefrontProductReviewDTO"];
-                        "application/json": components["schemas"]["StorefrontProductReviewDTO"];
-                        "text/json": components["schemas"]["StorefrontProductReviewDTO"];
+                        "text/plain": number;
+                        "application/json": number;
+                        "text/json": number;
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/Banners": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontBannerDTO"][];
+                        "application/json": components["schemas"]["StorefrontBannerDTO"][];
+                        "text/json": components["schemas"]["StorefrontBannerDTO"][];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/ActiveAnnouncement": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontAnnouncementDTO"];
+                        "application/json": components["schemas"]["StorefrontAnnouncementDTO"];
+                        "text/json": components["schemas"]["StorefrontAnnouncementDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/SiteSettings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontSiteSettingsDTO"];
+                        "application/json": components["schemas"]["StorefrontSiteSettingsDTO"];
+                        "text/json": components["schemas"]["StorefrontSiteSettingsDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/DeliveryPromiseTable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The delivery-promise table (the typed tier day ranges, the supplier day ranges, the
+         *     working-day list) the storefront resolves "najranije … najkasnije do …" from. A document
+         *     with a body even when nothing is typed yet. pa-cms docs/adr/0002-…
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontDeliveryPromiseTableDTO"];
+                        "application/json": components["schemas"]["StorefrontDeliveryPromiseTableDTO"];
+                        "text/json": components["schemas"]["StorefrontDeliveryPromiseTableDTO"];
                     };
                 };
                 /** @description Error */
@@ -4531,29 +2866,21 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Storefront/PlaceOrder": {
+    "/api/Storefront/Catalogs": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
-        put?: never;
-        post: {
+        get: {
             parameters: {
                 query?: never;
                 header?: never;
                 path?: never;
                 cookie?: never;
             };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["StorefrontPlaceOrderDTO"];
-                    "text/json": components["schemas"]["StorefrontPlaceOrderDTO"];
-                    "application/*+json": components["schemas"]["StorefrontPlaceOrderDTO"];
-                };
-            };
+            requestBody?: never;
             responses: {
                 /** @description Success */
                 200: {
@@ -4561,9 +2888,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["StorefrontPlaceOrderResultDTO"];
-                        "application/json": components["schemas"]["StorefrontPlaceOrderResultDTO"];
-                        "text/json": components["schemas"]["StorefrontPlaceOrderResultDTO"];
+                        "text/plain": components["schemas"]["StorefrontCatalogsResultDTO"];
+                        "application/json": components["schemas"]["StorefrontCatalogsResultDTO"];
+                        "text/json": components["schemas"]["StorefrontCatalogsResultDTO"];
                     };
                 };
                 /** @description Error */
@@ -4577,13 +2904,252 @@ export interface paths {
                 };
             };
         };
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/Storefront/ReportPurchaseTracked": {
+    "/api/Storefront/CatalogsByBrand": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    brandSlug?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontCatalogDTO"][];
+                        "application/json": components["schemas"]["StorefrontCatalogDTO"][];
+                        "text/json": components["schemas"]["StorefrontCatalogDTO"][];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/Health": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Catalog-read liveness probe for the D6 blackbox-catalog job. Returns 200 on any successful read
+         *     (NOT gated on the catalog being non-empty) and is anonymous by design — the probe carries no
+         *     credentials. See PACMS.Business.Services.Infrastructure.StorefrontHealthService for the rationale (why a code-owned read,
+         *     not a hardcoded product slug).
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/LoyaltyBalance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontLoyaltyBalanceDTO"];
+                        "application/json": components["schemas"]["StorefrontLoyaltyBalanceDTO"];
+                        "text/json": components["schemas"]["StorefrontLoyaltyBalanceDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/LoyaltyTransactions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    first?: number;
+                    rows?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontLoyaltyTransactionDTOPaginatedResultDTO"];
+                        "application/json": components["schemas"]["StorefrontLoyaltyTransactionDTOPaginatedResultDTO"];
+                        "text/json": components["schemas"]["StorefrontLoyaltyTransactionDTOPaginatedResultDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/ReferralInfo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontReferralInfoDTO"];
+                        "application/json": components["schemas"]["StorefrontReferralInfoDTO"];
+                        "text/json": components["schemas"]["StorefrontReferralInfoDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/ClaimReferralCode": {
         parameters: {
             query?: never;
             header?: never;
@@ -4592,19 +3158,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /**
-         * The confirmation page reporting that it fired the client-side GA4 purchase. Its
-         *     ABSENCE is what the Measurement Protocol backfill acts on, so this is the one
-         *     precise answer to "did GA4 see this order" — every alternative (payment state, a
-         *     rendered page) is a guess that an ad blocker defeats.
-         *
-         *     Identity-scoped, because the stamp SUPPRESSES a later server-side send: unscoped, it
-         *     would let anyone silence another customer's backfill by order number.
-         */
         post: {
             parameters: {
                 query?: {
-                    orderNumber?: string;
+                    code?: string;
                 };
                 header?: never;
                 path?: never;
@@ -4926,7 +3483,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Storefront/SubmitWarrantyRegistration": {
+    "/api/Storefront/FilteredProducts": {
         parameters: {
             query?: never;
             header?: never;
@@ -4935,6 +3492,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
+        /** Returns filtered products (as card DTOs) with facet counts (brands, tags, categories, price ranges) for the catalog page. */
         post: {
             parameters: {
                 query?: never;
@@ -4944,25 +3502,9 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    "multipart/form-data": {
-                        /** Format: email */
-                        Email: string;
-                        FirstName: string;
-                        LastName: string;
-                        PhoneNumber: string;
-                        ProductSlug: string;
-                        SerialNumber: string;
-                        /** Format: date-time */
-                        PurchaseDate: string;
-                        /** Format: binary */
-                        ReceiptImage: string;
-                        DealerName?: string;
-                        /** Format: int32 */
-                        BrandId?: number;
-                        /** @description Alternative to BrandId for presentational websites that don't have access to brand IDs. */
-                        BrandSlug?: string;
-                        CompanyPib?: string;
-                    };
+                    "application/json": components["schemas"]["StorefrontProductsFilterDTO"];
+                    "text/json": components["schemas"]["StorefrontProductsFilterDTO"];
+                    "application/*+json": components["schemas"]["StorefrontProductsFilterDTO"];
                 };
             };
             responses: {
@@ -4972,9 +3514,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["WarrantyRegistrationResultDTO"];
-                        "application/json": components["schemas"]["WarrantyRegistrationResultDTO"];
-                        "text/json": components["schemas"]["WarrantyRegistrationResultDTO"];
+                        "text/plain": components["schemas"]["StorefrontProductsResultDTO"];
+                        "application/json": components["schemas"]["StorefrontProductsResultDTO"];
+                        "text/json": components["schemas"]["StorefrontProductsResultDTO"];
                     };
                 };
                 /** @description Error */
@@ -4994,7 +3536,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Storefront/Unsubscribe": {
+    "/api/Storefront/BrandFilterOptions": {
         parameters: {
             query?: never;
             header?: never;
@@ -5003,7 +3545,6 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Unsubscribes a user from notifications. Requires a signed URL (sig param) for verification. */
         post: {
             parameters: {
                 query?: never;
@@ -5013,9 +3554,9 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    "application/json": components["schemas"]["StorefrontUnsubscribeDTO"];
-                    "text/json": components["schemas"]["StorefrontUnsubscribeDTO"];
-                    "application/*+json": components["schemas"]["StorefrontUnsubscribeDTO"];
+                    "application/json": components["schemas"]["StorefrontBrandFilterOptionsDTO"];
+                    "text/json": components["schemas"]["StorefrontBrandFilterOptionsDTO"];
+                    "application/*+json": components["schemas"]["StorefrontBrandFilterOptionsDTO"];
                 };
             };
             responses: {
@@ -5024,7 +3565,11 @@ export interface paths {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content?: never;
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontBrandFilterResultDTO"];
+                        "application/json": components["schemas"]["StorefrontBrandFilterResultDTO"];
+                        "text/json": components["schemas"]["StorefrontBrandFilterResultDTO"];
+                    };
                 };
                 /** @description Error */
                 default: {
@@ -5043,7 +3588,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Storefront/LoyaltyBalance": {
+    "/api/Storefront/TopProductsByCategory": {
         parameters: {
             query?: never;
             header?: never;
@@ -5052,7 +3597,10 @@ export interface paths {
         };
         get: {
             parameters: {
-                query?: never;
+                query?: {
+                    categorySlug?: string;
+                    count?: number;
+                };
                 header?: never;
                 path?: never;
                 cookie?: never;
@@ -5065,9 +3613,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["StorefrontLoyaltyBalanceDTO"];
-                        "application/json": components["schemas"]["StorefrontLoyaltyBalanceDTO"];
-                        "text/json": components["schemas"]["StorefrontLoyaltyBalanceDTO"];
+                        "text/plain": components["schemas"]["StorefrontProductCardDTO"][];
+                        "application/json": components["schemas"]["StorefrontProductCardDTO"][];
+                        "text/json": components["schemas"]["StorefrontProductCardDTO"][];
                     };
                 };
                 /** @description Error */
@@ -5089,7 +3637,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Storefront/LoyaltyTransactions": {
+    "/api/Storefront/TopProductsByBrand": {
         parameters: {
             query?: never;
             header?: never;
@@ -5099,6 +3647,720 @@ export interface paths {
         get: {
             parameters: {
                 query?: {
+                    brandSlug?: string;
+                    count?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontProductCardDTO"][];
+                        "application/json": components["schemas"]["StorefrontProductCardDTO"][];
+                        "text/json": components["schemas"]["StorefrontProductCardDTO"][];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/BestSellingProducts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    count?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontProductCardDTO"][];
+                        "application/json": components["schemas"]["StorefrontProductCardDTO"][];
+                        "text/json": components["schemas"]["StorefrontProductCardDTO"][];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/BestSellingProductsRecent": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Returns best-selling products within a recent time window (default: last 7 days). */
+        get: {
+            parameters: {
+                query?: {
+                    count?: number;
+                    days?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontProductCardDTO"][];
+                        "application/json": components["schemas"]["StorefrontProductCardDTO"][];
+                        "text/json": components["schemas"]["StorefrontProductCardDTO"][];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/ProductBySlug": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    slug?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontProductDTO"];
+                        "application/json": components["schemas"]["StorefrontProductDTO"];
+                        "text/json": components["schemas"]["StorefrontProductDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/RowPreviewProduct": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The product page a run's row keeps as its Row preview (spec pacms-workspace#2429): the page as it will stand after Primeni, which
+         *     the storefront's preview route draws in Draft Mode, uncached and noindex. t is the link's token, which the store
+         *     made (PACMS.Business.Services.AiCrons.Apply.RowPreviewLinks) and checks before any read, so a guess reads nothing. Not found for a token that is not the
+         *     store's, and for a row with no product page.
+         */
+        get: {
+            parameters: {
+                query: {
+                    cron: string;
+                    run: string;
+                    key: string;
+                    t: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontProductDTO"];
+                        "application/json": components["schemas"]["StorefrontProductDTO"];
+                        "text/json": components["schemas"]["StorefrontProductDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/ProductsByVariantIds": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * The product cards of the given variants. The shopper's browser calls it for the wishlist, the browsing
+         *     history and the homepage's recently viewed carousel.
+         *     <br>
+         *     More than 50 ids get a 400, so no caller gets a bulk read. The wishlist, the largest caller, holds 30
+         *     (pa-storefront `WISHLIST_MAX_ITEMS`). The limit is Moderate, not Strict: no id is a secret, so a call
+         *     guesses nothing (`EnumerableSecretRateLimitTests`).
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": number[];
+                    "text/json": number[];
+                    "application/*+json": number[];
+                };
+            };
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontProductCardWithVariantsDTO"][];
+                        "application/json": components["schemas"]["StorefrontProductCardWithVariantsDTO"][];
+                        "text/json": components["schemas"]["StorefrontProductCardWithVariantsDTO"][];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/ProductOptionGroups": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    productId?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontProductOptionGroupDTO"][];
+                        "application/json": components["schemas"]["StorefrontProductOptionGroupDTO"][];
+                        "text/json": components["schemas"]["StorefrontProductOptionGroupDTO"][];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/DispatchTier": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The dispatch tier of ONE variant at ONE quantity, live — what the product page asks once
+         *     its buy box moves above a unit, so the date beside the button is the date the cart shows
+         *     one click later (pa-storefront docs/adr/0010). Answers from the cart's own oracle; the
+         *     storefront resolves the working-day pair itself off M:PACMS.WebAPI.Controllers.StorefrontContentController.DeliveryPromiseTable.
+         *     <br>
+         *     Anonymous like the table above, and NOT output-cached: the answer turns on live stock and
+         *     on other orders' open stock claims, so a cached one would be exactly the stale promise
+         *     this route exists to replace. The client fetches it `no-store`.
+         *     <br>
+         *     Rate-limited because a stepper is a button a customer can hold down, and because the read
+         *     is a per-variant stock probe — Moderate, like M:PACMS.WebAPI.Controllers.StorefrontSearchController.Search(System.String), the other anonymous
+         *     read a customer can fire off repeatedly without meaning to. Not Strict: no argument here
+         *     is a secret, so a call is not a guess (`EnumerableSecretRateLimitTests`), and it
+         *     exposes no new class of fact either — `GetCart` already answers the tier of a
+         *     single-line basket at any quantity, so this makes that probe one call instead of two.
+         *     <br>
+         *     Always 200 with a body. An unknown or unsellable variant answers a null tier rather than
+         *     a 404, because the storefront reads a body as an answer and an error as a failure and
+         *     falls back differently for each.
+         */
+        get: {
+            parameters: {
+                query?: {
+                    productVariantId?: number;
+                    quantity?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontDispatchTierDTO"];
+                        "application/json": components["schemas"]["StorefrontDispatchTierDTO"];
+                        "text/json": components["schemas"]["StorefrontDispatchTierDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/SlugIndex/Products": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": string[];
+                        "application/json": string[];
+                        "text/json": string[];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/SlugIndex/Categories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": string[];
+                        "application/json": string[];
+                        "text/json": string[];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/SlugIndex/Brands": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": string[];
+                        "application/json": string[];
+                        "text/json": string[];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/SlugIndex/Tags": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": string[];
+                        "application/json": string[];
+                        "text/json": string[];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/ProductSlugByReadyCmsId": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    readyCmsId?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": string;
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/ProductSlugByRetiredSlug": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * The current slug of the live product a retired slug resolves to, or null (umbrella ADR 0038).
+         *     pa-storefront asks it only after `ProductBySlug` found no product, and answers a hit
+         *     with one permanent redirect; a slug a live product holds is never answered. Same envelope as
+         *     `ProductSlugByReadyCmsId` above, for the same reasons (JSON forced, absence is
+         *     200-with-null so the storefront's fetch cache can hold it).
+         */
+        get: {
+            parameters: {
+                query?: {
+                    slug?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": string;
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/ProductReviews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    productId?: number;
                     first?: number;
                     rows?: number;
                 };
@@ -5114,9 +4376,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["StorefrontLoyaltyTransactionDTOPaginatedResultDTO"];
-                        "application/json": components["schemas"]["StorefrontLoyaltyTransactionDTOPaginatedResultDTO"];
-                        "text/json": components["schemas"]["StorefrontLoyaltyTransactionDTOPaginatedResultDTO"];
+                        "text/plain": components["schemas"]["StorefrontProductReviewsPaginatedResultDTO"];
+                        "application/json": components["schemas"]["StorefrontProductReviewsPaginatedResultDTO"];
+                        "text/json": components["schemas"]["StorefrontProductReviewsPaginatedResultDTO"];
                     };
                 };
                 /** @description Error */
@@ -5138,7 +4400,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Storefront/ReferralInfo": {
+    "/api/Storefront/CurrentUserReviewForProduct": {
         parameters: {
             query?: never;
             header?: never;
@@ -5147,7 +4409,9 @@ export interface paths {
         };
         get: {
             parameters: {
-                query?: never;
+                query?: {
+                    productId?: number;
+                };
                 header?: never;
                 path?: never;
                 cookie?: never;
@@ -5160,9 +4424,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["StorefrontReferralInfoDTO"];
-                        "application/json": components["schemas"]["StorefrontReferralInfoDTO"];
-                        "text/json": components["schemas"]["StorefrontReferralInfoDTO"];
+                        "text/plain": components["schemas"]["StorefrontProductReviewDTO"];
+                        "application/json": components["schemas"]["StorefrontProductReviewDTO"];
+                        "text/json": components["schemas"]["StorefrontProductReviewDTO"];
                     };
                 };
                 /** @description Error */
@@ -5184,7 +4448,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Storefront/ClaimReferralCode": {
+    "/api/Storefront/SubmitReview": {
         parameters: {
             query?: never;
             header?: never;
@@ -5195,14 +4459,18 @@ export interface paths {
         put?: never;
         post: {
             parameters: {
-                query?: {
-                    code?: string;
-                };
+                query?: never;
                 header?: never;
                 path?: never;
                 cookie?: never;
             };
-            requestBody?: never;
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["StorefrontSubmitReviewDTO"];
+                    "text/json": components["schemas"]["StorefrontSubmitReviewDTO"];
+                    "application/*+json": components["schemas"]["StorefrontSubmitReviewDTO"];
+                };
+            };
             responses: {
                 /** @description Success */
                 200: {
@@ -5222,6 +4490,321 @@ export interface paths {
                 };
             };
         };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/ReviewRequestContext": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * What the review-invitation page renders. No `[AuthGuard]` deliberately: 92,3% of
+         *     orders are guests, and the signed token in the path IS the authorisation — requiring a
+         *     session here would put a login wall in front of the one thing we are asking a customer
+         *     to do us a favour by doing.
+         */
+        get: {
+            parameters: {
+                query?: {
+                    token?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontReviewRequestContextDTO"];
+                        "application/json": components["schemas"]["StorefrontReviewRequestContextDTO"];
+                        "text/json": components["schemas"]["StorefrontReviewRequestContextDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/SubmitReviewByToken": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Leaves a review on the strength of the e-mail invitation. Anonymous for the same reason
+         *     as the read above; the token names the order and the product, so nothing the caller
+         *     sends can retarget it.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["StorefrontSubmitReviewByTokenDTO"];
+                    "text/json": components["schemas"]["StorefrontSubmitReviewByTokenDTO"];
+                    "application/*+json": components["schemas"]["StorefrontSubmitReviewByTokenDTO"];
+                };
+            };
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontSubmitReviewResultDTO"];
+                        "application/json": components["schemas"]["StorefrontSubmitReviewResultDTO"];
+                        "text/json": components["schemas"]["StorefrontSubmitReviewResultDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/SubmitServiceReviewByToken": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Rates the purchase experience (delivery, service) for the invitation's order — the ask
+         *     chained after a product review on the same page. Anonymous like its siblings: the signed
+         *     token proves the order.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["StorefrontSubmitServiceReviewByTokenDTO"];
+                    "text/json": components["schemas"]["StorefrontSubmitServiceReviewByTokenDTO"];
+                    "application/*+json": components["schemas"]["StorefrontSubmitServiceReviewByTokenDTO"];
+                };
+            };
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/Search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Full-text search across products, categories, and brands via Meilisearch. */
+        get: {
+            parameters: {
+                query?: {
+                    q?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontSearchResultDTO"];
+                        "application/json": components["schemas"]["StorefrontSearchResultDTO"];
+                        "text/json": components["schemas"]["StorefrontSearchResultDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/SearchSuggestions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** The search box's suggestions: categories and brands matching what is typed. */
+        get: {
+            parameters: {
+                query?: {
+                    q?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontSearchSuggestionsDTO"];
+                        "application/json": components["schemas"]["StorefrontSearchSuggestionsDTO"];
+                        "text/json": components["schemas"]["StorefrontSearchSuggestionsDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/ProductsAutocompleteByBrand": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Brand-scoped product autocomplete. Returns a slim payload (slug, title, sku, image)
+         *     for pickers on brand presentation sites (e.g., DCK warranty form).
+         */
+        get: {
+            parameters: {
+                query?: {
+                    q?: string;
+                    brandSlug?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontProductAutocompleteDTO"][];
+                        "application/json": components["schemas"]["StorefrontProductAutocompleteDTO"][];
+                        "text/json": components["schemas"]["StorefrontProductAutocompleteDTO"][];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -5301,9 +4884,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "text/plain": components["schemas"]["SitemapEntryDTO"][];
-                        "application/json": components["schemas"]["SitemapEntryDTO"][];
-                        "text/json": components["schemas"]["SitemapEntryDTO"][];
+                        "text/plain": components["schemas"]["SitemapProductEntryDTO"][];
+                        "application/json": components["schemas"]["SitemapProductEntryDTO"][];
+                        "text/json": components["schemas"]["SitemapProductEntryDTO"][];
                     };
                 };
                 /** @description Error */
@@ -5789,17 +5372,89 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Storefront/ProductSlugByReadyCmsId": {
+    "/api/Storefront/SubmitWarrantyRegistration": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "multipart/form-data": {
+                        /** Format: email */
+                        Email: string;
+                        FirstName: string;
+                        LastName: string;
+                        PhoneNumber: string;
+                        ProductSlug: string;
+                        SerialNumber: string;
+                        /** Format: date-time */
+                        PurchaseDate: string;
+                        /** Format: binary */
+                        ReceiptImage: string;
+                        DealerName?: string;
+                        /** Format: int32 */
+                        BrandId?: number;
+                        /** @description Alternative to BrandId for presentational websites that don't have access to brand IDs. */
+                        BrandSlug?: string;
+                        CompanyPib?: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["WarrantyRegistrationResultDTO"];
+                        "application/json": components["schemas"]["WarrantyRegistrationResultDTO"];
+                        "text/json": components["schemas"]["WarrantyRegistrationResultDTO"];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/WarrantyGuideBySlug": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A brand's Warranty guide at its slug, as HTML, with the brand's registration; 404 when no listed brand has a
+         *     Warranty guide's HTML there. Every page it serves: M:PACMS.WebAPI.Controllers.StorefrontWarrantyController.WarrantyGuideCards.
+         */
         get: {
             parameters: {
                 query?: {
-                    readyCmsId?: number;
+                    slug?: string;
                 };
                 header?: never;
                 path?: never;
@@ -5813,7 +5468,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": string;
+                        "text/plain": components["schemas"]["StorefrontWarrantyGuideDTO"];
+                        "application/json": components["schemas"]["StorefrontWarrantyGuideDTO"];
+                        "text/json": components["schemas"]["StorefrontWarrantyGuideDTO"];
                     };
                 };
                 /** @description Error */
@@ -5835,25 +5492,17 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Storefront/ProductSlugByRetiredSlug": {
+    "/api/Storefront/WarrantyGuideCards": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /**
-         * The current slug of the live product a retired slug resolves to, or null (umbrella ADR 0038).
-         *     pa-storefront asks it only after `ProductBySlug` found no product, and answers a hit
-         *     with one permanent redirect; a slug a live product holds is never answered. Same envelope as
-         *     `ProductSlugByReadyCmsId` above, for the same reasons (JSON forced, absence is
-         *     200-with-null so the storefront's fetch cache can hold it).
-         */
+        /** Each brand's Warranty guide that M:PACMS.WebAPI.Controllers.StorefrontWarrantyController.WarrantyGuideBySlug(System.String) serves, for a list or the sitemap. */
         get: {
             parameters: {
-                query?: {
-                    slug?: string;
-                };
+                query?: never;
                 header?: never;
                 path?: never;
                 cookie?: never;
@@ -5866,7 +5515,239 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": string;
+                        "text/plain": components["schemas"]["StorefrontWarrantyGuideCardDTO"][];
+                        "application/json": components["schemas"]["StorefrontWarrantyGuideCardDTO"][];
+                        "text/json": components["schemas"]["StorefrontWarrantyGuideCardDTO"][];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/MergeWishlist": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Merges visitor wishlist items into the authenticated user's wishlist (called after login). */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": components["schemas"]["StorefrontWishlistMergeRequestDTO"];
+                    "text/json": components["schemas"]["StorefrontWishlistMergeRequestDTO"];
+                    "application/*+json": components["schemas"]["StorefrontWishlistMergeRequestDTO"];
+                };
+            };
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": number[];
+                        "application/json": number[];
+                        "text/json": number[];
+                    };
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/AddToWishlist": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: {
+                    productVariantId?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/RemoveFromWishlist": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: {
+            parameters: {
+                query?: {
+                    productVariantId?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/ClearWishlist": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiErrorDTO"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Storefront/WishlistPriceSnapshot": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Returns the user's wishlist with current prices, used for price drop notifications. */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["StorefrontWishlistPriceSnapshotDTO"][];
+                        "application/json": components["schemas"]["StorefrontWishlistPriceSnapshotDTO"][];
+                        "text/json": components["schemas"]["StorefrontWishlistPriceSnapshotDTO"][];
                     };
                 };
                 /** @description Error */
@@ -5938,6 +5819,8 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** @enum {string} */
+        ApiErrorCodes: "concurrency_conflict" | "email_not_verified" | "external_email_missing" | "external_provider_not_configured" | "foreign_key_violation" | "invalid_match_mode" | "invalid_token" | "unique_violation" | "unknown_filter_field" | "unknown_sort_field" | "validation_failed";
         ApiErrorDTO: {
             /** Format: int32 */
             statusCode?: number;
@@ -6034,6 +5917,21 @@ export interface components {
             /** Format: date-time */
             modifiedAt: string;
         };
+        /**
+         * @description A product's entry in the product sitemap. Only this entry carries `LastCrawlerVisibleChangeAt`, and the other
+         *     sitemaps keep `SitemapEntryDTO`. The spec: pacms-workspace#2151 (Spec: a product's sitemap lastmod is its last
+         *     Crawler-visible change).
+         */
+        SitemapProductEntryDTO: {
+            slug: string;
+            /** Format: date-time */
+            modifiedAt: string;
+            /**
+             * Format: date-time
+             * @description The product's `Product.LastCrawlerVisibleChangeAt`, in UTC. Null when no change of it is known.
+             */
+            lastCrawlerVisibleChangeAt?: string | null;
+        };
         StorefrontAddressDTO: {
             /** Format: int64 */
             id: number;
@@ -6054,7 +5952,7 @@ export interface components {
         };
         /**
          * @description One attribute facet on a listing response: the group the panel renders under <i>Filteri</i>, after
-         *     Kategorije, Brend and Cena, in the resolved category's effective order.
+         *     Kategorije, Brend and Cena, in the listing category's effective order.
          *     <br>
          *     A RESPONSE-FIELD WIDENING (backend-first, CLAUDE.md multi-repo rules): a consumer that has not deployed
          *     yet sees no field, and a consumer on an older backend must read a missing collection as "no facets",
@@ -6064,9 +5962,12 @@ export interface components {
             code: string;
             /** @description Customer-facing label (Serbian, formal register) — the group's title. */
             name: string;
-            /** @description decimal | range | boolean | select (lower-case AttributeValueTypeCodes name); text is never a facet. */
+            /** @description decimal | range | boolean | select, by the entry's kind (`ListingAttributeFacets.WireTypeNames`); free text is never a facet. */
             type: string;
-            /** @description Canonical unit for decimal and range values; the storefront appends it in the market's number locale. */
+            /**
+             * @description Canonical unit for decimal and range values; the storefront appends it in the market's number locale. A size facet in a
+             *     category with a Size unit gives that unit, m or cm (pa-cms ADR 0199).
+             */
             unit?: string | null;
             /** @description discrete (multi-select checkboxes) | range (single-select bands). */
             facetMode: string;
@@ -6081,7 +5982,8 @@ export interface components {
             /** @description What rides in the URL: an option code, a printed decimal, "da"/"ne", or a bucket id. */
             id: string;
             /**
-             * @description The option's Serbian name for a select. NULL for decimals, booleans and range bands, which the
+             * @description The option's Serbian name for a select. A size in a category with a Size unit gets its number in that unit ("2,5 m", pa-cms
+             *     ADR 0199), while its id stays in mm. NULL for other decimals, booleans and range bands, which the
              *     storefront formats itself (number locale + unit, "Da"/"Ne", "do 40 Nm") — the same formatter the
              *     PDP spec table uses, so the filter reads like the specification.
              */
@@ -6091,26 +5993,27 @@ export interface components {
             selected: boolean;
             /**
              * Format: double
-             * @description Range band only: inclusive lower bound, null when the band is unbounded below ("do 40 Nm").
+             * @description Range band only: inclusive lower bound in the facet's unit, null when the band is unbounded below ("do 40 Nm"). A size
+             *     band's bound is in its Size unit, while its id stays in mm.
              */
             min?: number | null;
             /**
              * Format: double
-             * @description Range band only: exclusive upper bound, null when the band is unbounded above ("preko 80 Nm").
+             * @description Range band only: exclusive upper bound in the facet's unit, null when the band is unbounded above ("preko 80 Nm").
              */
             max?: number | null;
         };
         /**
-         * @description One selected attribute filter on a listing request: the dictionary code and the value ids the customer
+         * @description One selected attribute filter on a listing request: the filter code and the value ids the customer
          *     ticked. Reaches the backend from one `atr-<code>` query parameter per attribute
          *     (workspace docs/adr/0007-attribute-filter-urls-carry-the-dictionary-code-under-an-atr-prefix.md), so the
-         *     storefront forwards every `atr-` parameter it sees without knowing the dictionary.
+         *     storefront forwards every `atr-` parameter it sees without knowing the filters.
          *     <br>
          *     An unknown code and an unknown value are IGNORED, never an error: a shared link naming an attribute the
          *     category no longer carries must still render the listing.
          */
         StorefrontAttributeFilterDTO: {
-            /** @description Mirrors AttributeDefinition.Code (varchar(100)); a longer value can never name an attribute. */
+            /** @description A Label glossary entry's filter code (varchar(100)); a longer value can never name a filter. */
             code: string;
             /**
              * @description Option codes, decimal values as `RangeBuckets.Print` writes them ("18", "1.5"), "da"/"ne" for a
@@ -6145,9 +6048,20 @@ export interface components {
             id: number;
             name: string;
             slug: string;
-            /** @description Null when the brand has no image. See Backend/CLAUDE.md → "Image absence is null". */
+            /**
+             * @description Null when the brand has no image. See ADR 0031 (an absent image is no media row, never a
+             *                 placeholder).
+             */
             imageUrl?: string | null;
             hasProducts?: boolean | null;
+        };
+        /**
+         * @description A Brand category page (workspace `GLOSSARY.md`), named by its category; its brand is the
+         *     one the carrying DTO already names.
+         */
+        StorefrontBrandCategoryPageDTO: {
+            categorySlug: string;
+            categoryName: string;
         };
         StorefrontBrandDTO: {
             /** Format: int32 */
@@ -6156,12 +6070,19 @@ export interface components {
             slug: string;
             /** Format: int32 */
             orderNumber?: number | null;
-            /** @description Null when the brand has no image. See Backend/CLAUDE.md → "Image absence is null". */
+            /**
+             * @description Null when the brand has no image. See ADR 0031 (an absent image is no media row, never a
+             *                 placeholder).
+             */
             imageUrl?: string | null;
             htmlDescription?: string | null;
             metaTitle: string;
             metaDescription: string;
             hasProducts?: boolean | null;
+            /** @description The <b>Brand page tagline</b>'s first line (umbrella `GLOSSARY.md`), null when the brand has none; as `Brand.StripFirstLine`. */
+            stripFirstLine?: string | null;
+            stripSecondLine?: string | null;
+            stripLink?: string | null;
         };
         StorefrontBrandFilterOptionsDTO: {
             categorySlug?: string | null;
@@ -6189,6 +6110,21 @@ export interface components {
             selectedBrands: components["schemas"]["StorefrontBrandWithCountDTO"][];
             brands: components["schemas"]["StorefrontBrandWithCountDTO"][];
         };
+        /**
+         * @description The brand's registration (`BrandRegistration`): how a customer registers a product with its maker. Not a
+         *     customer's own registration with us, which `WarrantyRegistration` and `WarrantyRegistrationDTO` hold.
+         */
+        StorefrontBrandRegistrationDTO: {
+            /** @description The maker's portal, where the customer registers the product. */
+            portalUrl: string;
+            /**
+             * Format: int32
+             * @description The days the customer has to register, at least 1.
+             */
+            deadlineDays: number;
+            /** @description What the deadline counts from: "purchasedate" | "receiptdate". */
+            deadlineStart: string;
+        };
         StorefrontBrandSuggestionDTO: {
             /** Format: int32 */
             id: number;
@@ -6211,181 +6147,36 @@ export interface components {
             productCount: number;
         };
         /**
-         * @description Lightweight bundle DTO for homepage/PDP cross-sell/listing grids.
-         *     Use PACMS.Business.DTO.Storefront.Bundle.StorefrontBundleDTO for the bundle detail page.
+         * @description A variant as PACMS.Business.DTO.Storefront.Product.StorefrontProductCardWithVariantsDTO carries it: its id and its price. The wishlist
+         *     drops an id that no variant answers, and shows a price drop.
          */
-        StorefrontBundleCardDTO: {
+        StorefrontCardVariantDTO: {
             /** Format: int64 */
             id: number;
-            title: string;
-            slug: string;
-            subtitle?: string | null;
-            /** Format: double */
-            price: number;
             /**
              * Format: double
-             * @description Sum of member variants' effective price × quantity. Used for the strikethrough price.
-             *     Null if we couldn't compute it (shouldn't happen in practice for a saved bundle).
+             * @description The final price shown to the customer (after any discount).
              */
-            regularPrice?: number | null;
-            /** Format: int32 */
-            discountPercentage?: number | null;
-            isOrderable: boolean;
-            heroImageUrl: string;
-            /**
-             * Format: int32
-             * @description Number of unique products in the bundle — used as a quick "3 proizvoda u paketu" badge.
-             */
-            itemCount: number;
-        };
-        /**
-         * @description Full bundle DTO returned from the bundle detail page endpoint.
-         *     Includes every member so the page can render the "what's inside" list without a second round-trip.
-         */
-        StorefrontBundleDTO: {
-            /** Format: int64 */
-            id: number;
-            title: string;
-            slug: string;
-            subtitle?: string | null;
-            summary: string;
-            htmlDescription: string;
-            /** Format: double */
-            price: number;
-            /** Format: double */
-            regularPrice?: number | null;
-            /** Format: int32 */
-            discountPercentage?: number | null;
-            isOrderable: boolean;
-            heroImageUrl: string;
-            items: components["schemas"]["StorefrontBundleItemDTO"][];
-            metaTitle: string;
-            metaDescription: string;
-        };
-        /**
-         * @description One product entry inside a bundle detail response — enough to render a thumbnail card
-         *     with a link back to the member product's own PDP.
-         */
-        StorefrontBundleItemDTO: {
-            /** Format: int64 */
-            id: number;
-            /** Format: int64 */
-            variantId: number;
-            /** Format: int32 */
-            productId: number;
-            productTitle: string;
-            productSlug: string;
-            /** @description Null when the member product has no media. See Backend/CLAUDE.md → "Image absence is null". */
-            imageUrl?: string | null;
-            /**
-             * @description Label describing which variant is bundled (empty for single-variant products).
-             *     e.g. "18V / 2×4.0Ah baterija".
-             */
-            variantLabel?: string | null;
-            /** Format: int32 */
-            quantity: number;
-            /**
-             * Format: double
-             * @description The member's effective price per unit (`SalePrice ?? Price`): what it sells for alone,
-             *     shown beside the bundle's price.
-             */
-            effectiveUnitPrice: number;
-            isOrderable: boolean;
-            /**
-             * @description Whether the member's variant has a live stock source, which tells "Nije u ponudi" from
-             *     "Trenutno nema na stanju" (PACMS.Business.DTO.Storefront.Product.StorefrontProductVariantDTO.HasLiveStockSource).
-             */
-            hasLiveStockSource: boolean;
-        };
-        /**
-         * @description A Paket ponuda entry in the cart. The member products are rendered read-only: the only
-         *     allowed cart actions on a bundle are change-quantity-of-whole-bundle and remove-whole-bundle.
-         *     Individual member lines cannot be dropped — that would let a user pay the bundle price for
-         *     fewer items than the bundle actually contains.
-         */
-        StorefrontCartBundleDTO: {
-            /** Format: int64 */
-            bundleId: number;
-            title: string;
-            slug: string;
-            heroImageUrl: string;
-            /** Format: int32 */
-            quantity: number;
-            /**
-             * Format: int32
-             * @description Max number of bundles the customer can order, bounded by the scarcest member variant.
-             *     Null means "no stock limit" (every member is IsAvailableWhenOutOfStock).
-             */
-            maxOrderQuantity?: number | null;
-            isOrderable: boolean;
-            /** Format: double */
-            unitPrice: number;
-            /**
-             * Format: double
-             * @description The bundle's regular price: what its members cost bought separately
-             *     (`ProductBundle.OriginalPrice`), before the bundle's discount. The bundle's struck-through
-             *     price; a member's own price is its PACMS.Business.DTO.Storefront.Checkout.StorefrontCartBundleMemberDTO.EffectiveUnitPrice.
-             */
-            regularUnitPrice?: number | null;
-            /** Format: int32 */
-            discountPercentage?: number | null;
-            members: components["schemas"]["StorefrontCartBundleMemberDTO"][];
-        };
-        StorefrontCartBundleMemberDTO: {
-            /** Format: int64 */
-            productVariantId: number;
-            /** Format: int32 */
-            productId: number;
-            productTitle: string;
-            productSlug: string;
-            imageUrl: string;
-            variantLabel?: string | null;
-            /**
-             * Format: int32
-             * @description Quantity of this variant in one copy of the bundle (so total cart quantity = this × bundle.Quantity).
-             */
-            quantityPerBundle: number;
-            /**
-             * Format: double
-             * @description The member's effective price per unit (`SalePrice ?? Price`, through
-             *     `SalePriceSanitizer`) when the DTO was built: what it sells for alone, shown in the cart
-             *     beside each member, struck through against the bundle's price.
-             */
-            effectiveUnitPrice: number;
+            effectivePrice: number;
         };
         StorefrontCartDTO: {
             items: components["schemas"]["StorefrontCartItemDTO"][];
-            bundles: components["schemas"]["StorefrontCartBundleDTO"][];
+            /**
+             * @description Always empty: bundles are deleted (umbrella ADR 0174, Bundles are deleted…). A cart tab opened before
+             *     2026-11-15 runs the old storefront build. That build reads `cart.bundles.some(…)` and crashes
+             *     without the field (Sentry STOREFRONT-RS-68, Cannot read properties of undefined (reading 'some')).
+             *     pa-cms#537 (The cart has `bundles` again…) put it back on 2026-11-19. pa-cms#538 (The cart drops
+             *     its always-empty `bundles` again…) deletes it 7 days after that deploy.
+             */
+            bundles: unknown[];
             /** Format: double */
             subtotal: number;
-            /** Format: double */
+            /**
+             * Format: double
+             * @description The chosen delivery method's charge: 0 for pickup, whatever PACMS.Business.DTO.Storefront.Checkout.StorefrontCartDTO.CourierPricing says.
+             */
             deliveryCost: number;
-            /**
-             * Format: double
-             * @description The resolved tier's free-delivery threshold (compared against the gross, pre-discount
-             *     subtotal). With PACMS.Business.DTO.Storefront.Checkout.StorefrontCartDTO.TierDeliveryCost this lets the storefront estimate the
-             *     free-delivery crossing during an in-flight optimistic quantity edit — without fetching
-             *     the tier table or re-resolving the tier client-side. Null when there is no tier
-             *     (empty/pickup cart) or the tier is never free by order value (bulky weight brackets).
-             */
-            freeDeliveryThreshold?: number | null;
-            /**
-             * Format: double
-             * @description The resolved tier's flat delivery charge below the threshold (unlike
-             *                 PACMS.Business.DTO.Storefront.Checkout.StorefrontCartDTO.DeliveryCost, not zeroed by threshold or discount).
-             */
-            tierDeliveryCost: number;
-            /**
-             * @description The resolved tier is a bulky bracket that our own vehicle delivers free inside
-             *                 the free-delivery zone ("besplatna za Beograd" note on cart surfaces).
-             */
-            freeForZone: boolean;
-            /**
-             * @description The cart priced in a bulky ("kabasta roba") tier — cart surfaces name the
-             *                 category under the delivery row and checkout adds the scheduling-call note. Explicit
-             *                 tier classification (ShippingTier.IsBulky), not derived from a null threshold.
-             */
-            isBulky: boolean;
+            courierPricing: components["schemas"]["StorefrontCourierPricingDTO"];
             courierDeliveryPromise?: components["schemas"]["StorefrontDeliveryPromiseDTO"];
             /**
              * @description Cart-owned zone-pricing context: the checkout's last picked place postal code
@@ -6400,7 +6191,7 @@ export interface components {
              *                 CompanyPib are absent until a card order stamped them or a recovery link folded them in;
              *                 Email also comes from the checkout's blur capture (SetCartEmail), so it alone is not a
              *                 snapshot. A non-null CompanyPib IS the company-order flag. Render-only, so no
-             *                 [StringLength] (Backend/CLAUDE.md).
+             *                 [StringLength] (`InboundDtoStringBoundsTests`).
              */
             email?: string | null;
             fullName?: string | null;
@@ -6461,16 +6252,17 @@ export interface components {
             maxOrderQuantity?: number | null;
             /**
              * Format: int32
-             * @description Per-line minimum order quantity (1 = no minimum). Out-of-stock AOOSO lines carry
-             *     the supplier-pack minimum (per-variant override or price tier). A quantity below this
+             * @description Per-line Minimum order quantity (1 = no minimum), above one only for an out-of-stock
+             *     AOOSO line (per-variant override or price tier). A quantity below this
              *     blocks checkout; the UI offers a bump-to-minimum fix. See OrderQuantityLimits.MinOrderQuantityFloor.
              */
             minOrderQuantity: number;
             isOrderable: boolean;
             /**
              * @description True when the line is orderable only because the variant is available-when-out-of-stock
-             *     (physical stock 0) — the storefront shows a "Za poručivanje" signal and, for mixed carts,
-             *     distinguishes it from ship-now lines. Twin of StorefrontProductService.ComputeAvailability.
+             *     (physical stock 0) — the storefront marks no cart line by it, and reads it to tell a mixed
+             *     cart (an AOOSO line beside one we hold), whose order ships when every line is ready. Twin
+             *     of StorefrontProductMapper.ComputeAvailability.
              */
             isAooso: boolean;
             /**
@@ -6504,7 +6296,11 @@ export interface components {
             productTitle: string;
             productSlug: string;
             brandName: string;
-            imageUrl: string;
+            /**
+             * @description Null when the product has no media. See ADR 0031 (an absent image is no media row, never a
+             *                 placeholder).
+             */
+            imageUrl?: string | null;
             /** Format: double */
             effectivePrice: number;
             /** Format: double */
@@ -6514,15 +6310,18 @@ export interface components {
             discountPercentage?: number | null;
             variantLabel?: string | null;
             /**
+             * @description The <b>Condition line</b> (umbrella `GLOSSARY.md`) of the line's product's Offer sticker, the one its
+             *     card and product page carry (PACMS.Business.DTO.Storefront.Product.StorefrontProductCardDTO.ConditionLine); null when it
+             *     has none. Carried whether or not the line can be ordered, as the card's is. Why no sticker image beside it:
+             *     workspace pacms-workspace#554 (each cart line carries its product's Offer sticker condition line).
+             */
+            conditionLine?: string | null;
+            /**
              * @description This line's product alone resolves to a bulky tier — the per-line "Kabasta
              *                 roba" chip (drawer, cart page, checkout items), so a mixed cart can point at which
              *                 item raised the delivery bracket. Sibling of PACMS.Business.DTO.Storefront.Checkout.StorefrontCartItemDTO.IsAooso.
              */
             isBulky: boolean;
-            /** Format: double */
-            weightKg?: number | null;
-            /** Format: double */
-            heightCm?: number | null;
         };
         StorefrontCatalogBrandDTO: {
             /** Format: int32 */
@@ -6549,7 +6348,10 @@ export interface components {
             id: number;
             name: string;
             slug: string;
-            /** @description Null when the category has no image. See Backend/CLAUDE.md → "Image absence is null". */
+            /**
+             * @description Null when the category has no image. See ADR 0031 (an absent image is no media row, never a
+             *                 placeholder).
+             */
             imageUrl?: string | null;
             subCategories: components["schemas"]["StorefrontCategoryCardDTO"][];
         };
@@ -6558,11 +6360,23 @@ export interface components {
             id: number;
             name: string;
             slug: string;
-            /** @description Null when the category has no image. See Backend/CLAUDE.md → "Image absence is null". */
+            /**
+             * @description Null when the category has no image. See ADR 0031 (an absent image is no media row, never a
+             *                 placeholder).
+             */
             imageUrl?: string | null;
             htmlDescription?: string | null;
             metaTitle?: string | null;
+            /**
+             * @description The Meta description to print: a typed one, else the first sentence of PACMS.Business.DTO.Storefront.Catalog.StorefrontCategoryDTO.ListingSummary, else none. Null
+             *     tells the storefront to compose its own.
+             */
             metaDescription?: string | null;
+            /**
+             * @description The Listing summary the page prints above its products, finished text (`ListingSummaries`). Null when the summary
+             *     is off for the page: it then renders as before. Only the storefront's category read sets it.
+             */
+            listingSummary?: string | null;
             hasProducts?: boolean | null;
             subCategories: components["schemas"]["StorefrontCategoryDTO"][];
             categoryBreadcrumbs: components["schemas"]["CategoryBreadcrumbDTO"][];
@@ -6585,13 +6399,37 @@ export interface components {
             productCount: number;
         };
         /**
+         * @description Courier pricing (umbrella glossary, Shipping): what courier delivery would charge a basket or
+         *     one product, whatever delivery method the cart has. The storefront states it and chooses no
+         *     tier (pa-cms ADR 0164). Its four names are the names of the parity fixture's
+         *     `courierPricing`, so a fixture case is a wire value.
+         */
+        StorefrontCourierPricingDTO: {
+            /**
+             * Format: double
+             * @description The order value from which delivery may be advertised as free
+             *     (PACMS.Business.Services.DomainServices.CourierPricing.AdvertisedFreeDeliveryThreshold).
+             *     Null when it never is, as for every Bulky bracket.
+             */
+            freeDeliveryThreshold?: number | null;
+            /**
+             * Format: double
+             * @description The Standard delivery price or the Bulky bracket's price, before a threshold or the zone frees it.
+             */
+            deliveryCost: number;
+            isBulky: boolean;
+            /** @description Whether an address inside the free-delivery zone frees it. The product page has no address, so it names the zone. */
+            freeForZone: boolean;
+        };
+        /**
          * @description The cart's delivery promise (workspace docs/plans/delivery-promise-plan.md → D3/D6):
          *     dates in the market zone as "yyyy-MM-dd" plus the working-day counts they came from, so
          *     checkout can render "od uplate" for a prepay rail without a second call.
          *     <br>
-         *     It does not say WHICH typed pair answered (a supplier's own, or the market default).
-         *     Nothing renders that, and a public cart response is the wrong place to publish whose number
-         *     a promise came from; that diagnosis lives per order in `Order.DeliveryPromiseInputs`.
+         *     It does not say WHICH typed pair answered (a supplier's own, or the default supplier day
+         *     range). Nothing renders that, and a public cart response is the wrong place to publish whose
+         *     number a promise came from; that diagnosis lives per order in
+         *     `Order.DeliveryPromiseInputs`.
          */
         StorefrontDeliveryPromiseDTO: {
             earliestDate: string;
@@ -6605,7 +6443,7 @@ export interface components {
             /** Format: int32 */
             supplierId?: number | null;
         };
-        /** @description One promise slot's rows: the same two lists the table's top level carries for `any`. */
+        /** @description One order placement slot's rows: the same two lists the table's top level carries for `any`. */
         StorefrontDeliveryPromiseSlotDTO: {
             tiers?: components["schemas"]["StorefrontDeliveryPromiseTierDTO"][] | null;
             suppliers?: components["schemas"]["StorefrontDeliveryPromiseSupplierDTO"][] | null;
@@ -6619,11 +6457,11 @@ export interface components {
             latestWorkingDays?: number;
         };
         /**
-         * @description The delivery-promise table (docs/adr/0002-…, 0007-…): the typed tier pairs, the suppliers
-         *     that carry a pair of their own, the cut-off hour, and PACMS.Business.DTO.Storefront.Catalog.StorefrontDeliveryPromiseTableDTO.WorkingDays — the
-         *     storefront picks a row the way `DeliveryPromiseResolver` does and turns working days
-         *     into dates by stepping the list, holding no calendar and no copy of the cut-off of its own.
-         *     A few dozen integers in total, so every PDP carries it whole. Every tier name is the
+         * @description The delivery-promise table (docs/adr/0002-…, 0007-…): the typed tier day ranges, the
+         *     suppliers that carry a pair of their own, the cut-off hour, and PACMS.Business.DTO.Storefront.Catalog.StorefrontDeliveryPromiseTableDTO.WorkingDays —
+         *     the storefront picks a row the way `DeliveryPromiseResolver` does and turns working
+         *     days into dates by stepping the list, holding no calendar and no copy of the cut-off of its
+         *     own. A few dozen integers in total, so every PDP carries it whole. Every tier name is the
          *     lowercase wire vocabulary mirrored in pa-storefront
          *     packages/shared/src/constants/delivery-promise.ts.
          *     <br>PACMS.Business.DTO.Storefront.Catalog.StorefrontDeliveryPromiseTableDTO.Tiers and PACMS.Business.DTO.Storefront.Catalog.StorefrontDeliveryPromiseTableDTO.Suppliers are the `any`-slot rows and keep their
@@ -6634,7 +6472,7 @@ export interface components {
         StorefrontDeliveryPromiseTableDTO: {
             /** @description The next working days in the market zone ("yyyy-MM-dd"), holidays and firm closures applied, starting a few days before today. */
             workingDays?: string[] | null;
-            /** @description One row per dispatch tier for the `any` slot; the supplier row is the market default an AOOSO falls to. */
+            /** @description One row per dispatch tier for the `any` slot; the supplier row is the default supplier day range an AOOSO falls to. */
             tiers?: components["schemas"]["StorefrontDeliveryPromiseTierDTO"][] | null;
             /** @description Only the suppliers that have typed an `any` pair; everything else uses the supplier tier's row above. */
             suppliers?: components["schemas"]["StorefrontDeliveryPromiseSupplierDTO"][] | null;
@@ -6659,19 +6497,19 @@ export interface components {
          *     stepper moves above one unit (pa-storefront docs/adr/0010). The cached page's own tier
          *     (PACMS.Business.DTO.Storefront.Product.StorefrontProductVariantDTO.DispatchTier) answers for one unit off a snapshot;
          *     this answers for the quantity the customer has actually chosen, against live stock and the
-         *     open claims of other orders, so the date beside the button is the date the cart shows one
-         *     click later.
+         *     open stock claims of other orders, so the date beside the button is the date the cart shows
+         *     one click later.
          *     <br>
          *     The tier and the supplier key, and nothing else. The PAIR — the working-day numbers behind
          *     "najranije … najkasnije do …" — is deliberately absent: the storefront resolves it off the
-         *     promise table it already holds, so `resolveTierPair` and
+         *     promise table it already holds, so `resolveTierDayRange` and
          *     `DeliveryPromiseResolver.PairFor` stay the only two implementations of that lookup,
          *     pinned as twins by the parity fixture. An endpoint returning the pair would be a third.
          *     <br>
          *     A null PACMS.Business.DTO.Storefront.Product.StorefrontDispatchTierDTO.DispatchTier is an ANSWER, not an absence: it says the store has nothing
-         *     to promise for this line, and the page falls back to the bounding range. That is why the
-         *     route carrying this never answers 204 or 404 — see `StorefrontController.DispatchTier`,
-         *     which owns the status-code half of the contract.
+         *     to promise for this line, and the page falls back to the undated delivery range. That is why
+         *     the route carrying this never answers 204 or 404 — see
+         *     `StorefrontProductsController.DispatchTier`, which owns the status-code half of the contract.
          */
         StorefrontDispatchTierDTO: {
             /**
@@ -6704,6 +6542,19 @@ export interface components {
         StorefrontFirmClosureDTO: {
             fromDate: string;
             toDate: string;
+        };
+        /**
+         * @description A <b>Gift product</b> (umbrella `GLOSSARY.md`) of the Offer sticker a product page shows, as its band links it
+         *     (workspace pacms-workspace#652 (a tag and a product carry Gift products)).
+         */
+        StorefrontGiftProductDTO: {
+            /** @description The gift's own product page. */
+            slug: string;
+            /**
+             * @description The gift's title without the code at its end
+             *     (M:PACMS.Business.Services.DomainServices.GiftProductQueries.TitleWithoutCodeOf(System.String,System.Collections.Generic.IEnumerable{System.String})).
+             */
+            titleWithoutCode: string;
         };
         StorefrontLoyaltyBalanceDTO: {
             /** Format: double */
@@ -6776,8 +6627,8 @@ export interface components {
             orderStatusId: number;
             orderStatusName: string;
             /**
-             * @description The order is in a reversing status — `OrderStatusPolicy.IsReversing`, shipped rather
-             *     than re-derived, so the storefront stops hand-copying which ids those are. What it
+             * @description The order is in a reversed-order status — `OrderStatusPolicy.IsReversing`, shipped
+             *     rather than re-derived, so the storefront stops hand-copying which ids those are. What it
              *     replaced and why that copy was dangerous: pa-storefront's order timeline input.
              */
             isReversing: boolean;
@@ -6879,11 +6730,15 @@ export interface components {
              *     e-mail, no service review yet, and at least one product of the order already reviewed
              *     (the ticket names a reviewed product — see the minting comment in OrderQueries; with
              *     nothing reviewed the per-item PACMS.Business.DTO.Storefront.Order.StorefrontOrderItemDTO.ReviewToken links
-             *     own the path). The storefront gates purely on presence — absent means no ask — and the
-             *     reason this outlives the item links: once every product is reviewed those are rightly
-             *     gone, while the service question can still be open.
+             *     own the path). The storefront reads it no more, since its service stars left
+             *     (pacms-workspace#2096).
              */
             serviceReviewToken?: string | null;
+            /**
+             * @description The Google review link (PACMS.Business.Configuration.MarketingMailSettings.GoogleReviewLink). When it is set, a Completed
+             *     order's page shows the Google button above the problem line. Null shows the problem line alone.
+             */
+            googleReviewLink?: string | null;
             paymentTransaction?: components["schemas"]["StorefrontPaymentTransactionDTO"];
         };
         StorefrontOrderItemDTO: {
@@ -6978,7 +6833,7 @@ export interface components {
             /** Format: double */
             longitude?: number | null;
             /**
-             * @description True when every line of the caller's active cart (bundles expanded to member variants)
+             * @description True when every line of the caller's active cart
              *     has warehouse stock >= the required quantity at this store — "available today".
              *     False means the daily morning transfer fulfills it (usually next working day).
              *     <br>
@@ -7098,10 +6953,28 @@ export interface components {
             /** Format: int32 */
             discountPercentage?: number | null;
             hasDiscount: boolean;
-            /** @description Null when the product has no media. See Backend/CLAUDE.md → "Image absence is null". */
+            /**
+             * @description Null when the product has no media. See ADR 0031 (an absent image is no media row, never a
+             *                 placeholder).
+             */
             imageUrl?: string | null;
+            /**
+             * @description The product's <b>Offer sticker</b> (umbrella `GLOSSARY.md`), its own or a tag's
+             *     (`StorefrontProductProjection.SelectProductRawData`); null when it has none. Carried whether or not
+             *     the product can be ordered: hiding it then is the storefront's call.
+             */
+            stickerImageUrl?: string | null;
+            /** @description The sticker's <b>Condition line</b> (umbrella `GLOSSARY.md`). */
+            conditionLine?: string | null;
+            /** @description The sticker's first line: what the buyer gets (PACMS.Business.Entities.Product.StickerFirstLine). */
+            stickerFirstLine?: string | null;
+            /** @description The sticker's second line: what earns it or what it is worth (PACMS.Business.Entities.Product.StickerSecondLine). */
+            stickerSecondLine?: string | null;
             brandName: string;
-            /** @description Null when the brand has no image. See Backend/CLAUDE.md → "Image absence is null". */
+            /**
+             * @description Null when the brand has no image. See ADR 0031 (an absent image is no media row, never a
+             *                 placeholder).
+             */
             brandImageUrl?: string | null;
             isOrderable: boolean;
             isAooso: boolean;
@@ -7116,7 +6989,7 @@ export interface components {
              * @description True when this product ALONE earns free delivery (its cheapest variant meets a courier
              *     tier's free-delivery threshold). Drives the static "Besplatna dostava" card line.
              *     Computed server-side against current shipping tiers — see
-             *     ShippingService.QualifiesForFreeDelivery / umbrella docs/free-delivery-indicators.md.
+             *     CourierPricingService.ForProduct / umbrella docs/free-delivery-indicators.md.
              */
             hasFreeDelivery: boolean;
             /** Format: double */
@@ -7134,6 +7007,102 @@ export interface components {
              *                 card's add-to-cart start at the minimum. See OrderQuantityLimits.MinOrderQuantityFloor.
              */
             minOrderQuantity: number;
+        };
+        /**
+         * @description A product card with each variant's id and price, as `ProductsByVariantIds` answers it. It holds nothing
+         *     else, so no caller gets a bulk read from it (pacms-workspace#1422).
+         *     <br>
+         *     Its availability (PACMS.Business.DTO.Storefront.Product.StorefrontProductCardDTO.IsOrderable, PACMS.Business.DTO.Storefront.Product.StorefrontProductCardDTO.IsAooso
+         *     and the order quantities) is the product's, as the product page states it. A listing's card states its default
+         *     variant's.
+         */
+        StorefrontProductCardWithVariantsDTO: {
+            /** Format: int32 */
+            id: number;
+            /** Format: int64 */
+            defaultProductVariantId: number;
+            /**
+             * @description The DEFAULT variant's business key (Wings `Šifra`) — the GA4 `item_id` for
+             *     events fired off a card (add_to_wishlist today; view_item_list/select_item when they
+             *     land). NULL when the product has no variants; never an empty string — the storefront
+             *     sink drops unkeyable items rather than grouping them under a blank id.
+             */
+            sku?: string | null;
+            /**
+             * @description Product-level Meta catalogue id — see PACMS.Business.DTO.Storefront.Product.StorefrontProductDTO.MetaCatalogId
+             *     for the id-space contract (never recomputed on the client, must byte-match the feed).
+             */
+            metaCatalogId: string;
+            title: string;
+            slug: string;
+            /**
+             * Format: double
+             * @description The final price shown to the customer (after any discount).
+             */
+            effectivePrice: number;
+            /**
+             * Format: double
+             * @description Pre-discount price. Null if no discount is active.
+             */
+            regularPrice?: number | null;
+            /** Format: int32 */
+            discountPercentage?: number | null;
+            hasDiscount: boolean;
+            /**
+             * @description Null when the product has no media. See ADR 0031 (an absent image is no media row, never a
+             *                 placeholder).
+             */
+            imageUrl?: string | null;
+            /**
+             * @description The product's <b>Offer sticker</b> (umbrella `GLOSSARY.md`), its own or a tag's
+             *     (`StorefrontProductProjection.SelectProductRawData`); null when it has none. Carried whether or not
+             *     the product can be ordered: hiding it then is the storefront's call.
+             */
+            stickerImageUrl?: string | null;
+            /** @description The sticker's <b>Condition line</b> (umbrella `GLOSSARY.md`). */
+            conditionLine?: string | null;
+            /** @description The sticker's first line: what the buyer gets (PACMS.Business.Entities.Product.StickerFirstLine). */
+            stickerFirstLine?: string | null;
+            /** @description The sticker's second line: what earns it or what it is worth (PACMS.Business.Entities.Product.StickerSecondLine). */
+            stickerSecondLine?: string | null;
+            brandName: string;
+            /**
+             * @description Null when the brand has no image. See ADR 0031 (an absent image is no media row, never a
+             *                 placeholder).
+             */
+            brandImageUrl?: string | null;
+            isOrderable: boolean;
+            isAooso: boolean;
+            /**
+             * @description Whether the card's variant has a live stock source: the fact that tells "Nije u ponudi"
+             *     from "Trenutno nema na stanju" while the card is not orderable (the full telling is on
+             *     PACMS.Business.DTO.Storefront.Product.StorefrontProductVariantDTO.HasLiveStockSource). A widening, so the
+             *     backend deploys first (pacms-workspace#107 redraft row R30).
+             */
+            hasLiveStockSource: boolean;
+            /**
+             * @description True when this product ALONE earns free delivery (its cheapest variant meets a courier
+             *     tier's free-delivery threshold). Drives the static "Besplatna dostava" card line.
+             *     Computed server-side against current shipping tiers — see
+             *     CourierPricingService.ForProduct / umbrella docs/free-delivery-indicators.md.
+             */
+            hasFreeDelivery: boolean;
+            /** Format: double */
+            averageRating?: number | null;
+            /** Format: int32 */
+            reviewCount: number;
+            /**
+             * Format: int32
+             * @description Max order quantity for the default variant. Null means unlimited.
+             */
+            maxOrderQuantity?: number | null;
+            /**
+             * Format: int32
+             * @description Minimum order quantity for the default variant (1 = no minimum) — lets the
+             *                 card's add-to-cart start at the minimum. See OrderQuantityLimits.MinOrderQuantityFloor.
+             */
+            minOrderQuantity: number;
+            variants: components["schemas"]["StorefrontCardVariantDTO"][];
         };
         StorefrontProductDTO: {
             /** Format: int32 */
@@ -7156,15 +7125,18 @@ export interface components {
             title: string;
             /**
              * @description The product summary (workspace `GLOSSARY.md`). Its old name, `description`, is
-             *     the product description's word, which PACMS.Business.DTO.Storefront.Product.StorefrontProductDTO.HtmlDescription takes in a later push
+             *     the product description's word, which PACMS.Business.DTO.Storefront.Product.StorefrontProductDTO.DescriptionWithScopeOfDelivery takes in a later push
              *     than the one that dropped it (PA Board 7746311, "Seven pa-cms entities take their glossary
              *     names…"), so no consumer reads one field under the other's meaning (pacms-workspace#107
              *     redraft row R36).
              */
             summary?: string | null;
             slug: string;
+            /**
+             * @description The product description with its Scope of delivery after it, as the description reader reads it, under the name
+             *     pa-storefront, dck and sg-tools read.
+             */
             htmlDescription?: string | null;
-            specification?: string | null;
             /**
              * @description Zemlja porekla for the PDP declaration (čl. 34), resolved product-first with the
              *     brand as fallback — the same resolution legacy prodavnicaalata.rs performs, so the
@@ -7187,19 +7159,44 @@ export interface components {
             /** Format: int32 */
             discountPercentage?: number | null;
             hasDiscount: boolean;
-            /** @description Null when the product has no media. See Backend/CLAUDE.md → "Image absence is null". */
+            /**
+             * @description Null when the product has no media. See ADR 0031 (an absent image is no media row, never a
+             *                 placeholder).
+             */
             imageUrl?: string | null;
+            /** @description The card's PACMS.Business.DTO.Storefront.Product.StorefrontProductCardDTO.StickerImageUrl, for the band under the price. */
+            stickerImageUrl?: string | null;
+            /** @description The card's PACMS.Business.DTO.Storefront.Product.StorefrontProductCardDTO.ConditionLine, shown under the price. */
+            conditionLine?: string | null;
+            /** @description The card's PACMS.Business.DTO.Storefront.Product.StorefrontProductCardDTO.StickerFirstLine. */
+            stickerFirstLine?: string | null;
+            /** @description The card's PACMS.Business.DTO.Storefront.Product.StorefrontProductCardDTO.StickerSecondLine. */
+            stickerSecondLine?: string | null;
+            /**
+             * @description The slug of the tag whose sticker PACMS.Business.DTO.Storefront.Product.StorefrontProductDTO.StickerImageUrl is, so the condition line links to
+             *     the other products the offer counts; null for the product's own sticker or none.
+             */
+            stickerTagSlug?: string | null;
+            /**
+             * @description The <b>Gift products</b> (umbrella `GLOSSARY.md`) of the sticker PACMS.Business.DTO.Storefront.Product.StorefrontProductDTO.StickerImageUrl is, which the
+             *     band links (M:PACMS.Business.Services.DomainServices.GiftProductQueries.ShownOf(PACMS.Business.Services.DomainServices.OfferSticker,PACMS.Business.Services.DomainServices.GiftProductQueries.OfferGifts,PACMS.Business.Services.Helpers.MakerNumbers)). Added 2026-11-02 as a response-field widening (backend-first, workspace pacms-workspace#652 (a tag and a
+             *     product carry Gift products)): empty for a sticker without them, and only the product page's read fills it.
+             */
+            giftProducts: components["schemas"]["StorefrontGiftProductDTO"][];
             brandName: string;
             brandSlug: string;
-            /** @description Null when the brand has no image. See Backend/CLAUDE.md → "Image absence is null". */
+            /**
+             * @description Null when the brand has no image. See ADR 0031 (an absent image is no media row, never a
+             *                 placeholder).
+             */
             brandImageUrl?: string | null;
+            warrantyFacts?: components["schemas"]["StorefrontWarrantyFactsDTO"];
             isOrderable: boolean;
             /** @description True if the product is out of stock but can still be ordered for later delivery. */
             isAooso: boolean;
             /**
              * @description The default variant's PACMS.Business.DTO.Storefront.Product.StorefrontProductVariantDTO.HasLiveStockSource, as the
-             *     product card carries it: the storefront renders a product as a card where it keeps one
-             *     (wishlist, recently viewed). pacms-workspace#107 redraft row R30.
+             *     product card carries it. pacms-workspace#107 redraft row R30.
              */
             hasLiveStockSource: boolean;
             /**
@@ -7220,22 +7217,29 @@ export interface components {
             deliverySupplierId?: number | null;
             /**
              * @description True when this product ALONE earns free delivery (its cheapest variant meets a courier
-             *     tier's free-delivery threshold). Drives the "Besplatna dostava" card line on the surfaces
-             *     that render the FULL product DTO through ProductCard (wishlist, browsing history,
-             *     recently-viewed). The PDP itself does not read this flag — its cart-aware delivery-line
+             *     tier's free-delivery threshold), as the product card carries it for its "Besplatna dostava"
+             *     line. The PDP itself does not read this flag — its cart-aware delivery-line
              *     swap is driven by the live cart, not this per-product flag. Computed server-side against
-             *     current shipping tiers — see ShippingService.QualifiesForFreeDelivery /
+             *     current shipping tiers — see CourierPricingService.ForProduct /
              *     umbrella docs/free-delivery-indicators.md.
              */
             hasFreeDelivery: boolean;
+            courierPricing?: components["schemas"]["StorefrontCourierPricingDTO"];
             categoryName: string;
             categorySlug: string;
             categoryBreadcrumbs: components["schemas"]["CategoryBreadcrumbDTO"][];
+            brandCategoryPage?: components["schemas"]["StorefrontBrandCategoryPageDTO"];
             productMedia: components["schemas"]["StorefrontProductMediaDTO"][];
             /** @description Downloadable product documents (PDF), rendered as the „Dokumentacija" tab. */
             files: components["schemas"]["StorefrontProductFileDTO"][];
             variants: components["schemas"]["StorefrontProductVariantDTO"][];
             optionGroups: components["schemas"]["StorefrontProductOptionGroupDTO"][];
+            /**
+             * @description The spec sheet's rows in the page's order (workspace pacms-workspace#514, Spec: one store of spec rows per
+             *     product). Added 2026-10-30 as a response-field widening (backend-first): empty until the product has
+             *     rows, and only the product page's read fills it.
+             */
+            specRows: components["schemas"]["StorefrontSpecRowDTO"][];
             /** Format: double */
             averageRating?: number | null;
             /**
@@ -7250,33 +7254,35 @@ export interface components {
              */
             commentedReviewCount: number;
             /**
-             * @description True iff any variant belongs to a LISTED bundle — the PDP's gate for the
-             *     BundlesForProduct fetch, same presence-gate role ReviewCount plays for reviews.
-             *     Deliberately broader than bundle availability (stock/window/price excluded):
-             *     predicate rationale on StorefrontProductHasBundlesTests.
+             * @description Always false: bundles are deleted (umbrella ADR 0174). The field stays required, because
+             *     pa-cms's consumer gate runs stridon-presentational-websites'
+             *     `apps/dck/__tests__/dto-shape.integration.test.ts`, and dck's generated types require it.
+             *     Plaky 8160873 (pa-cms: remove the always-false HasBundles from StorefrontProductDTO…) holds its removal.
              */
             hasBundles: boolean;
             /** Format: int32 */
             maxOrderQuantity?: number | null;
             /**
              * Format: int32
-             * @description Minimum order quantity for the default variant (1 = no minimum) — the
-             *                 supplier-pack rule for out-of-stock AOOSO lines. See OrderQuantityLimits.MinOrderQuantityFloor.
+             * @description Minimum order quantity for the default variant (1 = no minimum), above one only
+             *                 for an out-of-stock AOOSO line. See OrderQuantityLimits.MinOrderQuantityFloor.
              */
             minOrderQuantity: number;
-            /** Format: double */
-            weightKg?: number | null;
-            /** Format: double */
-            heightCm?: number | null;
             /**
              * Format: double
              * @description Shipping "chargeable" weight = max(real weight, volumetric from L×W×H), computed
-             *                 by ShippingWeight so the per-product delivery display (PDP + JSON-LD) brackets on the same
+             *                 by ShippingWeight.Of so the per-product delivery display (PDP + JSON-LD) brackets on the same
              *                 value the cart charges — the storefront must never reimplement the volumetric formula.
              *                 Always set (0 for a dimensionless product, never null). Cart-level tier selection stays
              *                 fully server-side (CartView.BuildAsync).
              */
             chargeableWeightKg: number;
+            /**
+             * Format: double
+             * @description The product's longest side in cm (ShippingWeight.Of); 0 when no side is known, never null. A tier's
+             *                 height limit reads it, whichever side is long.
+             */
+            longestSideCm: number;
             /** @description SKU of the default variant. */
             sku?: string | null;
             relatedProducts: components["schemas"]["StorefrontProductCardDTO"][];
@@ -7393,13 +7399,27 @@ export interface components {
             optionValueIds: number[];
             sku: string;
             barcode?: string | null;
+            /**
+             * @description The variant's Maker number where the Google feed sends one as `mpn`
+             *     (M:PACMS.Business.Services.Helpers.MakerNumbers.WhereNoValidEan(System.String,System.String)), null elsewhere: the product page's structured
+             *     data sends it verbatim as its `mpn`. Optional, so the storefront deploys before or after the backend that
+             *     fills it.
+             */
+            makerNumber?: string | null;
+            /**
+             * @description The variant's Maker number (M:PACMS.Business.Services.Helpers.MakerNumbers.Of(System.String,System.String,System.String)), which the product page prints as
+             *     "Kataloški broj" (spec pacms-workspace#1908). It is filled also where the variant has a valid EAN. It is
+             *     null where the variant has no Maker number. PACMS.Business.DTO.Storefront.Product.StorefrontProductVariantDTO.MakerNumber is the structured data's `mpn`.
+             *     Optional, so the storefront deploys before or after the backend that fills it.
+             */
+            printedMakerNumber?: string | null;
             media: components["schemas"]["StorefrontProductMediaDTO"][];
             /** Format: int32 */
             maxOrderQuantity?: number | null;
             /**
              * Format: int32
-             * @description Minimum order quantity (1 = no minimum) — the supplier-pack rule for
-             *                 out-of-stock AOOSO lines. See OrderQuantityLimits.MinOrderQuantityFloor.
+             * @description Minimum order quantity (1 = no minimum), above one only for an out-of-stock
+             *                 AOOSO line. See OrderQuantityLimits.MinOrderQuantityFloor.
              */
             minOrderQuantity: number;
             warehouseAvailability: components["schemas"]["StorefrontWarehouseAvailabilityDTO"][];
@@ -7462,9 +7482,9 @@ export interface components {
              */
             orderableCount: number;
             /**
-             * @description Attribute facets for the listing's resolved category, in that category's effective order — empty
+             * @description Attribute facets for the listing category, in that category's effective order — empty
              *     when the listing resolves no single category, when the dictionary binds nothing filterable, or when
-             *     every candidate is under the coverage gate. Semantics: StorefrontProductService.GetAttributeFacets.
+             *     every candidate is under the coverage gate. Semantics: ListingFacetCounts.GetAttributeFacets.
              */
             attributeFacets: components["schemas"]["StorefrontAttributeFacetDTO"][];
         };
@@ -7501,10 +7521,16 @@ export interface components {
              */
             otherItems: components["schemas"]["StorefrontReviewableItemDTO"][];
             /**
-             * @description True once the order carries a PACMS.Business.Entities.ServiceReview, so the page's
-             *     service-rating ask renders only while the question is still open.
+             * @description True once the order carries a PACMS.Business.Entities.ServiceReview. The storefront reads it no
+             *     more, since its service stars left (pacms-workspace#2096).
              */
             hasServiceReview: boolean;
+            /**
+             * @description The Google review link (PACMS.Business.Configuration.MarketingMailSettings.GoogleReviewLink). When it is set, the thank-you
+             *     and already-reviewed screens show the Google button above the problem line. Null shows the
+             *     problem line alone. The storefront never holds its own copy.
+             */
+            googleReviewLink?: string | null;
         };
         StorefrontReviewableItemDTO: {
             /** Format: int32 */
@@ -7558,9 +7584,39 @@ export interface components {
              * @description The firm's closures that have not ended yet, oldest first, as market-zone dates
              *     (workspace docs/plans/delivery-promise-plan.md → D5). Empty list, never null: this is a
              *     field on the same always-bodied document as the announcement, for the same 204 reason.
-             *     Deliberately no [Required]: it would generate NotEmpty() and refuse the common empty list.
              */
             upcomingClosures?: components["schemas"]["StorefrontFirmClosureDTO"][] | null;
+        };
+        /**
+         * @description One spec row on the product page (workspace GLOSSARY.md → "Spec sheet"); the list's order IS the page's
+         *     (`SpecRowPageOrder`). Pre-formatted: the value is printed as the store writes it, a typed row's by the backend's
+         *     formatter (`SpecRowFormatter`), so the page renders and never formats. Never its source or quote, which are the admin's.
+         */
+        StorefrontSpecRowDTO: {
+            label: string;
+            /** @description As printed, with its unit and a typed row's note after it ("0–2.100 o/min", "1,2 kg (bez baterije)"). */
+            value: string;
+            /** @description The spec section's name ("Snaga i brzina"): a heading past twenty rows. */
+            section: string;
+            /**
+             * @description On a kit, the article of the box the row is about, its Kit member's Scope of delivery item's article, as the section heading it
+             *     reads; null for the whole kit, and on a product that is no kit.
+             */
+            member?: string | null;
+        };
+        /**
+         * @description A <b>Sub-promotion</b> (umbrella `GLOSSARY.md`) as its Sub-promotion hub tag's page draws it: the fields of
+         *     /akcije's tag card, never the whole tag. Not PACMS.Business.DTO.Storefront.Catalog.StorefrontTagCardDTO, the tags index's, which has no discount.
+         */
+        StorefrontSubPromotionDTO: {
+            /** Format: int32 */
+            id: number;
+            name: string;
+            slug: string;
+            /** @description The card image, `Tag.ImageUrl`. */
+            imageUrl?: string | null;
+            /** Format: int32 */
+            discountPercentage?: number | null;
         };
         /**
          * @description A review left through the e-mail invitation's signed link. The token carries WHO and WHICH
@@ -7653,6 +7709,11 @@ export interface components {
             brandImageUrl?: string | null;
             brandSlug?: string | null;
             hasProducts?: boolean | null;
+            /**
+             * @description The tag's browsable <b>Sub-promotions</b> (umbrella `GLOSSARY.md`), in /akcije's order; empty when it
+             *     has none. As fresh as PACMS.Business.DTO.Storefront.Catalog.StorefrontTagDTO.HasProducts, stamped in the same snapshot.
+             */
+            subPromotions: components["schemas"]["StorefrontSubPromotionDTO"][];
         };
         StorefrontUnsubscribeDTO: {
             type: string;
@@ -7705,6 +7766,93 @@ export interface components {
             latitude?: number | null;
             /** Format: double */
             longitude?: number | null;
+        };
+        /**
+         * @description A product's Warranty facts as the product page's warranty block reads them (`ProductWarrantyFacts`): a line for
+         *     each advertised Warranty, or the saobraznost line alone. A product with no advertised line has none: it shows no block.
+         */
+        StorefrontWarrantyFactsDTO: {
+            /** @description The first advertised line's icon, with its intrinsic dimensions; null when that line has none. */
+            iconUrl?: string | null;
+            /** Format: int32 */
+            iconWidth?: number | null;
+            /** Format: int32 */
+            iconHeight?: number | null;
+            /**
+             * @description Never empty: each advertised line, the machine's first, then the motor's, the battery's and the charger's. A line
+             *     with a consumer term under the statutory 24 months is not advertised (`WarrantyFacts.IsUnderStatutoryConformity`).
+             */
+            lines: components["schemas"]["StorefrontWarrantyLineDTO"][];
+            /**
+             * Format: int32
+             * @description The product's lines before the ones not advertised leave, at least the count of `Lines`. The block's form counts
+             *     them: one part reads a sentence, more parts read a list (spec pa-storefront#262).
+             */
+            partCount?: number;
+            registration?: components["schemas"]["StorefrontBrandRegistrationDTO"];
+            /** @description The URL key of the brand's Warranty guide, `/kako-produziti-garanciju/<slug>`; null when it has none. */
+            warrantyGuideSlug?: string | null;
+        };
+        /**
+         * @description A brand's Warranty guide as a list shows it: the sitemap, the route's static pages and the
+         *     `/kako-produziti-garanciju` list of pages. The page itself: PACMS.Business.DTO.Storefront.Warranty.StorefrontWarrantyGuideDTO.
+         */
+        StorefrontWarrantyGuideCardDTO: {
+            slug: string;
+            title: string;
+            metaDescription: string;
+            brandSlug: string;
+            brandName: string;
+            /**
+             * Format: date-time
+             * @description The brand's last save, which stands for the page's last change: any save of the brand moves it.
+             */
+            modifiedAt: string;
+        };
+        /**
+         * @description A brand's Warranty guide, `/kako-produziti-garanciju/<slug>`: its HTML, and the brand's registration, which
+         *     the text never repeats (spec pacms-workspace#1943 (the Warranty guide lives only in the database as HTML…)).
+         */
+        StorefrontWarrantyGuideDTO: {
+            slug: string;
+            /** @description The brand's own slug: a save of the brand or of its page tells the storefront by it (`brandsChanged`). */
+            brandSlug: string;
+            brandName: string;
+            /** @description The page's heading. */
+            title: string;
+            metaDescription: string;
+            /**
+             * @description The page's text: HTML of the allowed tags alone, each image on the media host with its integer `width` and
+             *     `height`, as every description holds its images.
+             */
+            html: string;
+            registration: components["schemas"]["StorefrontBrandRegistrationDTO"];
+        };
+        StorefrontWarrantyLineDTO: {
+            /** @description "machine" | "motor" | "battery" | "charger". */
+            part: string;
+            /** @description The Warranty's name, for the icon's alt text; null on the saobraznost line, which no Warranty holds. */
+            name?: string | null;
+            /**
+             * Format: int32
+             * @description The months a consumer gets without registration; 0 means only the statutory conformity ("Saobraznost 2 godine").
+             */
+            consumerMonthsWithoutRegistration?: number;
+            /**
+             * Format: int32
+             * @description The months a consumer gets with registration; null when registration extends nothing.
+             */
+            consumerMonthsWithRegistration?: number | null;
+            /**
+             * Format: int32
+             * @description The months a company gets without registration; 0 means none, as on the saobraznost line.
+             */
+            companyMonthsWithoutRegistration?: number;
+            /**
+             * Format: int32
+             * @description The months a company gets with registration; null when registration extends nothing.
+             */
+            companyMonthsWithRegistration?: number | null;
         };
         StorefrontWishlistMergeRequestDTO: {
             productVariantIds: number[];

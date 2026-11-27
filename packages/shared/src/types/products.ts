@@ -31,6 +31,9 @@ export type ProductCardData = components["schemas"]["StorefrontProductCardDTO"];
 /** Full product DTO for product detail pages. */
 export type Product = components["schemas"]["StorefrontProductDTO"];
 
+/** One row of a product's spec sheet, printed by the backend; the page never formats it. */
+export type SpecRow = components["schemas"]["StorefrontSpecRowDTO"];
+
 export type ProductCardsResult = components["schemas"]["StorefrontProductsResultDTO"];
 
 export type SitemapEntry = components["schemas"]["SitemapEntryDTO"];
